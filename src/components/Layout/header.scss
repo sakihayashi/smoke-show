@@ -1,0 +1,31 @@
+@import "../../config";
+
+.nav-style{
+    font-family: 'Progress';
+    font-size: 22px;
+    color: $black !important;
+}
+.nav-link{
+    color: $black !important;
+}
+.header-wrapper{
+    padding-top: 2rem;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+nav{
+    max-width: $main-width-phone;
+    margin: 0 auto;
+    color: $black;
+}
+
+@media (min-width: 1025px){
+    .header-wrapper{
+      max-width: $main-width-tablet;
+    }
+  }
+  @media (min-width: 1250px){
+    .header-wrapper{
+      max-width: $main-width-pc;
+    }
+  }

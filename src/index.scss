@@ -1,0 +1,78 @@
+@import "./config";
+
+@font-face {
+  font-family: 'Progress';
+  src: local('Progress'), url(./fonts/Progress.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Best in Class';
+  src: local('BestInClass'), url(./fonts/BEST-IN-CLASS.ttf) format('truetype');
+}
+@font-face{
+  font-family: 'MerriweatherSans';
+  src: local('MerriweatherSans'), url(./fonts/MerriweatherSans-VariableFont_wght.ttf) format('truetype')
+}
+*{
+  margin: 0;
+  padding: 0;
+}
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1, h2{
+  font-family: 'Best in Class';
+}
+h3{
+  font-family: 'MerriweatherSans';
+  font-size: 18px;
+  line-height: 23px;
+}
+
+header{
+  width: 100vw;
+  height: 115px;
+  background: linear-gradient(180deg, rgba(110,77,208,1) 0%, rgba(255,255,255,1) 100%);
+  margin: 0 auto;
+}
+.main-wrapper{
+  max-width: $main-width-phone;
+  margin: 0 auto;
+}
+.spacer-4rem{
+  margin-top: 4rem;
+}
+.title{
+  color: #2D1468;
+  border-bottom: 3px solid #2D1468;
+  width: 100%;
+}
+.btn-search{
+  background-color: #2D1468;
+}
+
+.videoWrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+}
+.videoWrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+@media (min-width: 1025px){
+  .main-wrapper{
+    max-width: $main-width-tablet;
+  }
+}
+@media (min-width: 1250px){
+  .main-wrapper{
+    max-width: $main-width-pc;
+  }
+}
+
