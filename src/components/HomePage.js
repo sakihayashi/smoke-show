@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Form, FormControl } from 'react-bootstrap'
 import datacsv from '../assets/car-data.csv'
 import * as d3 from 'd3'
 // import * as Papa from 'papaparse'
 import { youtubeAPI } from '../utils/youtubeAPI'
+import { carTempData } from './carTempData'
 
+import powerIcon from '../assets/global/Horsepower.png'
+import pistonIcon from '../assets/global/piston.png'
+import priceIcon from '../assets/global/Price-Tag-icon.png'
+// import speedIcon from '../assets/global/Speed-icon.png'
+// import ford from '../assets/car-brand-logos/Ford_Logo.png'
+// import mercedes from '../assets/car-brand-logos/MercedesBenz_Logo.png'
 
 const HomePage = () =>{
-    const [carData, setCarData] = useState([])
-    const [video1Desc, setVideo1Desc] = useState()
-    const [video2Desc, setVideo2Desc] = useState()
-
-    const videoId1 = 'QHLojVxs-M0'
-    const videoId2 = 'ifi5cGgJa7s'
+ 
+    // const videoIds = ['QHLojVxs-M0', 'ifi5cGgJa7s']
     const videoEmbedURL = 'https://www.youtube.com/embed/'
-
+    const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
+    const [searchKeyword, setSearchKeyword] = useState('')
+    const [titleStr, setTitleStr] = useState('Your search result')
+    const [searchedCarData, setSearchedCarData] = useState([])
 //     items: Array(5)
 // 0:
 // etag: "IPLLqa9ikvoy_gLqxEcoiqqavC4"
@@ -49,17 +55,28 @@ const HomePage = () =>{
 // thumbnails: {default: {…}, medium: {…}, high: {…}}
 // title: "The Best Mercedes AMG Ever! | SLS Black Series Review"
 
-    const handleTest = async () =>{
-        console.log('working?')
-          await youtubeAPI.get('/videos', {
+    const handleTest = async (e) =>{
+       
+        await youtubeAPI.get('/videos', {
               params: {
-                  id: videoId1
+                  id: carTempData[0].videoId
               }
           }).then(res =>{
               console.log('res', res)
-            setVideo1Desc(res.data.items[0])
-            console.log('test', video1Desc)
+              carTempData[0].youtube = res.data.items[0]
+            // setVideo1Desc(res.data.items[0])
+            // setCarData(
+
+            // )
           })
+        await youtubeAPI.get('/videos', {
+            params: {
+                id: carTempData[1].videoId
+            }
+        }).then(res =>{
+            console.log('res2', res)
+            carTempData[1].youtube = res.data.items[0]
+        })
     }
     const handleEddie = async () =>{
         await youtubeAPI.get('/search', {
@@ -68,8 +85,53 @@ const HomePage = () =>{
             }
         }).then(res =>{
             console.log('res eddir', res)
-          setVideo1Desc(res.data.items[0])
-          console.log('test', video1Desc)
+        //   setVideo1Desc(res.data.items[0])
+        })
+    }
+    const handleChangeKeyword = (e) =>{
+        setSearchKeyword(e.target.value)
+    }
+    const handleVideoSearch = async e =>{
+        e.preventDefault()
+        await youtubeAPI.get('/search', {
+            params: {
+                q: searchKeyword,
+                channelId: EddieXChannelId
+            }
+        }).then(res =>{
+            console.log('res from youtube', res)
+            setTitleStr("EddieX " + searchKeyword)
+            const searchResult = res.data.items
+            console.log('is this array?', res.data.items)
+            const datayoutube =[]
+            searchResult.map(data =>{
+                datayoutube.push({
+                    videoId: data.id.videoId,
+                    youtube:{
+                        snippet: {title: data.snippet.title}
+                    }
+                })
+            })
+            setSearchedCarData(datayoutube)
+            console.log('use state check: ', searchedCarData)
+            
+            
+// etag: "DGXOPdigGW4SFrRywMEE_lwUuwY"
+// id:
+// kind: "youtube#video"
+// videoId: "iXrO7LJTUkE"
+// __proto__: Object
+// kind: "youtube#searchResult"
+// snippet:
+// channelId: "UCdOXRB936PKSwx0J7SgF6SQ"
+// channelTitle: "EddieX"
+// description: "Follow me on IG and FB at @eddiex616 to see daily posts and updates! The Dodge Durango SRT and Ford Explorer ST are two 3 row SUVs that offer some ..."
+// liveBroadcastContent: "none"
+// publishTime: "2020-02-17T20:00:10Z"
+// publishedAt: "2020-02-17T20:00:10Z"
+// thumbnails: {default: {…}, medium: {…}, high: {…}}
+// title: "2020 Dodge Durango SRT vs 2020 Ford Explorer ST | Is The V8 Worth $20,000 More?"
+
         })
     }
     useEffect( () => {
@@ -80,41 +142,40 @@ const HomePage = () =>{
         
   
       })
-      useEffect(async () => {
-        //   console.log('working?')
-        //   await youtubeAPI.get('/videos', {
-        //       params: {
-        //           id: videoId1
-        //       }
-        //   }).then(res =>{
-        //     setVideo1Desc(res.data.items[0])
-        //     console.log('test', res)
-        //   })
-        //   await youtubeAPI.get('/search', {
-        //     params: {
-        //         q: 'car'
-        //     }
-        // }).then(res =>{
-        //     setVideo2Desc(res.data.items[0])
-        //     console.log('test', res)
-        // })
-        
-        
-        
-
-        // setVideo2Desc(video2Data)
+    //   useEffect(async () => {
+    //     await youtubeAPI.get('/videos', {
+    //         params: {
+    //             id: carTempData[0].videoId
+    //         }
+    //     }).then(res =>{
+    //         console.log('res', res)
+    //         carTempData[0].youtube = res.data.items[0]
+       
+    //     })
+    //   await youtubeAPI.get('/videos', {
+    //       params: {
+    //           id: carTempData[1].videoId
+    //       }
+    //   }).then(res =>{
+    //       console.log('res2', res)
+    //       carTempData[1].youtube = res.data.items[0]
+    //   })
           
-      })
+    //   })
     return(
         <div className="main-wrapper">
             <div className="spacer-4rem"></div>
             <h2 className="title">New Today</h2>
-            <Row>
-                <Col sm={6}>
+            <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
+            {
+                carTempData.map((car, index) =>{
+       
+                    return <>
+                    <Col sm={6} key={car.videoId}>
                     <Row>
                         <Col sm={8} >
                             <div className="videoWrapper">
-                                <iframe src={videoEmbedURL + videoId1}
+                                <iframe src={videoEmbedURL + car.videoId}
                                         frameBorder='0'
                                         allow='autoplay; encrypted-media'
                                         allowFullScreen
@@ -123,30 +184,63 @@ const HomePage = () =>{
                                 />
                   
                             </div>
-                            {/* <h3>{video1Desc.snippet.title}</h3> */}
+                            <h3 style={{marginTop:'10px'}}>{car.youtube.snippet.title}</h3>
                         </Col>
-                        <Col sm={4}>
-                            {}
+                        <Col sm={4} style={{paddingLeft:0}}>
+                            <div className="spec-wrapper">
+                            <img alt={car.name} key={car.logoUrl} src={require(`../assets/car-brand-logos/${car.logoUrl}`).default} className="icon-s" />{' '}<span className="spec-text"><strong>{car.name}</strong></span><br/>
+                            <img alt="price" key={priceIcon} src={priceIcon} className="icon-s" /><span className="spec-text">{' '}${car.price}</span><br />
+                            <img alt="power " key={powerIcon} src={powerIcon} className="icon-s" /><span className="spec-text">{' '}{car.engine}</span><br />
+                            <img alt="piston" key={pistonIcon} src={pistonIcon} className="icon-s" /><span className="spec-text">{' '}{car.hoursepower}</span><br />
+                            </div>
                         </Col>
                     </Row>
                 </Col>
-                <Col sm={6}>
+                    </>
+                })
+            }
+           </Row>
+           <div className="spacer-4rem"></div>
+           <div className="title title-adj">
+            <h2 style={{marginBottom: '-1rem'}}>{titleStr}</h2>
+            <Form inline onSubmit={handleVideoSearch} style={{marginRight: '-8px'}}>
+                <FormControl type="text" placeholder="Search" className="mr-sm-2 form-adj" onChange={handleChangeKeyword}/>
+            </Form>
+            </div>
+            <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
+            {searchedCarData &&
+                searchedCarData.map((car, index) =>{
+       
+                    return <>
+                    <Col sm={6} key={car.videoId}>
                     <Row>
-                        <Col sm={8}>
-                        <div className="videoWrapper">
-                            <iframe width="560" height="315" 
-                            src={videoEmbedURL + videoId2}
-                            frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                        </div>
-                        
+                        <Col sm={8} >
+                            <div className="videoWrapper">
+                                <iframe src={videoEmbedURL + car.videoId}
+                                        frameBorder='0'
+                                        allow='autoplay; encrypted-media'
+                                        allowFullScreen
+                                        title='video'
+                                
+                                />
+                    
+                            </div>
+                            <h3 style={{marginTop:'10px'}}>{car.youtube.snippet.title}</h3>
                         </Col>
-                        <Col sm={4}></Col>
+                        <Col sm={4} style={{paddingLeft:0}}>
+                            <div className="spec-wrapper">
+                            {/* <img alt={car.name} key={car.logoUrl} src={require(`../assets/car-brand-logos/${car.logoUrl}`).default} className="icon-s" />{' '}<span className="spec-text"><strong>{car.name}</strong></span><br/>
+                            <img alt="price" key={priceIcon} src={priceIcon} className="icon-s" /><span className="spec-text">{' '}${car.price}</span><br />
+                            <img alt="power " key={powerIcon} src={powerIcon} className="icon-s" /><span className="spec-text">{' '}{car.engine}</span><br />
+                            <img alt="piston" key={pistonIcon} src={pistonIcon} className="icon-s" /><span className="spec-text">{' '}{car.hoursepower}</span><br /> */}
+                            </div>
+                        </Col>
                     </Row>
-
                 </Col>
+                    </>
+             })
+            }
             </Row>
-            <button onClick={handleTest}>test API</button><br/>
-            <button onClick={handleEddie}>test API Eddie</button>
         </div>
     )
 }

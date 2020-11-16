@@ -1,7 +1,7 @@
 @import "../../config";
 
 .nav-style{
-    font-family: 'Progress';
+    font-family: 'X-Heighting';
     font-size: 22px;
     color: $black !important;
 }
@@ -9,23 +9,114 @@
     color: $black !important;
 }
 .header-wrapper{
-    padding-top: 2rem;
+    // padding-top: 1rem;
     padding-right: 0 !important;
     padding-left: 0 !important;
+}
+.login-wrapper{
+    max-width: $main-width-phone;
+    text-align: right;
+    margin: 0 auto;
+    padding-top: 15px;
+    color: white;
+}
+.btn-login{
+    background-color: transparent;
+    border: 0;;
+}
+.btn-login:hover{
+    background-color: $theme-hover;
 }
 nav{
     max-width: $main-width-phone;
     margin: 0 auto;
     color: $black;
 }
+.navbar-light .navbar-toggler{
+    border: 0 !important;
+}
+.navbar-collapse{
+    background-color: $tertiary-color;
+}
+.navbar-nav .nav-link{
+    text-align: center;
+}
+.nav-link:hover{
+    background-color: $theme-hover;
+}
+.login-form{
+    max-width: 375px;
+    margin: 0 auto;
+}
+.login-btn{
+    background-color: $theme-color;
+    border-color: $theme-color;
+    width: 100%;
+}
+.login-btn:hover{
+    background-color: transparent !important;
+    border-color: $theme-hover !important;
+    color: $black;
+}
+.login-btn:focus{
+    background-color: $theme-darker;
+}
+.login-btn-wrapper{
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+}
+.modal-dialog{
+    font-family: 'MerriweatherSans';
+}
+.modal-header{
+    border: 0 !important;
+}
+.note-text{
+    color: $gray;
+    font-weight: 100;
+    font-size: 14px;
 
+}
+.error-msg{
+    color: red;
+    font-weight: 14px;
+    font-weight: lighter;
+    margin-bottom: 1rem;
+}
+.navbar-collapse{
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    padding-bottom: 2rem;
+    z-index: 100;
+}
+.click-div:hover{
+    cursor: pointer;
+    color: #aaa;
+}
+.title-adj{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+@media (min-width: 893px){
+    .navbar-collapse{
+        background-color: transparent !important;
+    }
+}
 @media (min-width: 1025px){
-    .header-wrapper{
+    .header-wrapper {
       max-width: $main-width-tablet;
+    }
+    .login-wrapper{
+        max-width: $main-width-tablet;
     }
   }
   @media (min-width: 1250px){
     .header-wrapper{
       max-width: $main-width-pc;
+    }
+    .login-wrapper{
+        max-width: $main-width-pc;
     }
   }
