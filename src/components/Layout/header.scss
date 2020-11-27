@@ -1,4 +1,4 @@
-@import "../../config";
+@import "../../scss/config";
 
 .nav-style{
     font-family: 'X-Heighting';
@@ -42,7 +42,8 @@ nav{
     text-align: center;
 }
 .nav-link:hover{
-    background-color: $theme-hover;
+    // background-color: $theme-hover;
+    color: #555;
 }
 .login-form{
     max-width: 375px;
@@ -98,6 +99,26 @@ nav{
     justify-content: space-between;
     margin-bottom: 10px;
 }
+.modal-header{
+    padding-bottom: 0 !important;
+}
+.custom-modal-body{
+    padding-top: 0 !important;
+}
+.login-logo-wrapper{
+    text-align: center;
+    padding-bottom: 15px;
+}
+.form-control{
+    color: #ccc;
+    font-size: 14px;
+}
+.modal-content{
+    border: 0;
+}
+// .modal-header{
+//     background: linear-gradient(180deg, #6e4dd0 0%, white 100%)
+// }
 
 @media (min-width: 893px){
     .navbar-collapse{

@@ -1,26 +1,36 @@
 import React, { useEffect, useState } from 'react'
 import { Row, Col, Form, FormControl } from 'react-bootstrap'
-import datacsv from '../assets/car-data.csv'
-import * as d3 from 'd3'
+// import datacsv from '../assets/car-data.csv'
+// import * as d3 from 'd3'
+import { connect } from 'react-redux'
+import * as Realm from "realm-web"
+
+
 // import * as Papa from 'papaparse'
 import { youtubeAPI } from '../utils/youtubeAPI'
 import { carTempData } from './carTempData'
+import { commentsTempData } from './commentsTempData' 
+import Comments from './Comments'
+import Avatar from 'react-avatar'
 
 import powerIcon from '../assets/global/Horsepower.png'
 import pistonIcon from '../assets/global/piston.png'
 import priceIcon from '../assets/global/Price-Tag-icon.png'
-// import speedIcon from '../assets/global/Speed-icon.png'
-// import ford from '../assets/car-brand-logos/Ford_Logo.png'
-// import mercedes from '../assets/car-brand-logos/MercedesBenz_Logo.png'
 
 const HomePage = () =>{
  
-    // const videoIds = ['QHLojVxs-M0', 'ifi5cGgJa7s']
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
     const [searchKeyword, setSearchKeyword] = useState('')
     const [titleStr, setTitleStr] = useState('Your search result')
     const [searchedCarData, setSearchedCarData] = useState([])
+    // var d = new Date();
+    // var n = new Date().getTime();
+    const appConfig = {
+        id: process.env.REACT_APP_REALM_APP_ID,
+        timeout: 10000, // timeout in number of milliseconds
+      };
+    const app = new Realm.App(appConfig);
 //     items: Array(5)
 // 0:
 // etag: "IPLLqa9ikvoy_gLqxEcoiqqavC4"
@@ -64,10 +74,7 @@ const HomePage = () =>{
           }).then(res =>{
               console.log('res', res)
               carTempData[0].youtube = res.data.items[0]
-            // setVideo1Desc(res.data.items[0])
-            // setCarData(
-
-            // )
+       
           })
         await youtubeAPI.get('/videos', {
             params: {
@@ -85,7 +92,6 @@ const HomePage = () =>{
             }
         }).then(res =>{
             console.log('res eddir', res)
-        //   setVideo1Desc(res.data.items[0])
         })
     }
     const handleChangeKeyword = (e) =>{
@@ -134,34 +140,32 @@ const HomePage = () =>{
 
         })
     }
-    useEffect( () => {
-        d3.csv(datacsv, function(data) {
-    //         var PATTERN = 'bedroom',
-    // filtered = myArray.filter(function (str) { return str.indexOf(PATTERN) === -1; });
-        });
-        
-  
-      })
-    //   useEffect(async () => {
-    //     await youtubeAPI.get('/videos', {
-    //         params: {
-    //             id: carTempData[0].videoId
-    //         }
-    //     }).then(res =>{
-    //         console.log('res', res)
-    //         carTempData[0].youtube = res.data.items[0]
-       
-    //     })
-    //   await youtubeAPI.get('/videos', {
-    //       params: {
-    //           id: carTempData[1].videoId
-    //       }
-    //   }).then(res =>{
-    //       console.log('res2', res)
-    //       carTempData[1].youtube = res.data.items[0]
-    //   })
+    useEffect( async () => {
+        let userLogged;
+        const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
+        try {
+        //   const app = new Realm.App(appConfig);
+      
+          // an authenticated user is required to access a MongoDB instance
+          await app.logIn(credentials).then( async user =>{
+            const mongo = user.mongoClient("RealmClusterFreeTier");
+            const mongoCollection = mongo.db("smoke-show").collection("comments");
+            const filter = {videoId: 'QHLojVxs'} 
+            await mongoCollection.find(filter).then(resAll =>{
+                console.log('find all', resAll);
+            })
+           
+          }
+          )
+      
           
-    //   })
+      
+          // the rest of your code ...
+      
+         }catch(error){console.log(error)}
+
+      })
+
     return(
         <div className="main-wrapper">
             <div className="spacer-4rem"></div>
@@ -185,6 +189,20 @@ const HomePage = () =>{
                   
                             </div>
                             <h3 style={{marginTop:'10px'}}>{car.youtube.snippet.title}</h3>
+                            <Row className="comment-wrapper">
+                                <Col sm={1} style={{margin:0,padding:0}}>
+                                {car.profile_pic ? <img src={car.profile_pic} className="creator-profile-pic" /> :
+                                <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="creator-profile-pic" name={car.creator} />
+                                }
+                                    
+                                </Col>
+                                <Col sm={11} style={{margin: 0, paddingRight:0, margin: 'auto'}}>
+                                <div className="creator-name"><strong>{car.creator}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{' '} {car.fans} fans</span></div>
+
+                                </Col>
+                            </Row>
+                   
+                            <Comments comments={commentsTempData[index]} videoId={car.videoId}/>
                         </Col>
                         <Col sm={4} style={{paddingLeft:0}}>
                             <div className="spec-wrapper">
@@ -244,24 +262,12 @@ const HomePage = () =>{
         </div>
     )
 }
+const mapStateToProps = (state) => {
+    //syntax is propName: state.key of combineReducer.key
+    return{
+      username: state.user.username,
+    }
+  }
 
-export default HomePage
+export default connect(mapStateToProps)(HomePage)
 
-
-// etag: "zSDmvaDlxia7m7rjosNr1ZzMUgY"
-// items: Array(1)
-// 0:
-// etag: "sdyw-vxA45M_t1eQABAOPH3tGzk"
-// id: "QHLojVxs-M0"
-// kind: "youtube#video"
-// snippet:
-// categoryId: "2"
-// channelId: "UCdOXRB936PKSwx0J7SgF6SQ"
-// channelTitle: "EddieX"
-// defaultAudioLanguage: "en"
-// description: "Follow me on IG and FB at @eddiex616 to see daily posts and updates!↵Instagram: https://www.instagram.com/eddiex616/↵Facebook:  https://www.facebook.com/EddieX616/↵The 2020 Shelby GT500 is the most powerful production Mustang every built, with a 5.2L Supercharged V8 making 760HP and 625 lb-ft of torque. Paired with a 7 speed DCT transmission, this track monster is irresponsibly fast. Tremendously capable both around a track and in a straight line, the top tier Shelby takes everything to the next level. As a current Shelby GT350R owner, I can confidently say that the GT500 brings a completely different kind of driving experience. The more powerful GT500 is without a doubt much more capable, and despite being 500lbs heavier, will demolish the GT350 in almost every metric. I enjoyed my time with the GT500 so much that I now want to add one to my garage alongside the GT350R!↵↵Use my referral link to get 12% off your BlendMount Radar Detector mount order!↵http://blendmount.refr.cc/eddiex↵↵Music from https://www.epidemicsound.com/↵↵#ShelbyGT500 #Ford #Mustang"
-// liveBroadcastContent: "none"
-// localized: {title: "Here's Why I Want A 2020 Shelby GT500!", description: "Follow me on IG and FB at @eddiex616 to see daily …w.epidemicsound.com/↵↵#ShelbyGT500 #Ford #Mustang"}
-// publishedAt: "2020-10-29T19:00:02Z"
-// tags: (21) ["EddieX", "BMW", "audi", "mercedes", "supercar", "review", "automotive", "cars", "ford", "informational", "ford mustang", "shelby gt500", "ford gt500", "2020 shelby gt500", "gt350R", "shelby gt350", "gt350 vs gt500", "best mustang every", "shelby gt500 mustang", "mustang gt500", "ford performance"]
-// thumbnails: {default: {…}, medium: {…}, high: {…}, standard: {…}, maxres: {…}}

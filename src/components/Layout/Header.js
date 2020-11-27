@@ -5,11 +5,11 @@ import './header.scss'
 import * as Realm from "realm-web"
 import LoginModal from './LoginModal'
 import SignUpModal from './SignUpModal'
-
+import { connect } from 'react-redux'
 // const REALM_APP_ID = "smoke-show-test-uasqg"; 
 
 
-const Header = () =>{
+const Header = (props) =>{
     // const app = new Realm.App({ id: process.env.REALM_APP_ID })
     const app = new Realm.App({ id: "smoke-show-test-uasqg" })
     const getApp = Realm.App.getApp("smoke-show-test-uasqg");
@@ -18,6 +18,8 @@ const Header = () =>{
     const [username, setUsername] = useState('')
     const [hasAccount, setHasAccount] = useState(true)
     const [modalShow, setModalShow] = useState(false)
+    // const userid = props
+    console.log('check if working', props)
 
     const logIn = async ()=>{
         setModalShow(true)
@@ -86,4 +88,10 @@ const Header = () =>{
     )
 }
 
-export default Header
+const mapStateToProps = (state) =>{
+    return{
+        userId: state.userId,
+    }
+}
+
+export default connect(mapStateToProps)(Header)

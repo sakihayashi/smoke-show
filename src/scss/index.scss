@@ -2,19 +2,19 @@
 
 @font-face {
   font-family: 'Progress';
-  src: local('Progress'), url(./fonts/Progress.ttf) format('truetype');
+  src: local('Progress'), url(../fonts/Progress.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Best in Class';
-  src: local('BestInClass'), url(./fonts/BEST-IN-CLASS.ttf) format('truetype');
+  src: local('BestInClass'), url(../fonts/BEST-IN-CLASS.ttf) format('truetype');
 }
 @font-face{
   font-family: 'MerriweatherSans';
-  src: local('MerriweatherSans'), url(./fonts/MerriweatherSans-VariableFont_wght.ttf) format('truetype')
+  src: local('MerriweatherSans'), url(../fonts/MerriweatherSans-VariableFont_wght.ttf) format('truetype')
 }
 @font-face{
   font-family: 'X-Heighting';
-  src: local('X-Heighting'), url(./fonts/X-Heighting400.otf) format('otf')
+  src: local('X-Heighting'), url(../fonts/X-Heighting400.otf) format('otf')
 }
 *{
   margin: 0;
@@ -31,7 +31,7 @@ h1, h2{
 }
 h3{
   font-family: 'MerriweatherSans' !important;
-  font-size: 18px !important;
+  font-size: 16px !important;
   line-height: 23px;
 }
 
@@ -88,6 +88,69 @@ header{
 .icon-s{
   width: 20px;
   height: auto;
+}
+.profile-pic{
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 15px;
+}
+.profile-pic > div{
+  font-size: 16px !important;
+  // padding-top: 2px !important;
+}
+.comment-txt{
+  font-weight: 100;
+  font-size: 13px;
+  font-family: "MerriweatherSans", Arial;
+  color: #333;
+}
+.comment-username{
+  font-weight: 700;
+  font-size: 13px;
+  font-family: "MerriweatherSans", Arial;
+}
+.comment-wrapper{
+  width: 100%;
+  margin: 22px 0 !important;
+  color: $black;
+}
+.comment-login-wrapper{
+  text-align: right;
+}
+.comment-input{
+  width: 100%;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+}
+.comment-input:focus{
+  width: 100%;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+}
+.comment-btn{
+  background-color: $theme-color !important;
+  border: 0 !important;
+  margin-top: 5px;
+  font-size: 14px !important;
+  margin-right: 0;
+}
+label{
+  margin-bottom: 0px !important;
+}
+.creator-name{
+  font-size: 16px;
+  font-family: "MerriweatherSans", Arial;
+  margin-left: 15px;
+  line-height: 16px;
+
+}
+
+.creator-profile-pic{
+  width: 46px;
+  height: 46px;
+  border-radius: 23px;
 }
 @media (min-width: 1025px){
   .main-wrapper{

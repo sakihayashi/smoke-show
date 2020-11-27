@@ -3,14 +3,17 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-} from "react-router-dom";
+} from "react-router-dom"
 
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.scss';
-import Header from './components/Layout/Header';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './scss/App.scss'
+import Header from './components/Layout/Header'
 import HomePage from './components/HomePage'
-// import DataController from './components/DataController';
+
+
+
+
 
 function App() {
   return (
@@ -18,9 +21,8 @@ function App() {
       <Header />
       <Switch>
         <Route exact path="/" component={HomePage} />
-        {/* <Route exact path="/data" component={DataController} /> */}
       </Switch>
-    </Router>
+    </Router>    
   );
 }
 
