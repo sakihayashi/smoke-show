@@ -1,0 +1,39 @@
+@import "../../scss/config";
+
+.bio-profile-pic{
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+}
+.bio-creator-name{
+    font-size: $font-l;
+    font-weight: 600;
+    color: $black;
+    // margin-left: 20px;
+}
+.bio-creator-data{
+    font-size: $font-m;
+    color: $gray;
+    // margin-left: 20px;
+}
+.bio-text-wrapper{
+    margin: auto;
+}
+.banner-wrapper{
+    width: 100%;
+    margin: 4rem 0 2rem 0;
+    
+  }
+  .bio-sub-menu{
+      margin: auto;
+      font-size: $font-l;
+      font-family: 'X-Heighting';
+      color: $black;
+      ul{
+          margin: auto;
+          li{
+              display: inline;
+              margin-right: 20px;
+          }
+      }
+  }

@@ -2,16 +2,30 @@
 
 .nav-style{
     font-family: 'X-Heighting';
-    font-size: 22px;
+    font-size: $font-l;
     color: $black !important;
 }
-.nav-link{
-    color: $black !important;
+// .nav-link{
+//     color: $black !important;
+// }
+.nav-style{
+    
+    a{
+        // color: $black;
+        margin: auto 15px;
+    }
+    .active{
+        color: $gray !important;
+        // text-decoration: underline;
+    }
 }
 .header-wrapper{
     // padding-top: 1rem;
     padding-right: 0 !important;
     padding-left: 0 !important;
+}
+.nav-link{
+    color: $black !important;
 }
 .login-wrapper{
     max-width: $main-width-phone;
@@ -76,12 +90,12 @@ nav{
 .note-text{
     color: $gray;
     font-weight: 100;
-    font-size: 14px;
+    font-size: $font-s;
 
 }
 .error-msg{
     color: red;
-    font-weight: 14px;
+    font-weight: $font-s;
     font-weight: lighter;
     margin-bottom: 1rem;
 }
@@ -111,7 +125,7 @@ nav{
 }
 .form-control{
     color: #ccc;
-    font-size: 14px;
+    font-size: $font-s;
 }
 .modal-content{
     border: 0;

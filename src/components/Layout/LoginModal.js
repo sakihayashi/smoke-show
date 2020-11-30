@@ -4,17 +4,24 @@ import * as Realm from "realm-web"
 import { authUser } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import Logo from '../../assets/global/Logo-smoke-show.png'
-
+import jwt from 'jsonwebtoken'
+import { useUID } from 'react-uid'
 
 const LoginModal = (props) =>{
     const [userObj, setUserObj] = useState({fname: '', lname: '', email: '', password: ''})
+    const uid = useUID()
     const appConfig = {
         id: "smoke-show-test-uasqg" ,
         timeout: 10000, // timeout in number of milliseconds
       };
-    const getApp = Realm.App.getApp("smoke-show-test-uasqg");
+    const getApp = Realm.App.getApp("smoke-show-test-uasqg")
+    //max age one day number of day, hours, min and sec
+    const maxAge = 1 * 24 * 60 * 60
+    const maxAgeTest = 1 * 60 * 60
 
-    // console.log('props at loginmodal', props)
+    const createToken = (userData) =>{
+        return jwt.sign({ userData: userData }, 'smoke_show_secret', {expiresIn: maxAgeTest});
+    }
 
     const handleChange =(e) =>{
         setUserObj({
@@ -25,26 +32,35 @@ const LoginModal = (props) =>{
     const handleSubmit = async (e) =>{
         e.preventDefault()
         const credentials = Realm.Credentials.emailPassword(userObj.email, userObj.password)
-
-
-        // const mongodb = props.app.services.mongodb("smoke-show-test-uasqg");
-        // const collection = mongodb("smoke-show").collection("users");
+        
 
         try{
             // Authenticate the user
             await props.app.logIn(credentials).then(async user=>{
-                
+                    
+                    // const key = await user.apiKeys.create(uid)
                     const mongo = user.mongoClient("RealmClusterFreeTier");
                     const mongoCollection = mongo.db("smoke-show").collection("users");
+                    let token = ''
                     // const customData = getApp.currentUser.customData
                     // props.handleUser(customData.fname)
                     // console.log('user', getApp.currentUser)
                     // console.log('user', user)
                     const queryFilter = { userId: user.id };
-                    const loginUserData = await mongoCollection.findOne(queryFilter);
-                    const userData = {loginUserData: loginUserData, credentials: userObj}
-                    props.handleUser(loginUserData.fname)
-                    props.authUser(userData)
+                    await mongoCollection.findOne(queryFilter).then(loginUserData =>{
+                        loginUserData.login = userObj
+                        token = createToken(loginUserData)
+                        
+                        localStorage.setItem('session_token', token)
+                        const userData = {loginUserData: loginUserData, credentials: userObj}
+                        props.handleUser(loginUserData.fname)
+                        props.authUser(userData)
+                    })
+                    
+                    // let decoded = jwt.verify(token, 'smoke_show_secret');
+                    // console.log('decoded', decoded)
+                    // console.log('userId', decoded.userData.userId)
+                    
                 });
             
       
@@ -55,27 +71,27 @@ const LoginModal = (props) =>{
     }
     
 
-const handleTest = async (e) =>{
-e.preventDefault()
-  let user;
-const testName = {
-    fname: "Mario",
-    lname: "Hayashi"
-}
+// const handleTest = async (e) =>{
+// e.preventDefault()
+//   let user;
+// const testName = {
+//     fname: "Mario",
+//     lname: "Hayashi"
+// }
   
-  try {
-    const app = new Realm.App(appConfig);
+//   try {
+//     const app = new Realm.App(appConfig);
 
-    // an authenticated user is required to access a MongoDB instance
-    user = await app.logIn(Realm.Credentials.anonymous());
-    console.log('uers', user)
-    const mongo = user.mongoClient("RealmClusterFreeTier");
-    const mongoCollection = mongo.db("smoke-show").collection("users");
-    const insertOneResult = await mongoCollection.insertOne(testName);
-    console.log(insertOneResult);
+//     // an authenticated user is required to access a MongoDB instance
+//     user = await app.logIn(Realm.Credentials.anonymous());
+//     console.log('uers', user)
+//     const mongo = user.mongoClient("RealmClusterFreeTier");
+//     const mongoCollection = mongo.db("smoke-show").collection("users");
+//     const insertOneResult = await mongoCollection.insertOne(testName);
+//     console.log(insertOneResult);
 
-   }catch(err){console.log(err)}
-}
+//    }catch(err){console.log(err)}
+// }
 
 
     return (

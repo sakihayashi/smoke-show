@@ -5,32 +5,45 @@ import { connect } from 'react-redux'
 import * as Realm from "realm-web"
 // import { authUser } from '../store/actions/authActions'
 import moment from 'moment'
+import jwt from 'jsonwebtoken'
 
 const Comments = (props) =>{
     // const [commentsData, setCommentsData] = useState(props.comments)
     const [commentsDB, setCommentsDB] = useState([])
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [modalShow, setModalShow] = useState(false)
+    // const [modalShow, setModalShow] = useState(false)
     const [userComment, setUserComment] = useState("")
     const app = new Realm.App({ id: "smoke-show-test-uasqg" })
-    const getApp = Realm.App.getApp("smoke-show-test-uasqg");
-    console.log('comment props', props)
+    // const getApp = Realm.App.getApp("smoke-show-test-uasqg");
+    // console.log('comment props', props)
 
     const handleChange = (e) =>{
         setUserComment(e.target.value)
     }
     const handleSubmitComment = async (e) =>{
         e.preventDefault()
-        console.log('props', props)
-        const newComment = {
-            userId: props.loginUserData.userId,
-            comment: userComment,
-            date_posted: new Date().getTime(),
-            videoId: props.videoId,
-            username: props.loginUserData.fname
+        // console.log('props', props)
+        let tokenLocalStorage = localStorage.getItem('session_token')
+        let newComment ={}
+        let credentials = null
+        if(tokenLocalStorage){
+            jwt.verify(tokenLocalStorage, 'smoke_show_secret', (err, decoded)=>{
+                if(err){
+                    console.log('please log in. session time out')
+                }else{
+                    newComment={
+                        userId: decoded.userData.userId,
+                        comment: userComment,
+                        date_posted: new Date().getTime(),
+                        videoId: props.videoId,
+                        username: decoded.userData.fname
+                    }
+                    credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password);
+                }
+            })
         }
-        console.log('props', props)
-        const credentials = Realm.Credentials.emailPassword(props.credentials.email, props.credentials.password)
+ 
+        // const credentials = Realm.Credentials.emailPassword(props.credentials.email, props.credentials.password)
         try{
             // Authenticate the user
             await app.logIn(credentials).then(async user=>{
@@ -121,6 +134,7 @@ const Comments = (props) =>{
             setIsLoggedIn(false)
         }
     }, [props.loginUserData.userId])
+
     useEffect( () => {
         
         getComments()
@@ -136,7 +150,7 @@ const Comments = (props) =>{
             return(
                 <Row className="comment-wrapper">
                     <Col sm={1} style={{margin:0,padding:0}}>
-                    {comment.profile_pic ? <img src={comment.profile_pic} className="profile-pic" /> :
+                    {comment.profile_pic ? <img src={comment.profile_pic} className="profile-pic" alt={comment.username} /> :
                     <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="profile-pic" name={comment.username} />
                     }
                         

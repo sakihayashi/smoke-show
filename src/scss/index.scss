@@ -31,7 +31,7 @@ h1, h2{
 }
 h3{
   font-family: 'MerriweatherSans' !important;
-  font-size: 16px !important;
+  font-size: $font-m !important;
   line-height: 23px;
 }
 
@@ -41,6 +41,7 @@ header{
   background: linear-gradient(180deg, rgba(110,77,208,1) 0%, rgba(255,255,255,1) 100%);
   margin: 0 auto;
 }
+
 .main-wrapper{
   max-width: $main-width-phone;
   margin: 0 auto;
@@ -81,8 +82,8 @@ header{
   padding-bottom: 5px;
 }
 .spec-text{
-  font-size: 14px;
-  line-height: 14px;
+  font-size: $font-s;
+  line-height: $font-s;
   font-family: 'Arial Narrow';
 }
 .icon-s{
@@ -95,18 +96,18 @@ header{
   border-radius: 15px;
 }
 .profile-pic > div{
-  font-size: 16px !important;
+  font-size: $font-m !important;
   // padding-top: 2px !important;
 }
 .comment-txt{
   font-weight: 100;
-  font-size: 13px;
+  font-size: $font-xs;
   font-family: "MerriweatherSans", Arial;
   color: #333;
 }
 .comment-username{
   font-weight: 700;
-  font-size: 13px;
+  font-size: $font-xs;
   font-family: "MerriweatherSans", Arial;
 }
 .comment-wrapper{
@@ -133,17 +134,17 @@ header{
   background-color: $theme-color !important;
   border: 0 !important;
   margin-top: 5px;
-  font-size: 14px !important;
+  font-size: $font-s !important;
   margin-right: 0;
 }
 label{
   margin-bottom: 0px !important;
 }
 .creator-name{
-  font-size: 16px;
+  font-size: $font-m;
   font-family: "MerriweatherSans", Arial;
   margin-left: 15px;
-  line-height: 16px;
+  line-height: $font-m;
 
 }
 
@@ -152,6 +153,24 @@ label{
   height: 46px;
   border-radius: 23px;
 }
+.influencer-desc{
+  height: 100px;
+  max-height: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 1.5rem;
+  max-height: 6rem;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  display: block;
+  display: -webkit-box;
+}
+.influencer-banner{
+    width: 100%;    
+    object-fit: cover;
+    height: 100px;
+}
+
 @media (min-width: 1025px){
   .main-wrapper{
     max-width: $main-width-tablet;

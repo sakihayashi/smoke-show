@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
+import { NavLink } from 'react-router-dom'
 import { Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
 import Logo from '../../assets/global/Logo-smoke-show.png'
 import './header.scss'
@@ -6,10 +7,13 @@ import * as Realm from "realm-web"
 import LoginModal from './LoginModal'
 import SignUpModal from './SignUpModal'
 import { connect } from 'react-redux'
+import jwt from 'jsonwebtoken'
 // const REALM_APP_ID = "smoke-show-test-uasqg"; 
 
 
 const Header = (props) =>{
+    const { location } = props
+    console.log('location', props)
     // const app = new Realm.App({ id: process.env.REALM_APP_ID })
     const app = new Realm.App({ id: "smoke-show-test-uasqg" })
     const getApp = Realm.App.getApp("smoke-show-test-uasqg");
@@ -18,14 +22,13 @@ const Header = (props) =>{
     const [username, setUsername] = useState('')
     const [hasAccount, setHasAccount] = useState(true)
     const [modalShow, setModalShow] = useState(false)
-    // const userid = props
-    console.log('check if working', props)
 
     const logIn = async ()=>{
         setModalShow(true)
     }
     const logOut = async () =>{
         setUser(false)
+        localStorage.removeItem('session_token')
         await getApp.currentUser.logOut();
 
     }
@@ -37,6 +40,21 @@ const Header = (props) =>{
      const toggleModal = () =>{
          setHasAccount(!hasAccount)
      }
+     useEffect(() => {
+         let tokenLocalStorage = localStorage.getItem('session_token')
+         if(tokenLocalStorage){
+            jwt.verify(tokenLocalStorage, 'smoke_show_secret', (err, decoded)=>{
+                if(err){
+                    console.log(err)
+                    setUser(false)
+                }else{
+                    setUser(true)
+                    setUsername(decoded.userData.fname)
+                }
+            });
+            
+         }
+     }, [])
 
     return(
         <header>
@@ -67,9 +85,10 @@ const Header = (props) =>{
                 </Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="mr-auto nav-style" >
-                    <Nav.Link href="#home">Home</Nav.Link>
-                    <Nav.Link href="#link">Influencers</Nav.Link>
+                    <Nav className="mr-auto nav-style" activeKey={location.pathname}>
+                    {/* <Nav.Link href="#home">Home</Nav.Link> */}
+                        <Nav.Link href="/" >Home</Nav.Link>
+                        <Nav.Link href="/influencers"  >Influencers</Nav.Link>
                     {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                         <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
