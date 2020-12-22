@@ -1,7 +1,7 @@
 
 import * as Realm from "realm-web"
 
-const getApp = Realm.App.getApp("smoke-show-test-uasqg");
+const getApp = Realm.App.getApp(process.env.REACT_APP_REALM_APP_ID);
 
 export const createNewUser = (userObj) =>{
     //with thunk, we can reutrn function but otherwise, return state

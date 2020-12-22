@@ -37,10 +37,22 @@
 .btn-login{
     background-color: transparent;
     border: 0;;
+    &:hover{
+        background-color: $theme-hover !important;
+    }
+    &:active {
+        background-color: $theme-hover !important;
+    }
+    &focus{
+        background-color: $theme-hover !important;
+    }
 }
-.btn-login:hover{
-    background-color: $theme-hover;
+.btn-primary.focus, .btn-primary:focus{
+    background-color: $theme-hover !important;
+    border-color: $theme-hover !important;
+    box-shadow: none !important;
 }
+
 nav{
     max-width: $main-width-phone;
     margin: 0 auto;
@@ -104,9 +116,15 @@ nav{
     padding-bottom: 2rem;
     z-index: 100;
 }
-.click-div:hover{
-    cursor: pointer;
-    color: #aaa;
+.click-div{
+    color: $black;
+    &:hover{
+        cursor: pointer;
+        color: #aaa;
+        text-decoration: underline;
+        border-radius: 4px;
+    }
+    
 }
 .title-adj{
     display: flex;

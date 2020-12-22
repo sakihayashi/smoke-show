@@ -1,0 +1,13 @@
+@import "../../scss/config";
+
+.footer-wrapper{
+    width: 100vw;
+    height: 100px;
+    background: linear-gradient(0deg, $theme-color 0%, $tertiary-color 100%);
+    margin-top: 4rem;
+    color: $black;
+    text-align: center;
+}
+.footer-main{
+    height: 50px;
+}

@@ -6,6 +6,7 @@ import * as Realm from "realm-web"
 // import { authUser } from '../store/actions/authActions'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
+import {uid} from 'react-uid'
 
 const Comments = (props) =>{
     // const [commentsData, setCommentsData] = useState(props.comments)
@@ -13,8 +14,8 @@ const Comments = (props) =>{
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     // const [modalShow, setModalShow] = useState(false)
     const [userComment, setUserComment] = useState("")
-    const app = new Realm.App({ id: "smoke-show-test-uasqg" })
-    // const getApp = Realm.App.getApp("smoke-show-test-uasqg");
+    const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
+    // const getApp = Realm.App.getApp(process.env.REACT_APP_REALM_APP_ID);
     // console.log('comment props', props)
 
     const handleChange = (e) =>{
@@ -27,7 +28,7 @@ const Comments = (props) =>{
         let newComment ={}
         let credentials = null
         if(tokenLocalStorage){
-            jwt.verify(tokenLocalStorage, 'smoke_show_secret', (err, decoded)=>{
+            jwt.verify(tokenLocalStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
                     console.log('please log in. session time out')
                 }else{
@@ -48,7 +49,7 @@ const Comments = (props) =>{
             // Authenticate the user
             await app.logIn(credentials).then(async user=>{
                 
-                    const mongo = user.mongoClient("RealmClusterFreeTier");
+                    const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
                     const mongoCollection = mongo.db("smoke-show").collection("comments");
 
                     await mongoCollection.insertOne(newComment).then(result =>{
@@ -77,7 +78,7 @@ const Comments = (props) =>{
             <Col sm={11} style={{margin: 0, paddingRight:0}}>
                 <Form onSubmit={handleSubmitComment} >
                     <Form.Group >
-                    <Form.Control className="comment-input" type="text" placeholder="Write a comment here" name="comment" onChange={handleChange}/>
+                    <Form.Control className="comment-input" type="text" placeholder="Write a comment here" name="comment" onChange={handleChange} required/>
                         <div className="comment-login-wrapper">
                             <Button className="comment-btn" type="submit">Post comment</Button>
                         </div>
@@ -108,7 +109,7 @@ const Comments = (props) =>{
       
           // an authenticated user is required to access a MongoDB instance
           await app.logIn(credentials).then( async user =>{
-            const mongo = user.mongoClient("RealmClusterFreeTier");
+            const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
             const mongoCollection = mongo.db("smoke-show").collection("comments");
             const filter = {videoId: props.videoId} 
             const options = {sort: {date_posted: -1}, limit: 4}
@@ -128,6 +129,7 @@ const Comments = (props) =>{
          }catch(error){console.log(error)}
     }
     useEffect(() => {
+        
         if(props.loginUserData.userId){
             setIsLoggedIn(true)
         }else{
@@ -138,6 +140,19 @@ const Comments = (props) =>{
     useEffect( () => {
         
         getComments()
+        let tokenLocalStorage = localStorage.getItem('session_token')
+         if(tokenLocalStorage){
+            jwt.verify(tokenLocalStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+                if(err){
+                    console.log(err)
+                    setIsLoggedIn(false)
+                }else{
+                    console.log('decoded: ', decoded)
+                    setIsLoggedIn(true)
+                }
+            });
+            
+         }
     }, [])
     return(
         <React.Fragment>
@@ -148,7 +163,7 @@ const Comments = (props) =>{
             var localtime = moment(comment.date_posted).local().format('YYYY-MM-DD')
            
             return(
-                <Row className="comment-wrapper">
+                <Row className="comment-wrapper" key={uid(comment)}>
                     <Col sm={1} style={{margin:0,padding:0}}>
                     {comment.profile_pic ? <img src={comment.profile_pic} className="profile-pic" alt={comment.username} /> :
                     <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="profile-pic" name={comment.username} />

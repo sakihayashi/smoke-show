@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useState, useEffect} from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
 import Logo from '../../assets/global/Logo-smoke-show.png'
 import './header.scss'
@@ -8,48 +8,41 @@ import LoginModal from './LoginModal'
 import SignUpModal from './SignUpModal'
 import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
-// const REALM_APP_ID = "smoke-show-test-uasqg"; 
 
 
 const Header = (props) =>{
-    const { location } = props
-    console.log('location', props)
+    const location = useLocation();
+    // const { location } = props
+    console.log('location', location)
+    const id = process.env.REACT_APP_REALM_APP_ID
     // const app = new Realm.App({ id: process.env.REALM_APP_ID })
-    const app = new Realm.App({ id: "smoke-show-test-uasqg" })
-    const getApp = Realm.App.getApp("smoke-show-test-uasqg");
+    const app = new Realm.App({ id: id })
+    const getApp = Realm.App.getApp(id);
 
-    const [user, setUser] = useState(false)
-    const [username, setUsername] = useState('')
     const [hasAccount, setHasAccount] = useState(true)
-    const [modalShow, setModalShow] = useState(false)
-
+    
     const logIn = async ()=>{
-        setModalShow(true)
+        props.modalShowHide(true)
     }
     const logOut = async () =>{
-        setUser(false)
+        props.changeUserState(false)
         localStorage.removeItem('session_token')
-        await getApp.currentUser.logOut();
-
+        await getApp.currentUser.logOut()
     }
-     const handleUser = (fname) =>{
-         setUser(true)
-         setUsername(fname)
-         setModalShow(false)
-     }
+     
      const toggleModal = () =>{
          setHasAccount(!hasAccount)
      }
      useEffect(() => {
          let tokenLocalStorage = localStorage.getItem('session_token')
          if(tokenLocalStorage){
-            jwt.verify(tokenLocalStorage, 'smoke_show_secret', (err, decoded)=>{
+            jwt.verify(tokenLocalStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
                     console.log(err)
-                    setUser(false)
+                    props.changeUserState(false)
                 }else{
-                    setUser(true)
-                    setUsername(decoded.userData.fname)
+                    props.changeUserState(true)
+                    props.funcSetUsername(decoded.userData.fname)
                 }
             });
             
@@ -59,21 +52,21 @@ const Header = (props) =>{
     return(
         <header>
             <div className="login-wrapper">
-            {user ? <div >Hi {username}, <Button className="btn-login"  onClick={logOut}>Logout</Button></div> :
+            {props.user ? <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button></div> :
             <Button className="btn-login" onClick={logIn}>Login</Button>
             }
             { hasAccount ? <LoginModal 
-            show={modalShow}  
-            onHide={()=>setModalShow(false)}
+            show={props.modalShow}  
+            onHide={()=>props.modalShowHide(false)}
             app={app}
-            handleUser={handleUser}
+            handleuser={props.handleuser}
             toggleModal={toggleModal}
             />
             : <SignUpModal
-            show={modalShow}  
-            onHide={()=>setModalShow(false)}
+            show={props.modalShow}  
+            onHide={()=>props.modalShowHide(false)}
             app={app}
-            handleUser={handleUser}
+            handleuser={props.handleuser}
             toggleModal={toggleModal}
              />
             }
@@ -88,7 +81,10 @@ const Header = (props) =>{
                     <Nav className="mr-auto nav-style" activeKey={location.pathname}>
                     {/* <Nav.Link href="#home">Home</Nav.Link> */}
                         <Nav.Link href="/" >Home</Nav.Link>
-                        <Nav.Link href="/influencers"  >Influencers</Nav.Link>
+                        <Nav.Link href="/influencers"   >Influencers</Nav.Link>
+                        <Nav.Link href="/car-search">Car Stats</Nav.Link>
+                        {/* <Nav.Link as={Link} to="/about">About</Nav.Link> */}
+                        <Nav.Link href="/about">About</Nav.Link>
                     {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                         <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>

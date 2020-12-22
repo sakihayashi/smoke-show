@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { Row, Col, Form, FormControl } from 'react-bootstrap'
+import React, { useEffect, useState, Fragment, useRef } from 'react'
+import { Row, Col, Form, FormControl, Button } from 'react-bootstrap'
 // import datacsv from '../assets/car-data.csv'
 // import * as d3 from 'd3'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
-
-
 // import * as Papa from 'papaparse'
 import { youtubeAPI } from '../utils/youtubeAPI'
 import { carTempData } from './carTempData'
 import { commentsTempData } from './commentsTempData' 
 import Comments from './Comments'
 import Avatar from 'react-avatar'
-
+import { v4 as uuidv4 } from 'uuid';
 import powerIcon from '../assets/global/Horsepower.png'
 import pistonIcon from '../assets/global/piston.png'
 import priceIcon from '../assets/global/Price-Tag-icon.png'
+import Layout from './Layout/Layout'
 
-const HomePage = () =>{
- 
+const HomePage = (props) =>{
+ console.log('props', props)
+ const childRef = useRef();
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
     const [searchKeyword, setSearchKeyword] = useState('')
@@ -65,35 +65,36 @@ const HomePage = () =>{
 // thumbnails: {default: {…}, medium: {…}, high: {…}}
 // title: "The Best Mercedes AMG Ever! | SLS Black Series Review"
 
-    const handleTest = async (e) =>{
+    // const handleTest = async (e) =>{
        
-        await youtubeAPI.get('/videos', {
-              params: {
-                  id: carTempData[0].videoId
-              }
-          }).then(res =>{
-              console.log('res', res)
-              carTempData[0].youtube = res.data.items[0]
+    //     await youtubeAPI.get('/videos', {
+    //           params: {
+    //               id: carTempData[0].videoId
+    //           }
+    //       }).then(res =>{
+    //           console.log('res', res)
+    //           carTempData[0].youtube = res.data.items[0]
        
-          })
-        await youtubeAPI.get('/videos', {
-            params: {
-                id: carTempData[1].videoId
-            }
-        }).then(res =>{
-            console.log('res2', res)
-            carTempData[1].youtube = res.data.items[0]
-        })
-    }
-    const handleEddie = async () =>{
-        await youtubeAPI.get('/search', {
-            params: {
-                q: 'Eddie X'
-            }
-        }).then(res =>{
-            console.log('res eddir', res)
-        })
-    }
+    //       })
+    //     await youtubeAPI.get('/videos', {
+    //         params: {
+    //             id: carTempData[1].videoId
+    //         }
+    //     }).then(res =>{
+    //         console.log('res2', res)
+    //         carTempData[1].youtube = res.data.items[0]
+    //     })
+    // }
+
+    // const handleEddie = async () =>{
+    //     await youtubeAPI.get('/search', {
+    //         params: {
+    //             q: 'Eddie X'
+    //         }
+    //     }).then(res =>{
+    //         console.log('res eddir', res)
+    //     })
+    // }
     const handleChangeKeyword = (e) =>{
         setSearchKeyword(e.target.value)
     }
@@ -117,6 +118,7 @@ const HomePage = () =>{
                         snippet: {title: data.snippet.title}
                     }
                 })
+                return
             })
             setSearchedCarData(datayoutube)
             console.log('use state check: ', searchedCarData)
@@ -140,7 +142,8 @@ const HomePage = () =>{
 
         })
     }
-    useEffect( async () => {
+ 
+    const loginCheck = async () =>{
         let userLogged;
         const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
         try {
@@ -148,7 +151,7 @@ const HomePage = () =>{
       
           // an authenticated user is required to access a MongoDB instance
           await app.logIn(credentials).then( async user =>{
-            const mongo = user.mongoClient("RealmClusterFreeTier");
+            const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
             const mongoCollection = mongo.db("smoke-show").collection("comments");
             const filter = {videoId: 'QHLojVxs'} 
             await mongoCollection.find(filter).then(resAll =>{
@@ -157,109 +160,119 @@ const HomePage = () =>{
            
           }
           )
-      
-          
-      
           // the rest of your code ...
       
          }catch(error){console.log(error)}
+    }
+
+
+    useEffect( () => {
+        loginCheck()
 
       })
 
     return(
-        <div className="main-wrapper">
-            <div className="spacer-4rem"></div>
-            <h2 className="title">New Today</h2>
-            <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
-            {
-                carTempData.map((car, index) =>{
-       
-                    return <>
-                    <Col sm={6} key={car.videoId}>
-                    <Row>
-                        <Col sm={8} >
-                            <div className="videoWrapper">
-                                <iframe src={videoEmbedURL + car.videoId}
-                                        frameBorder='0'
-                                        allow='autoplay; encrypted-media'
-                                        allowFullScreen
-                                        title='video'
+            <Layout ref={childRef}>
+                <div className="main-wrapper">
+                <div className="spacer-4rem"></div>
+                <h2 className="title">New Today</h2>
+                <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
+                {
+                    carTempData.map((car, index) =>{
+                        const uuid = uuidv4()
+                        return(
+                            <Fragment key={uuid}>
+                                <Col sm={6} >
+                                    <Row >
+                                        <Col sm={8} >
+                                            <div className="videoWrapper">
+                                                <iframe src={videoEmbedURL + car.videoId}
+                                                        frameBorder='0'
+                                                        allow='autoplay; encrypted-media'
+                                                        allowFullScreen
+                                                        title='video'
+                                                />
                                 
-                                />
-                  
-                            </div>
-                            <h3 style={{marginTop:'10px'}}>{car.youtube.snippet.title}</h3>
-                            <Row className="comment-wrapper">
-                                <Col sm={1} style={{margin:0,padding:0}}>
-                                {car.profile_pic ? <img src={car.profile_pic} className="creator-profile-pic" /> :
-                                <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="creator-profile-pic" name={car.creator} />
-                                }
-                                    
-                                </Col>
-                                <Col sm={11} style={{margin: 0, paddingRight:0, margin: 'auto'}}>
-                                <div className="creator-name"><strong>{car.creator}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{' '} {car.fans} fans</span></div>
+                                            </div>
+                                            <h3 style={{marginTop:'10px'}} >{car.youtube.snippet.title}</h3>
+                                            <Row className="comment-wrapper" >
+                                                <Col sm={1} style={{margin:0,padding:0}} >
+                                                {car.profile_pic ? <img src={car.profile_pic} 
+                                                
+                                                className="creator-profile-pic" alt="car"/> :
+                                                <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="creator-profile-pic" name={car.creator} />
+                                                }
+                                                    
+                                                </Col>
+                                                <Col sm={11} style={{paddingRight:0, margin: 'auto'}} >
+                                                <div className="creator-name"><strong>{car.creator}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{' '} {car.fans} fans</span></div>
 
-                                </Col>
-                            </Row>
-                   
-                            <Comments comments={commentsTempData[index]} videoId={car.videoId}/>
-                        </Col>
-                        <Col sm={4} style={{paddingLeft:0}}>
-                            <div className="spec-wrapper">
-                            <img alt={car.name} key={car.logoUrl} src={require(`../assets/car-brand-logos/${car.logoUrl}`).default} className="icon-s" />{' '}<span className="spec-text"><strong>{car.name}</strong></span><br/>
-                            <img alt="price" key={priceIcon} src={priceIcon} className="icon-s" /><span className="spec-text">{' '}${car.price}</span><br />
-                            <img alt="power " key={powerIcon} src={powerIcon} className="icon-s" /><span className="spec-text">{' '}{car.engine}</span><br />
-                            <img alt="piston" key={pistonIcon} src={pistonIcon} className="icon-s" /><span className="spec-text">{' '}{car.hoursepower}</span><br />
-                            </div>
-                        </Col>
-                    </Row>
-                </Col>
-                    </>
-                })
-            }
-           </Row>
-           <div className="spacer-4rem"></div>
-           <div className="title title-adj">
-            <h2 style={{marginBottom: '-1rem'}}>{titleStr}</h2>
-            <Form inline onSubmit={handleVideoSearch} style={{marginRight: '-8px'}}>
-                <FormControl type="text" placeholder="Search" className="mr-sm-2 form-adj" onChange={handleChangeKeyword}/>
-            </Form>
-            </div>
-            <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
-            {searchedCarData &&
-                searchedCarData.map((car, index) =>{
-       
-                    return <>
-                    <Col sm={6} key={car.videoId}>
-                    <Row>
-                        <Col sm={8} >
-                            <div className="videoWrapper">
-                                <iframe src={videoEmbedURL + car.videoId}
-                                        frameBorder='0'
-                                        allow='autoplay; encrypted-media'
-                                        allowFullScreen
-                                        title='video'
+                                                </Col>
+                                            </Row>
                                 
-                                />
-                    
-                            </div>
-                            <h3 style={{marginTop:'10px'}}>{car.youtube.snippet.title}</h3>
-                        </Col>
-                        <Col sm={4} style={{paddingLeft:0}}>
-                            <div className="spec-wrapper">
-                            {/* <img alt={car.name} key={car.logoUrl} src={require(`../assets/car-brand-logos/${car.logoUrl}`).default} className="icon-s" />{' '}<span className="spec-text"><strong>{car.name}</strong></span><br/>
-                            <img alt="price" key={priceIcon} src={priceIcon} className="icon-s" /><span className="spec-text">{' '}${car.price}</span><br />
-                            <img alt="power " key={powerIcon} src={powerIcon} className="icon-s" /><span className="spec-text">{' '}{car.engine}</span><br />
-                            <img alt="piston" key={pistonIcon} src={pistonIcon} className="icon-s" /><span className="spec-text">{' '}{car.hoursepower}</span><br /> */}
-                            </div>
-                        </Col>
-                    </Row>
-                </Col>
-                    </>
-             })
-            }
+                                            <Comments comments={commentsTempData[index]} videoId={car.videoId} />
+                                        </Col>
+                                        <Col sm={4} style={{paddingLeft:0}} >
+                                            <div className="spec-wrapper" key={'spec-wrapper' + uuid}>
+                                            <img alt={car.name} src={require(`../assets/car-brand-logos/${car.logoUrl}`).default} className="icon-s" />{' '}<span className="spec-text" ><strong >{car.name}</strong></span><br/>
+                                            <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" >{' '}${car.price}</span><br />
+                                            <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text">{' '}{car.engine}</span><br />
+                                            <img alt="piston" key={pistonIcon} src={pistonIcon}  className="icon-s" /><span className="spec-text">{' '}{car.hoursepower}</span><br />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </Fragment>
+                        )
+                    })
+                }
             </Row>
-        </div>
+            <div className="spacer-4rem"></div>
+            <div className="title title-adj">
+                <h2 style={{marginBottom: '-1rem'}}>{titleStr}</h2>
+                <Form inline onSubmit={handleVideoSearch} style={{marginRight: '-8px'}}>
+                    <FormControl type="text" placeholder="Search" className="mr-sm-2 form-adj" onChange={handleChangeKeyword}/>
+                </Form>
+                </div>
+                <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
+                {searchedCarData &&
+                    searchedCarData.map((car, index) =>{
+                        const uuid = uuidv4()
+                        return(
+                            <Fragment>
+                                <Col sm={6} key={uuid}>
+                                    <Row >
+                                        <Col sm={8} >
+                                            <div className="videoWrapper">
+                                                <iframe src={videoEmbedURL + car.videoId}
+                                                        frameBorder='0'
+                                                        allow='autoplay; encrypted-media'
+                                                        allowFullScreen
+                                                        title='video'
+                                                />
+                                    
+                                            </div>
+                                            <h3 style={{marginTop:'10px'}}>{car.youtube.snippet.title}</h3>
+                                        </Col>
+                                        <Col sm={4} style={{paddingLeft:0}} >
+                                            <div className="spec-wrapper">
+                                            {/* <img alt={car.name} key={car.logoUrl} src={require(`../assets/car-brand-logos/${car.logoUrl}`).default} className="icon-s" />{' '}<span className="spec-text"><strong>{car.name}</strong></span><br/>
+                                            <img alt="price" key={priceIcon} src={priceIcon} className="icon-s" /><span className="spec-text">{' '}${car.price}</span><br />
+                                            <img alt="power " key={powerIcon} src={powerIcon} className="icon-s" /><span className="spec-text">{' '}{car.engine}</span><br />
+                                            <img alt="piston" key={pistonIcon} src={pistonIcon} className="icon-s" /><span className="spec-text">{' '}{car.hoursepower}</span><br /> */}
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </Fragment>
+
+                        )
+                    
+                })
+                }
+                </Row>
+            </div>
+            </Layout>
     )
 }
 const mapStateToProps = (state) => {
@@ -271,3 +284,4 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps)(HomePage)
 
+// --data '{"personalizations": [{"to": [{"email": "saki@musicofsnow.io"}]}],"from": {"email": "saki@thehoongroup.com"},"subject": "Hello, World!","content": [{"type": "text/plain", "value": "Heya!"}]}'

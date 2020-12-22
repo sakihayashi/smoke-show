@@ -9,10 +9,11 @@ import Logo from '../../assets/global/Logo-smoke-show.png'
 const SignUpModal = (props) =>{
     const [userObj, setUserObj] = useState({fname: '', lname: '', email: '', password: '', password2: '', username: ''})
     const [msg, setMsg] = useState("")
-    // const [isRegistered, setIsregistered] = useState(false)
+    const [emailSent, setEmailSent] = useState(false)
     const [hasError, setHasError] = useState(false)
     //this is different from props.app -getApp
-    const getApp = Realm.App.getApp("smoke-show-test-uasqg");
+    const appId = process.env.REACT_APP_REALM_APP_ID
+    const getApp = Realm.App.getApp(appId);
     
     // console.log('check from signin', props)
     const handleChange =(e) =>{
@@ -24,34 +25,20 @@ const SignUpModal = (props) =>{
     const handleSubmit = async (e) =>{
         e.preventDefault()
         setHasError(false)
+        const email = userObj.email.toLowerCase()
         if(userObj.password === userObj.password2){
             try{
-                await getApp.emailPasswordAuth.registerUser(userObj.email, userObj.password).then(async res =>{
-                    console.log('res', res)
-                    const credentials = Realm.Credentials.emailPassword(userObj.email, userObj.password)
-                    await props.app.logIn(credentials).then(async user =>{
-                        console.log('what is user', user)
-                        const mongo = user.mongoClient("RealmClusterFreeTier");
-                        const userData = {
-                            userId: user.id,
-                            fname: userObj.fname,
-                            lname: userObj.lname
-                        }
-                        
-                        const mongoCollection = mongo.db("smoke-show").collection("users");
-                        const insertOneResult = await mongoCollection.insertOne(userData);
-                        console.log('res', user)
-                        console.log('result', insertOneResult)
-                        if(insertOneResult.insertedId){
-                            props.handleUser(userObj.fname)
-                        }
-                    })
-                    // setIsregistered(true)
+                await getApp.emailPasswordAuth.registerUser(email, userObj.password).then(async res =>{
+                    console.log('res token?', res)
+                  
+                    setEmailSent(true)
+                    
                 })
+       
                 
             }catch(error){
                 console.log('error', error)
-                setMsg("Something went wrong, try again.")
+                setMsg("This email address is already registered.")
                 setHasError(true)
             }
         }else{
@@ -59,6 +46,19 @@ const SignUpModal = (props) =>{
             setHasError(true)
         }
         
+    }
+    const resendConfirmationEmail = async (email)=>{
+        const credentials = Realm.Credentials.anonymous();
+        await applicationCache.logIn(credentials).then(user =>{
+            const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+            const mongoCollection = mongo.db("smoke-show").collection("comments");
+            const filter = {email: email} 
+            mongoCollection.find(filter).then(pendingUser =>{
+                const token = pendingUser.token
+                const tokenId = pendingUser.tokenId
+            })
+        })
+        console.log('under construction')
     }
     // const handleSubmitToDispatch = () =>{
     //     props.createNewUser(userObj)
@@ -76,28 +76,37 @@ const SignUpModal = (props) =>{
             </Modal.Title> */}
             
           </Modal.Header>
+          {emailSent ? 
+          <center>
+              <h3>Thank you for your registration. <br /><br />
+              Please check your email and click to confirm. <br /><br />
+              Please check your spam box if you do not find the confirmation email.
+              </h3>
+              <div className="spacer-4rem"></div>
+          </center>
+          :
           <Modal.Body className="custom-modal-body">
             <div className="login-logo-wrapper">
                 <img src={Logo} alt="The Smoke Show" className="logo-header" />
             </div>
           
-            <Form className="login-form" onSubmit ={handleSubmit}>
-                <Form.Group >
-                    <Form.Label>First name</Form.Label>
+            <Form className="login-form" onSubmit={handleSubmit}>
+                {/* <Form.Group > */}
+                    {/* <Form.Label>First name</Form.Label>
                     <Form.Control type="text" placeholder="e.g. John" name="fname" onChange={handleChange}/>
                 </Form.Group>
                 <Form.Group >
                     <Form.Label>Last name</Form.Label>
                     <Form.Control type="text" placeholder="e.g. Due" name="lname" onChange={handleChange}/>
-                </Form.Group>
+                </Form.Group> */}
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="e.g. example@example.com" name="email" onChange={handleChange} />
                 </Form.Group>
-                <Form.Group controlId="formBasicEmail">
+                {/* <Form.Group controlId="formBasicEmail">
                     <Form.Label>Username</Form.Label>
                     <Form.Control type="text" placeholder="e.g. Smoke Show love" name="username" onChange={handleChange} />
-                </Form.Group>
+                </Form.Group> */}
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Between 6 and 128 characters long" name="password" onChange={handleChange} />
@@ -106,7 +115,11 @@ const SignUpModal = (props) =>{
                     <Form.Label>Confirm Password</Form.Label>
                     <Form.Control type="password" placeholder="" name="password" onChange={handleChange} name="password2" />
                 </Form.Group>
-                {hasError && <div className="error-msg">{msg}</div>}
+                {hasError && 
+                <div>
+                    <div className="error-msg">{msg}</div>
+                    <p onClick={resendConfirmationEmail}>Click here to resend the confirmation email</p>
+                </div>}
                 <div className="login-btn-wrapper">
                     <Button className="login-btn" type="submit">
                         Signup
@@ -116,8 +129,8 @@ const SignUpModal = (props) =>{
                 
             </Form>
           </Modal.Body>
-          {/* <div className="spacer-4rem"></div> */}
-          {/* <button onClick={handleSubmitToDispatch}>test</button> */}
+
+        }
         </Modal>
       );
 }
