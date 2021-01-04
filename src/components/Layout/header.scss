@@ -1,14 +1,9 @@
 @import "../../scss/config";
 
 .nav-style{
-    font-family: 'X-Heighting';
+    font-family: $font-nav;
     font-size: $font-l;
     color: $black !important;
-}
-// .nav-link{
-//     color: $black !important;
-// }
-.nav-style{
     
     a{
         // color: $black;

@@ -10,11 +10,15 @@
 }
 @font-face{
   font-family: 'MerriweatherSans';
-  src: local('MerriweatherSans'), url(../fonts/MerriweatherSans-VariableFont_wght.ttf) format('truetype')
+  src: url('../fonts/MerriweatherSans-VariableFont_wght.ttf'); 
+  src: local('MerriweatherSans'), url(../fonts/MerriweatherSans-VariableFont_wght.ttf) format('truetype');
+  font-weight: normal;
+
 }
 @font-face{
   font-family: 'X-Heighting';
-  src: local('X-Heighting'), url(../fonts/X-Heighting400.otf) format('otf')
+  src: local('X-Heighting'), url(../fonts/X-Heighting400.otf) format('otf');
+  src: url('../fonts/X-Heighting400.otf')
 }
 *{
   margin: 0;
@@ -22,7 +26,7 @@
 }
 body {
   margin: 0;
-  font-family: 'MerriweatherSans', sans-serif;
+  font-family: 'MerriweatherSans', sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -171,7 +175,6 @@ label{
   font-family: "MerriweatherSans", Arial;
   margin-left: 15px;
   line-height: $font-m;
-
 }
 
 .creator-profile-pic{
@@ -196,9 +199,25 @@ label{
     object-fit: cover;
     height: 100px;
 }
-
-
-
+.not-found{
+  font-size: 5rem;
+  font-family: $font-general;
+  margin: 2rem auto;
+  text-align: center;
+}
+.go-home{
+  font-size: 3rem;
+  font-family: $font-general;
+  margin: 3rem auto;
+  text-align: center;
+  &:hover{
+    cursor: pointer;
+  }
+}
+.not-found-wrapper{
+  min-height: calc(100vh - 21rem);
+  
+}
 @media (min-width: 1025px){
   .main-wrapper{
     max-width: $main-width-tablet;

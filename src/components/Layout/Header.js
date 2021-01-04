@@ -81,6 +81,7 @@ const Header = (props) =>{
                         <Nav.Link href="/" >Home</Nav.Link>
                         <Nav.Link href="/influencers"   >Influencers</Nav.Link>
                         <Nav.Link href="/car-search">Car Stats</Nav.Link>
+                        <Nav.Link href="/giveaways">Giveaways</Nav.Link>
                         {/* <Nav.Link as={Link} to="/about">About</Nav.Link> */}
                         <Nav.Link href="/about">About</Nav.Link>
                     {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">

@@ -23,7 +23,7 @@
 .counter-wrapper{
     display: flex;
     justify-content: space-between;
-    padding: 2rem 20px;
+    padding: 20px 3rem 0 3rem;
 }
 .counter-box{
     display: flex;
@@ -32,4 +32,45 @@
 }
 .padding-btn{
     padding: 20px;
+}
+.timer-num{
+    font-size: 2rem;
+    color: $theme-darker;
+}
+.ends-in{
+    display: flex;
+    align-items: center;
+    color: $theme-darker;
+}
+.share-icon{
+    width: 20px;
+    height: auto;
+    margin-left: 10px;
+}
+.social-share-btn{
+    display: inline;
+    float: right;
+}
+.card-title{
+    display: inline;
+}
+.share-btn-wrapper{
+    float: right;
+}
+// .card-title-text{
+
+// }
+.card-left{
+    float: left;
+}
+.link-counter{
+    display: inline;
+}
+.unit-div{
+    color: $theme-hover;
+    font-size: small;
+}
+.card-mute-text{
+    color: $gray;
+    margin-left: 3rem;
 }

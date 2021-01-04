@@ -3,9 +3,39 @@ import Layout from './Layout/Layout'
 import { Row, Col, Card, Button } from 'react-bootstrap'
 import './giveaways.scss'
 import { giveAwaysArr } from './giveAwayData'
+import {
+    EmailShareButton,
+    FacebookShareButton,
+ 
+    TwitterShareButton,
+    ViberShareButton,
+    VKShareButton,
+    WhatsappShareButton,
+    WorkplaceShareButton
+  } from "react-share";
 
-const Giveaways = () =>{
+  import {
+    FacebookShareCount,
+    HatenaShareCount,
+    OKShareCount,
+    PinterestShareCount,
+    RedditShareCount,
+    TumblrShareCount,
+  } from "react-share";
+//   import {
+//     EmailIcon,
+//     FacebookIcon,
+//   } from "react-share";
 
+import facebookIcon from '../assets/global/Facebook-icon.svg'
+import twitterIcon from '../assets/global/Twitter-icon.svg'
+import emailIcon from '../assets/global/Messages-icon.svg'
+
+const Giveaways = (props) =>{
+    const sharePathname = props.location.pathname
+    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=https://competent-hamilton-fb58c1.netlify.app${sharePathname}/`
+    const twitterUrl = `https://twitter.com/intent/tweet?url=https://competent-hamilton-fb58c1.netlify.app${sharePathname}/`
+    const mailUrl = `mailto:info@example.com?&subject=&body=https://competent-hamilton-fb58c1.netlify.app${sharePathname}/ Share your love`
     return(
         <Layout>
             <div className="spacer-4rem"></div>
@@ -21,9 +51,58 @@ const Giveaways = () =>{
                         <Col sm={6}>
                             <Card className="givaways-card">
                                 <Card.Img variant="top" src={data.imgUrl} />
+                                    
                                 <Card.Body>
-                                    <Card.Title><strong>{data.item}</strong> giveaway
-                                    <p>by {data.influencer}</p>
+                                    <Card.Title class="card-title">
+                                    <div className="card-title-text">
+                                        <div className="card-left"></div>
+                                        <strong>{data.item}</strong>{' '} giveaway
+                                    
+                                    <div className="share-btn-wrapper">
+                                        <TwitterShareButton
+                                            url={twitterUrl}
+                                            quote={data.item}
+                                            className="social-share-btn"
+                                        >
+                                            <img src={twitterIcon} alt="share via facebook" className="share-icon"/>
+                                        </TwitterShareButton>
+
+                                        <div className="link-counter">
+                                            {/* <FacebookShareCount url={fbUrl} className="">
+                                            {count => count}
+                                            </FacebookShareCount> */}
+                                        </div>
+                                        <FacebookShareButton
+                                            url={fbUrl}
+                                            quote={data.item}
+                                            className="social-share-btn"
+                                        >
+                                            <img src={facebookIcon} alt="share via facebook" className="share-icon"/>
+                                        </FacebookShareButton>
+
+                                        <div className="link-counter">
+                                            <FacebookShareCount url={fbUrl} className="">
+                                            {count => count}
+                                            </FacebookShareCount>
+                                        </div>
+                                        <EmailShareButton
+                                            url={mailUrl}
+                                            quote={data.item}
+                                            className="social-share-btn"
+                                        >
+                                            <img src={emailIcon} alt="share via email" className="share-icon"/>
+                                        </EmailShareButton>
+                                        <div className="link-counter">
+                                            {/* <FacebookShareCount url={fbUrl} className="">
+                                            {count => count}
+                                            </FacebookShareCount> */}
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <p>by {data.influencer} {' '} 
+                                    <span className="card-mute-text">| {data.entries.length} {' '} entries</span></p>
+                                    
+
                                     </Card.Title>
                                     <Card.Text>
                                     <p>
@@ -35,14 +114,23 @@ const Giveaways = () =>{
                                     </Card.Text>
                                     <div className="counter-div">
                                         <div className="counter-wrapper">
-                                            <div>Ends in:</div>
+                                            <div className="ends-in">Ends in:</div>
                                             <div className="counter-box">
-                                            <span>10 </span>
-                                            <span>days</span>
+                                                <span className="timer-num">10 </span>
+                                                <span className="unit-div">days</span>
                                             </div>
-                                            <div>13 hours</div>
-                                            <div>13 mins</div>
-                                            <div>13 sec</div>
+                                            <div className="counter-box">
+                                                <span className="timer-num">12</span>
+                                                <span className="unit-div">hours</span>
+                                            </div>
+                                            <div className="counter-box">
+                                                <span className="timer-num">21</span>
+                                                <span className="unit-div">minutes</span>
+                                            </div>
+                                            <div className="counter-box">
+                                                <span className="timer-num">13</span>
+                                                <span className="unit-div">seconds</span>
+                                            </div>
                                         </div>
                                     <div className="padding-btn">
                                         <Button className="login-btn ">Entry now</Button>
