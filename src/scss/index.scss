@@ -56,6 +56,10 @@ header{
 .main-wrapper{
   max-width: $main-width-phone;
   margin: 0 auto;
+  padding: 0 15px;
+}
+.main-col{
+  margin-bottom: 30px;
 }
 .height-adj-nav{
   margin-top: 10%;
@@ -206,3 +210,14 @@ label{
   }
 }
 
+@media (min-width: 576px) { 
+  .main-wrapper{
+    padding: 0;
+  }
+  .spec-col{
+    padding-left: 0;
+  }
+  .main-col{
+    margin-bottom: 0;
+  }
+}

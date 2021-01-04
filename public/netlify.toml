@@ -1,12 +1,14 @@
 # The following redirect is intended for use with most SPAs that handle
 # routing internally.
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/car-stats"
+  to = "https://api.carsxe.com"
   status = 200
+  force = true
+  headers = {X-From = "Netlify"}
 
 [[headers]]
   # Define which paths this specific [[headers]] block will cover.
-  for = "/*"
+  for = "/car-stats"
     [headers.values]
     Access-Control-Allow-Origin = "*"

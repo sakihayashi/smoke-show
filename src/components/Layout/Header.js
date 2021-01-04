@@ -12,8 +12,6 @@ import jwt from 'jsonwebtoken'
 
 const Header = (props) =>{
     const location = useLocation();
-    // const { location } = props
-    console.log('location', location)
     const id = process.env.REACT_APP_REALM_APP_ID
     // const app = new Realm.App({ id: process.env.REALM_APP_ID })
     const app = new Realm.App({ id: id })

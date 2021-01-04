@@ -17,14 +17,15 @@ import AboutPage from './components/AboutPage'
 import CarStats from './components/CarStats'
 import CarSearch from './components/CarSearch'
 import CreateDta from './components/CreateData'
+import Giveaways from './components/Giveaways'
+import NotFoundPage from './components/NotFoundPage'
 
 
 function App() {
 
-
   return (
     <Router>
-        <Fragment>
+        <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/influencers" component={InfluencerIndexPage} />
           <Route path="/influencer/:id" component={BioPage} />
@@ -34,7 +35,9 @@ function App() {
           <Route exact path="/car-stats/:id" component={CarStats} />
           <Route exact path="/car-search" component={CarSearch} />
           <Route exact path="/get-data" component={CreateDta} />
-        </Fragment>
+          <Route exact path="/giveaways" component={Giveaways} />
+          <Route component={NotFoundPage} />
+        </Switch>
     </Router>    
   );
 }

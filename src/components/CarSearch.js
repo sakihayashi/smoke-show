@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const CarSearch = (props) =>{
     const [modelName, setModelName] = useState([])
-    const [selectedCar, setSelectedCar] = useState({make: "Select a maker", model: " - ", type: ' - ', year: ' - '})
+    const [selectedCar, setSelectedCar] = useState({make: "Select a maker", model: "Select a model", type: "Select a type", year: "Select a year"})
     const [carTypeArr, setCarTypeArr] = useState([])
     const [carYearArr, setCarYearArr] = useState([])
     const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
@@ -56,7 +56,7 @@ const CarSearch = (props) =>{
                       if (carModelArr.includes(car.model) === false) carModelArr.push(car.model);
                   })
                   
-                  setModelName(carModelArr)
+                  setModelName(carModelArr.sort())
                   setCars(cars)
               })
              
@@ -72,8 +72,7 @@ const CarSearch = (props) =>{
                 yearArr.push(car.year)
             }
         })
-        console.log('years', yearArr)
-        setCarYearArr(yearArr)
+        setCarYearArr(yearArr.sort())
     }
     const filterByModel = (e) =>{
         setSelectedCar({...selectedCar, model: e})
@@ -100,7 +99,7 @@ const CarSearch = (props) =>{
           
         })
         const finalResult = [...new Set(availableTypes)]
-        setCarTypeArr(finalResult)
+        setCarTypeArr(finalResult.sort())
 
     }
     const filterByYear = (e) =>{
@@ -115,15 +114,10 @@ const CarSearch = (props) =>{
     }
 
     const filterByType = (e) =>{
-        console.log('key', e)
-        console.log('car', cars)
+       
         setSelectedCar({...selectedCar, type: e})
-        let filtered = cars.map(car =>{
-            if(car.name.includes(e)){
-                return car
-            }
-            
-        })
+     
+        let filtered =  cars.filter(car => car.name.includes(e))
         console.log('filtered', filtered)
         setCars(filtered)
     }
@@ -133,6 +127,7 @@ const CarSearch = (props) =>{
        props.history.push({
         pathname: `/car-stats/${searchId}`,
         cars: cars,
+        selected: selectedCar
       })
    }
 
@@ -145,12 +140,11 @@ const CarSearch = (props) =>{
                     <div className="center-box">
                     {/* maker */}
                     <DropdownButton id="dropdown-brand" title={selectedCar.make} onSelect={getModel} className="custom-dropdown">
-                        { carsAllYear && carsAllYear.map(maker =>{
+                        { carsAllYear && carsAllYear.map((maker, index) =>{
                             const titleCase = maker.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-
                             return(
-                                <Fragment>
-                                    <Dropdown.Item  eventKey={titleCase}>
+                                <Fragment key={maker}>
+                                    <Dropdown.Item  eventKey={titleCase} >
                                     <img src={require(`../assets/maker_logos/${titleCase}_Logo.png`).default} alt={titleCase} className="maker-img"/>
                                     {titleCase}
                                     </Dropdown.Item>
@@ -167,8 +161,8 @@ const CarSearch = (props) =>{
                         <DropdownButton id="dropdown-year" title={selectedCar.model} onSelect={filterByModel} className="dropdown-middle">
                             {modelName.map(model =>{
                                 return(
-                                    <Fragment>
-                                        <Dropdown.Item eventKey={model}>{model}</Dropdown.Item>
+                                    <Fragment key={model}>
+                                        <Dropdown.Item eventKey={model} >{model}</Dropdown.Item>
                                     </Fragment>
                                 )
                             })}
@@ -178,9 +172,10 @@ const CarSearch = (props) =>{
                     {/* year */}
                         <DropdownButton id="dropdown-model" title={selectedCar.year} onSelect={filterByYear}>
                             {carYearArr.map(year =>{
+                                const uuid = uuidv4()
                                 return(
-                                    <Fragment>
-                                        <Dropdown.Item eventKey={year}>{year}</Dropdown.Item>
+                                    <Fragment key={uuid} >
+                                        <Dropdown.Item eventKey={year} >{year}</Dropdown.Item>
                                     </Fragment>
                                 )
                             })}
@@ -190,8 +185,8 @@ const CarSearch = (props) =>{
                         <DropdownButton id="dropdown-type" title={selectedCar.type} onSelect={filterByType} >
                             { carTypeArr && carTypeArr.map(type =>{
                                 return(
-                                    <Fragment>
-                                        <Dropdown.Item eventKey={type}>{type}</Dropdown.Item>
+                                    <Fragment key={type}>
+                                        <Dropdown.Item eventKey={type} >{type}</Dropdown.Item>
                                     </Fragment>
                                 )
                                 

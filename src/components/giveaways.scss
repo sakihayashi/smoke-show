@@ -1,0 +1,35 @@
+@import "../scss/config";
+
+.notice-div{
+    background-color: $theme-color;
+    color: $tertiary-color;
+    text-align: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-family: $font-general;
+}
+.giveaway-card{
+    font-family: $font-general;
+    img{
+        object-fit: cover;
+    }
+}
+.counter-div{
+    background: $primary-color-light;
+    width: calc(100% + 40px);
+    margin-left: -20px;
+    margin-bottom: -20px;
+}
+.counter-wrapper{
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 20px;
+}
+.counter-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.padding-btn{
+    padding: 20px;
+}

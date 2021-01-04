@@ -65,36 +65,7 @@ const HomePage = (props) =>{
 // thumbnails: {default: {…}, medium: {…}, high: {…}}
 // title: "The Best Mercedes AMG Ever! | SLS Black Series Review"
 
-    // const handleTest = async (e) =>{
-       
-    //     await youtubeAPI.get('/videos', {
-    //           params: {
-    //               id: carTempData[0].videoId
-    //           }
-    //       }).then(res =>{
-    //           console.log('res', res)
-    //           carTempData[0].youtube = res.data.items[0]
-       
-    //       })
-    //     await youtubeAPI.get('/videos', {
-    //         params: {
-    //             id: carTempData[1].videoId
-    //         }
-    //     }).then(res =>{
-    //         console.log('res2', res)
-    //         carTempData[1].youtube = res.data.items[0]
-    //     })
-    // }
-
-    // const handleEddie = async () =>{
-    //     await youtubeAPI.get('/search', {
-    //         params: {
-    //             q: 'Eddie X'
-    //         }
-    //     }).then(res =>{
-    //         console.log('res eddir', res)
-    //     })
-    // }
+  
     const handleChangeKeyword = (e) =>{
         setSearchKeyword(e.target.value)
     }
@@ -182,7 +153,7 @@ const HomePage = (props) =>{
                         const uuid = uuidv4()
                         return(
                             <Fragment key={uuid}>
-                                <Col sm={6} >
+                                <Col sm={6} className="main-col" >
                                     <Row >
                                         <Col sm={8} >
                                             <div className="videoWrapper">
@@ -212,7 +183,7 @@ const HomePage = (props) =>{
                                 
                                             <Comments comments={commentsTempData[index]} videoId={car.videoId} />
                                         </Col>
-                                        <Col sm={4} style={{paddingLeft:0}} >
+                                        <Col sm={4} className="spec-col"  >
                                             <div className="spec-wrapper" key={'spec-wrapper' + uuid}>
                                             <img alt={car.name} src={require(`../assets/car-brand-logos/${car.logoUrl}`).default} className="icon-s" />{' '}<span className="spec-text" ><strong >{car.name}</strong></span><br/>
                                             <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" >{' '}${car.price}</span><br />
