@@ -8,7 +8,7 @@ const Footer = () =>{
     return(
         <footer className="footer-wrapper">
             <div className="footer-main">
-            ©{getYear()} The Hoon Group All Rights reserved. 
+            ©{getYear()} The Hoon Group. All Rights reserved
             </div>
         </footer>
     )

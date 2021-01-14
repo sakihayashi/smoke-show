@@ -1,10 +1,7 @@
 import React, { useEffect, useState, Fragment, useRef } from 'react'
 import { Row, Col, Form, FormControl, Button } from 'react-bootstrap'
-// import datacsv from '../assets/car-data.csv'
-// import * as d3 from 'd3'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
-// import * as Papa from 'papaparse'
 import { youtubeAPI } from '../utils/youtubeAPI'
 import { carTempData } from './carTempData'
 import { commentsTempData } from './commentsTempData' 
@@ -18,19 +15,19 @@ import Layout from './Layout/Layout'
 
 const HomePage = (props) =>{
  console.log('props', props)
- const childRef = useRef();
-    const videoEmbedURL = 'https://www.youtube.com/embed/'
-    const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
-    const [searchKeyword, setSearchKeyword] = useState('')
-    const [titleStr, setTitleStr] = useState('Your search result')
-    const [searchedCarData, setSearchedCarData] = useState([])
-    // var d = new Date();
-    // var n = new Date().getTime();
-    const appConfig = {
-        id: process.env.REACT_APP_REALM_APP_ID,
-        timeout: 10000, // timeout in number of milliseconds
-      };
-    const app = new Realm.App(appConfig);
+const childRef = useRef();
+const videoEmbedURL = 'https://www.youtube.com/embed/'
+const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
+const [searchKeyword, setSearchKeyword] = useState('')
+const [titleStr, setTitleStr] = useState('Your search result')
+const [searchedCarData, setSearchedCarData] = useState([])
+// var d = new Date();
+// var n = new Date().getTime();
+const appConfig = {
+    id: process.env.REACT_APP_REALM_APP_ID,
+    timeout: 10000, // timeout in number of milliseconds
+    };
+const app = new Realm.App(appConfig);
 //     items: Array(5)
 // 0:
 // etag: "IPLLqa9ikvoy_gLqxEcoiqqavC4"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
 import Logo from '../../assets/global/Logo-smoke-show.png'
@@ -8,6 +8,8 @@ import LoginModal from './LoginModal'
 import SignUpModal from './SignUpModal'
 import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
+import settingsIcon from '../../assets/global/Settings-icon-white.svg'
+import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 
 
 const Header = (props) =>{
@@ -31,6 +33,11 @@ const Header = (props) =>{
      const toggleModal = () =>{
          setHasAccount(!hasAccount)
      }
+     const loggedInDiv = 
+     <Fragment>
+        <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><img src={settingsIcon} className=""/>
+        </div>
+     </Fragment>
      useEffect(() => {
          let tokenLocalStorage = localStorage.getItem('session_token')
          if(tokenLocalStorage){
@@ -50,7 +57,7 @@ const Header = (props) =>{
     return(
         <header>
             <div className="login-wrapper">
-            {props.user ? <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button></div> :
+            {props.user ? loggedInDiv : 
             <Button className="btn-login" onClick={logIn}>Login</Button>
             }
             { hasAccount ? <LoginModal 
@@ -72,25 +79,20 @@ const Header = (props) =>{
             </div>
             <Navbar expand="lg" className="header-wrapper">
                 <Navbar.Brand href="#home">
-                    <img className="logo-header" src={Logo} alt="The Smoke Show logo"/>
+                    <Link to="/">
+                        <img className="logo-header" src={Logo} alt="The Smoke Show logo"/>
+                    </Link>
+                    
                 </Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto nav-style" activeKey={location.pathname}>
-                    {/* <Nav.Link href="#home">Home</Nav.Link> */}
                         <Nav.Link href="/" >Home</Nav.Link>
                         <Nav.Link href="/influencers"   >Influencers</Nav.Link>
                         <Nav.Link href="/car-search">Car Stats</Nav.Link>
                         <Nav.Link href="/giveaways">Giveaways</Nav.Link>
-                        {/* <Nav.Link as={Link} to="/about">About</Nav.Link> */}
+                        <Nav.Link href="/swagg">Swagg</Nav.Link>
                         <Nav.Link href="/about">About</Nav.Link>
-                    {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                    </NavDropdown> */}
                     </Nav>
                     <Form inline>
                     <FormControl type="text" placeholder="Search" className="mr-sm-2" />

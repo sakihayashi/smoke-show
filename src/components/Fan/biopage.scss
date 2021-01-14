@@ -1,0 +1,247 @@
+@import "../../scss/config";
+
+.bio-fleet-img{
+    width: 100%;
+    img{
+    max-width: 100%;
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    }
+}
+.bio-pic{
+    width: 150px;
+    height: 150px;
+    position: relative;
+
+    img{
+        height: 100%;
+        width: 100%;
+        border-radius: 75px;
+        position: absolute;
+        top: -75px;
+        left: 50px;
+    }
+}
+
+.bio-main-wrapper{
+    width: 100%;
+    position: relative;
+}
+
+.bio-content-wrapper{
+    background: $theme-lighter;
+}
+
+.bio-title-text{
+    position: absolute;
+    left: 230px;
+    width: 100%;
+    top: 1rem;
+}
+.bio-name-title{
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+.bio-setting-btn{
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: $theme-color;
+    border-color: $theme-color;
+    &:hover{
+        background-color: $theme-hover;
+        border-color: $theme-color;
+    }
+    &:focus{
+        background-color: $theme-hover;
+        border-color: $theme-color;
+    }
+}
+.bio-container{
+    margin: 8px;
+    background: $tertiary-color;
+}
+.bio-content{
+    background-color: $tertiary-color;
+    padding: 15px;
+}
+.bio-about{
+    background: $theme-lighter;
+    padding: 15px;
+}
+.bio-height-adj{
+    margin-top: -2rem;
+}
+
+.bio-border{
+    border-bottom: 1px solid rgba(110, 77, 213, 0.3);
+}
+.no-m-b{
+    margin-bottom: 0;
+}
+.pt-pb-15{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.p-15{
+    padding: 15px;
+}
+.pl-0{
+    padding-left: 0;
+}
+.car-names{
+    padding: 15px;
+    border-bottom: 3px solid $theme-color;
+}
+.bio-row-adj{
+    width: 100%;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+
+}
+.bio-car-contents{
+    padding-top: 15px;
+}
+.bio-my-car{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.setting-icon{
+    width: 18px;
+    height: 18px;
+    margin-right: 15px;
+}
+.edit-icon{
+    width: 18px;
+    width:18px;
+    &:hover{
+        cursor: pointer;
+    }
+}
+.edit-icon-wrapper{
+    text-align: right;
+}
+.mb-1rem{
+    margin-bottom: -1rem;
+}
+.bio-edit-btn{
+    background-color: $theme-color;
+    border-color: $theme-color;
+    &:hover{
+        background-color: $theme-hover;
+        border-color: $theme-color;
+    }
+    &:focus{
+        background-color: $theme-hover;
+        border-color: $theme-color;
+    }
+}
+.bio-edit-btn-wrapper{
+    text-align: right;
+    margin-top: 1rem;
+}
+.edit-icon-wrapper-card{
+    float: right;
+    display: inline;
+}
+.dropzone-wrapper{
+    border-style: dashed;
+    border-radius: 10px;
+    border-color: $theme-alpha-50;
+    border-width: 5px;
+    height: 100%;
+}
+.drag-dropzone{
+    text-align: center;
+    color: $theme-alpha-50;
+    height : 100%;
+}
+.bio-modal-inner-wrapper{
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+.bio-modal-container{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.save-changes-btn{
+    width: 100%;
+    background-color: $theme-color;
+    border-color: $theme-color;
+    &:hover{
+        background-color: $theme-hover;
+        border-color: $theme-color;
+    }
+    &:focus{
+        background-color: $theme-hover;
+        border-color: $theme-color;
+    }
+}
+.cancel-btn{
+    width: 100% !important;
+}
+.modal-footer{
+    border-top: 0 !important;
+}
+.modal-dialog{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.form-label{
+    color: #666 !important;
+}
+.form-control{
+    color: #111 !important;
+}
+.change-bio-pic-wrapper{
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+.change-pic{
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.setting-file-btn{
+    display: flex;
+    align-items: flex-end;
+}
+// .upload-file-btn{
+//     input{
+//         width: 100%;
+//         background-color: $theme-color;
+//         border-color: $theme-color;
+//         &:hover{
+//             background-color: $theme-hover;
+//             border-color: $theme-color;
+//         }
+//         &:focus{
+//             background-color: $theme-hover;
+//             border-color: $theme-color;
+//         }
+//     }
+// }
+.file-upload-desc{
+    font-size: 1rem;
+}
+.heading-modal{
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #555;
+}
+@media (min-width: 576px){
+    .modal-wrapper-bio > .modal-dialog {
+        max-width: 90vw;
+        margin: 1.75rem auto;
+    }
+}

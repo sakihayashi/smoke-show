@@ -6,26 +6,12 @@ import { giveAwaysArr } from './giveAwayData'
 import {
     EmailShareButton,
     FacebookShareButton,
- 
     TwitterShareButton,
-    ViberShareButton,
-    VKShareButton,
-    WhatsappShareButton,
-    WorkplaceShareButton
   } from "react-share";
 
-  import {
-    FacebookShareCount,
-    HatenaShareCount,
-    OKShareCount,
-    PinterestShareCount,
-    RedditShareCount,
-    TumblrShareCount,
-  } from "react-share";
-//   import {
-//     EmailIcon,
-//     FacebookIcon,
-//   } from "react-share";
+import {
+FacebookShareCount
+} from "react-share";
 
 import facebookIcon from '../assets/global/Facebook-icon.svg'
 import twitterIcon from '../assets/global/Twitter-icon.svg'
@@ -33,9 +19,7 @@ import emailIcon from '../assets/global/Messages-icon.svg'
 
 const Giveaways = (props) =>{
     const sharePathname = props.location.pathname
-    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=https://competent-hamilton-fb58c1.netlify.app${sharePathname}/`
-    const twitterUrl = `https://twitter.com/intent/tweet?url=https://competent-hamilton-fb58c1.netlify.app${sharePathname}/`
-    const mailUrl = `mailto:info@example.com?&subject=&body=https://competent-hamilton-fb58c1.netlify.app${sharePathname}/ Share your love`
+    const shareUrl = `https://competent-hamilton-fb58c1.netlify.app${sharePathname}`
     return(
         <Layout>
             <div className="spacer-4rem"></div>
@@ -60,7 +44,7 @@ const Giveaways = (props) =>{
                                     
                                     <div className="share-btn-wrapper">
                                         <TwitterShareButton
-                                            url={twitterUrl}
+                                            url={shareUrl}
                                             quote={data.item}
                                             className="social-share-btn"
                                         >
@@ -68,12 +52,12 @@ const Giveaways = (props) =>{
                                         </TwitterShareButton>
 
                                         <div className="link-counter">
-                                            {/* <FacebookShareCount url={fbUrl} className="">
+                                            {/* <FacebookShareCount url={shareUrl} className="">
                                             {count => count}
                                             </FacebookShareCount> */}
                                         </div>
                                         <FacebookShareButton
-                                            url={fbUrl}
+                                            url={shareUrl}
                                             quote={data.item}
                                             className="social-share-btn"
                                         >
@@ -81,19 +65,19 @@ const Giveaways = (props) =>{
                                         </FacebookShareButton>
 
                                         <div className="link-counter">
-                                            <FacebookShareCount url={fbUrl} className="">
+                                            <FacebookShareCount url={shareUrl} className="">
                                             {count => count}
                                             </FacebookShareCount>
                                         </div>
                                         <EmailShareButton
-                                            url={mailUrl}
+                                            url={shareUrl}
                                             quote={data.item}
                                             className="social-share-btn"
                                         >
                                             <img src={emailIcon} alt="share via email" className="share-icon"/>
                                         </EmailShareButton>
                                         <div className="link-counter">
-                                            {/* <FacebookShareCount url={fbUrl} className="">
+                                            {/* <FacebookShareCount url={shareUrl} className="">
                                             {count => count}
                                             </FacebookShareCount> */}
                                         </div>
