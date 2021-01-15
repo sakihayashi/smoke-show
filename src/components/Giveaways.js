@@ -19,7 +19,7 @@ import emailIcon from '../assets/global/Messages-icon.svg'
 
 const Giveaways = (props) =>{
     const sharePathname = props.location.pathname
-    const shareUrl = `https://competent-hamilton-fb58c1.netlify.app${sharePathname}`
+    const shareUrl = `https://master.d2rltwsx300g54.amplifyapp.com${sharePathname}`
     return(
         <Layout>
             <div className="spacer-4rem"></div>
