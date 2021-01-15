@@ -6,18 +6,26 @@ import editIcon from '../../assets/global/edit-icon.svg'
 import uploadIcon from '../../assets/global/upload.svg'
 
 const VehicleCard = (props) =>{
+    const carColors = ['White', 'Black', 'Grey', 'Blue', 'Silver', 'Red', 'Orange', 'Bronze', 'Yellow', 'Green', 'Navy']
+    const [carObj, setCarObj] = useState({name: '', color: '', wheels:'', performance: '', upgrade: ''})
     const [show, setShow] = useState(false);
-
+    
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const onDrop = useCallback(acceptedFiles => {
         // Do something with the files
       }, [])
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+    const handleChange = (e) =>{
+        setCarObj({
+            ...carObj,
+            [e.target.name]: e.target.value
+        })
+    }
 
     const editModal = 
     <Fragment>
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleClose} className="modal-wrapper-bio">
             <Modal.Header closeButton>
             </Modal.Header>
             <Modal.Body>
@@ -37,7 +45,6 @@ const VehicleCard = (props) =>{
                                 </div>
 
                             </div>
-                            
                         }
                     </div>
                     </Col>
@@ -45,22 +52,35 @@ const VehicleCard = (props) =>{
                     <Form>
                         <Form.Group >
                             <Form.Label>Car name</Form.Label>
-                            <Form.Control type="text" placeholder="Enter car name" />
+                            <Form.Control type="text" placeholder="Enter car name" onChange={handleChange} name="name"/>
                         </Form.Group>
                         <br/>
                         <Form.Group >
-                            <Form.Label>Update</Form.Label>
-                            <Form.Control type="text" placeholder="Enter your update" />
+                            <Form.Label>Color</Form.Label>
+                            {/* <Form.Control type="text" placeholder="Select your color" onChange={handleChange} name="color" /> */}
+                            <Form.Control as="select" onChange={handleChange}>
+                            {carColors.map((color, index) =>{
+                                return(
+                                    <option key={color + index}>{color}</option>
+                                )
+                            })}
+                                
+                            </Form.Control>
                         </Form.Group>
                         <br/>
                         <Form.Group >
                             <Form.Label>Wheels</Form.Label>
-                            <Form.Control type="text" placeholder="Enter your update" />
+                            <Form.Control type="text" placeholder="Enter your update" onChange={handleChange} name="wheels"/>
                         </Form.Group>
                         <br/>
                         <Form.Group >
                             <Form.Label>Performance</Form.Label>
-                            <Form.Control type="text" placeholder="Enter your update" />
+                            <Form.Control type="text" placeholder="Enter your performance" onChange={handleChange} name="performance" />
+                        </Form.Group>
+                        <br/>
+                        <Form.Group >
+                            <Form.Label>Upgrade</Form.Label>
+                            <Form.Control type="text" placeholder="Enter your update" onChange={handleChange} name="upgrade" />
                         </Form.Group>
                         <br/><br/>
                         <Row>

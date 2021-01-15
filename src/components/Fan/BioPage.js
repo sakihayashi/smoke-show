@@ -14,12 +14,20 @@ import { Button, Row, Col, Form } from 'react-bootstrap'
 
 import './biopage.scss'
 import VehicleCard from './vehicleCard'
+import CreateNewCar from './CreateNewCar'
+
 
 const BioPage = () =>{
     const [userData, setUserData] = useState({about: "a photographer based in Cheshire, UK. With a background in design, I strive to create engaging imagery that stands out"})
+
     const [editMode, setEditMode] = useState(false)
     const [showSetting, setShowSetting] = useState(false);
     const carOptions = ['Daily Driver', 'Vehicle #2', 'Dream Car']
+    const [showAddCar, setShowAddCar] = useState(false)
+    
+    const handleCloseAddCarModal = () => setShowAddCar(false)
+    const handleShowAddCarModal = () => setShowAddCar(true)
+
     const handleChange = (e) =>{
         console.log(e.target.value)
         setUserData({
@@ -54,6 +62,7 @@ const BioPage = () =>{
     }
     return(
         <Layout>
+        {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal}  />}
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} />}
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
@@ -144,8 +153,15 @@ const BioPage = () =>{
                             <div className="spacer-2rem"></div>
                             <VehicleCard car={dayDriver} />
                             <div className="spacer-2rem"></div>
+                            <div style={{padding: '0 6px'}}>
+                                <Button className="btn-add-car" onClick={handleShowAddCarModal}>Add a car</Button>
+                            </div>
+                            
+                            <div className="spacer-2rem"></div>
                         </Col>
+                        
                     </Row>
+                    
                 </div>
                 
             </div>

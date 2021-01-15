@@ -239,6 +239,20 @@
     font-weight: 600;
     color: #555;
 }
+.btn-add-car{
+    background-color: $theme-color;
+    border-color: $theme-color;
+    width: 100%;
+    margin: 0 auto;
+    &:hover{
+      background-color: $theme-hover;
+      border-color: $theme-color;
+    }
+    &:focus{
+      background-color: $theme-hover;
+      border-color: $theme-color;
+    }
+  }
 @media (min-width: 576px){
     .modal-wrapper-bio > .modal-dialog {
         max-width: 90vw;
