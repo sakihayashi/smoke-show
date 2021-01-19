@@ -1,4 +1,5 @@
 import React from 'react'
+import {Helmet} from "react-helmet"
 import { Row, Col } from 'react-bootstrap'
 import Layout from './Layout/Layout'
 import './about.scss'
@@ -7,6 +8,13 @@ const AboutPage = () =>{
     
  return(
      <Layout>
+     <Helmet>
+        <meta charSet="utf-8" />
+        <title>About Us | The Smoke Show</title>
+        <meta name="description" content="Who we are and how we started The Smoke Show. Stay in touch." />
+        <meta name="robots" content="noindex, follow" />
+        {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+    </Helmet>
         <div class="spacer-4rem"></div>
         <div className="main-wrapper">
             <div className="mission-wrapper">

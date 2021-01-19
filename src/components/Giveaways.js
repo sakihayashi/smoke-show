@@ -1,4 +1,5 @@
 import React from 'react'
+import {Helmet} from "react-helmet"
 import Layout from './Layout/Layout'
 import { Row, Col, Card, Button } from 'react-bootstrap'
 import './giveaways.scss'
@@ -22,6 +23,13 @@ const Giveaways = (props) =>{
     const shareUrl = `https://master.d2rltwsx300g54.amplifyapp.com${sharePathname}`
     return(
         <Layout>
+        <Helmet>
+            <meta charSet="utf-8" />
+            <title>Giveaways | The Smoke Show</title>
+            <meta name="description" content="Checkout our giveaways and entry now to win!" />
+            <meta name="robots" content="noindex, follow" />
+            {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+        </Helmet>
             <div className="spacer-4rem"></div>
             <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem)'}}>
             <h2 className="title">Giveaways</h2>

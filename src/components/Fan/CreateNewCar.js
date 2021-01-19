@@ -2,8 +2,8 @@ import React, { useState, Fragment, useCallback, useEffect } from 'react'
 import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 import {useDropzone} from 'react-dropzone'
 import AWS from 'aws-sdk';
-import Amplify from 'aws-amplify';
-
+import Amplify, { Auth, Storage } from 'aws-amplify';
+// import awsExports from '../aws-exports'
 
 
 import editIcon from '../../assets/global/edit-icon.svg'
@@ -17,29 +17,22 @@ const CreateNewCar = (props) =>{
 
     Amplify.configure({
         Auth: {
-            identityPoolId: IdentityPoolId, //REQUIRED - Amazon Cognito Identity Pool ID
-            region: bucketRegion, // REQUIRED - Amazon Cognito Region
-            userPoolId: 'XX-XXXX-X_abcd1234', //OPTIONAL - Amazon Cognito User Pool ID
-            userPoolWebClientId: 'XX-XXXX-X_abcd1234', //OPTIONAL - Amazon Cognito Web Client ID
+            identityPoolId: process.env.REACT_APP_AWS_POOL_ID, //REQUIRED - Amazon Cognito Identity Pool ID
+            region: process.env.REACT_APP_AWS_BUCKET_REGION, // REQUIRED - Amazon Cognito Region
+            // userPoolId: 'XX-XXXX-X_abcd1234', 
+            //OPTIONAL - Amazon Cognito User Pool ID
+            // userPoolWebClientId: 'XX-XXXX-X_abcd1234', 
+            //OPTIONAL - Amazon Cognito Web Client ID
         },
         Storage: {
-            bucket: albumBucketName, //REQUIRED -  Amazon S3 bucket
-            region: bucketRegion, //OPTIONAL -  Amazon service region
+            AWSS3: {
+                bucket: process.env.REACT_APP_S3_BUCKET, //REQUIRED -  Amazon S3 bucket name
+                region: process.env.REACT_APP_AWS_BUCKET_REGION, //OPTIONAL -  Amazon service region
+            }
         }
-    }
-    )
-
-    AWS.config.update({
-    region: bucketRegion,
-    credentials: new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: IdentityPoolId
-    })
     });
 
-    var s3 = new AWS.S3({
-    apiVersion: "2006-03-01",
-    params: { Bucket: albumBucketName }
-    });
+
     const onDrop = useCallback(acceptedFiles => {
         // Do something with the files
         console.log('file', acceptedFiles)

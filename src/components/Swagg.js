@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import {Helmet} from "react-helmet"
 import Layout from './Layout/Layout'
 import Client from 'shopify-buy';
 import Products from './Shopify/Products'
@@ -67,6 +68,13 @@ useEffect(() => {
 }, [])
     return(
         <Layout>
+        <Helmet>
+            <meta charSet="utf-8" />
+            <title>Swagg | The Smoke Show</title>
+            <meta name="description" content="Check out our swaggs here!" />
+            <meta name="robots" content="noindex, follow" />
+            {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+        </Helmet>
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
                 <h2 className="title">Swagg</h2>

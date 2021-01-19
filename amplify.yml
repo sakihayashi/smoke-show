@@ -7,6 +7,9 @@ frontend:
     build:
       commands:
         - yarn build
+    postBuild:
+      commands:
+        - react-snap
   artifacts:
     baseDirectory: build
     files:

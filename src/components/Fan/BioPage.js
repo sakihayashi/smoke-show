@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import {Helmet} from "react-helmet"
 import Layout from '../Layout/Layout'
 import bioImgXs from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_375.jpg'
 import bioImgS from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_752.jpg'
@@ -62,6 +63,13 @@ const BioPage = () =>{
     }
     return(
         <Layout>
+        <Helmet>
+            <meta charSet="utf-8" />
+            <title>User profile page | The Smoke Show</title>
+            <meta name="description" content="Place the meta description text here." />
+            <meta name="robots" content="noindex, follow" />
+            {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+        </Helmet>
         {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal}  />}
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} />}
             <div className="main-wrapper">

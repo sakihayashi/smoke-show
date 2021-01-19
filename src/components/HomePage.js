@@ -1,17 +1,20 @@
-import React, { useEffect, useState, Fragment, useRef } from 'react'
+import React, { useEffect, useState, Fragment, useRef, Suspense } from 'react'
+import {Helmet} from "react-helmet"
 import { Row, Col, Form, FormControl, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
 import { youtubeAPI } from '../utils/youtubeAPI'
 import { carTempData } from './carTempData'
 import { commentsTempData } from './commentsTempData' 
-import Comments from './Comments'
+// import Comments from './Comments'
 import Avatar from 'react-avatar'
 import { v4 as uuidv4 } from 'uuid';
 import powerIcon from '../assets/global/Horsepower.png'
 import pistonIcon from '../assets/global/piston.png'
 import priceIcon from '../assets/global/Price-Tag-icon.png'
 import Layout from './Layout/Layout'
+import '../scss/spinner.css'
+const Comments = React.lazy(() => import('./Comments'))
 
 const HomePage = (props) =>{
  console.log('props', props)
@@ -141,6 +144,13 @@ const app = new Realm.App(appConfig);
 
     return(
             <Layout ref={childRef}>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Home | The Smoke Show</title>
+                <meta name="description" content="Place the meta description text here." />
+                <meta name="robots" content="noindex, follow" />
+                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            </Helmet>
                 <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
                 <h2 className="title">New Today</h2>
@@ -177,8 +187,10 @@ const app = new Realm.App(appConfig);
 
                                                 </Col>
                                             </Row>
-                                
-                                            <Comments comments={commentsTempData[index]} videoId={car.videoId} />
+                                            <Suspense fallback={<div class="loader">Loading...</div>}>
+                                                <Comments comments={commentsTempData[index]} videoId={car.videoId} />
+                                            </Suspense>
+                                            
                                         </Col>
                                         <Col sm={4} className="spec-col"  >
                                             <div className="spec-wrapper" key={'spec-wrapper' + uuid}>

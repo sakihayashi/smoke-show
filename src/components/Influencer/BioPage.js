@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import {Helmet} from "react-helmet"
 import { Row, Col, Form, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
@@ -37,7 +38,6 @@ const BioPage = (props) =>{
         timeout: 10000, // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
-
 
     const handleChangeKeyword = (e) =>{
         setSearchKeyword(e.target.value)
@@ -89,6 +89,7 @@ const BioPage = (props) =>{
 
     return(
         <Layout>
+        
             <div className="main-wrapper">
                 <div className="banner-wrapper">
                     <img src={banner_img} alt={username} className="influencer-banner"/>

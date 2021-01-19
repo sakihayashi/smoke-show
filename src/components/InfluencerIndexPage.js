@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import {Helmet} from "react-helmet"
 import { Row, Col, Card, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
@@ -47,6 +48,13 @@ const InfluencerIndexPage = () =>{
 
     return(
         <Layout>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>The list of influencers | The Smoke Show</title>
+          <meta name="description" content="Check out our influencers / authors" />
+          <meta name="robots" content="noindex, follow" />
+          {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+        </Helmet>
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
                 <div className="title title-adj">
