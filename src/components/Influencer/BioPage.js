@@ -3,7 +3,7 @@ import {Helmet} from "react-helmet"
 import { Row, Col, Form, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
-import Avatar from 'react-avatar'
+// import Avatar from 'react-avatar'
 import './bioPage.scss'
 // import * as Papa from 'papaparse'
 import { youtubeAPI } from '../../utils/youtubeAPI'
@@ -18,13 +18,11 @@ import pistonIcon from '../../assets/global/piston.png'
 import priceIcon from '../../assets/global/Price-Tag-icon.png'
 
 const BioPage = (props) =>{
-    const { banner_img, username, profile_pic, fans } = props.location.state.influencer
-    let formattedFans
-    if(fans > 999){
-        formattedFans = Math.sign(fans)*((Math.abs(fans)/1000).toFixed(1)) + 'k'
-    }else{
-        formattedFans = Math.sign(fans)*Math.abs(fans)
-    }
+    const influencerId = props.match.params.id
+    const [influencer, setInfluencer] = useState({})
+    // const { banner_img, username, profile_pic, fans } = props.location.state.influencer
+    const [formattedFans, setFormattedFans] = useState('')
+    
     const { params: { id } } = props.match
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
@@ -68,6 +66,27 @@ const BioPage = (props) =>{
             
         })
     }
+    const getInfluencer = async () =>{
+        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI);
+        try {
+ 
+          await app.logIn(credentials).then( async user =>{
+            const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+            const mongoCollection = mongo.db("smoke-show").collection("influencers");
+            const filter = {userId: influencerId} 
+            await mongoCollection.findOne(filter).then(res =>{
+                setInfluencer(res)
+                if(res.fans > 999){
+                    setFormattedFans(Math.sign(res.fans)*((Math.abs(res.fans)/1000).toFixed(1)) + 'k')
+                }else{
+                    setFormattedFans(Math.sign(res.fans)*Math.abs(res.fans))
+                }
+            })
+           
+          }
+          )
+         }catch(error){console.log(error)}
+    }
     useEffect( async () => {
         const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
         try {
@@ -79,27 +98,30 @@ const BioPage = (props) =>{
             const mongoCollection = mongo.db("smoke-show").collection("comments");
             const filter = {videoId: 'QHLojVxs'} 
             await mongoCollection.find(filter).then(resAll =>{
-                console.log('find all', resAll);
             })
            
           }
           )
          }catch(error){console.log(error)}
       })
-
+      useEffect(() => {
+        getInfluencer()
+      }, [])
     return(
         <Layout>
-        
+            <Helmet>
+                <title>Influencer {influencer.username} Bio | The Smoke Show</title>
+            </Helmet>
             <div className="main-wrapper">
                 <div className="banner-wrapper">
-                    <img src={banner_img} alt={username} className="influencer-banner"/>
+                    <img src={influencer.banner_img} alt={influencer.username} className="influencer-banner"/>
                 </div>
                 <Row>
                     <Col style={{paddingRight:0}}>
-                    <img src={profile_pic} className="bio-profile-pic" />
+                    <img src={influencer.profile_pic} className="bio-profile-pic" />
                     </Col>
                     <Col className="bio-text-wrapper" style={{paddingLeft: 0}}>
-                        <div className="bio-creator-name">{username}</div>
+                        <div className="bio-creator-name">{influencer.username}</div>
                         <div className="bio-creator-data">{formattedFans} Fans</div>
                     </Col>
                     <Col sm={9} className="bio-sub-menu">

@@ -21,8 +21,7 @@ const InfluencerIndexPage = () =>{
     const app = new Realm.App(appConfig);
 
     const getInfluencers = async () =>{
-        console.log('check env', process.env.REACT_APP_REALM_AUTHAPI)
-        const credentials = Realm.Credentials.apiKey('KcaGuToSoxeFzhV8TbhIoqPAYQl9hYbutBRUQqHqSWEkcPR2Vmd7Bp0eazJToPek');
+        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI);
         try {
         //   const app = new Realm.App(appConfig);
       
