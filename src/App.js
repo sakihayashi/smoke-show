@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,7 +16,7 @@ import ResetPassword from './components/ResetPassword'
 import AboutPage from './components/AboutPage'
 import CarStats from './components/CarStats'
 import CarSearch from './components/CarSearch'
-import CreateDta from './components/CreateData'
+// import CreateDta from './components/CreateData'
 import Giveaways from './components/Giveaways'
 import NotFoundPage from './components/NotFoundPage'
 import Swagg from './components/Swagg'
@@ -36,7 +36,7 @@ function App() {
           <Route exact path="/about" component={AboutPage} />
           <Route exact path="/car-stats/:id" component={CarStats} />
           <Route exact path="/car-search" component={CarSearch} />
-          <Route exact path="/get-data" component={CreateDta} />
+          {/* <Route exact path="/get-data" component={CreateDta} /> */}
           <Route exact path="/giveaways" component={Giveaways} />
           <Route exact path="/swagg" component={Swagg} />
           <Route path="/user/:id" component={BioPage} />
