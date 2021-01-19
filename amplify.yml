@@ -6,7 +6,7 @@ frontend:
         - npm install
     build:
       commands:
-        - yarn build
+        - npm run build
     postBuild:
       commands:
         - react-snap
