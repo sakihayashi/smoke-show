@@ -110,7 +110,7 @@ const BioPage = (props) =>{
     return(
         <Layout>
             <Helmet>
-                <title>Influencer {influencer.username} Bio | The Smoke Show</title>
+                <title>Influencer {`${influencer.username}`} Bio | The Smoke Show</title>
             </Helmet>
             <div className="main-wrapper">
                 <div className="banner-wrapper">

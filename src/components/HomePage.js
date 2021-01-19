@@ -17,12 +17,10 @@ import '../scss/spinner.css'
 import { Amplify } from "aws-amplify";
 import awsExports from '../aws-exports'
 
-Amplify.configure({ ...awsExports, ssr: true });
-
 const Comments = React.lazy(() => import('./Comments'))
 
 const HomePage = (props) =>{
- console.log('props', props)
+    Amplify.configure({ ...awsExports, ssr: true });
 const childRef = useRef();
 const videoEmbedURL = 'https://www.youtube.com/embed/'
 const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'

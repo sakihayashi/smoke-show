@@ -3,9 +3,7 @@ import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 import {useDropzone} from 'react-dropzone'
 import AWS from 'aws-sdk';
 import Amplify, { Auth, Storage } from 'aws-amplify';
-// import awsExports from '../aws-exports'
-
-
+import awsExports from '../../aws-exports'
 import editIcon from '../../assets/global/edit-icon.svg'
 import uploadIcon from '../../assets/global/upload.svg'
 
@@ -14,7 +12,7 @@ const CreateNewCar = (props) =>{
     const bucketRegion = process.env.REACT_APP_BUCKET_REGION;
     const IdentityPoolId = process.env.REACT_APP_POOL_ID;
     const albumName = "test"
-
+    Amplify.configure({ ...awsExports, ssr: true });
     Amplify.configure({
         Auth: {
             identityPoolId: process.env.REACT_APP_AWS_POOL_ID, //REQUIRED - Amazon Cognito Identity Pool ID
@@ -73,9 +71,9 @@ const CreateNewCar = (props) =>{
     }
     const testUpload = (e) =>{
         e.preventDefault()
-        // Storage.put('test.txt', 'Hello')
-        // .then (result => console.log(result))
-        // .catch(err => console.log(err));
+        Storage.put('test.txt', 'Hello')
+        .then (result => console.log(result))
+        .catch(err => console.log(err));
     }
     useEffect(() => {
         const script = document.createElement("script");
