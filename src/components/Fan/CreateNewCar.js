@@ -2,12 +2,12 @@ import React, { useState, Fragment, useCallback, useEffect } from 'react'
 import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 import {useDropzone} from 'react-dropzone'
 import AWS from 'aws-sdk';
-import Amplify, { Auth, Storage } from 'aws-amplify';
-import awsmobile from '../../aws-exports'
+// import Amplify, { Auth, Storage } from 'aws-amplify';
+// import awsmobile from '../../aws-exports'
 import editIcon from '../../assets/global/edit-icon.svg'
 import uploadIcon from '../../assets/global/upload.svg'
 
-Amplify.configure({ ...awsmobile, ssr: true });
+// Amplify.configure({ ...awsmobile, ssr: true });
 
 const CreateNewCar = (props) =>{
     const albumBucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
