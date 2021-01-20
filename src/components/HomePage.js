@@ -15,12 +15,12 @@ import priceIcon from '../assets/global/Price-Tag-icon.png'
 import Layout from './Layout/Layout'
 import '../scss/spinner.css'
 import { Amplify } from "aws-amplify";
-import awsExports from '../aws-exports'
-
+import awsmobile from '../aws-exports'
+Amplify.configure({ ...awsmobile, ssr: true });
 const Comments = React.lazy(() => import('./Comments'))
 
 const HomePage = (props) =>{
-    Amplify.configure({ ...awsExports, ssr: true });
+    
 const childRef = useRef();
 const videoEmbedURL = 'https://www.youtube.com/embed/'
 const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
