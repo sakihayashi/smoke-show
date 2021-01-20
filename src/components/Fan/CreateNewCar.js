@@ -7,28 +7,30 @@ import awsExports from '../../aws-exports'
 import editIcon from '../../assets/global/edit-icon.svg'
 import uploadIcon from '../../assets/global/upload.svg'
 
+Amplify.configure({ ...awsExports, ssr: true });
+
 const CreateNewCar = (props) =>{
     const albumBucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
     const bucketRegion = process.env.REACT_APP_BUCKET_REGION;
     const IdentityPoolId = process.env.REACT_APP_POOL_ID;
     const albumName = "test"
-    Amplify.configure({ ...awsExports, ssr: true });
-    Amplify.configure({
-        Auth: {
-            identityPoolId: process.env.REACT_APP_AWS_POOL_ID, //REQUIRED - Amazon Cognito Identity Pool ID
-            region: process.env.REACT_APP_AWS_BUCKET_REGION, // REQUIRED - Amazon Cognito Region
-            // userPoolId: 'XX-XXXX-X_abcd1234', 
-            //OPTIONAL - Amazon Cognito User Pool ID
-            // userPoolWebClientId: 'XX-XXXX-X_abcd1234', 
-            //OPTIONAL - Amazon Cognito Web Client ID
-        },
-        Storage: {
-            AWSS3: {
-                bucket: process.env.REACT_APP_S3_BUCKET, //REQUIRED -  Amazon S3 bucket name
-                region: process.env.REACT_APP_AWS_BUCKET_REGION, //OPTIONAL -  Amazon service region
-            }
-        }
-    });
+    
+    // Amplify.configure({
+    //     Auth: {
+    //         identityPoolId: process.env.REACT_APP_AWS_POOL_ID, //REQUIRED - Amazon Cognito Identity Pool ID
+    //         region: process.env.REACT_APP_AWS_BUCKET_REGION, // REQUIRED - Amazon Cognito Region
+    //         // userPoolId: 'XX-XXXX-X_abcd1234', 
+    //         //OPTIONAL - Amazon Cognito User Pool ID
+    //         // userPoolWebClientId: 'XX-XXXX-X_abcd1234', 
+    //         //OPTIONAL - Amazon Cognito Web Client ID
+    //     },
+    //     Storage: {
+    //         AWSS3: {
+    //             bucket: process.env.REACT_APP_S3_BUCKET, //REQUIRED -  Amazon S3 bucket name
+    //             region: process.env.REACT_APP_AWS_BUCKET_REGION, //OPTIONAL -  Amazon service region
+    //         }
+    //     }
+    // });
 
 
     const onDrop = useCallback(acceptedFiles => {
@@ -71,7 +73,10 @@ const CreateNewCar = (props) =>{
     }
     const testUpload = (e) =>{
         e.preventDefault()
-        Storage.put('test.txt', 'Hello')
+        Storage.put('test.txt', 'Protected Content', {
+            level: 'protected',
+            contentType: 'text/plain'
+        })
         .then (result => console.log(result))
         .catch(err => console.log(err));
     }
