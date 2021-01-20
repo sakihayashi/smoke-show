@@ -2,12 +2,12 @@ import React, { useState, Fragment, useCallback, useEffect } from 'react'
 import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 import {useDropzone} from 'react-dropzone'
 import AWS from 'aws-sdk';
-import Amplify, { Auth, Storage } from 'aws-amplify';
-import awsExports from '../../aws-exports'
+// import Amplify, { Auth, Storage } from 'aws-amplify';
+// import awsExports from '../../aws-exports'
 import editIcon from '../../assets/global/edit-icon.svg'
 import uploadIcon from '../../assets/global/upload.svg'
 
-Amplify.configure({ ...awsExports, ssr: true });
+// Amplify.configure({ ...awsExports, ssr: true });
 
 const CreateNewCar = (props) =>{
     const albumBucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
@@ -73,12 +73,12 @@ const CreateNewCar = (props) =>{
     }
     const testUpload = (e) =>{
         e.preventDefault()
-        Storage.put('test.txt', 'Protected Content', {
-            level: 'protected',
-            contentType: 'text/plain'
-        })
-        .then (result => console.log(result))
-        .catch(err => console.log(err));
+        // Storage.put('test.txt', 'Protected Content', {
+        //     level: 'protected',
+        //     contentType: 'text/plain'
+        // })
+        // .then (result => console.log(result))
+        // .catch(err => console.log(err));
     }
     useEffect(() => {
         const script = document.createElement("script");
