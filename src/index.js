@@ -10,6 +10,10 @@ import rootReducer from './store/reducers/rootReducer'
 //middleware
 import thunk from 'redux-thunk'
 
+import { Amplify } from "aws-amplify";
+import awsmobile from '../aws-exports'
+Amplify.configure({ ...awsmobile, ssr: true });
+
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const rootElement = document.getElementById("root");
