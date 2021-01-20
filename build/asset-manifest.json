@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/static/css/main.d3d0f80e.chunk.css",
-    "main.js": "/static/js/main.8be89f3b.chunk.js",
-    "main.js.map": "/static/js/main.8be89f3b.chunk.js.map",
+    "main.js": "/static/js/main.1cdddc8c.chunk.js",
+    "main.js.map": "/static/js/main.1cdddc8c.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.26a56151.js",
     "runtime-main.js.map": "/static/js/runtime-main.26a56151.js.map",
     "static/css/2.1a02f21c.chunk.css": "/static/css/2.1a02f21c.chunk.css",
-    "static/js/2.79dd2f76.chunk.js": "/static/js/2.79dd2f76.chunk.js",
-    "static/js/2.79dd2f76.chunk.js.map": "/static/js/2.79dd2f76.chunk.js.map",
+    "static/js/2.94565e92.chunk.js": "/static/js/2.94565e92.chunk.js",
+    "static/js/2.94565e92.chunk.js.map": "/static/js/2.94565e92.chunk.js.map",
     "static/js/3.77b4de23.chunk.js": "/static/js/3.77b4de23.chunk.js",
     "static/js/3.77b4de23.chunk.js.map": "/static/js/3.77b4de23.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.1a02f21c.chunk.css.map": "/static/css/2.1a02f21c.chunk.css.map",
     "static/css/main.d3d0f80e.chunk.css.map": "/static/css/main.d3d0f80e.chunk.css.map",
-    "static/js/2.79dd2f76.chunk.js.LICENSE.txt": "/static/js/2.79dd2f76.chunk.js.LICENSE.txt",
+    "static/js/2.94565e92.chunk.js.LICENSE.txt": "/static/js/2.94565e92.chunk.js.LICENSE.txt",
     "static/media/Abarth_Logo.png": "/static/media/Abarth_Logo.6fe9dc0a.png",
     "static/media/Acura_Logo.png": "/static/media/Acura_Logo.24d57dbd.png",
     "static/media/Alfa-romeo_Logo.png": "/static/media/Alfa-romeo_Logo.f6a1bc3f.png",
@@ -102,8 +102,8 @@
   "entrypoints": [
     "static/js/runtime-main.26a56151.js",
     "static/css/2.1a02f21c.chunk.css",
-    "static/js/2.79dd2f76.chunk.js",
+    "static/js/2.94565e92.chunk.js",
     "static/css/main.d3d0f80e.chunk.css",
-    "static/js/main.8be89f3b.chunk.js"
+    "static/js/main.1cdddc8c.chunk.js"
   ]
 }
