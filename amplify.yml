@@ -3,6 +3,7 @@ backend:
   phases:
     build:
       commands:
+        - '# Get Amplify CLI Cloud-Formation stack info from environment cache'
         - '# Execute Amplify CLI with the helper script'
         - amplifyPush --simple
 frontend:
