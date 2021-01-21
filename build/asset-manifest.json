@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/static/css/main.d3d0f80e.chunk.css",
-    "main.js": "/static/js/main.1cdddc8c.chunk.js",
-    "main.js.map": "/static/js/main.1cdddc8c.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.26a56151.js",
-    "runtime-main.js.map": "/static/js/runtime-main.26a56151.js.map",
-    "static/css/2.1a02f21c.chunk.css": "/static/css/2.1a02f21c.chunk.css",
-    "static/js/2.94565e92.chunk.js": "/static/js/2.94565e92.chunk.js",
-    "static/js/2.94565e92.chunk.js.map": "/static/js/2.94565e92.chunk.js.map",
-    "static/js/3.77b4de23.chunk.js": "/static/js/3.77b4de23.chunk.js",
-    "static/js/3.77b4de23.chunk.js.map": "/static/js/3.77b4de23.chunk.js.map",
+    "main.js": "/static/js/main.40f30bb7.chunk.js",
+    "main.js.map": "/static/js/main.40f30bb7.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.786684ea.js",
+    "runtime-main.js.map": "/static/js/runtime-main.786684ea.js.map",
+    "static/css/2.150d169a.chunk.css": "/static/css/2.150d169a.chunk.css",
+    "static/js/2.d823023d.chunk.js": "/static/js/2.d823023d.chunk.js",
+    "static/js/2.d823023d.chunk.js.map": "/static/js/2.d823023d.chunk.js.map",
+    "static/js/3.972b3d75.chunk.js": "/static/js/3.972b3d75.chunk.js",
+    "static/js/3.972b3d75.chunk.js.map": "/static/js/3.972b3d75.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/2.1a02f21c.chunk.css.map": "/static/css/2.1a02f21c.chunk.css.map",
+    "static/css/2.150d169a.chunk.css.map": "/static/css/2.150d169a.chunk.css.map",
     "static/css/main.d3d0f80e.chunk.css.map": "/static/css/main.d3d0f80e.chunk.css.map",
-    "static/js/2.94565e92.chunk.js.LICENSE.txt": "/static/js/2.94565e92.chunk.js.LICENSE.txt",
+    "static/js/2.d823023d.chunk.js.LICENSE.txt": "/static/js/2.d823023d.chunk.js.LICENSE.txt",
     "static/media/Abarth_Logo.png": "/static/media/Abarth_Logo.6fe9dc0a.png",
     "static/media/Acura_Logo.png": "/static/media/Acura_Logo.24d57dbd.png",
     "static/media/Alfa-romeo_Logo.png": "/static/media/Alfa-romeo_Logo.f6a1bc3f.png",
@@ -100,10 +100,10 @@
     "static/media/weight.961aed74.svg": "/static/media/weight.961aed74.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.26a56151.js",
-    "static/css/2.1a02f21c.chunk.css",
-    "static/js/2.94565e92.chunk.js",
+    "static/js/runtime-main.786684ea.js",
+    "static/css/2.150d169a.chunk.css",
+    "static/js/2.d823023d.chunk.js",
     "static/css/main.d3d0f80e.chunk.css",
-    "static/js/main.1cdddc8c.chunk.js"
+    "static/js/main.40f30bb7.chunk.js"
   ]
 }
