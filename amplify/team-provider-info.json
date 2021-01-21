@@ -13,8 +13,8 @@
     },
     "categories": {
       "auth": {
-        "theSmokeShowAuth": {},
-        "userPoolGroups": {}
+        "userPoolGroups": {},
+        "theSmokeShowAuth": {}
       }
     }
   }
