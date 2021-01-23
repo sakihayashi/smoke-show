@@ -147,7 +147,7 @@ const app = new Realm.App(appConfig);
             <Layout ref={childRef}>
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Home | The Smoke Show</title>
+                <title>Home  testing here | The Smoke Show</title>
                 <meta name="description" content="Place the meta description text here." />
                 <meta name="robots" content="noindex, follow" />
                 {/* <link rel="canonical" href="http://mysite.com/example" /> */}
