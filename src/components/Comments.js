@@ -3,6 +3,7 @@ import { Row, Col, Button, Form } from 'react-bootstrap'
 import Avatar from 'react-avatar'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
+import { Link } from 'react-router-dom'
 // import { authUser } from '../store/actions/authActions'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
@@ -43,8 +44,6 @@ const Comments = (props) =>{
                 }
             })
         }
- 
-        // const credentials = Realm.Credentials.emailPassword(props.credentials.email, props.credentials.password)
         try{
             // Authenticate the user
             await app.logIn(credentials).then(async user=>{
@@ -103,27 +102,23 @@ const Comments = (props) =>{
     }
     const getComments = async () =>{
         let userLogged;
-        const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
+        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
         try {
         //   const app = new Realm.App(appConfig);
       
           // an authenticated user is required to access a MongoDB instance
           await app.logIn(credentials).then( async user =>{
             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-            const mongoCollection = mongo.db("smoke-show").collection("comments");
+            const mongoCollection = mongo.db("smoke-show").collection("comments")
             const filter = {videoId: props.videoId} 
             const options = {sort: {date_posted: -1}, limit: 4}
             await mongoCollection.find(filter,options).then(resAll =>{
-                console.log('find all', resAll);
                 setCommentsDB(resAll)
                 return resAll
             })
            
           }
           )
-      
-          
-      
           // the rest of your code ...
       
          }catch(error){console.log(error)}
@@ -164,16 +159,27 @@ const Comments = (props) =>{
            
             return(
                 <Row className="comment-wrapper" key={uid(comment)}>
-                    <Col sm={1} style={{margin:0,padding:0}}>
-                    {comment.profile_pic ? <img src={comment.profile_pic} className="profile-pic" alt={comment.username} /> :
-                    <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="profile-pic" name={comment.username} />
-                    }
-                        
-                    </Col>
-                    <Col sm={11} style={{margin: 0, paddingRight:0}}>
-                    <div className="comment-username"><strong>{comment.username}</strong> | <span style={{color:'gray'}}>{localtime}</span></div>
+                    
+                    <div style={{margin:0,padding:0}} className="col-1">
+                        <Link to={{
+                            pathname: `/user/${comment.userId}`
+                        }}>
+                            {comment.profile_pic ? <img src={comment.profile_pic} className="profile-pic " alt={comment.username} /> :
+                            <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="profile-pic" name={comment.username} />
+                            }
+                        </Link>
+                    </div>
+                    
+                    <div  style={{margin: 0, paddingRight:0}} className="col-11">
+                    <div className="comment-username ">
+                        <Link to={{
+                            pathname: `/user/${comment.userId}`
+                        }}>
+                            <strong>{comment.username}</strong>
+                        </Link>
+                     {" "} | <span style={{color:'gray'}}>{localtime}</span></div>
                     <div className="comment-txt" s>{comment.comment}</div>
-                    </Col>
+                    </div>
                 </Row>
             )
         })

@@ -110,21 +110,24 @@ const VehicleCard = (props) =>{
         <div className="bio-container box-shadow-white">
         { editModal}
             <div className="car-names">
-                <strong>Daily Driver</strong>
+                <strong>{props.car.category}</strong>
                     <div className="edit-icon-wrapper-card" onClick={handleShow}>
+                    {props.allowEdit && 
                         <img className="edit-icon" src={editIcon} alt="Edit about you"/>
+                    }
+                        
                     </div>
             </div>
             <Row>
                 <Col sm={5} >
-                    <img src={props.car} className="bio-my-car" alt="my daily driver" />
+                    <img src={props.car.imgUlr} className="bio-my-car" alt="my daily driver" />
                 </Col>
                 <Col sm={7} className="bio-car-contents">
-                    <p>Name: 2012 Lamborghini Aventador</p>
-                    <p>Upgrades: </p>
-                    <p>Color: </p>
-                    <p>Wheels: </p>
-                    <p>Performance: </p>
+                    <p>Name: {props.car.name}</p>
+                    <p>Upgrades: {props.car.upgrades}</p>
+                    <p>Color: {props.car.color}</p>
+                    <p>Wheels: {props.car.wheels}</p>
+                    <p>Performance: {props.car.performance}</p>
                 </Col>
             </Row>
         </div>

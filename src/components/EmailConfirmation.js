@@ -15,11 +15,9 @@ const EmailConfirmation = (props) =>{
     const [hasRegistered, setHasRegistered] = useState(false)
     const [msg, setMsg] = useState("")
     const maxAgeTest = 1 * 60 * 60
-    // let location = useLocation()
     const id = process.env.REACT_APP_REALM_APP_ID
     const config = { id };
     const app = new Realm.App(config);
-    // console.log('location', location)
     
     const getApp = Realm.App.getApp(id)
 
@@ -49,7 +47,6 @@ const EmailConfirmation = (props) =>{
             
             const mongoCollection = mongo.db("smoke-show").collection("users");
             await mongoCollection.insertOne(userData).then(insertOneResult =>{
-                console.log('result', insertOneResult)
                 userData.login = {email: email, password: userObj.password}
                 let token = createToken(userData)
                 localStorage.setItem('session_token', token)

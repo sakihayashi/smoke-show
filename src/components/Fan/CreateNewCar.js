@@ -1,93 +1,90 @@
-import React, { useState, Fragment, useCallback, useEffect } from 'react'
+import React, { useState, Fragment } from 'react'
 import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
-import {useDropzone} from 'react-dropzone'
-import AWS from 'aws-sdk';
-// import Amplify, { Auth, Storage } from 'aws-amplify';
-// import awsmobile from '../../aws-exports'
-import editIcon from '../../assets/global/edit-icon.svg'
-import uploadIcon from '../../assets/global/upload.svg'
+import * as Realm from "realm-web"
+import ImageUpload from './ImageUpload'
+import jwt from 'jsonwebtoken'
 
-// Amplify.configure({ ...awsmobile, ssr: true });
 
 const CreateNewCar = (props) =>{
-    const albumBucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
-    const bucketRegion = process.env.REACT_APP_BUCKET_REGION;
-    const IdentityPoolId = process.env.REACT_APP_POOL_ID;
-    const albumName = "test"
-    
-    // Amplify.configure({
-    //     Auth: {
-    //         identityPoolId: process.env.REACT_APP_AWS_POOL_ID, //REQUIRED - Amazon Cognito Identity Pool ID
-    //         region: process.env.REACT_APP_AWS_BUCKET_REGION, // REQUIRED - Amazon Cognito Region
-    //         // userPoolId: 'XX-XXXX-X_abcd1234', 
-    //         //OPTIONAL - Amazon Cognito User Pool ID
-    //         // userPoolWebClientId: 'XX-XXXX-X_abcd1234', 
-    //         //OPTIONAL - Amazon Cognito Web Client ID
-    //     },
-    //     Storage: {
-    //         AWSS3: {
-    //             bucket: process.env.REACT_APP_S3_BUCKET, //REQUIRED -  Amazon S3 bucket name
-    //             region: process.env.REACT_APP_AWS_BUCKET_REGION, //OPTIONAL -  Amazon service region
-    //         }
-    //     }
-    // });
+    const bucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
+    // const bucketRegion = process.env.REACT_APP_BUCKET_REGION;
+    // const IdentityPoolId = process.env.REACT_APP_POOL_ID;
+    const [imgFile, setImgFile] = useState('')
+    const [imgData64, setImgData64] = useState('')
+    const appConfig = {
+        id: process.env.REACT_APP_REALM_APP_ID,
+        timeout: 10000, // timeout in number of milliseconds
+        };
+    const app = new Realm.App(appConfig)
+    const maxAgeTest = 1 * 60 * 60
+
+    const setImgData = (obj) =>{
+        setImgFile(obj)
+        var file = obj
+        const reader = new FileReader();
+        reader.onload = (event) => {
+        const base64 = event.target.result.split(",").pop()
+          setImgData64(base64)
+          console.log(base64);
+        };
+        reader.readAsDataURL(file);
+      }
+    const closeModal = () =>{
+        setNewCarObj({name: '', category: '', color: '', wheels: '', upgrade: ''})
+        props.handleClose()
+    }
 
 
-    const onDrop = useCallback(acceptedFiles => {
-        // Do something with the files
-        console.log('file', acceptedFiles)
-        const file = acceptedFiles[0]
-        const fileName = file.name;
-        const albumPhotosKey = encodeURIComponent(albumName) + "/"
-        console.log('key', albumPhotosKey)
-        const photoKey = albumPhotosKey + fileName;
-        var upload = new AWS.S3.ManagedUpload({
-            params: {
-              Bucket: albumBucketName,
-              Key: photoKey,
-              Body: file
-            }
-          });
+    // const onDrop = useCallback(acceptedFiles => {
         
-          var promise = upload.promise();
-        
-          promise.then(data => {
-              alert("Successfully uploaded photo.");
-            //   viewAlbum(albumName);
-            },
-            function(err) {
-              return alert("There was an error uploading your photo: ", err.message);
-            }
-          );
-      }, [])
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+        // var file = acceptedFiles[0]
+        // const reader = new FileReader();
+        // reader.onload = (event) => {
+        // setImgFile(acceptedFiles[0])
+        // const base64 = event.target.result.split(",").pop()
+        //   setImgData64(base64)
+        // //   console.log(event.target.result);
+        // };
+        // reader.readAsDataURL(file);
+    //     // Do something with the files
+    //   }, [])
+    // const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
     
     const carColors = ['White', 'Black', 'Grey', 'Blue', 'Silver', 'Red', 'Orange', 'Bronze', 'Yellow', 'Green', 'Navy']
     const carCategories = ['Daily Driver', 'Vehicle #2', 'Dream Car']
-    const [newCarObj, setNewCarObj] = useState({})
+    const [newCarObj, setNewCarObj] = useState({name: '', category: '', color: '', wheels: '', upgrade: ''})
+
     const handleChange = (e) =>{
         setNewCarObj({
             ...newCarObj,
             [e.target.name]: e.target.value
         })
     }
-    const testUpload = (e) =>{
-        e.preventDefault()
-        // Storage.put('test.txt', 'Protected Content', {
-        //     level: 'protected',
-        //     contentType: 'text/plain'
-        // })
-        // .then (result => console.log(result))
-        // .catch(err => console.log(err));
+    const createToken = (userData) =>{
+        return jwt.sign({ userData: userData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest});
     }
-    useEffect(() => {
-        const script = document.createElement("script");
+    const handleSubmit = (e) =>{
+        e.preventDefault()
+        const token = localStorage.getItem('session_token')
+        var decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET);
+        console.log('test', decoded) 
+    }
+    // const testUpload = async (e) =>{
+    //     e.preventDefault()
+    //     const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
+    //     const filekey = 'test/' + imgFile.name
+    //     //username profile_car_
+    //     try{
+    //         await app.logIn(credentials).then(async user =>{
+    //             // base64EncodedImage, bucket, fileName, fileType
+    //             const result = await user.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type);
+    //             console.log('res', result)
+    //         })
+    //     }catch(err){
+    //         console.log(err)
+    //     }
+    // }
 
-    script.src = "https://sdk.amazonaws.com/js/aws-sdk-2.828.0.min.js";
-    script.async = true;
-
-    document.body.appendChild(script);
-    }, [])
     return(
     <Fragment>
         <Modal show={props.show} onHide={props.handleClose} className="modal-wrapper-bio">
@@ -96,7 +93,9 @@ const CreateNewCar = (props) =>{
             <Modal.Body>
                 <Row className="bio-modal-inner-wrapper">
                     <Col sm={6} className="">
-                    <div {...getRootProps()} className="dropzone-wrapper">
+                    <ImageUpload fileObj={setImgData}/>
+
+                    {/* <div {...getRootProps()} className="dropzone-wrapper">
                         <input {...getInputProps()} />
                         {
                             isDragActive ?
@@ -111,27 +110,32 @@ const CreateNewCar = (props) =>{
 
                             </div>
                         }
-                    </div>
+                    </div> */}
+                    
                     </Col>
                     <Col sm={6}>
                     <Form>
                         <Form.Group >
-                            <Form.Label>Caterogy</Form.Label>
-                            <Form.Control type="text" placeholder="Select a category" onChange={handleChange} name="name"/>
-                            <Form.Control>
+                            <Form.Label>Category</Form.Label>
+                            <Form.Control as="select"  onChange={handleChange} name="category">
+                            {carCategories.map((category, index) =>{
+                                return(
+                                    <option key={category + index}>{category}</option>
+                                )
+                            })}
 
                             </Form.Control>
                         </Form.Group>
                         <br/>
                         <Form.Group >
                             <Form.Label>Car name</Form.Label>
-                            <Form.Control type="text" placeholder="Enter car name" onChange={handleChange} name="name"/>
+                            <Form.Control type="text" placeholder="Enter car name e.g. maker, model, year" onChange={handleChange} name="name"/>
                         </Form.Group>
                         <br/>
                         <Form.Group >
                             <Form.Label>Color</Form.Label>
                             {/* <Form.Control type="text" placeholder="Select your color" onChange={handleChange} name="color" /> */}
-                            <Form.Control as="select" onChange={handleChange}>
+                            <Form.Control as="select" onChange={handleChange} name="color">
                             {carColors.map((color, index) =>{
                                 return(
                                     <option key={color + index}>{color}</option>
@@ -143,7 +147,7 @@ const CreateNewCar = (props) =>{
                         <br/>
                         <Form.Group >
                             <Form.Label>Wheels</Form.Label>
-                            <Form.Control type="text" placeholder="Enter your update" onChange={handleChange} name="wheels"/>
+                            <Form.Control type="text" placeholder="Enter your wheel" onChange={handleChange} name="wheels"/>
                         </Form.Group>
                         <br/>
                         <Form.Group >
@@ -158,7 +162,7 @@ const CreateNewCar = (props) =>{
                         <br/><br/>
                         <Row>
                             <Col sm={6}>
-                                <Button variant="secondary" onClick={props.handleClose} className="cancel-btn" > 
+                                <Button variant="secondary" onClick={closeModal} className="cancel-btn" > 
                                     Cancel
                                 </Button>
                             </Col>
@@ -166,8 +170,7 @@ const CreateNewCar = (props) =>{
                                 <Button variant="primary" onClick={props.handleClose} className="save-changes-btn">
                                 Add my new car
                                 </Button>
-                            </Col>
-                            <button onClick={testUpload}>test upload</button>
+                            </Col>                          
                         </Row>
                     </Form>
                     </Col>

@@ -32,6 +32,7 @@ const CarSearch = (props) =>{
               await mongoCollection.find().then(cars =>{
                   cars.map(car =>{
                       if (carMakerArr.includes(car.make) === false) carMakerArr.push(car.make);
+                      return
                   })
                   setCarMakers(carMakerArr)
                   
@@ -84,7 +85,6 @@ const CarSearch = (props) =>{
 
         setCars(filteredByModel)
         getCarYear(filteredByModel)
-        console.log('data', filteredByModel)
         
     }
     const getModelNames = (data) =>{
@@ -122,7 +122,6 @@ const CarSearch = (props) =>{
         setCars(filtered)
     }
    const goStatsPage = () =>{
-       console.log('selected cars', selectedCar)
        sessionStorage.setItem(searchId, cars)
        props.history.push({
         pathname: `/car-stats/${searchId}`,

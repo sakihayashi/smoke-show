@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react'
+import React, { useState, useImperativeHandle, forwardRef, useRef } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import { withRouter } from "react-router"
@@ -9,8 +9,8 @@ const Layout = forwardRef((props, ref) =>{
     const [modalShow, setModalShow] = useState(false)
     const [user, setUser] = useState(false)
     const [username, setUsername] = useState('')
-
-    const modelShowHide = (state)=>{
+    const parentRef = useRef()
+    const modalShowHide = (state)=>{
         setModalShow(state)
     }
     const changeUserState = (state) =>{
@@ -20,11 +20,15 @@ const Layout = forwardRef((props, ref) =>{
         console.log('name', name)
         setUsername(name)
     }
-    const handleuser = (fname) =>{
+    const handleuser = (fname, userId) =>{
         setUser(true)
         setUsername(fname)
         setModalShow(false)
+        props.userLoggedIn(userId)
     }
+    // const updateLoggedOut = (id) =>{
+    //     props.userLoggedOut(id)
+    // }
     useImperativeHandle(
         ref,
         (fname) => ({
@@ -34,10 +38,18 @@ const Layout = forwardRef((props, ref) =>{
             }
         }),
     )
+    useImperativeHandle(
+        ref,
+        () =>({
+            handleLoginModal(state){
+                modalShowHide(state)
+            }
+        })
+    )
 
     return(
         <div>
-            <HeaderWithRouter handleuser={handleuser} modalShowHide={modelShowHide} user={user} username={username} changeUserState={changeUserState} funcSetUsername={funcSetUsername} modalShow={modalShow}/>
+            <HeaderWithRouter handleuser={handleuser} modalShowHide={modalShowHide} user={user} username={username} changeUserState={changeUserState} funcSetUsername={funcSetUsername} modalShow={modalShow} userLoggedOut={props.userLoggedOut} />
                 { props.children }
             <Footer />
         </div>

@@ -93,13 +93,12 @@ const LoginModal = (props) =>{
        
                     const queryFilter = { userId: user.id };
                     await mongoCollection.findOne(queryFilter).then(loginUserData =>{
-                        console.log('login user data', loginUserData)
                         loginUserData.login = userObj
                         token = createToken(loginUserData)
                         
                         localStorage.setItem('session_token', token)
                         const userData = {loginUserData: loginUserData, credentials: userObj}
-                        props.handleuser(loginUserData.fname)
+                        props.handleuser(loginUserData.fname, loginUserData.userId)
                         props.authUser(userData)
                     })
                     

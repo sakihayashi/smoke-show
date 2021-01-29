@@ -253,6 +253,45 @@
       border-color: $theme-color;
     }
   }
+
+  .thumb-container{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin-top: 16px;
+  }
+.thumb{
+    display: inline-flex;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    width: 100px;
+    height: 100px;
+    padding: 4px;
+    box-sizing: border-box;
+}
+.thumb-inner{
+    display: flex;
+    min-width: 0;
+    overflow: hidden;
+}
+.img{
+    display: block;
+    width: auto;
+    height: 100%;
+}
+.dropZone{
+    width: 18vh;
+    height: 18vh;
+    border: 1px solid #afafaf;
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 40px;
+  }
+  .dropzone:hover{
+    cursor: pointer;
+  }
 @media (min-width: 576px){
     .modal-wrapper-bio > .modal-dialog {
         max-width: 90vw;

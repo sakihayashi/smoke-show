@@ -117,9 +117,10 @@ const app = new Realm.App(appConfig);
  
     const loginCheck = async () =>{
         let userLogged;
-        const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
+        // const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
+        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+
         try {
-        //   const app = new Realm.App(appConfig);
       
           // an authenticated user is required to access a MongoDB instance
           await app.logIn(credentials).then( async user =>{

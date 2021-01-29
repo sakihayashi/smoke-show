@@ -12,11 +12,9 @@ import thunk from 'redux-thunk'
 
 import Amplify from 'aws-amplify';
 import config from './aws-exports';
-Amplify.configure(config);
+Amplify.configure({ ...config, ssr: true });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
-
-const rootElement = document.getElementById("root");
 
 ReactDOM.render(
   <React.StrictMode>
