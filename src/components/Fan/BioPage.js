@@ -201,7 +201,7 @@ const BioPage = (props) =>{
         <Layout ref={childRef} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut}>
         <Helmet>
             <meta charSet="utf-8" />
-            <title>User profile page | The Smoke Show</title>
+            <title>{profileUser.fname} User profile page | The Smoke Show</title>
             <meta name="description" content="Place the meta description text here." />
             <meta name="robots" content="noindex, follow" />
             {/* <link rel="canonical" href="http://mysite.com/example" /> */}
