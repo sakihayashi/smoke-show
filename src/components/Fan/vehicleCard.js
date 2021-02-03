@@ -2,18 +2,25 @@ import React, { useState, Fragment, useCallback } from 'react'
 import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 import {useDropzone} from 'react-dropzone'
 import noImg from '../../assets/global/no_image.jpg'
+import * as Realm from "realm-web"
 
 import editIcon from '../../assets/global/edit-icon.svg'
 import uploadIcon from '../../assets/global/upload.svg'
 
 const VehicleCard = (props) =>{
     console.log('props.car', props.car.imgUrl)
+    
     const carColors = ['White', 'Black', 'Grey', 'Blue', 'Silver', 'Red', 'Orange', 'Bronze', 'Yellow', 'Green', 'Navy']
     const [carObj, setCarObj] = useState({name: '', color: '', wheels:'', performance: '', upgrade: ''})
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false)
+    const appConfig = {
+        id: process.env.REACT_APP_REALM_APP_ID,
+        timeout: 10000, // timeout in number of milliseconds
+        };
+    const app = new Realm.App(appConfig)
     
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false)
+    const handleShow = () => setShow(true)
     const onDrop = useCallback(acceptedFiles => {
         // Do something with the files
       }, [])
@@ -23,6 +30,27 @@ const VehicleCard = (props) =>{
             ...carObj,
             [e.target.name]: e.target.value
         })
+    }
+    const handleSubmit = async (e) =>{
+        console.log('checking')
+        e.preventDefault()
+        if(app.currentUser.id === props.profileUser.userId){
+            const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+            const mongoCollection = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
+            try{
+                await mongoCollection.updateOne(
+                    { userId: app.currentUser.id},
+                    { $set: { "myCars" : {carId: 'ff0cbcdc-a4b7-4c5c-91fd-fc342f2af0a9',
+                    name: 'working'}} },
+                    { arrayFilters: [ { "elem.carId": { $eq: "ff0cbcdc-a4b7-4c5c-91fd-fc342f2af0a9" } } ]}
+                )
+                
+            }catch(err){
+                console.log(err)
+            }
+        }else{
+            console.log('figure out what is going on')
+        }
     }
 
     const editModal = 
@@ -92,7 +120,7 @@ const VehicleCard = (props) =>{
                                 </Button>
                             </Col>
                             <Col sm={6}>
-                                <Button variant="primary" onClick={handleClose} className="save-changes-btn">
+                                <Button variant="primary" onClick={handleSubmit} className="save-changes-btn">
                                 Save Changes
                                 </Button>
                             </Col>

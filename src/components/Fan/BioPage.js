@@ -30,7 +30,7 @@ const BioPage = (props) =>{
     const [allowEdit, setAllowEdit] = useState(false)
     const [editMode, setEditMode] = useState(false)
     const [showSetting, setShowSetting] = useState(false);
-    // const carOptions = ['Daily Driver', 'Vehicle #2', 'Dream Car']
+    const [userCars, setUserCars] = useState([])
     const [showAddCar, setShowAddCar] = useState(false)
     const [numOfComments, setNumComments] = useState(null)
     const altData = {uername: 'No username yet', userId: '', profileDesc: 'No description yet.', myCars: [] }
@@ -75,6 +75,9 @@ const BioPage = (props) =>{
             ...profileUser,
             key: data
         })
+    }
+    const updateCarData = (data) =>{
+        setUserCars(prevArray => [...prevArray, data])
     }
     const handleDataUpdate = async (e) =>{
         e.preventDefault()
@@ -144,19 +147,19 @@ const BioPage = (props) =>{
             await mongoCollectionUser.findOne(filter).then(user =>{
                         setProfileUser(user)
                         setFormattedTime(moment(profileUser.joined).local().format('MMMM Do YYYY'))
-                        console.log('user', profileUser.myCars)
                         getTotalComments(user.userId, mongo)
+                        getMyCars(user.userId, mongo)
             })
         }catch(err){
             console.log(err)
         }
         // const mongo = decoded.userData.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
         if(theUser.userId === profileUser.userId){
-                        
             setAllowEdit(true)
         }
     
     }
+    
     const getDataAsPublic = async () =>{
         console.log('is this is runnig as public')
         const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI)
@@ -164,9 +167,9 @@ const BioPage = (props) =>{
             await app.logIn(credentials).then( async user =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
                 const mongoCollection = mongo.db("smoke-show").collection("users")
-                // const mongoCollectionComments = mongo.db("smoke-show").collection("comments")
 
                 const filter = {userId: profileUserId} 
+               
                 await mongoCollection.findOne(filter).then(user =>{
                     console.log('returned user', user)
                     if(user === null){
@@ -182,6 +185,7 @@ const BioPage = (props) =>{
                         }
                         
                         getTotalComments(user.userId, mongo)
+                        getMyCars(user.userId, mongo)
                     }
                     
                 })
@@ -199,6 +203,15 @@ const BioPage = (props) =>{
             // setProfileUser({...profileUser, totalComments: res.length})
             setNumComments(res.length)
             console.log('check', profileUser)
+        })
+    }
+    const getMyCars = async (id, mongo) =>{
+        const mongoCollection = mongo.db("smoke-show").collection("my-cars")
+        
+        const filter = {userId: profileUserId}
+        await mongoCollection.find(filter).then( cars =>{
+            console.log('cars', cars)
+            setUserCars(cars)
         })
     }
     useEffect(() => {
@@ -230,7 +243,7 @@ const BioPage = (props) =>{
             <meta name="robots" content="noindex, follow" />
             {/* <link rel="canonical" href="http://mysite.com/example" /> */}
         </Helmet>
-        {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal} profileUser={profileUser} updateProfileData={updateProfileData} />}
+        {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal} profileUser={profileUser} updateProfileData={updateProfileData} updateCarData={updateCarData} />}
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} />}
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
@@ -332,12 +345,12 @@ const BioPage = (props) =>{
                             </div>
                         </Col>
                         <Col sm={8} className="pl-0">
-                        {console.log('car', profileUser.myCars !== undefined)}
-                        { profileUser.myCars !== undefined ?
-                            profileUser.myCars.map( car =>{
+                        {console.log('usercars', userCars)}
+                        { userCars !== undefined ?
+                            userCars.map( car =>{
                                return (
                                 <React.Fragment>
-                                    <VehicleCard car={car} allowEdit={allowEdit}/>
+                                    <VehicleCard car={car} allowEdit={allowEdit} profileUser={profileUser}  />
                                     <div className="spacer-2rem"></div>
                                 </React.Fragment>
                                )
@@ -354,8 +367,6 @@ const BioPage = (props) =>{
                                     <Button className="btn-add-car" onClick={handleShowAddCarModal}>Add my car</Button>
                                 </div>
                             }
-                            
-                            
                             <div className="spacer-2rem"></div>
                         </Col>
                         
