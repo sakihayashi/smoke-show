@@ -4,7 +4,6 @@ import * as Realm from "realm-web"
 import ImageUpload from './ImageUpload'
 import jwt from 'jsonwebtoken'
 
-
 const CreateNewCar = (props) =>{
     const bucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
     // const bucketRegion = process.env.REACT_APP_BUCKET_REGION;
@@ -25,7 +24,7 @@ const CreateNewCar = (props) =>{
         reader.onload = (event) => {
         const base64 = event.target.result.split(",").pop()
           setImgData64(base64)
-          console.log(base64);
+        //   console.log(base64);
         };
         reader.readAsDataURL(file);
       }
@@ -52,7 +51,7 @@ const CreateNewCar = (props) =>{
     
     const carColors = ['White', 'Black', 'Grey', 'Blue', 'Silver', 'Red', 'Orange', 'Bronze', 'Yellow', 'Green', 'Navy']
     const carCategories = ['Daily Driver', 'Vehicle #2', 'Dream Car']
-    const [newCarObj, setNewCarObj] = useState({name: '', category: '', color: '', wheels: '', upgrade: ''})
+    const [newCarObj, setNewCarObj] = useState({name: '', category: 'Daily Driver', color: 'White', wheels: '', upgrade: ''})
 
     const handleChange = (e) =>{
         setNewCarObj({
@@ -62,12 +61,6 @@ const CreateNewCar = (props) =>{
     }
     const createToken = (userData) =>{
         return jwt.sign({ userData: userData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest});
-    }
-    const handleSubmit = (e) =>{
-        e.preventDefault()
-        const token = localStorage.getItem('session_token')
-        var decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET);
-        console.log('test', decoded) 
     }
     // const testUpload = async (e) =>{
     //     e.preventDefault()
@@ -84,6 +77,187 @@ const CreateNewCar = (props) =>{
     //         console.log(err)
     //     }
     // }
+    const testImgUpload = async (e) =>{
+        e.preventDefault()
+        
+        const baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
+        const imgId = new Date().getTime()
+        const filekey = props.profileUser.userId + '/my-cars/' + imgId
+        if(app.currentUser.id === props.profileUser.userId){
+            try{
+                await app.currentUser.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then(res =>{
+
+                })
+            }catch(err){
+                console.log(err)
+            }
+        }
+        
+    }
+
+    // 6011c1f66b6c907850f08a3c
+    const handleSubmit = async (e) =>{
+        e.preventDefault()
+
+        const baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
+        const imgId = new Date().getTime()
+        const filekey = props.profileUser.userId + '/my-cars/' + imgId
+        const imgUrlWithKey = baseImgUrl + filekey
+        setNewCarObj({...newCarObj, imgUrl: imgUrlWithKey})
+
+        if(app.currentUser.id === props.profileUser.userId){
+            
+            try{
+                await app.currentUser.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then( async res =>{
+
+                    const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+                    const mongoCollection = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
+                    console.log('imgurl', baseImgUrl + filekey)
+                    try{
+                        await mongoCollection.updateOne(
+                            { "userId": app.currentUser.id},
+                            {
+                             $push: { myCars: { 
+                                                name: newCarObj.name,
+                                                imgUrl: newCarObj.imgUrl,
+                                                upgrades: newCarObj.upgrades,
+                                                wheels: newCarObj.wheels,
+                                                color: newCarObj.color,
+                                                performance: newCarObj.performance
+                                            } 
+                                        } 
+                                    // "arrayOfObjects.$myCars": {
+                                    //     "imgUrl": baseImgUrl + filekey,
+                                    //     "name": newCarObj.name,
+                                    //     "upgrades": newCarObj.upgrades,
+                                    //     "wheels": newCarObj.wheels,
+                                    //     "color": newCarObj.color,
+                                    //     "performance": newCarObj.performance
+                                    // }
+                                  
+                            
+                        }
+                        ).then(res =>{
+                            console.log('res', res)
+                            const oldArr = props.profileUser.myCars
+                            const cars = {myCars: oldArr.push(newCarObj)}
+                            props.updateProfileData(cars, 'myCars')
+                            closeModal()
+                        })
+                    }catch(err){
+                        console.log(err)
+                    }
+                })
+            }catch(err){
+                console.log(err)
+            }
+        }else{
+            const token = localStorage.getItem('session_token')
+            const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
+            const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+            try{
+                await app.logIn(credentials).then(user =>{
+                    user.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then( async res =>{
+                        const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                        const mongoCollection = mongo.db("smoke-show").collection("users")
+                        try{
+                            await mongoCollection.insertOne({
+
+                            })
+                        }catch(err){
+                            console.log(err)
+                        }
+                        try{
+                            await mongoCollection.updateOne(
+                                { "userId": app.currentUser.id,
+                                    arrayOfObjects: { }
+                                },
+                                { $set: {
+                                        myCars: { new: "whatever", title: "whatever" }
+                                        }
+                                },
+                                // {
+                                //     "$set": {
+                                //         "myCars": [{
+                                //             "imgUrl": baseImgUrl + filekey,
+                                //             "name": newCarObj.name,
+                                //             "upgrades": newCarObj.upgrades,
+                                //             "wheels": newCarObj.wheels,
+                                //             "color": newCarObj.color,
+                                //             "performance": newCarObj.performance
+                                //         }]
+                                //       }
+                                // }
+                                // {
+                                //     "myCars": {"$arrayElemAt":
+                                //     [{
+                                //         "imgUrl": baseImgUrl + filekey,
+                                //         "name": newCarObj.name,
+                                //         "upgrades": newCarObj.upgrades,
+                                //         "wheels": newCarObj.wheels,
+                                //         "color": newCarObj.color,
+                                //         "performance": newCarObj.performance
+                                    
+                                // }]
+                                // }
+                                // },
+                                {
+                                    "$unwind": {
+                                      "path": "$myCars",
+                                      "includeArrayIndex": "itemIndex",
+                                    //   "imgUrl": baseImgUrl + filekey
+                                     }
+                                  },
+                                {
+                                    upsert: true
+                                }
+                            ).then(res =>{
+                                console.log('res', res)
+                            })
+                        }catch(err){
+                            console.log(err)
+                        }
+                    })
+                    
+                })
+
+            }catch(err){
+                console.log(err)
+            }
+        }
+
+        // const token = localStorage.getItem('session_token')
+        // var decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET);
+
+        // if(app.currentUser.id === props.profileUser.userId){
+        //     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+        //     const mongoCollection = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
+    
+        //     try{
+        //         await mongoCollection.updateOne(
+        //             { "userId": app.currentUser.id},
+        //             {
+        //                 "$set": {
+        //                     "myCars": {
+        //                         "imgUrl": newCarObj.imgUrl,
+        //                         "name": newCarObj.name,
+        //                         "upgrades": newCarObj.upgrades,
+        //                         "wheels": newCarObj.wheels,
+        //                         "color": newCarObj.color,
+        //                         "performance": newCarObj.performance
+        //                     }
+        //                   }
+        //             }
+        //         ).then(res =>{
+        //             console.log('res', res)
+        //         })
+        //     }catch(err){
+        //         console.log(err)
+        //     }
+        // }
+    }
+        
+
 
     return(
     <Fragment>
@@ -157,7 +331,7 @@ const CreateNewCar = (props) =>{
                         <br/>
                         <Form.Group >
                             <Form.Label>Upgrade</Form.Label>
-                            <Form.Control type="text" placeholder="Enter your update" onChange={handleChange} name="upgrade" />
+                            <Form.Control type="text" placeholder="Enter your update" onChange={handleChange} name="upgrades" />
                         </Form.Group>
                         <br/><br/>
                         <Row>
@@ -167,9 +341,11 @@ const CreateNewCar = (props) =>{
                                 </Button>
                             </Col>
                             <Col sm={6}>
-                                <Button variant="primary" onClick={props.handleClose} className="save-changes-btn">
+                                <Button variant="primary" type="submit" onClick={handleSubmit} className="save-changes-btn">
                                 Add my new car
                                 </Button>
+                                {/* <br></br><br/>
+                                <button onClick={testImgUpload}>test upload</button> */}
                             </Col>                          
                         </Row>
                     </Form>

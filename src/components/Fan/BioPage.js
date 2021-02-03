@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react'
 import {Helmet} from "react-helmet"
 import * as Realm from "realm-web"
-import { connect } from 'react-redux'
-
 import Layout from '../Layout/Layout'
-import bioImgXs from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_375.jpg'
-import bioImgS from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_752.jpg'
-import bioImgM from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_1040.jpg'
-import bioImgL from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_1280.jpg'
-import bioImgXL from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_1500.jpg'
+// import bioImgXs from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_375.jpg'
+// import bioImgS from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_752.jpg'
+// import bioImgM from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_1040.jpg'
+// import bioImgL from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_1280.jpg'
+// import bioImgXL from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_1500.jpg'
 import noImg from '../../assets/global/no_image.jpg'
 import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 import dayDriver from '../../assets/temp-photos/bio/placeholder-car-repair2.jpg'
@@ -32,11 +30,12 @@ const BioPage = (props) =>{
     const [allowEdit, setAllowEdit] = useState(false)
     const [editMode, setEditMode] = useState(false)
     const [showSetting, setShowSetting] = useState(false);
-    const carOptions = ['Daily Driver', 'Vehicle #2', 'Dream Car']
+    // const carOptions = ['Daily Driver', 'Vehicle #2', 'Dream Car']
     const [showAddCar, setShowAddCar] = useState(false)
     const [numOfComments, setNumComments] = useState(null)
     const altData = {uername: 'No username yet', userId: '', profileDesc: 'No description yet.', myCars: [] }
     const [formattedTime, setFormattedTime] = useState(null)
+    const altCarData = {name: 'No data yet', upgrades: 'No data yet', color: 'No data yet', wheels: 'No data yet', performance: 'No data yet', category: 'Dream car', imgUlr: noImg}
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         timeout: 10000, // timeout in number of milliseconds
@@ -62,6 +61,7 @@ const BioPage = (props) =>{
     const userLoggedIn = (id) =>{
         if(id === profileUser.userId){
             setAllowEdit(true)
+            regainData()
         }
     }
     const userLoggedOut = (id) =>{
@@ -69,16 +69,13 @@ const BioPage = (props) =>{
             setAllowEdit(false)
         }
     }
-    // useImperativeHandle(
-    //     parentRef,
-    //     (id) => ({
-    //         userLoggedIn(id){
-    //             if(id === profileUser.userId){
-    //                 setAllowEdit(true)
-    //             }
-    //         }
-    //     }),
-    // )
+    const updateProfileData = (data, key)=>{
+
+        setProfileUser({
+            ...profileUser,
+            key: data
+        })
+    }
     const handleDataUpdate = async (e) =>{
         e.preventDefault()
         console.log('current', app.currentUser.id)
@@ -121,6 +118,23 @@ const BioPage = (props) =>{
             </Form>
         )
     }
+    const regainData = ()=>{
+        const token = localStorage.getItem('session_token')
+        if(token){
+            jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
+                if (err) {
+                    getDataAsPublic()
+                    console.log('err login again', err)
+                    childRef.current.handleLoginModal(true)
+                }else{
+                    getDataAsTheUser(decoded)
+                }
+              });
+            
+        }else{
+            getDataAsPublic()
+        }
+    }
     const getDataAsTheUser = async (decoded) =>{
         setTheUser(decoded.userData)
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
@@ -144,7 +158,7 @@ const BioPage = (props) =>{
     
     }
     const getDataAsPublic = async () =>{
-        console.log('is this is runnig')
+        console.log('is this is runnig as public')
         const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI)
         try{
             await app.logIn(credentials).then( async user =>{
@@ -154,11 +168,22 @@ const BioPage = (props) =>{
 
                 const filter = {userId: profileUserId} 
                 await mongoCollection.findOne(filter).then(user =>{
-                    setProfileUser(user)
-                    console.log('this is profile user', profileUser)
-                    console.log('cars', profileUser.myCars)
-                    setFormattedTime(moment(user.joined).local().format('MMMM Do YYYY'))
-                    getTotalComments(user.userId, mongo)
+                    console.log('returned user', user)
+                    if(user === null){
+                        setProfileUser({fname: 'No user data', lname: '', profileDesc: 'No user data', })
+                    }else{
+                        setProfileUser(user)
+                        console.log('this is profile user', profileUser)
+                        console.log('cars', profileUser.myCars)
+                        if(user.joined){
+                            setFormattedTime(moment(user.joined).local().format('MMMM Do YYYY'))
+                        }else{
+                            setFormattedTime('No data')
+                        }
+                        
+                        getTotalComments(user.userId, mongo)
+                    }
+                    
                 })
             })
         }catch(err){
@@ -179,7 +204,6 @@ const BioPage = (props) =>{
     useEffect(() => {
        
         const token = localStorage.getItem('session_token')
-        console.log('tokn', token)
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
@@ -201,29 +225,28 @@ const BioPage = (props) =>{
         <Layout ref={childRef} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut}>
         <Helmet>
             <meta charSet="utf-8" />
-            <title>{profileUser.fname} User profile page | The Smoke Show</title>
+            <title>User profile page | The Smoke Show</title>
             <meta name="description" content="Place the meta description text here." />
             <meta name="robots" content="noindex, follow" />
             {/* <link rel="canonical" href="http://mysite.com/example" /> */}
         </Helmet>
-        {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal}  />}
+        {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal} profileUser={profileUser} updateProfileData={updateProfileData} />}
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} />}
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
                 <h2 className="title">User Profile</h2>
                 <div className="bio-fleet-img">
                     <img
-                    sizes="(max-width: 1500px) 100vw, 1500px"
-                    srcset={`
-                    ${bioImgXs} 375w,
-                    ${bioImgS} 752w,
-                    ${bioImgM} 1040w,
-                    ${bioImgL} 1280w,
-                    ${bioImgXL} 1500w
-                    `}
-                    src={bioImgXL}
-                    alt="user selected fleet"
-
+                    // sizes="(max-width: 1500px) 100vw, 1500px"
+                    // srcset={`
+                    // ${bioImgXs} 375w,
+                    // ${bioImgS} 752w,
+                    // ${bioImgM} 1040w,
+                    // ${bioImgL} 1280w,
+                    // ${bioImgXL} 1500w
+                    // `}
+                    src={profileUser.profileCover ? profileUser.profileCover : noImg}
+                    alt="user selected profile image"
                      />
                 </div>
                 <div className="bio-content-wrapper">
@@ -273,7 +296,7 @@ const BioPage = (props) =>{
                                         <p className="no-m-b">Joined:</p>
                                     </Col>
                                     <Col sm={8}>
-                                        <p>{formattedTime}</p>
+                                        <p>{formattedTime ? formattedTime : 'No data'}</p>
                                     </Col>
                                 </Row>
                                 <Row className="bio-border pt-pb-15 bio-row-adj">
@@ -310,7 +333,7 @@ const BioPage = (props) =>{
                         </Col>
                         <Col sm={8} className="pl-0">
                         {console.log('car', profileUser.myCars !== undefined)}
-                        { profileUser.myCars !== undefined &&
+                        { profileUser.myCars !== undefined ?
                             profileUser.myCars.map( car =>{
                                return (
                                 <React.Fragment>
@@ -318,12 +341,20 @@ const BioPage = (props) =>{
                                     <div className="spacer-2rem"></div>
                                 </React.Fragment>
                                )
-                            })
+                            }) :
+                            <React.Fragment>
+                                <VehicleCard car={altCarData} allowEdit={allowEdit} />
+                                <div className="spacer-2rem"></div>
+                            </React.Fragment>
                         }
+
                             <div className="spacer-2rem"></div>
-                            <div style={{padding: '0 6px'}}>
-                                <Button className="btn-add-car" onClick={handleShowAddCarModal}>Add my car</Button>
-                            </div>
+                            { allowEdit && 
+                                <div style={{padding: '0 6px'}}>
+                                    <Button className="btn-add-car" onClick={handleShowAddCarModal}>Add my car</Button>
+                                </div>
+                            }
+                            
                             
                             <div className="spacer-2rem"></div>
                         </Col>

@@ -85,7 +85,6 @@ const LoginModal = (props) =>{
         try{
             // Authenticate the user
             await props.app.logIn(credentials).then(async user=>{
-                    console.log('working?', user)
                     // const key = await user.apiKeys.create(uid)
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
                     const mongoCollection = mongo.db("smoke-show").collection("users");

@@ -36,11 +36,10 @@ import { useDropzone } from 'react-dropzone'
   };
 
 
-const ImageUpload = ({fileObj}, props) => {
+const ImageUpload = ({fileObj} ) => {
     
     const [files, setFiles] = useState([])
     const [msg, setMsg] = useState('')
-    // const [storageRef, setStorageRef] = useState('')
     const [uploaded, setUploaded] = useState(false)
 
     const getFileData = (obj) => {

@@ -1,11 +1,13 @@
 import React, { useState, Fragment, useCallback } from 'react'
 import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 import {useDropzone} from 'react-dropzone'
+import noImg from '../../assets/global/no_image.jpg'
 
 import editIcon from '../../assets/global/edit-icon.svg'
 import uploadIcon from '../../assets/global/upload.svg'
 
 const VehicleCard = (props) =>{
+    console.log('props.car', props.car.imgUrl)
     const carColors = ['White', 'Black', 'Grey', 'Blue', 'Silver', 'Red', 'Orange', 'Bronze', 'Yellow', 'Green', 'Navy']
     const [carObj, setCarObj] = useState({name: '', color: '', wheels:'', performance: '', upgrade: ''})
     const [show, setShow] = useState(false);
@@ -110,7 +112,7 @@ const VehicleCard = (props) =>{
         <div className="bio-container box-shadow-white">
         { editModal}
             <div className="car-names">
-                <strong>{props.car.category}</strong>
+                <strong>{props.car.category ? props.car.category : 'Dream Car'}</strong>
                     <div className="edit-icon-wrapper-card" onClick={handleShow}>
                     {props.allowEdit && 
                         <img className="edit-icon" src={editIcon} alt="Edit about you"/>
@@ -120,7 +122,7 @@ const VehicleCard = (props) =>{
             </div>
             <Row>
                 <Col sm={5} >
-                    <img src={props.car.imgUlr} className="bio-my-car" alt="my daily driver" />
+                    <img src={props.car.imgUrl !== undefined ? props.car.imgUrl : noImg} className="bio-my-car" alt="my daily driver" />
                 </Col>
                 <Col sm={7} className="bio-car-contents">
                     <p>Name: {props.car.name}</p>
