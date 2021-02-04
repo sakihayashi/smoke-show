@@ -1,57 +1,104 @@
 import React, { useState, Fragment, useCallback } from 'react'
 import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
-import {useDropzone} from 'react-dropzone'
+// import {useDropzone} from 'react-dropzone'
 import noImg from '../../assets/global/no_image.jpg'
 import * as Realm from "realm-web"
+import ImageUpload from './ImageUpload'
 
 import editIcon from '../../assets/global/edit-icon.svg'
-import uploadIcon from '../../assets/global/upload.svg'
+// import uploadIcon from '../../assets/global/upload.svg'
 
 const VehicleCard = (props) =>{
     console.log('props.car', props.car.imgUrl)
-    
+    const [imgFile, setImgFile] = useState('')
+    const [imgData64, setImgData64] = useState('')
+    const [newImg, setNewImg] = useState(false)
     const carColors = ['White', 'Black', 'Grey', 'Blue', 'Silver', 'Red', 'Orange', 'Bronze', 'Yellow', 'Green', 'Navy']
-    const [carObj, setCarObj] = useState({name: '', color: '', wheels:'', performance: '', upgrade: ''})
+    const [carObj, setCarObj] = useState({name: props.car.name, color: props.car.color, wheels: props.car.wheels, performance: props.car.performance, upgrades: props.car.upgrades, imgUrl: props.car.imgUrl})
     const [show, setShow] = useState(false)
+    const bucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         timeout: 10000, // timeout in number of milliseconds
         };
     const app = new Realm.App(appConfig)
-    
+
+    const imgChange = (state) => {
+        console.log('checking', state)
+        setNewImg(state)
+    }
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
-    const onDrop = useCallback(acceptedFiles => {
-        // Do something with the files
-      }, [])
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+    // const onDrop = useCallback(acceptedFiles => {
+    //     // Do something with the files
+    //   }, [])
+    // const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
     const handleChange = (e) =>{
         setCarObj({
             ...carObj,
             [e.target.name]: e.target.value
         })
     }
+    const updateData = async (carData, mongo) =>{
+        const collectionMyCars = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("my-cars")
+        try{
+            await collectionMyCars.updateOne(
+                {_id: props.car._id},
+                { $set: carData }
+            ).then(res =>{
+                console.log('res', res)
+                props.getMyCars(props.car.userId, mongo)
+                handleClose()
+            })
+            
+        }catch(err){
+            console.log(err)
+        }
+    }
     const handleSubmit = async (e) =>{
         console.log('checking')
+        const baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
+        const imgId = new Date().getTime()
+        const filekey = props.profileUser.userId + '/my-cars/' + imgId
+        const imgUrlWithKey = baseImgUrl + filekey
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+        
+        const carData ={
+            name: carObj.name,
+            upgrades: carObj.upgrades,
+            wheels: carObj.wheels,
+            color: carObj.color,
+            userId: props.profileUser.userId,
+            performance: carObj.performance
+        }
         e.preventDefault()
         if(app.currentUser.id === props.profileUser.userId){
-            const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-            const mongoCollection = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
-            try{
-                await mongoCollection.updateOne(
-                    { userId: app.currentUser.id},
-                    { $set: { "myCars" : {carId: 'ff0cbcdc-a4b7-4c5c-91fd-fc342f2af0a9',
-                    name: 'working'}} },
-                    { arrayFilters: [ { "elem.carId": { $eq: "ff0cbcdc-a4b7-4c5c-91fd-fc342f2af0a9" } } ]}
-                )
-                
-            }catch(err){
-                console.log(err)
+            
+            if(newImg){
+                carData.imgUrl = imgUrlWithKey
+                await app.currentUser.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then(res =>{
+                    
+                    updateData(carData, mongo)
+                })
+            }else{
+                updateData(carData, mongo)
             }
+            
         }else{
             console.log('figure out what is going on')
         }
     }
+        const setImgData = (obj) =>{
+        setImgFile(obj)
+        var file = obj
+        const reader = new FileReader();
+        reader.onload = (event) => {
+        const base64 = event.target.result.split(",").pop()
+          setImgData64(base64)
+        //   console.log(base64);
+        };
+        reader.readAsDataURL(file);
+      }
 
     const editModal = 
     <Fragment>
@@ -61,7 +108,8 @@ const VehicleCard = (props) =>{
             <Modal.Body>
                 <Row className="bio-modal-inner-wrapper">
                     <Col sm={6} className="">
-                    <div {...getRootProps()} className="dropzone-wrapper">
+                    <ImageUpload fileObj={setImgData} imgChange={imgChange} />
+                    {/* <div {...getRootProps()} className="dropzone-wrapper">
                         <input {...getInputProps()} />
                         {
                             isDragActive ?
@@ -76,13 +124,15 @@ const VehicleCard = (props) =>{
 
                             </div>
                         }
-                    </div>
+                    </div> */}
                     </Col>
                     <Col sm={6}>
+                    <h3>Category: {props.car.category}</h3>
+                    <hr />
                     <Form>
                         <Form.Group >
                             <Form.Label>Car name</Form.Label>
-                            <Form.Control type="text" placeholder="Enter car name" onChange={handleChange} name="name"/>
+                            <Form.Control type="text" placeholder={carObj.name} onChange={handleChange} name="name"/>
                         </Form.Group>
                         <br/>
                         <Form.Group >
@@ -100,17 +150,17 @@ const VehicleCard = (props) =>{
                         <br/>
                         <Form.Group >
                             <Form.Label>Wheels</Form.Label>
-                            <Form.Control type="text" placeholder="Enter your update" onChange={handleChange} name="wheels"/>
+                            <Form.Control type="text" placeholder={carObj.wheels} onChange={handleChange} name="wheels"/>
                         </Form.Group>
                         <br/>
                         <Form.Group >
                             <Form.Label>Performance</Form.Label>
-                            <Form.Control type="text" placeholder="Enter your performance" onChange={handleChange} name="performance" />
+                            <Form.Control type="text" placeholder={carObj.performance} onChange={handleChange} name="performance" />
                         </Form.Group>
                         <br/>
                         <Form.Group >
                             <Form.Label>Upgrade</Form.Label>
-                            <Form.Control type="text" placeholder="Enter your update" onChange={handleChange} name="upgrade" />
+                            <Form.Control type="text" placeholder="Enter your update" onChange={handleChange} name={carObj.upgrades} />
                         </Form.Group>
                         <br/><br/>
                         <Row>

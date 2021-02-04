@@ -3,7 +3,6 @@ import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import ImageUpload from './ImageUpload'
 import jwt from 'jsonwebtoken'
-// import { v4 as uuidv4 } from 'uuid';
 
 const CreateNewCar = (props) =>{
     const bucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
@@ -62,23 +61,7 @@ const CreateNewCar = (props) =>{
         return jwt.sign({ userData: userData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest});
     }
 
-    // const testImgUpload = async (e) =>{
-    //     e.preventDefault()
-        
-    //     const baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
-    //     const imgId = new Date().getTime()
-    //     const filekey = props.profileUser.userId + '/my-cars/' + imgId
-    //     if(app.currentUser.id === props.profileUser.userId){
-    //         try{
-    //             await app.currentUser.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then(res =>{
-
-    //             })
-    //         }catch(err){
-    //             console.log(err)
-    //         }
-    //     }
-        
-    // }
+ 
 
     const handleSubmit = async (e) =>{
         e.preventDefault()
@@ -190,7 +173,7 @@ const CreateNewCar = (props) =>{
             <Modal.Body>
                 <Row className="bio-modal-inner-wrapper">
                     <Col sm={6} className="">
-                    <ImageUpload fileObj={setImgData}/>
+                    <ImageUpload fileObj={setImgData} />
 
                     {/* <div {...getRootProps()} className="dropzone-wrapper">
                         <input {...getInputProps()} />

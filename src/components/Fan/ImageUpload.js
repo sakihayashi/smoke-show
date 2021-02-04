@@ -36,7 +36,7 @@ import { useDropzone } from 'react-dropzone'
   };
 
 
-const ImageUpload = ({fileObj} ) => {
+const ImageUpload = (props ) => {
     
     const [files, setFiles] = useState([])
     const [msg, setMsg] = useState('')
@@ -46,7 +46,7 @@ const ImageUpload = ({fileObj} ) => {
         // Create a root reference
         console.log('file obj', obj)
         // const newValue = files[0]
-        fileObj(obj)
+        props.fileObj(obj)
     }
 
     const {getRootProps, getInputProps, isDragActive} = useDropzone({
@@ -58,6 +58,10 @@ const ImageUpload = ({fileObj} ) => {
               }else{
                     getFileData(acceptedFiles[0])
                     setUploaded(true)
+                    if(props.imgChange){
+                      props.imgChange(true)
+                    }
+                    
                     setFiles(acceptedFiles.map( file => Object.assign(file, {
                               preview: URL.createObjectURL(file)
                           

@@ -350,7 +350,7 @@ const BioPage = (props) =>{
                             userCars.map( car =>{
                                return (
                                 <React.Fragment>
-                                    <VehicleCard car={car} allowEdit={allowEdit} profileUser={profileUser}  />
+                                    <VehicleCard car={car} allowEdit={allowEdit} profileUser={profileUser} getMyCars={getMyCars} />
                                     <div className="spacer-2rem"></div>
                                 </React.Fragment>
                                )
