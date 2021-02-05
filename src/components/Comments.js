@@ -71,10 +71,10 @@ const Comments = (props) =>{
     const writeComment = () =>{
         return (
         <Row className="comment-wrapper">
-            <Col sm={1} style={{margin:0,padding:0}}>
+            <div className="col-1" style={{margin:0,padding:0}}>
                 <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="profile-pic" name="saki" />
-            </Col>
-            <Col sm={11} style={{margin: 0, paddingRight:0}}>
+            </div>
+            <div className="col-11" style={{margin: 0, paddingRight:0}}>
                 <Form onSubmit={handleSubmitComment} >
                     <Form.Group >
                     <Form.Control className="comment-input" type="text" placeholder="Write a comment here" name="comment" onChange={handleChange} required/>
@@ -84,7 +84,7 @@ const Comments = (props) =>{
                     </Form.Group>
                 </Form>
                 
-            </Col>
+            </div>
         </Row>
         )
         

@@ -1,0 +1,16 @@
+@import "../scss/config";
+
+.card-influencer{
+    width: 100%;
+}
+
+@media (min-width: $sm){
+
+}
+
+@media (min-width: $md){
+    .footer-pos{
+        min-height: calc(100vh - 343px);
+        padding: 0 1rem;
+    }
+}

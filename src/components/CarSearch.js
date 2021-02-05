@@ -159,9 +159,10 @@ const CarSearch = (props) =>{
                     {/* model */}
                         <DropdownButton id="dropdown-year" title={selectedCar.model} onSelect={filterByModel} className="dropdown-middle">
                             {modelName.map(model =>{
+                                const titleCase = model.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})
                                 return(
                                     <Fragment key={model}>
-                                        <Dropdown.Item eventKey={model} >{model}</Dropdown.Item>
+                                        <Dropdown.Item eventKey={model} >{titleCase}</Dropdown.Item>
                                     </Fragment>
                                 )
                             })}

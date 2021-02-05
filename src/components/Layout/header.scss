@@ -143,14 +143,17 @@ nav{
 .modal-content{
     border: 0;
 }
-// .modal-header{
-//     background: linear-gradient(180deg, #6e4dd0 0%, white 100%)
-// }
+.setting-icon-nav{
+    padding-right: 1rem;
+}
 
 
 @media (min-width: 992px){
     .navbar-collapse{
         background-color: transparent !important;
+    }
+    .setting-icon-nav{
+        padding-right: 0;
     }
 }
 @media (min-width: 1025px){

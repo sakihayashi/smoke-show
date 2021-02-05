@@ -42,7 +42,7 @@ const SignUpModal = (props) =>{
                 setHasError(true)
             }
         }else{
-            setMsg("Password and Confirm Password do not match. Try again.")
+            setMsg("Your Email or Password do not match our records. Try again.")
             setHasError(true)
         }
         

@@ -177,18 +177,18 @@ const app = new Realm.App(appConfig);
                                             </div>
                                             <h3 style={{marginTop:'10px'}} >{car.youtube.snippet.title}</h3>
                                             <Row className="comment-wrapper" >
-                                                <Col sm={1} style={{margin:0,padding:0}} >
+                                                <div className="col-1" style={{margin:0,padding:0}} >
                                                 {car.profile_pic ? <img src={car.profile_pic} 
                                                 
                                                 className="creator-profile-pic" alt="car"/> :
                                                 <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="creator-profile-pic" name={car.creator} />
                                                 }
                                                     
-                                                </Col>
-                                                <Col sm={11} style={{paddingRight:0, margin: 'auto'}} >
+                                                </div>
+                                                <div className="col-11" style={{paddingRight:0, margin: 'auto'}} >
                                                 <div className="creator-name"><strong>{car.creator}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{' '} {car.fans} fans</span></div>
 
-                                                </Col>
+                                                </div>
                                             </Row>
                                             <Suspense fallback={<div class="loader">Loading...</div>}>
                                                 <Comments comments={commentsTempData[index]} videoId={car.videoId} />

@@ -9,7 +9,7 @@ import SignUpModal from './SignUpModal'
 import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import settingsIcon from '../../assets/global/Settings-icon-white.svg'
-import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
+// import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 
 const Header = (props) =>{
     const location = useLocation()
@@ -41,7 +41,7 @@ const Header = (props) =>{
      }
      const loggedInDiv = 
      <Fragment>
-        <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><Link to={'/user/' + currentUser}><img src={settingsIcon} className=""/></Link>
+        <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><Link to={'/user/' + currentUser}><img src={settingsIcon} className="setting-icon-nav"/></Link>
         </div>
      </Fragment>
      useEffect(() => {

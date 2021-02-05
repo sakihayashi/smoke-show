@@ -6,6 +6,7 @@ import * as Realm from "realm-web"
 import { uid } from 'react-uid'
 import { NavLink } from 'react-router-dom'
 import Layout from './Layout/Layout'
+import './influencerIndexPage.scss'
 
 const InfluencerIndexPage = () =>{
 
@@ -55,7 +56,7 @@ const InfluencerIndexPage = () =>{
           <meta name="robots" content="noindex, nofollow" />
           {/* <link rel="canonical" href="http://mysite.com/example" /> */}
         </Helmet>
-            <div className="main-wrapper">
+            <div className="main-wrapper footer-pos">
                 <div className="spacer-4rem"></div>
                 <div className="title title-adj">
                     <h2 >List of Influencers</h2>
@@ -64,7 +65,7 @@ const InfluencerIndexPage = () =>{
                 {influencers && influencers.map(influencer =>{
                     return(
                         <Col sm={6} md={4} key={uid(influencer)}>
-                            <Card style={{ width: '18rem' }}>
+                            <Card className="card-influencer" >
                                 <div className="videoWrapper">
                                         <iframe src={videoEmbedURL + influencer.featuredVideo.id}
                                                 frameBorder='0'

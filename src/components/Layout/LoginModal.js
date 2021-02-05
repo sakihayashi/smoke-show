@@ -111,7 +111,7 @@ const LoginModal = (props) =>{
         }catch(error){
             console.log('error', error)
             setHasError(true)
-            setLoginMsg('Your email and password do not match')
+            setLoginMsg('Email and Password are incorrect')
         }
     }
     

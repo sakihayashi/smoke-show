@@ -263,22 +263,7 @@ const CarStats = (props) =>{
             setCarImages(res.dataimages)
             
         })
-        // try{
-        //     await fetch(url, {
-        //         // crossDomain:true,
-        //         method: 'GET',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //           },
-        //       }).then(response => response.json()).then(result =>{
-        //             console.log('res', result)
-        //             setCarImages(result.images)
-        //         })
-        // }catch(err){
-        //     console.log(err)
-        // }
         
-
     }
     useEffect(() => {
         
@@ -286,7 +271,7 @@ const CarStats = (props) =>{
     }, [])
     return(
         <Layout>
-            <div className="main-wrapper">
+            <div className="main-wrapper stats-container">
                 <div className="spacer-4rem"></div>
                 {carData && carData.map((car, index) =>{
                     car.tabs = statsArr
