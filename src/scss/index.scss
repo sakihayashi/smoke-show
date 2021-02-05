@@ -17,9 +17,10 @@
 }
 @font-face{
   font-family: 'X-Heighting';
-  src: local('X-Heighting'), url(../fonts/X-Heighting400.otf) format('otf');
+  src: local('X-Heighting'), url(../fonts/X-Heighting400.otf) format('opentype');
   src: url('../fonts/X-Heighting400.otf');
 }
+
 *{
   margin: 0;
   padding: 0;
