@@ -3,13 +3,15 @@ import ReactDOM from 'react-dom';
 import './scss/index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import './fonts/X-Heighting400.otf'
+import './fonts/BEST-IN-CLASS.ttf'
+import './fonts/MerriweatherSans-Italic-VariableFont_wght.ttf'
+import './fonts/MerriweatherSans-VariableFont_wght.ttf'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './store/reducers/rootReducer'
 //middleware
 import thunk from 'redux-thunk'
-
 import Amplify from 'aws-amplify';
 import config from './aws-exports';
 Amplify.configure({ ...config, ssr: true });

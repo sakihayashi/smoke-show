@@ -11,7 +11,6 @@ import jwt from 'jsonwebtoken'
 import settingsIcon from '../../assets/global/Settings-icon-white.svg'
 import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 
-
 const Header = (props) =>{
     const location = useLocation();
     const id = process.env.REACT_APP_REALM_APP_ID
