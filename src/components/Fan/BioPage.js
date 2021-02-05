@@ -276,7 +276,7 @@ const BioPage = (props) =>{
                     // ${bioImgL} 1280w,
                     // ${bioImgXL} 1500w
                     // `}
-                    src={profileUser.profileCover ? profileUser.profileCover : noImg}
+                    src={profileUser.profileCover == true || profileUser.profileCover !== null ? profileUser.profileCover : noImg}
                     alt="user selected profile image"
                      />
                 </div>

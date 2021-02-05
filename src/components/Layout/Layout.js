@@ -9,6 +9,7 @@ const Layout = forwardRef((props, ref) =>{
     const [modalShow, setModalShow] = useState(false)
     const [user, setUser] = useState(false)
     const [username, setUsername] = useState('')
+    const [userId, setUserId] = useState('')
     const parentRef = useRef()
     const modalShowHide = (state)=>{
         setModalShow(state)
@@ -17,14 +18,15 @@ const Layout = forwardRef((props, ref) =>{
         setUser(state)
     }
     const funcSetUsername = (name) =>{
-        console.log('name', name)
         setUsername(name)
     }
     const handleuser = (fname, userId) =>{
+        console.log('value check', userId)
         setUser(true)
         setUsername(fname)
+        setUserId(userId)
         setModalShow(false)
-        props.userLoggedIn(userId)
+        // props.userLoggedIn(userId)
     }
     // const updateLoggedOut = (id) =>{
     //     props.userLoggedOut(id)
@@ -49,7 +51,7 @@ const Layout = forwardRef((props, ref) =>{
 
     return(
         <div>
-            <HeaderWithRouter handleuser={handleuser} modalShowHide={modalShowHide} user={user} username={username} changeUserState={changeUserState} funcSetUsername={funcSetUsername} modalShow={modalShow} userLoggedOut={props.userLoggedOut} />
+            <HeaderWithRouter handleuser={handleuser} modalShowHide={modalShowHide} user={user} username={username} changeUserState={changeUserState} funcSetUsername={funcSetUsername} modalShow={modalShow} userLoggedOut={props.userLoggedOut} userId={userId} />
                 { props.children }
             <Footer />
         </div>

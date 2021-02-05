@@ -53,6 +53,16 @@ const VehicleCard = (props) =>{
             console.log(err)
         }
     }
+    const deleteImgObj = async (key) =>{
+
+        if(app.currentUser.id === props.profileUser.userId){
+            try{
+                await app.currentUser.functions.deleteImageObjToS3(bucketName, key).then(res =>{
+                    console.log('res', res)
+                })
+            }catch(err){console.log(err)}
+        }
+    }
     const handleSubmit = async (e) =>{
         console.log('checking')
         const baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
@@ -75,7 +85,10 @@ const VehicleCard = (props) =>{
             if(newImg){
                 carData.imgUrl = imgUrlWithKey
                 await app.currentUser.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then(res =>{
-                    
+                    const currentUrl = props.car.imgUrl
+                    const splitted = currentUrl.split('/');
+                    const key = splitted.splice(4, 7).join("/")
+                    deleteImgObj(key)
                     updateData(carData, mongo)
                 })
             }else{
@@ -86,17 +99,17 @@ const VehicleCard = (props) =>{
             console.log('figure out what is going on')
         }
     }
-        const setImgData = (obj) =>{
-        setImgFile(obj)
-        var file = obj
-        const reader = new FileReader();
-        reader.onload = (event) => {
-        const base64 = event.target.result.split(",").pop()
-          setImgData64(base64)
-        //   console.log(base64);
-        };
-        reader.readAsDataURL(file);
-      }
+    const setImgData = (obj) =>{
+    setImgFile(obj)
+    var file = obj
+    const reader = new FileReader();
+    reader.onload = (event) => {
+    const base64 = event.target.result.split(",").pop()
+        setImgData64(base64)
+    //   console.log(base64);
+    };
+    reader.readAsDataURL(file);
+    }
 
     const editModal = 
     <Fragment>

@@ -80,6 +80,12 @@ const SettingModal = (props) =>{
             try{
                 await app.currentUser.functions.putImageObjToS3(imgData64Profile, bucketName, filekey, profilePic.type).then( async res =>{
                     console.log('res', res)
+                    if(props.profileUser.profilePic !== '' || typeof(props.profileUser.profilePic) !== "undefined"){
+                        const currentUrl = props.profileUser.profilePic
+                        const splitted = currentUrl.split('/');
+                        const key = splitted.splice(4, 7).join("/")
+                        deleteImgObj(key)
+                    }
                     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                     const collectionUser = mongo.db("smoke-show").collection("users")
                     try{
@@ -130,11 +136,18 @@ const SettingModal = (props) =>{
         const imgId = new Date().getTime()
         const filekey = props.profileUser.userId + '/profile/' + imgId
         const imgUrlWithKey = baseImgUrl + filekey
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
         if(app.currentUser.id === props.profileUser.userId){
             try{
                 await app.currentUser.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
                     console.log('res', res)
-                    const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                    if(props.profileUser.profileCover !== '' || typeof(props.profileUser.profileCover) !== "undefined"){
+                        const currentUrl = props.profileUser.profileCover
+                        const splitted = currentUrl.split('/');
+                        const key = splitted.splice(4, 7).join("/")
+                        deleteImgObj(key)
+                    }
+                    
                     const collectionUser = mongo.db("smoke-show").collection("users")
                     try{
                         await collectionUser.updateOne(
@@ -205,18 +218,16 @@ const SettingModal = (props) =>{
         
     }
 
-    // const reLogin = () =>{
-    //       const token = localStorage.getItem('session_token')
-    //     jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
-    //         if (err) {
-    //             console.log('err', err)
+const deleteImgObj = async (key) =>{
 
-    //         }else{
-    //             console.log('success', decoded.userData.login.email)
-    //             return decoded.userData.login
-    //         }
-    //           });
-    // }
+    if(app.currentUser.id === props.profileUser.userId){
+        try{
+            await app.currentUser.functions.deleteImageObjToS3(bucketName, key).then(res =>{
+                console.log('res', res)
+            })
+        }catch(err){console.log(err)}
+    }
+}
 
     useEffect(() => {
         if( typeof(props.profileUser.profilePic) == 'undefined' || props.profileUser.profilePic  == ''){
@@ -305,9 +316,7 @@ const SettingModal = (props) =>{
                             <Form.Control type="text" name="username" placeholder={props.profileUser.username ? props.profileUser.username : "Please add your username"} onChange={handleChange} />
                         </Form.Group>
                         <br/>
-                        {isSuccess.userDetails ? <Alert variant="success" style={{padding: '5px', marginTop: '1rem', textAlign:'center'}}><small>{msg.userDetails}</small></Alert> :
-                                <div style={{marginTop: '1rem'}}></div>
-                                }
+                        {isSuccess.userDetails ? <Alert variant="success" style={{padding: '5px', marginTop: '1rem', textAlign:'center'}}><small>{msg.userDetails}</small></Alert> : ""}
                         <Button variant="primary" onClick={handleUpdateProfile} className="save-changes-btn" disabled={disableBtnStates.userDetails}>
                                 Save Changes
                         </Button>
@@ -378,6 +387,9 @@ const SettingModal = (props) =>{
                 <Button variant="primary" onClick={handleClose} className="save-changes-btn btn-close-settings">
                         Close
                 </Button>
+                {/* <Button variant="primary" onClick={testDelete} className="save-changes-btn btn-close-settings">
+                        test delete
+                </Button> */}
             </Modal.Footer>
         </Modal>
     </Fragment>

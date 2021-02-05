@@ -79,12 +79,12 @@ const LoginModal = (props) =>{
         e.preventDefault()
         const emailLowerCase = userObj.email.toLocaleLowerCase()
         const credentials = Realm.Credentials.emailPassword(emailLowerCase, userObj.password)
-        console.log('working?')
         try{
             // Authenticate the user
             await props.app.logIn(credentials).then(async user=>{
                 if(user.id === props.app.currentUser.id){
                     console.log('matched')
+                    props.getUserId(user.id)
                 }else{
                     console.log('not match')
                 }
@@ -100,7 +100,7 @@ const LoginModal = (props) =>{
                         
                         localStorage.setItem('session_token', token)
                         const userData = {loginUserData: loginUserData, credentials: userObj}
-                        props.handleuser(loginUserData.fname, loginUserData.userId)
+                        props.handleuser(loginUserData.fname, user.id)
                         props.authUser(userData)
                     })
                     

@@ -12,7 +12,8 @@ import settingsIcon from '../../assets/global/Settings-icon-white.svg'
 import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 
 const Header = (props) =>{
-    const location = useLocation();
+    const location = useLocation()
+    const [currentUser, setCurrentUser] = useState('')
     const id = process.env.REACT_APP_REALM_APP_ID
     // const app = new Realm.App({ id: process.env.REALM_APP_ID })
     const app = new Realm.App({ id: id })
@@ -26,19 +27,21 @@ const Header = (props) =>{
     const logOut = async () =>{
         props.changeUserState(false)
         localStorage.removeItem('session_token')
-        props.userLoggedOut(app.currentUser.id)
+        // props.userLoggedOut(app.currentUser.id)
         // console.log('x', app.currentUser.id)
         await app.currentUser.logOut().then(res =>{
             console.log('res', res)
         })
     }
-     
+     const getUserId = (id) =>{
+         setCurrentUser(id)
+     }
      const toggleModal = () =>{
          setHasAccount(!hasAccount)
      }
      const loggedInDiv = 
      <Fragment>
-        <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><img src={settingsIcon} className=""/>
+        <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><Link to={'/user/' + currentUser}><img src={settingsIcon} className=""/></Link>
         </div>
      </Fragment>
      useEffect(() => {
@@ -51,6 +54,10 @@ const Header = (props) =>{
                 }else{
                     props.changeUserState(true)
                     props.funcSetUsername(decoded.userData.fname)
+                    props.handleuser(decoded.userData.fname, decoded.userData.userId)
+                    setCurrentUser(decoded.userData.userId)
+                    console.log(decoded.userData.userId)
+
                 }
             });
             
@@ -69,6 +76,7 @@ const Header = (props) =>{
             app={app}
             handleuser={props.handleuser}
             toggleModal={toggleModal}
+            getUserId={getUserId}
             />
             : <SignUpModal
             show={props.modalShow}  
