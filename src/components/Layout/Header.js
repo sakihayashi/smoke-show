@@ -17,7 +17,7 @@ const Header = (props) =>{
     const id = process.env.REACT_APP_REALM_APP_ID
     // const app = new Realm.App({ id: process.env.REALM_APP_ID })
     const app = new Realm.App({ id: id })
-    const getApp = Realm.App.getApp(id);
+    // const getApp = Realm.App.getApp(id);
 
     const [hasAccount, setHasAccount] = useState(true)
     
@@ -29,7 +29,9 @@ const Header = (props) =>{
         localStorage.removeItem('session_token')
         props.userLoggedOut(app.currentUser.id)
         // console.log('x', app.currentUser.id)
-        await getApp.currentUser.logOut()
+        await app.currentUser.logOut().then(res =>{
+            console.log('res', res)
+        })
     }
      
      const toggleModal = () =>{

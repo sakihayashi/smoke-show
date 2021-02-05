@@ -72,6 +72,7 @@ const SettingModal = (props) =>{
         reader.readAsDataURL(file)
     }
     const saveProfilePic = async () =>{
+        // console.log('current', app.currentUser.id)
         const imgId = new Date().getTime()
         const filekey = props.profileUser.userId + '/profile/' + imgId
         const imgUrlWithKey = baseImgUrl + filekey
@@ -106,7 +107,8 @@ const SettingModal = (props) =>{
             console.log(err)
             }
         }else{
-        console.log('I have to debug')
+        console.log('I have to debug', app.currentUser.id)
+    
         }
     }
     const coverPicUpload = (e) =>{
