@@ -27,7 +27,7 @@ const Giveaways = (props) =>{
             <meta charSet="utf-8" />
             <title>Giveaways | The Smoke Show</title>
             <meta name="description" content="Checkout our giveaways and entry now to win!" />
-            <meta name="robots" content="noindex, follow" />
+            <meta name="robots" content="noindex, nofollow" />
             {/* <link rel="canonical" href="http://mysite.com/example" /> */}
         </Helmet>
             <div className="spacer-4rem"></div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {Helmet} from "react-helmet"
 import * as Realm from "realm-web"
 import Layout from '../Layout/Layout'
@@ -22,7 +22,7 @@ import jwt from 'jsonwebtoken'
 import moment from 'moment'
 
 const BioPage = (props) =>{
-    // const [userData, setUserData] = useState({about: "a photographer based in Cheshire, UK. With a background in design, I strive to create engaging imagery that stands out"})
+  
     const childRef = useRef()
     const profileUserId = props.match.params.id
     const [theUser, setTheUser] = useState({})
@@ -53,7 +53,21 @@ const BioPage = (props) =>{
         })
     }
     const handleShowSetting = () =>{
-        setShowSetting(true)
+        const token = localStorage.getItem('session_token')
+        jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
+            if (err) {
+                console.log('err', err)
+                
+            }else{
+                console.log('success', decoded.userData.login.email)
+                setProfileUser({
+                    ...profileUser,
+                    email: decoded.userData.login.email
+                })
+                setShowSetting(true)
+            }
+          });
+        
     }
     const handleCloseSetting = () =>{
         setShowSetting(false)
@@ -73,7 +87,15 @@ const BioPage = (props) =>{
 
         setProfileUser({
             ...profileUser,
-            key: data
+            [key]: data
+        })
+    }
+    const updateUserDetails = (fname, lname, username) =>{
+        setProfileUser({
+            ...profileUser,
+            fname: fname,
+            lname: lname,
+            username: username
         })
     }
     const updateCarData = (data) =>{
@@ -81,8 +103,7 @@ const BioPage = (props) =>{
     }
     const handleDataUpdate = async (e) =>{
         e.preventDefault()
-        console.log('current', app.currentUser.id)
-        console.log('profileuser', profileUser)
+  
         if(app.currentUser.id === profileUser.userId){
             const mongodb = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
             const mongoCollection = mongodb.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
@@ -161,7 +182,6 @@ const BioPage = (props) =>{
     }
     
     const getDataAsPublic = async () =>{
-        console.log('is this is runnig as public')
         const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI)
         try{
             await app.logIn(credentials).then( async user =>{
@@ -171,13 +191,12 @@ const BioPage = (props) =>{
                 const filter = {userId: profileUserId} 
                
                 await mongoCollection.findOne(filter).then(user =>{
-                    console.log('returned user', user)
                     if(user === null){
                         setProfileUser({fname: 'No user data', lname: '', profileDesc: 'No user data', })
                     }else{
                         setProfileUser(user)
-                        console.log('this is profile user', profileUser)
-                        console.log('cars', profileUser.myCars)
+                        // console.log('this is profile user', profileUser)
+                        // console.log('cars', profileUser.myCars)
                         if(user.joined){
                             setFormattedTime(moment(user.joined).local().format('MMMM Do YYYY'))
                         }else{
@@ -202,7 +221,6 @@ const BioPage = (props) =>{
         await mongoCollectionComments.find(filter).then(res =>{
             // setProfileUser({...profileUser, totalComments: res.length})
             setNumComments(res.length)
-            console.log('check', profileUser)
         })
     }
     const getMyCars = async (id, mongo) =>{
@@ -210,7 +228,6 @@ const BioPage = (props) =>{
         
         const filter = {userId: profileUserId}
         await mongoCollection.find(filter).then( cars =>{
-            console.log('cars', cars)
             setUserCars(cars)
         })
     }
@@ -240,11 +257,11 @@ const BioPage = (props) =>{
             <meta charSet="utf-8" />
             <title>User profile page | The Smoke Show</title>
             <meta name="description" content="Place the meta description text here." />
-            <meta name="robots" content="noindex, follow" />
+            <meta name="robots" content="noindex, nofollow" />
             {/* <link rel="canonical" href="http://mysite.com/example" /> */}
         </Helmet>
         {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal} profileUser={profileUser} updateProfileData={updateProfileData} updateCarData={updateCarData} />}
-            {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} />}
+            {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} profileUser={profileUser}  updateProfileData={updateProfileData} updateUserDetails={updateUserDetails}/>}
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
                 <h2 className="title">User Profile</h2>
@@ -265,7 +282,7 @@ const BioPage = (props) =>{
                 <div className="bio-content-wrapper">
                     <div className="bio-main-wrapper">
                         <div className="bio-pic">
-                            <img src={bioPic} alt="the user profile picture" />
+                            <img src={profileUser.profilePic ? profileUser.profilePic : bioPic} alt="the user profile picture" />
                         </div>
                         
                         <div className="bio-title-text">
@@ -345,7 +362,6 @@ const BioPage = (props) =>{
                             </div>
                         </Col>
                         <Col sm={8} className="pl-0">
-                        {console.log('usercars', userCars)}
                         { userCars !== undefined ?
                             userCars.map( car =>{
                                return (

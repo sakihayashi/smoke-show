@@ -10,7 +10,7 @@ const NotFoundPage = () => {
           <meta charSet="utf-8" />
           <title>404 Page Not Found | The Smoke Show</title>
           <meta name="description" content="The page does not exist at thesmokeshow.com. " />
-          <meta name="robots" content="noindex, follow" />
+          <meta name="robots" content="noindex, nofollow" />
           {/* <link rel="canonical" href="http://mysite.com/example" /> */}
       </Helmet>
         <div className="spacer-4rem"></div>

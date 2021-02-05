@@ -150,7 +150,7 @@ const app = new Realm.App(appConfig);
                 <meta charSet="utf-8" />
                 <title>Home | The Smoke Show</title>
                 <meta name="description" content="Place the meta description text here." />
-                <meta name="robots" content="noindex, follow" />
+                <meta name="robots" content="noindex, nofollow" />
                 {/* <link rel="canonical" href="http://mysite.com/example" /> */}
             </Helmet>
                 <div className="main-wrapper">

@@ -87,7 +87,6 @@ const CreateNewCar = (props) =>{
             
             try{
                 await app.currentUser.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then( async res =>{
-                    console.log('check obj', newCarObj)
                     
                     try{
                         await collectionMyCars.insertOne(newCarData).then(async res =>{

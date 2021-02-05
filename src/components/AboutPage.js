@@ -12,7 +12,7 @@ const AboutPage = () =>{
         <meta charSet="utf-8" />
         <title>About Us | The Smoke Show</title>
         <meta name="description" content="Who we are and how we started The Smoke Show. Stay in touch." />
-        <meta name="robots" content="noindex, follow" />
+        <meta name="robots" content="noindex, nofollow" />
         {/* <link rel="canonical" href="http://mysite.com/example" /> */}
     </Helmet>
         <div class="spacer-4rem"></div>

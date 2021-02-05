@@ -21,9 +21,14 @@
         position: absolute;
         top: -75px;
         left: 50px;
+        object-fit: cover;
     }
 }
-
+.btn-close-settings{
+    margin-left: 3rem;
+    margin-right: 3rem;
+    margin-bottom: 2rem;
+}
 .bio-main-wrapper{
     width: 100%;
     position: relative;
@@ -182,6 +187,10 @@
         background-color: $theme-hover;
         border-color: $theme-color;
     }
+    &:disabled{
+        background-color: $gray;
+        border-color: $gray;
+    }
 }
 .cancel-btn{
     width: 100% !important;
@@ -281,6 +290,7 @@
     width: auto;
     height: 100%;
 }
+
 .dropZone{
     width: 18vh;
     height: 18vh;

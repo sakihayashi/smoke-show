@@ -95,10 +95,10 @@ const Header = (props) =>{
                         <Nav.Link href="/swagg">Swagg</Nav.Link>
                         <Nav.Link href="/about">About</Nav.Link>
                     </Nav>
-                    <Form inline>
-                    <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+                    {/* <Form inline>
+                    <FormControl type="text" placeholder="Search" className="mr-sm-2" /> */}
                     {/* <Button className="btn-search">Search</Button> */}
-                    </Form>
+                    {/* </Form> */}
                 </Navbar.Collapse>
             </Navbar>
         </header>

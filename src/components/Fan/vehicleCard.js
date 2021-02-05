@@ -9,7 +9,6 @@ import editIcon from '../../assets/global/edit-icon.svg'
 // import uploadIcon from '../../assets/global/upload.svg'
 
 const VehicleCard = (props) =>{
-    console.log('props.car', props.car.imgUrl)
     const [imgFile, setImgFile] = useState('')
     const [imgData64, setImgData64] = useState('')
     const [newImg, setNewImg] = useState(false)
@@ -24,7 +23,6 @@ const VehicleCard = (props) =>{
     const app = new Realm.App(appConfig)
 
     const imgChange = (state) => {
-        console.log('checking', state)
         setNewImg(state)
     }
     const handleClose = () => setShow(false)
