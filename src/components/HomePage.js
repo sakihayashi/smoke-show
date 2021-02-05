@@ -29,7 +29,8 @@ const [searchedCarData, setSearchedCarData] = useState([])
 // var n = new Date().getTime();
 const appConfig = {
     id: process.env.REACT_APP_REALM_APP_ID,
-    timeout: 10000, // timeout in number of milliseconds
+    // timeout: 10000, 
+    // timeout in number of milliseconds
     };
 const app = new Realm.App(appConfig);
 //     items: Array(5)

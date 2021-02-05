@@ -43,7 +43,6 @@ const SettingModal = (props) =>{
                 userDetails: false
             })
         }
-        console.log('userobj', userObj)
 
     }
     const handleChangePw = (e) =>{
@@ -161,6 +160,8 @@ const SettingModal = (props) =>{
             }
         }else{
             console.log('I have to debug')
+            
+            
         }
     }
 
@@ -197,9 +198,24 @@ const SettingModal = (props) =>{
             
         }else{
             console.log('write login function')
+            console.log('id', app.currentUser.id)
         }
         
     }
+
+    // const reLogin = () =>{
+    //       const token = localStorage.getItem('session_token')
+    //     jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
+    //         if (err) {
+    //             console.log('err', err)
+
+    //         }else{
+    //             console.log('success', decoded.userData.login.email)
+    //             return decoded.userData.login
+    //         }
+    //           });
+    // }
+
     useEffect(() => {
         if( typeof(props.profileUser.profilePic) == 'undefined' || props.profileUser.profilePic  == ''){
             setCurrentBioPic(bioPic)
@@ -213,16 +229,8 @@ const SettingModal = (props) =>{
         }else{
             setCurrentCover(props.profileUser.profileCover)
         }
-        // const token = localStorage.getItem('session_token')
-        // jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
-        //     if (err) {
-        //         console.log('err', err)
-
-        //     }else{
-        //         console.log('success', decoded.userData.login.email)
-        //         setUserObj({...userObj, email: decoded.userData.login.email})
-        //     }
-        //   });
+      
+        
     }, [])
 
     return(

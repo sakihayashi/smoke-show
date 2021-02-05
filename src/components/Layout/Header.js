@@ -28,6 +28,7 @@ const Header = (props) =>{
         props.changeUserState(false)
         localStorage.removeItem('session_token')
         props.userLoggedOut(app.currentUser.id)
+        // console.log('x', app.currentUser.id)
         await getApp.currentUser.logOut()
     }
      

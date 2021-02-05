@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal, Button, Form } from 'react-bootstrap'
+import { Modal, Button, Form, Alert } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import { authUser } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
@@ -12,9 +12,11 @@ import { v4 as uuidv4 } from 'uuid';
 const LoginModal = (props) =>{
     
     const [userObj, setUserObj] = useState({fname: '', lname: '', email: '', password: ''})
+    const [hasError, setHasError] = useState(false)
     const [forgotPw, setForgotPw] = useState(false)
     const [resetPwSent, setResetPwSent] = useState(false)
     const uid = useUID()
+    const [loginMsg, setLoginMsg] = useState('')
     const appId = process.env.REACT_APP_REALM_APP_ID
     const appConfig = {
         id: appId,
@@ -38,10 +40,6 @@ const LoginModal = (props) =>{
             setResetPwSent(true)
         })
         
-        // await getApp.emailPasswordAuth.sendResetPasswordEmail(userObj.email).then(res =>{
-        //     console.log('res', res)
-            
-        // })
     }
     const closeWindow = () =>{
         setForgotPw(false)
@@ -81,10 +79,15 @@ const LoginModal = (props) =>{
         e.preventDefault()
         const emailLowerCase = userObj.email.toLocaleLowerCase()
         const credentials = Realm.Credentials.emailPassword(emailLowerCase, userObj.password)
-
+        console.log('working?')
         try{
             // Authenticate the user
             await props.app.logIn(credentials).then(async user=>{
+                if(user.id === props.app.currentUser.id){
+                    console.log('matched')
+                }else{
+                    console.log('not match')
+                }
                     // const key = await user.apiKeys.create(uid)
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
                     const mongoCollection = mongo.db("smoke-show").collection("users");
@@ -107,7 +110,8 @@ const LoginModal = (props) =>{
       
         }catch(error){
             console.log('error', error)
-
+            setHasError(true)
+            setLoginMsg('Your email and password do not match')
         }
     }
     
@@ -139,6 +143,7 @@ const LoginModal = (props) =>{
                     <Form.Control type="password" placeholder="" name="password" onChange={handleChange} />
                 </Form.Group>
                 <p className="click-div" onClick={()=>{setForgotPw(true)}}>Forgot password?</p>
+                {hasError && <Alert variant="danger" style={{padding: '5px', marginTop: '1rem', textAlign:'center'}}><small>{loginMsg}</small></Alert> }
                 <div className="login-btn-wrapper">
                     <Button className="login-btn" type="submit">
                         Login

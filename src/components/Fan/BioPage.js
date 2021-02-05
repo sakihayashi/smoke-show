@@ -38,7 +38,8 @@ const BioPage = (props) =>{
     const altCarData = {name: 'No data yet', upgrades: 'No data yet', color: 'No data yet', wheels: 'No data yet', performance: 'No data yet', category: 'Dream car', imgUlr: noImg}
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
-        timeout: 10000, // timeout in number of milliseconds
+        // timeout: 10000, 
+        // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
     
