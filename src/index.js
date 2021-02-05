@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './scss/index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import './fonts/X-Heighting400.otf'
+import './fonts/X-Heighting400.ttf'
 import './fonts/BEST-IN-CLASS.ttf'
 import './fonts/MerriweatherSans-Italic-VariableFont_wght.ttf'
 import './fonts/MerriweatherSans-VariableFont_wght.ttf'
