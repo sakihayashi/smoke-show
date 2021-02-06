@@ -362,7 +362,7 @@ const BioPage = (props) =>{
                                 </Row>
                             </div>
                         </Col>
-                        <Col sm={8} className="pl-0">
+                        <Col sm={8} className="pl-0-pc">
                         { userCars !== undefined ?
                             userCars.map( car =>{
                                return (

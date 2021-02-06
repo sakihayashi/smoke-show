@@ -146,8 +146,16 @@ nav{
 .setting-icon-nav{
     padding-right: 1rem;
 }
-
-
+.modal{
+    width: 100vw;
+    height: 100vh !important;
+}
+.modal-content{
+    box-shadow: 0 0 5px #ccc;
+}
+.modal-dialog {
+    height: 100vh !important;
+}
 @media (min-width: 992px){
     .navbar-collapse{
         background-color: transparent !important;
@@ -155,6 +163,9 @@ nav{
     .setting-icon-nav{
         padding-right: 0;
     }
+    // .modal-dialog{
+    //     align-items: center !important;
+    // }
 }
 @media (min-width: 1025px){
     .header-wrapper {

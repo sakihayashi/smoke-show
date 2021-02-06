@@ -213,12 +213,15 @@ const VehicleCard = (props) =>{
                 <Col sm={5} >
                     <img src={props.car.imgUrl !== undefined ? props.car.imgUrl : noImg} className="bio-my-car" alt="my daily driver" />
                 </Col>
-                <Col sm={7} className="bio-car-contents">
-                    <p>Name: {props.car.name}</p>
-                    <p>Upgrades: {props.car.upgrades}</p>
-                    <p>Color: {props.car.color}</p>
-                    <p>Wheels: {props.car.wheels}</p>
-                    <p>Performance: {props.car.performance}</p>
+                <Col sm={7} >
+                    <div className="bio-car-contents">
+                        <p>Name: {props.car.name}</p>
+                        <p>Upgrades: {props.car.upgrades}</p>
+                        <p>Color: {props.car.color}</p>
+                        <p>Wheels: {props.car.wheels}</p>
+                        <p>Performance: {props.car.performance}</p>
+                    </div>
+                    
                 </Col>
             </Row>
         </div>

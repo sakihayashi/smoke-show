@@ -32,7 +32,8 @@ const ResetPassword = (props) =>{
     const handeleRestPw = async (e) =>{
         e.preventDefault()
         try{
-            await app.emailPasswordAuth.resetPassword(token, tokenId, userObj.password).then(res =>{
+            // await app.emailPasswordAuth.resetPassword("newPassw0rd", token, tokenId);
+            await app.emailPasswordAuth.resetPassword(userObj.password, token, tokenId).then(res =>{
                 console.log('res', res)
                 hasReset(true)
             })
@@ -123,7 +124,7 @@ const ResetPassword = (props) =>{
                         <br/>
                         <Form.Group >
                             <Form.Label>Confirm new password</Form.Label>
-                            <Form.Control type="password2" placeholder="type your new password again" name="password" onChange={handleChange} />
+                            <Form.Control type="password" placeholder="type your new password again" name="password2" onChange={handleChange} />
                         </Form.Group>
                         {hasError && <div className="error-msg">{msg}</div>}
                         <br/>

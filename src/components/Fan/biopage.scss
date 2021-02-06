@@ -18,9 +18,7 @@
         height: 100%;
         width: 100%;
         border-radius: 75px;
-        position: absolute;
-        top: -75px;
-        left: 50px;
+        position: relative;
         object-fit: cover;
     }
 }
@@ -32,18 +30,25 @@
 .bio-main-wrapper{
     width: 100%;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: -75px;
 }
 
 .bio-content-wrapper{
     background: $theme-lighter;
 }
 
-.bio-title-text{
-    position: absolute;
-    left: 230px;
+
+.bio-title-text {
+    position: relative;
     width: 100%;
-    top: 1rem;
+    padding: 1rem;
+    text-align: center;
 }
+
 .bio-name-title{
     font-weight: 600;
     font-size: 1.5rem;
@@ -76,7 +81,7 @@
     padding: 15px;
 }
 .bio-height-adj{
-    margin-top: -2rem;
+    margin-top: 0;
 }
 
 .bio-border{
@@ -92,8 +97,8 @@
 .p-15{
     padding: 15px;
 }
-.pl-0{
-    padding-left: 0;
+.pl-0-pc{
+    padding-left: 15px;
 }
 .car-names{
     padding: 15px;
@@ -106,7 +111,7 @@
 
 }
 .bio-car-contents{
-    padding-top: 15px;
+    padding: 1rem;
 }
 .bio-my-car{
     width: 100%;
@@ -306,5 +311,33 @@
     .modal-wrapper-bio > .modal-dialog {
         max-width: 90vw;
         margin: 1.75rem auto;
+    }
+    .bio-main-wrapper{
+        display: block;
+        margin-top: 0;
+    }
+    .bio-title-text{
+        position: absolute;
+        left: 230px;
+        width: 100%;
+        top: 1rem;
+        text-align: left;
+        padding: 0;
+    }
+    .bio-pic{
+    
+        img{
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: -75px;
+            left: 50px;
+        }
+    }
+    .bio-height-adj{
+        margin-top: -2rem;
+    }
+    .pl-0-pc{
+        padding-left: 0;
     }
 }
