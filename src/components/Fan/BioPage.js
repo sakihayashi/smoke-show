@@ -26,7 +26,7 @@ const BioPage = (props) =>{
     const childRef = useRef()
     const profileUserId = props.match.params.id
     const [theUser, setTheUser] = useState({})
-    const [profileUser, setProfileUser] = useState({})
+    const [profileUser, setProfileUser] = useState({fname: '', lname: '', profilePic: '', profileCover: '', username: ''})
     const [allowEdit, setAllowEdit] = useState(false)
     const [editMode, setEditMode] = useState(false)
     const [showSetting, setShowSetting] = useState(false);
@@ -183,17 +183,20 @@ const BioPage = (props) =>{
     }
     
     const getDataAsPublic = async () =>{
+        console.log('working?')
         const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI)
         try{
             await app.logIn(credentials).then( async user =>{
+
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
                 const mongoCollection = mongo.db("smoke-show").collection("users")
 
                 const filter = {userId: profileUserId} 
                
                 await mongoCollection.findOne(filter).then(user =>{
+                    console.log('user?', user)
                     if(user === null){
-                        setProfileUser({fname: 'No user data', lname: '', profileDesc: 'No user data', })
+                        setProfileUser({fname: 'No user data', lname: '', profileDesc: 'No user data', profileCover: '' })
                     }else{
                         setProfileUser(user)
                         // console.log('this is profile user', profileUser)
@@ -233,15 +236,16 @@ const BioPage = (props) =>{
         })
     }
     useEffect(() => {
-       
+        
         const token = localStorage.getItem('session_token')
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     getDataAsPublic()
-                    console.log('err login again', err)
+                    // console.log('err login again', err)
                     childRef.current.handleLoginModal(true)
                 }else{
+                    console.log('working')
                     getDataAsTheUser(decoded)
                 }
               });
@@ -253,7 +257,7 @@ const BioPage = (props) =>{
     }, [])
 
     return(
-        <Layout ref={childRef} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut}>
+        <Layout refModal={childRef} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut}>
         <Helmet>
             <meta charSet="utf-8" />
             <title>User profile page | The Smoke Show</title>
@@ -276,7 +280,7 @@ const BioPage = (props) =>{
                     // ${bioImgL} 1280w,
                     // ${bioImgXL} 1500w
                     // `}
-                    src={profileUser.profileCover == true || profileUser.profileCover !== null ? profileUser.profileCover : noImg}
+                    src={ typeof(profileUser.profileCover) == 'undefined' || !profileUser.hasOwnProperty("profileCover") ?  noImg : profileUser.profileCover }
                     alt="user selected profile image"
                      />
                 </div>

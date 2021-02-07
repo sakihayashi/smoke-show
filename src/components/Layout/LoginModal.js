@@ -6,17 +6,16 @@ import { connect } from 'react-redux'
 import Logo from '../../assets/global/Logo-smoke-show.png'
 import jwt from 'jsonwebtoken'
 import { useUID } from 'react-uid'
-import { v4 as uuidv4 } from 'uuid';
-
 
 const LoginModal = (props) =>{
     
-    const [userObj, setUserObj] = useState({fname: '', lname: '', email: '', password: ''})
+    const [userObj, setUserObj] = useState({fname: '', lname: '', email: '', password: '', confirmPw: ''})
     const [hasError, setHasError] = useState(false)
     const [forgotPw, setForgotPw] = useState(false)
     const [resetPwSent, setResetPwSent] = useState(false)
     const uid = useUID()
     const [loginMsg, setLoginMsg] = useState('')
+    const [errMsg, setErrMsg] = useState('')
     const appId = process.env.REACT_APP_REALM_APP_ID
     const appConfig = {
         id: appId,
@@ -32,14 +31,17 @@ const LoginModal = (props) =>{
     }
     const handleResetPw = async (e) =>{
         e.preventDefault()
-        const newPW = uuidv4()
+        // const newPW = uuidv4()
         // Additional arguments for the reset function
-        const args = ["something"];
-        await getApp.emailPasswordAuth.callResetPasswordFunction(userObj.email, newPW, args).then(res =>{
-            console.log('res', res)
-            setResetPwSent(true)
-        })
-        
+        if(userObj.password === userObj.confirmPw){
+            const args = [];
+            await getApp.emailPasswordAuth.callResetPasswordFunction(userObj.email, userObj.password, args).then(res =>{
+                console.log('res', res)
+                setResetPwSent(true)
+            })
+        }else{
+            setErrMsg('the password and the confirm password do not match. Try again.')
+        }
     }
     const closeWindow = () =>{
         setForgotPw(false)
@@ -56,7 +58,8 @@ const LoginModal = (props) =>{
         resetPassword =
         <div>
             <p class="login-form" style={{textAlign: 'center', marginBottom: '2rem'}}>We've sent you an email link to reset your password.<br/><br /> Please check your email inbox.</p><br/>
-            <p >Please close this window.</p>
+            <div className="text-center" ><Button className="comment-btn" onClick={props.onHide} style={{minWidth: '200px'}}>Close</Button></div>
+            
         </div>
         
     }else if(!resetPwSent){
@@ -64,9 +67,20 @@ const LoginModal = (props) =>{
         <Form className="login-form" onSubmit={handleResetPw}>
             <Form.Group >
                 <Form.Label>Type your email address below.</Form.Label>
-                <Form.Control type="email" placeholder="e.g. example@example.com" name="email" onChange={handleChange} />
+                <Form.Control type="email" placeholder="e.g. example@example.com" name="email" onChange={handleChange} required/>
             </Form.Group>
-            <div style={{marginTop: '4rem'}}></div>
+            <div className="spacer-1rem"></div>
+            <Form.Group >
+                <Form.Label>Type your new password below.</Form.Label>
+                <Form.Control type="password" placeholder="more than six characters" name="password" onChange={handleChange} required />
+            </Form.Group>
+            <div className="spacer-1rem"></div>
+            <Form.Group >
+                <Form.Label>Confirm your new password below.</Form.Label>
+                <Form.Control type="password" placeholder="" name="confirmPw" onChange={handleChange} required />
+            </Form.Group>
+            <div className="spacer-1rem"></div>
+            {errMsg && <Alert variant="danger" style={{padding: '5px', marginTop: '1rem', textAlign:'center'}}><small>{errMsg}</small></Alert>}
             <Button className="login-btn" type="submit">Reset Password</Button>
             <p className="click-div" style={{marginTop: '1rem'}} onClick={()=>setForgotPw(false)}>Go back to login</p>
             <div style={{marginTop:"4rem"}}></div>
@@ -103,11 +117,8 @@ const LoginModal = (props) =>{
                         props.handleuser(loginUserData.fname, user.id)
                         props.authUser(userData)
                     })
-                    
-                    
                 });
-            
-      
+
         }catch(error){
             console.log('error', error)
             setHasError(true)

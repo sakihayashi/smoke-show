@@ -6,10 +6,15 @@ import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import Layout from './Layout/Layout'
 
+// http://localhost:3000/reset-password?token=a13bd84a8417b512344a3b6c6368d531048b3b8f5da61189c760dd5e43324097e56f8347c7540fe61ea9f090516223e3df94116aa32212ebebc6022aaa34d788&tokenId=601f01fd96554f5bcb2dd04d
+
 const ResetPassword = (props) =>{
+
     const childRef = useRef()
     const token = new URLSearchParams(props.location.search).get("token")
     const tokenId = new URLSearchParams(props.location.search).get("tokenId")
+    console.log(token)
+    console.log(tokenId)
     const [userObj, setUserObj] = useState({token: token, tokenId: tokenId, email: '', password: '', password2: ''})
     const [hasError, setHasError] = useState(false)
     const [hasReset, setHasReset] = useState(false)
@@ -30,12 +35,14 @@ const ResetPassword = (props) =>{
         return jwt.sign({ userData: userData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest});
     }
     const handeleRestPw = async (e) =>{
+        console.log('pw', token, tokenId, userObj.password)
         e.preventDefault()
         try{
             // await app.emailPasswordAuth.resetPassword("newPassw0rd", token, tokenId);
-            await app.emailPasswordAuth.resetPassword(userObj.password, token, tokenId).then(res =>{
+            // await app.emailPasswordAuth.resetPassword(token, tokenId, "newPassw0rd");
+            await app.emailPasswordAuth.resetPassword( token, tokenId, userObj.password).then(res =>{
                 console.log('res', res)
-                hasReset(true)
+                setHasReset(true)
             })
         }catch(error){
             console.log(error)
@@ -122,10 +129,10 @@ const ResetPassword = (props) =>{
                             <Form.Control type="password" placeholder="Between 6 and 128 characters long" name="password" onChange={handleChange} />
                         </Form.Group>
                         <br/>
-                        <Form.Group >
+                        {/* <Form.Group >
                             <Form.Label>Confirm new password</Form.Label>
                             <Form.Control type="password" placeholder="type your new password again" name="password2" onChange={handleChange} />
-                        </Form.Group>
+                        </Form.Group> */}
                         {hasError && <div className="error-msg">{msg}</div>}
                         <br/>
                         <div className="login-btn-wrapper">

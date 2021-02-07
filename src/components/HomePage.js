@@ -19,7 +19,7 @@ const Comments = React.lazy(() => import('./Comments'))
 
 const HomePage = (props) =>{
     
-const childRef = useRef();
+// const childRef = useRef();
 const videoEmbedURL = 'https://www.youtube.com/embed/'
 const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
 const [searchKeyword, setSearchKeyword] = useState('')
@@ -146,7 +146,7 @@ const app = new Realm.App(appConfig);
       })
 
     return(
-            <Layout ref={childRef}>
+            <Layout >
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Home | The Smoke Show</title>

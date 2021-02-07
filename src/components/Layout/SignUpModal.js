@@ -51,12 +51,12 @@ const SignUpModal = (props) =>{
         const credentials = Realm.Credentials.anonymous();
         await applicationCache.logIn(credentials).then(user =>{
             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-            const mongoCollection = mongo.db("smoke-show").collection("comments");
-            const filter = {email: email} 
-            mongoCollection.find(filter).then(pendingUser =>{
-                const token = pendingUser.token
-                const tokenId = pendingUser.tokenId
-            })
+            // const mongoCollection = mongo.db("smoke-show").collection("commeusernts");
+            // const filter = {email: email} 
+            // mongoCollection.find(filter).then(pendingUser =>{
+            //     const token = pendingUser.token
+            //     const tokenId = pendingUser.tokenId
+            // })
         })
         console.log('under construction')
     }
@@ -103,6 +103,7 @@ const SignUpModal = (props) =>{
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="e.g. example@example.com" name="email" onChange={handleChange} />
                 </Form.Group>
+                <div className="spacer-1rem"></div>
                 {/* <Form.Group controlId="formBasicEmail">
                     <Form.Label>Username</Form.Label>
                     <Form.Control type="text" placeholder="e.g. Smoke Show love" name="username" onChange={handleChange} />
@@ -111,6 +112,7 @@ const SignUpModal = (props) =>{
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Between 6 and 128 characters long" name="password" onChange={handleChange} />
                 </Form.Group>
+                <div className="spacer-1rem"></div>
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Confirm Password</Form.Label>
                     <Form.Control type="password" placeholder="" name="password" onChange={handleChange} name="password2" />
@@ -120,6 +122,7 @@ const SignUpModal = (props) =>{
                     <div className="error-msg">{msg}</div>
                     <p onClick={resendConfirmationEmail}>Click here to resend the confirmation email</p>
                 </div>}
+                <div className="spacer-2rem"></div>
                 <div className="login-btn-wrapper">
                     <Button className="login-btn" type="submit">
                         Signup

@@ -55,12 +55,21 @@ const EmailConfirmation = (props) =>{
 
         })
     }
+
     const handleResendToken = async (e) =>{
         e.preventDefault()
         console.log('email', userObj.email)
         const email = userObj.email
-        const response = await getApp.emailPasswordAuth.resendConfirmation(email)
-        console.log('response', response)
+        const credentials = Realm.Credentials.anonymous();
+        try{
+            await getApp.emailPasswordAuth.resendConfirmation(email).then( res =>{
+                console.log('res', res)
+            })
+        }catch(err){
+            console.log(err)
+        }
+        // const response = await getApp.emailPasswordAuth.resendConfirmation(email)
+        // console.log('response', response)
     }
     const resendToken = ()=>{
         return(
@@ -75,11 +84,11 @@ const EmailConfirmation = (props) =>{
                         <Form.Label>Email address</Form.Label>
                         <Form.Control type="email" placeholder="e.g. example@example.com" name="email" onChange={handleChange} required />
                     </Form.Group>
+                    <div className="spacer-2rem"></div>
                     <div className="login-btn-wrapper">
                         <Button className="login-btn" type="submit">
                             Resend Confirmation Email
                         </Button><br /><br />
-                     
                     </div>
                 </Form>
             </div>
@@ -143,6 +152,7 @@ const EmailConfirmation = (props) =>{
                             <Button className="login-btn" type="submit">
                                 Login
                             </Button>
+                          
                         </div>
                         <div className="spacer-4rem"></div>
                     </Form>
