@@ -131,7 +131,7 @@ nav{
 }
 .custom-modal-body{
     padding-top: 0 !important;
-    min-height: calc(100vh - 20.2rem);
+    // min-height: calc(100vh - 20.2rem);
 }
 .login-logo-wrapper{
     text-align: center;
@@ -164,9 +164,7 @@ nav{
     .setting-icon-nav{
         padding-right: 0;
     }
-    // .modal-dialog{
-    //     align-items: center !important;
-    // }
+
 }
 @media (min-width: 1025px){
     .header-wrapper {

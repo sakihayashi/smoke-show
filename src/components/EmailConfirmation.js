@@ -45,7 +45,7 @@ const EmailConfirmation = (props) =>{
                 username: userObj.username
             }
             
-            const mongoCollection = mongo.db("smoke-show").collection("users");
+            const mongoCollection = mongo.db("smoke-show").collection("users")
             await mongoCollection.insertOne(userData).then(insertOneResult =>{
                 userData.login = {email: email, password: userObj.password}
                 let token = createToken(userData)

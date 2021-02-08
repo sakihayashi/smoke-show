@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {Helmet} from "react-helmet"
+import { Helmet } from "react-helmet"
 import { Row, Col, Form, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
@@ -16,10 +16,11 @@ import Layout from '../Layout/Layout'
 import powerIcon from '../../assets/global/Horsepower.png'
 import pistonIcon from '../../assets/global/piston.png'
 import priceIcon from '../../assets/global/Price-Tag-icon.png'
+import InfluencerIndexPage from '../InfluencerIndexPage'
 
 const BioPage = (props) =>{
     const influencerId = props.match.params.id
-    const [influencer, setInfluencer] = useState({})
+    const [influencer, setInfluencer] = useState({userId: '', fname: '', lname: '', username: '', fans: null, desc: '', channelId: '', banner_img: '', profile_pic: '', featuredVideo: {id: '', title: ''}})
     // const { banner_img, username, profile_pic, fans } = props.location.state.influencer
     const [formattedFans, setFormattedFans] = useState('')
     
@@ -45,7 +46,7 @@ const BioPage = (props) =>{
         await youtubeAPI.get('/search', {
             params: {
                 q: searchKeyword,
-                channelId: EddieXChannelId
+                channelId: influencer.channelId
             }
         }).then(res =>{
             console.log('res from youtube', res)
@@ -67,7 +68,7 @@ const BioPage = (props) =>{
         })
     }
     const getInfluencer = async () =>{
-        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI);
+        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
         try {
  
           await app.logIn(credentials).then( async user =>{
@@ -75,6 +76,7 @@ const BioPage = (props) =>{
             const mongoCollection = mongo.db("smoke-show").collection("influencers");
             const filter = {userId: influencerId} 
             await mongoCollection.findOne(filter).then(res =>{
+                console.log('res', res)
                 setInfluencer(res)
                 if(res.fans > 999){
                     setFormattedFans(Math.sign(res.fans)*((Math.abs(res.fans)/1000).toFixed(1)) + 'k')
@@ -88,7 +90,7 @@ const BioPage = (props) =>{
          }catch(error){console.log(error)}
     }
     useEffect( async () => {
-        const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
+        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
         try {
         //   const app = new Realm.App(appConfig);
       
@@ -133,8 +135,30 @@ const BioPage = (props) =>{
                         </ul>
                     </Col>
                 </Row>
+                <div className="spacer-2rem"></div>
+                <Row>
+                    <Col sm={6}>
+                        <div className="videoWrapper">
+                            <iframe src={ typeof(influencer.featuredVideo.id) == 'undefined' ? '' : videoEmbedURL + influencer.featuredVideo.id}
+                                    frameBorder='0'
+                                    allow='autoplay; encrypted-media'
+                                    allowFullScreen
+                                    title='video'
+                            
+                            />
+                            
+                        </div>
+                        <h3 style={{marginTop:'10px'}}>{influencer.featuredVideo.title}</h3>
+                    </Col>
+                    <Col sm={6}>
+                        <div className="bio-desc-wrapper">
+                            <p>{influencer.desc}</p>
+                        </div>
+                        
+                    </Col>
+                </Row>
                 <div className="spacer-4rem"></div>
-                <h2 className="title">New Today</h2>
+                <h2 className="title">New This Week</h2>
                 <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
                 {
                     carTempData.map((car, index) =>{
@@ -151,7 +175,6 @@ const BioPage = (props) =>{
                                             title='video'
                                     
                                     />
-                    
                                 </div>
                                 <h3 style={{marginTop:'10px'}}>{car.youtube.snippet.title}</h3>
                                 {/* <Row className="comment-wrapper">
@@ -169,7 +192,7 @@ const BioPage = (props) =>{
                     
                                 <Comments comments={commentsTempData[index]} videoId={car.videoId}/>
                             </Col>
-                            <Col sm={4} style={{paddingLeft:0}}>
+                            <Col sm={4} className="bio-stats">
                                 <div className="spec-wrapper">
                                 <img alt={car.name} key={car.logoUrl} src={require(`../../assets/car-brand-logos/${car.logoUrl}`).default} className="icon-s" />{' '}<span className="spec-text"><strong>{car.name}</strong></span><br/>
                                 <img alt="price" key={priceIcon} src={priceIcon} className="icon-s" /><span className="spec-text">{' '}${car.price}</span><br />
