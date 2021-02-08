@@ -37,6 +37,7 @@ const LoginModal = (props) =>{
             const args = [];
             await getApp.emailPasswordAuth.callResetPasswordFunction(userObj.email, userObj.password, args).then(res =>{
                 console.log('res', res)
+                setUserObj({fname: '', lname: '', email: '', password: '', confirmPw: ''})
                 setResetPwSent(true)
             })
         }else{

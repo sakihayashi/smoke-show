@@ -16,6 +16,7 @@ const SettingModal = (props) =>{
     const [imgData64Profile, setImgData64Profile] = useState('')
     const [imgData64Cover, setImgData64Cover] = useState('')
     const [userObj, setUserObj] = useState({fname: props.profileUser.fname, lname: props.profileUser.lname, email: props.profileUser.email, username: props.profileUser.username})
+    const [currentUserId, setCurrentUserId] = useState(app.currentUser.id)
     const [userPw, setUserPw] = useState({newPw: '', conNewPw: '', currentPw: ''})
     // const [file, setFile] = useState({})
     const [profilePic, setProfilePic] = useState({})
@@ -72,19 +73,22 @@ const SettingModal = (props) =>{
         reader.readAsDataURL(file)
     }
     const saveProfilePic = async () =>{
-        // console.log('current', app.currentUser.id)
+        
         const imgId = new Date().getTime()
         const filekey = props.profileUser.userId + '/profile/' + imgId
         const imgUrlWithKey = baseImgUrl + filekey
-        if(app.currentUser.id === props.profileUser.userId){
+        const oldProfilePic = props.profileUser.profilePic
+        if( currentUserId === props.profileUser.userId){
             try{
                 await app.currentUser.functions.putImageObjToS3(imgData64Profile, bucketName, filekey, profilePic.type).then( async res =>{
                     console.log('res', res)
-                    if(props.profileUser.profilePic !== '' || typeof(props.profileUser.profilePic) !== "undefined"){
-                        const currentUrl = props.profileUser.profilePic
-                        const splitted = currentUrl.split('/');
-                        const key = splitted.splice(4, 7).join("/")
-                        deleteImgObj(key)
+                    if(typeof(oldProfilePic) !== "undefined"){
+                  
+                            const currentUrl = props.profileUser.profilePic
+                            const splitted = currentUrl.split('/');
+                            const key = splitted.splice(4, 7).join("/")
+                            deleteImgObj(key)
+                        
                     }
                     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                     const collectionUser = mongo.db("smoke-show").collection("users")
@@ -137,11 +141,11 @@ const SettingModal = (props) =>{
         const filekey = props.profileUser.userId + '/profile/' + imgId
         const imgUrlWithKey = baseImgUrl + filekey
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-        if(app.currentUser.id === props.profileUser.userId){
+        if(currentUserId === props.profileUser.userId){
             try{
                 await app.currentUser.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
                     console.log('res', res)
-                    if(props.profileUser.profileCover !== '' || typeof(props.profileUser.profileCover) !== "undefined"){
+                    if( typeof(props.profileUser.profileCover) !== "undefined"){
                         const currentUrl = props.profileUser.profileCover
                         const splitted = currentUrl.split('/');
                         const key = splitted.splice(4, 7).join("/")
@@ -230,6 +234,7 @@ const deleteImgObj = async (key) =>{
 }
 
     useEffect(() => {
+
         if( typeof(props.profileUser.profilePic) == 'undefined' || props.profileUser.profilePic  == ''){
             setCurrentBioPic(bioPic)
         
