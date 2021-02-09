@@ -19,7 +19,7 @@ import moment from 'moment'
 
 const BioPage = (props) =>{
   
-    const refModal = useRef()
+    const childRef = useRef()
     const [refAlt, setRefAlt] = useState()
     const [paramId, setParamId] = useState(props.match.params.id)
     const [parentModal, setParentModal] = useState(null)
@@ -311,7 +311,7 @@ const BioPage = (props) =>{
                 if (err) {
                     // timeout
                     // measuredRef()
-                    refModal.current.handleLoginModal(true)
+                    // childRef.current.handleLoginModal(true)
                     getDataAsCurrent()
                 }else{
                     getDataAsCurrent()
@@ -325,7 +325,7 @@ const BioPage = (props) =>{
     }, [])
 
     return(
-        <Layout refModal={refModal} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut} >
+        <Layout refBio={childRef} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut} >
         <Helmet>
             <meta charSet="utf-8" />
             <title>User profile page | The Smoke Show</title>

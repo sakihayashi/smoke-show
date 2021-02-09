@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 import Layout from './Layout/Layout'
 
 const EmailConfirmation = (props) =>{
-    const childRef = useRef()
+    const childRef = useRef(null)
     let token = new URLSearchParams(props.location.search).get("token")
     let tokenId = new URLSearchParams(props.location.search).get("tokenId")
     const [userObj, setUserObj] = useState({fname: '', lname: '', token: token, tokenId: tokenId, username: '', email: '', password: ''})

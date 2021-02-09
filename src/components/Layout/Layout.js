@@ -5,7 +5,7 @@ import { withRouter } from "react-router"
 
 const HeaderWithRouter = withRouter(Header);
 
-const Layout = forwardRef((props, ref, refModal) =>{
+const Layout = forwardRef((props, ref, refBio) =>{
     const [modalShow, setModalShow] = useState(false)
     const [user, setUser] = useState(false)
     const [username, setUsername] = useState('')
@@ -54,9 +54,9 @@ const Layout = forwardRef((props, ref, refModal) =>{
     //     })
     // )
     useImperativeHandle(
-        refModal, 
-        (state) => ({
-            handleLoginModal(){
+        refBio, 
+        () => ({
+            handleLoginModal(state){
                 modalShowHide(state)
             }
       })
