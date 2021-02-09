@@ -18,7 +18,8 @@ const Header = (props) =>{
     const id = process.env.REACT_APP_REALM_APP_ID
     // const app = new Realm.App({ id: process.env.REALM_APP_ID })
     const app = new Realm.App({ id: id })
-    // const getApp = Realm.App.getApp(id);
+    const productionUrl = 'https://master.d3l3iqr3dhkcvm.amplifyapp.com/'
+    const devUrl = 'http://localhost:3000/'
 
     const [hasAccount, setHasAccount] = useState(true)
     
@@ -45,7 +46,7 @@ const Header = (props) =>{
      }
      const loggedInDiv = 
      <Fragment>
-        <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><a href={'http://localhost:3000/user/' + currentUser}><img src={settingsIcon} className="setting-icon-nav"  /></a>
+        <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><a href={productionUrl + 'user/' + currentUser}><img src={settingsIcon} className="setting-icon-nav"  /></a>
         </div>
      </Fragment>
      useEffect(() => {
