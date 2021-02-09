@@ -30,14 +30,13 @@ const BioPage = (props) =>{
     const [searchKeyword, setSearchKeyword] = useState('')
     const [titleStr, setTitleStr] = useState('Your search result')
     const [searchedCarData, setSearchedCarData] = useState([])
-    // var d = new Date();
-    // var n = new Date().getTime();
+    
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         timeout: 10000, // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
-
+    const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
     const handleChangeKeyword = (e) =>{
         setSearchKeyword(e.target.value)
     }
@@ -68,11 +67,11 @@ const BioPage = (props) =>{
         })
     }
     const getInfluencer = async () =>{
-        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+        // const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
         try {
  
-          await app.logIn(credentials).then( async user =>{
-            const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+        //   await app.logIn(credentials).then( async user =>{
+        //     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
             const mongoCollection = mongo.db("smoke-show").collection("influencers");
             const filter = {userId: influencerId} 
             await mongoCollection.findOne(filter).then(res =>{
@@ -85,25 +84,25 @@ const BioPage = (props) =>{
                 }
             })
            
-          }
-          )
+        //   }
+        //   )
          }catch(error){console.log(error)}
     }
     useEffect( async () => {
-        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+        // const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
         try {
         //   const app = new Realm.App(appConfig);
       
           // an authenticated user is required to access a MongoDB instance
-          await app.logIn(credentials).then( async user =>{
-            const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+        //   await app.logIn(credentials).then( async user =>{
+        //     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
             const mongoCollection = mongo.db("smoke-show").collection("comments");
             const filter = {videoId: 'QHLojVxs'} 
             await mongoCollection.find(filter).then(resAll =>{
             })
            
-          }
-          )
+        //   }
+        //   )
          }catch(error){console.log(error)}
       })
       useEffect(() => {

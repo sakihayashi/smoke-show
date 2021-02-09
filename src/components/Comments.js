@@ -54,7 +54,7 @@ const Comments = (props) =>{
                     await mongoCollection.insertOne(newComment).then(result =>{
                         if(result){
                             e.target.reset();
-                            getComments()
+                            getCommentsCurrent()
                         }else{
                             console.log('error', result)
                         }
@@ -100,54 +100,84 @@ const Comments = (props) =>{
         )
        
     }
-    const getComments = async () =>{
-        let userLogged;
-        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-        try {
-        //   const app = new Realm.App(appConfig);
-      
-          // an authenticated user is required to access a MongoDB instance
-          await app.logIn(credentials).then( async user =>{
-            const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-            const mongoCollection = mongo.db("smoke-show").collection("comments")
-            const filter = {videoId: props.videoId} 
-            const options = {sort: {date_posted: -1}, limit: 4}
-            await mongoCollection.find(filter,options).then(resAll =>{
-                setCommentsDB(resAll)
-                return resAll
-            })
-           
-          }
-          )
-          // the rest of your code ...
-      
-         }catch(error){console.log(error)}
+    const getCommentsCurrent = async () =>{
+        const filter = {videoId: props.videoId} 
+        const options = {sort: {date_posted: -1}, limit: 4}
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+            const collectionComments = mongo.db("smoke-show").collection("comments")
+            try{
+                await collectionComments.find(filter,options).then(resAll =>{
+                    setCommentsDB(resAll)
+                    return resAll
+                })
+            }catch(err){console.log(err)}
     }
-    useEffect(() => {
+    // const getComments = async () =>{
+    //     const filter = {videoId: props.videoId} 
+    //     const options = {sort: {date_posted: -1}, limit: 4}
+    //     if(isLoggedIn){
+    //         console.log('loggedin')
+    //         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+    //         const collectionComments = mongo.db("smoke-show").collection("comments")
+    //         try{
+    //             await collectionComments.find(filter,options).then(resAll =>{
+    //                 setCommentsDB(resAll)
+    //                 return resAll
+    //             })
+    //         }catch(err){console.log(err)}
+            
+    //     }else{
+    //         const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+    //         try {
+          
+    //           await app.logIn(credentials).then( async user =>{
+    //             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+    //             const mongoCollection = mongo.db("smoke-show").collection("comments")
+       
+    //             await mongoCollection.find(filter,options).then(resAll =>{
+    //                 setCommentsDB(resAll)
+    //                 return resAll
+    //             })
+               
+    //           }
+    //           )          
+    //          }catch(error){console.log(error)}
+    //     }
         
-        if(props.loginUserData.userId){
-            setIsLoggedIn(true)
-        }else{
-            setIsLoggedIn(false)
-        }
-    }, [props.loginUserData.userId])
+    // }
+    // useEffect(() => {
+        
+    //     if(props.loginUserData.userId){
+    //         setIsLoggedIn(true)
+    //     }else{
+    //         setIsLoggedIn(false)
+    //     }
+    // }, [props.loginUserData.userId])
 
     useEffect( () => {
+        getCommentsCurrent()
+        // let tokenLocalStorage = localStorage.getItem('session_token')
+        // if(tokenLocalStorage){
+        //     setIsLoggedIn(true)
+        //     getComments()
+        // }else{
+        //     setIsLoggedIn(false)
+        //     getComments()
+        // }
         
-        getComments()
-        let tokenLocalStorage = localStorage.getItem('session_token')
-         if(tokenLocalStorage){
-            jwt.verify(tokenLocalStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
-                if(err){
-                    console.log(err)
-                    setIsLoggedIn(false)
-                }else{
-                    console.log('decoded: ', decoded)
-                    setIsLoggedIn(true)
-                }
-            });
+        
+        //  if(tokenLocalStorage){
+        //     jwt.verify(tokenLocalStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+        //         if(err){
+        //             console.log(err)
+        //             setIsLoggedIn(false)
+        //         }else{
+        //             console.log('decoded: ', decoded)
+        //             setIsLoggedIn(true)
+        //         }
+        //     });
             
-         }
+        //  }
     }, [])
     return(
         <React.Fragment>

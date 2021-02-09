@@ -10,12 +10,14 @@ const Layout = forwardRef((props, ref, refModal) =>{
     const [user, setUser] = useState(false)
     const [username, setUsername] = useState('')
     const [userId, setUserId] = useState('')
+    
     // const parentRef = useRef()
     const modalShowHide = (state)=>{
         setModalShow(state)
     }
-    const changeUserState = (state) =>{
-        setUser(state)
+    const changeUserState = (id) =>{
+        setUser(false)
+        props.userLoggedOut(id)
     }
     const funcSetUsername = (name) =>{
         setUsername(name)
@@ -26,7 +28,7 @@ const Layout = forwardRef((props, ref, refModal) =>{
         setUsername(fname)
         setUserId(userId)
         setModalShow(false)
-        // props.userLoggedIn(userId)
+        props.userLoggedIn(userId)
     }
     // const updateLoggedOut = (id) =>{
     //     props.userLoggedOut(id)
@@ -40,13 +42,17 @@ const Layout = forwardRef((props, ref, refModal) =>{
             }
         }),
     )
-    useImperativeHandle(
-        refModal,
-        () =>({
-            handleLoginModal(state){
-                modalShowHide(state)
-            }
-        })
+    // useImperativeHandle(
+    //     refModal,
+    //     () =>({
+    //         handleLoginModal(state){
+    //             modalShowHide(state)
+    //         }
+    //     })
+    // )
+    useImperativeHandle(refModal, (state) => ({
+        handleLoginModal: modalShowHide(state)
+      })
     )
 
     return(

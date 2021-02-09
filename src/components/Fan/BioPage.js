@@ -1,15 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import {Helmet} from "react-helmet"
 import * as Realm from "realm-web"
 import Layout from '../Layout/Layout'
-// import bioImgXs from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_375.jpg'
-// import bioImgS from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_752.jpg'
-// import bioImgM from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_1040.jpg'
-// import bioImgL from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_1280.jpg'
-// import bioImgXL from '../../assets/temp-photos/bio/sample_a1n16a_c_scale,w_1500.jpg'
+
 import noImg from '../../assets/global/no_image.jpg'
 import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
-import dayDriver from '../../assets/temp-photos/bio/placeholder-car-repair2.jpg'
 import editIcon from '../../assets/global/edit-icon.svg'
 import settingsIcon from '../../assets/global/Settings-icon-white.svg'
 import SettingModal from './SettingModal'
@@ -20,22 +15,34 @@ import VehicleCard from './vehicleCard'
 import CreateNewCar from './CreateNewCar'
 import jwt from 'jsonwebtoken'
 import moment from 'moment'
+// import axios from 'axios'
 
 const BioPage = (props) =>{
   
-    const childRef = useRef()
-    const profileUserId = props.match.params.id
-    const [theUser, setTheUser] = useState({})
-    const [profileUser, setProfileUser] = useState({fname: '', lname: '', profilePic: '', profileCover: '', username: ''})
+    const refModal = useRef(null)
+    const [refAlt, setRefAlt] = useState()
+    const [paramId, setParamId] = useState(props.match.params.id)
+    const [parentModal, setParentModal] = useState(null)
+    const measuredRef = useCallback(node => {
+        if (node !== null) {
+            setParentModal({func: node.current.handleLoginModal(true)})
+        }
+      }, []);
+    // const [ref, setRef] = useState(null)
+    // const profileUserId = props.match.params.id
+    let userIdParam = props.match.params.id
+    // const [userIdParam, setUserIdParam] = useState('')
+    // const [theUser, setTheUser] = useState({})
+    const [profileUser, setProfileUser] = useState({fname: '', lname: '', profilePic: '', profileCover: '', username: '', profileDesc: '', favSong: '', favArtist: ''})
     const [allowEdit, setAllowEdit] = useState(false)
-    const [editMode, setEditMode] = useState(false)
+    const [editMode, setEditMode] = useState({about: false, song: false, artist: false})
     const [showSetting, setShowSetting] = useState(false);
     const [userCars, setUserCars] = useState([])
     const [showAddCar, setShowAddCar] = useState(false)
     const [numOfComments, setNumComments] = useState(null)
     const altData = {uername: 'No username yet', userId: '', profileDesc: 'No description yet.', myCars: [] }
     const [formattedTime, setFormattedTime] = useState(null)
-    const altCarData = {name: 'No data yet', upgrades: 'No data yet', color: 'No data yet', wheels: 'No data yet', performance: 'No data yet', category: 'Dream car', imgUlr: noImg}
+    const altCarData = {name: 'No data yet', upgrades: 'No data yet', color: 'No data yet', wheels: 'No data yet', performance: 'No data yet', category: 'Dream car', imgUlr: noImg, favSong: 'Nodata yet', favArtist: 'No data yet'}
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
@@ -47,7 +54,6 @@ const BioPage = (props) =>{
     const handleShowAddCarModal = () => setShowAddCar(true)
 
     const handleChangeProfile = (e) =>{
-        console.log('data disappear', profileUser)
         setProfileUser({
             ...profileUser,
             [e.target.name]: e.target.value
@@ -74,13 +80,19 @@ const BioPage = (props) =>{
         setShowSetting(false)
     }
     const userLoggedIn = (id) =>{
+        console.log('working?', id)
+        console.log('profileuser', profileUser.userId)
+        console.log('param', userIdParam)
+        
         if(id === profileUser.userId){
+            console.log('working?', id)
             setAllowEdit(true)
-            regainData()
+            // regainData()
         }
     }
     const userLoggedOut = (id) =>{
-        if(id === profileUserId){
+        console.log('working?', id)
+        if(id === userIdParam){
             setAllowEdit(false)
         }
     }
@@ -102,6 +114,9 @@ const BioPage = (props) =>{
     const updateCarData = (data) =>{
         setUserCars(prevArray => [...prevArray, data])
     }
+    // const updateLogStatus = () =>{
+    //     setAllowEdit(false)
+    // }
     const handleDataUpdate = async (e) =>{
         e.preventDefault()
   
@@ -114,7 +129,9 @@ const BioPage = (props) =>{
                     { "userId": app.currentUser.id},
                     {
                         "$set": {
-                            "profileDesc": profileUser.profileDesc
+                            "profileDesc": profileUser.profileDesc,
+                            "favSong": profileUser.favSong,
+                            "favArtist": profileUser.favArtist
                           }
                     }
                 ).then(res =>{
@@ -123,7 +140,7 @@ const BioPage = (props) =>{
             }catch(err){
                 console.log(err)
             }
-            setEditMode(false)
+            setEditMode({...editMode, about: false, song: false, artist: false})
         }
         
     }
@@ -143,121 +160,194 @@ const BioPage = (props) =>{
             </Form>
         )
     }
-    const regainData = ()=>{
-        const token = localStorage.getItem('session_token')
-        if(token){
-            jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
-                if (err) {
-                    getDataAsPublic()
-                    console.log('err login again', err)
-                    childRef.current.handleLoginModal(true)
-                }else{
-                    getDataAsTheUser(decoded)
-                }
-              });
-            
-        }else{
-            getDataAsPublic()
-        }
+    const editSong = ()=>{
+        return(
+            <Form>
+                <Form.Group >
+                    <Form.Label>Edit</Form.Label>
+                    <Form.Control as="textarea" rows={3} name="favSong" value={profileUser.favSong && profileUser.favSong } onChange={handleChangeProfile} />
+                </Form.Group>
+                <div className="bio-edit-btn-wrapper">
+                    <Button variant="primary" type="submit" onClick={handleDataUpdate} className="bio-edit-btn">
+                        Submit
+                    </Button>
+                </div>
+                
+            </Form>
+        )
     }
-    const getDataAsTheUser = async (decoded) =>{
-        setTheUser(decoded.userData)
+    const editArtist = ()=>{
+        return(
+            <Form>
+                <Form.Group >
+                    <Form.Label>Edit</Form.Label>
+                    <Form.Control as="textarea" rows={3} name="favArtist" value={profileUser.favArtist && profileUser.favArtist } onChange={handleChangeProfile} />
+                </Form.Group>
+                <div className="bio-edit-btn-wrapper">
+                    <Button variant="primary" type="submit" onClick={handleDataUpdate} className="bio-edit-btn">
+                        Submit
+                    </Button>
+                </div>
+                
+            </Form>
+        )
+    }
+    // const regainData = ()=>{
+    //     const token = localStorage.getItem('session_token')
+    //     if(token){
+    //         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
+    //             if (err) {
+    //                 getDataAsCurrent()
+    //                 console.log('err login again', err)
+    //                 refModal.current.handleLoginModal(true)
+    //             }else{
+    //                 getDataAsCurrent()
+    //             }
+    //           });
+            
+    //     }else{
+    //         getDataAsCurrent()
+    //     }
+    // }
+    // const getDataAsTheUser = async (decoded) =>{
+    //     setTheUser(decoded.userData)
+    //     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+    //     const mongoCollectionUser = mongo.db("smoke-show").collection("users")
+    //     const filter = {userId: profileUserId}
+    //     try{
+    //         await mongoCollectionUser.findOne(filter).then(user =>{
+    //                     setProfileUser(user)
+    //                     setFormattedTime(moment(profileUser.joined).local().format('MMMM Do YYYY'))
+    //                     getTotalComments(user.userId, mongo)
+    //                     getMyCars(user.userId, mongo)
+    //         })
+    //     }catch(err){
+    //         console.log(err)
+    //     }
+    //     // const mongo = decoded.userData.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+    //     if(theUser.userId === profileUser.userId){
+    //         setAllowEdit(true)
+    //     }
+    
+    // }
+    const getDataAsCurrent = async () =>{
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
         const mongoCollectionUser = mongo.db("smoke-show").collection("users")
-        const filter = {userId: profileUserId}
+        const filter = {userId: userIdParam}
         try{
             await mongoCollectionUser.findOne(filter).then(user =>{
                         setProfileUser(user)
                         setFormattedTime(moment(profileUser.joined).local().format('MMMM Do YYYY'))
-                        getTotalComments(user.userId, mongo)
-                        getMyCars(user.userId, mongo)
+                        getTotalComments(mongo)
+                        getMyCars(mongo)
+                        return user
+            }).then(user =>{
+                if( userIdParam === app.currentUser.id){
+                    setAllowEdit(true)
+                }else{
+                    setAllowEdit(false)
+                }
             })
         }catch(err){
             console.log(err)
         }
-        // const mongo = decoded.userData.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-        if(theUser.userId === profileUser.userId){
-            setAllowEdit(true)
-        }
-    
+        
     }
     
-    const getDataAsPublic = async () =>{
-        console.log('working?')
-        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI)
-        try{
-            await app.logIn(credentials).then( async user =>{
+    // const getDataAsPublic = async () =>{
+    //     console.log('working?')
+    //     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI)
+    //     try{
+    //         await app.logIn(credentials).then( async user =>{
 
-                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-                const mongoCollection = mongo.db("smoke-show").collection("users")
+    //             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+    //             const mongoCollection = mongo.db("smoke-show").collection("users")
 
-                const filter = {userId: profileUserId} 
+    //             const filter = {userId: profileUserId} 
                
-                await mongoCollection.findOne(filter).then(user =>{
-                    console.log('user?', user)
-                    if(user === null){
-                        setProfileUser({fname: 'No user data', lname: '', profileDesc: 'No user data', profileCover: '' })
-                    }else{
-                        setProfileUser(user)
-                        // console.log('this is profile user', profileUser)
-                        // console.log('cars', profileUser.myCars)
-                        if(user.joined){
-                            setFormattedTime(moment(user.joined).local().format('MMMM Do YYYY'))
-                        }else{
-                            setFormattedTime('No data')
-                        }
+    //             await mongoCollection.findOne(filter).then(user =>{
+    //                 console.log('user?', user)
+    //                 if(user === null){
+    //                     setProfileUser({fname: 'No user data', lname: '', profileDesc: 'No user data', profileCover: '' })
+    //                 }else{
+    //                     setProfileUser(user)
+    //                     // console.log('this is profile user', profileUser)
+    //                     // console.log('cars', profileUser.myCars)
+    //                     if(user.joined){
+    //                         setFormattedTime(moment(user.joined).local().format('MMMM Do YYYY'))
+    //                     }else{
+    //                         setFormattedTime('No data')
+    //                     }
                         
-                        getTotalComments(user.userId, mongo)
-                        getMyCars(user.userId, mongo)
-                    }
+    //                     getTotalComments(user.userId, mongo)
+    //                     getMyCars(user.userId, mongo)
+    //                 }
                     
-                })
-            })
-        }catch(err){
-            console.log(err)
-        }
-    }
-    const getTotalComments = async (profileUserId, mongo) =>{
+    //             })
+    //         })
+    //     }catch(err){
+    //         console.log(err)
+    //     }
+    // }
+    const getTotalComments = async (mongo) =>{
         
         const mongoCollectionComments = mongo.db("smoke-show").collection("comments")
         
-        const filter = {userId: profileUserId}
+        const filter = {userId: userIdParam}
         await mongoCollectionComments.find(filter).then(res =>{
             // setProfileUser({...profileUser, totalComments: res.length})
             setNumComments(res.length)
         })
     }
-    const getMyCars = async (id, mongo) =>{
+    const getMyCars = async (mongo) =>{
         const mongoCollection = mongo.db("smoke-show").collection("my-cars")
         
-        const filter = {userId: profileUserId}
+        const filter = {userId: userIdParam}
         await mongoCollection.find(filter).then( cars =>{
             setUserCars(cars)
         })
     }
     useEffect(() => {
-        
+        // setUserIdParam(props.match.params.id)
         const token = localStorage.getItem('session_token')
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
-                    getDataAsPublic()
-                    // console.log('err login again', err)
-                    childRef.current.handleLoginModal(true)
+                    // timeout
+                    // measuredRef()
+                    refModal.current.handleLoginModal(true)
+                    getDataAsCurrent()
                 }else{
-                    console.log('working')
-                    getDataAsTheUser(decoded)
+                    getDataAsCurrent()
                 }
               });
             
         }else{
-            getDataAsPublic()
+            getDataAsCurrent()
         }
    
     }, [])
 
+    // useEffect(() => {
+    //     const token = localStorage.getItem('session_token')
+    //     if(token){
+    //         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
+    //             if (err) {
+    //                 // timeout
+    //                 refModal.current.handleLoginModal(true)
+    //                 getDataAsCurrent()
+    //             }else{
+    //                 getDataAsCurrent()
+    //             }
+    //           });
+            
+    //     }else{
+    //         getDataAsCurrent()
+    //     }
+    // }, [refModal])
+
     return(
-        <Layout refModal={childRef} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut}>
+        <Layout refModal={refModal} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut} >
         <Helmet>
             <meta charSet="utf-8" />
             <title>User profile page | The Smoke Show</title>
@@ -309,7 +399,7 @@ const BioPage = (props) =>{
                                 <p className="bio-about no-m-b"><strong>About: {` ${profileUser.fname} ${profileUser.lname}`}</strong></p>
                                 <div className="">
                                     <p className="bio-content bio-border">
-                                        {editMode ? editAbout()
+                                        {editMode.about ? editAbout()
                                         : [
                                             (profileUser.profileDesc 
                                                 ? <p >{profileUser.profileDesc}</p>
@@ -317,9 +407,9 @@ const BioPage = (props) =>{
                                             )
                                             ]
                                         }
-                                    { !editMode && <br/> }
-                                    <div className="edit-icon-wrapper" onClick={()=>{setEditMode(true)}}>
-                                        {editMode ? '' : [
+                                    { !editMode.about && <br/> }
+                                    <div className="edit-icon-wrapper" onClick={()=>{setEditMode({...editMode, about: true})}}>
+                                        {editMode.about ? '' : [
                                             (allowEdit && <img className="edit-icon" src={editIcon} alt="Edit about you"/>)
                                         ]}
                                     </div>
@@ -361,7 +451,39 @@ const BioPage = (props) =>{
                                         <p className="no-m-b">Favorite Driving Song:</p>
                                     </Col>
                                     <Col sm={8}>
-                                        <p className="no-m-b">Sting</p>
+                                        {editMode.song ? editSong()
+                                        : [
+                                            (profileUser.favSong 
+                                                ? <p className="no-m-b">{profileUser.favSong}</p>
+                                                : <p className="no-m-b">{altData.favSong}</p>
+                                            )
+                                            ]
+                                        }
+                                        <div className="edit-icon-wrapper" onClick={()=>{setEditMode({...editMode, song: true})}}>
+                                        {editMode.song ? '' : [
+                                            (allowEdit && <img className="edit-icon" src={editIcon} alt="Edit your favourite songs"/>)
+                                        ]}
+                                    </div>
+                                    </Col>
+                                </Row>
+                                <Row className="pt-pb-15 bio-row-adj"> 
+                                    <Col sm={4}>
+                                        <p className="no-m-b">Favorite Musician:</p>
+                                    </Col>
+                                    <Col sm={8}>
+                                    {editMode.artist ? editArtist()
+                                        : [
+                                            (profileUser.favArtist 
+                                                ? <p className="no-m-b">{profileUser.favArtist}</p>
+                                                : <p className="no-m-b">{altData.favArtist}</p>
+                                            )
+                                            ]
+                                        }
+                                        <div className="edit-icon-wrapper" onClick={()=>{setEditMode({...editMode, artist: true})}}>
+                                        {editMode.artist ? '' : [
+                                            (allowEdit && <img className="edit-icon" src={editIcon} alt="Edit your favourite artists"/>)
+                                        ]}
+                                    </div>
                                     </Col>
                                 </Row>
                             </div>

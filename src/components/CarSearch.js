@@ -11,7 +11,8 @@ const CarSearch = (props) =>{
     const [selectedCar, setSelectedCar] = useState({make: "Select a maker", model: "Select a model", type: "Select a type", year: "Select a year"})
     const [carTypeArr, setCarTypeArr] = useState([])
     const [carYearArr, setCarYearArr] = useState([])
-    const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
+    // const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
+    const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
     const [cars, setCars] = useState([])
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -21,49 +22,60 @@ const CarSearch = (props) =>{
     const [carMakers, setCarMakers] = useState([])
     const searchId = uuidv4()
 
-    const getMaker = async () =>{
-        try {
-            // an authenticated user is required to access a MongoDB instance
-            await app.logIn(credentials).then( async user =>{
-              const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-              let carMakerArr = []
-              const mongoCollection = mongo.db("smoke-show").collection("cars");
-            //   const filter = {make: 'aston-martin'} 
-              await mongoCollection.find().then(cars =>{
-                  cars.map(car =>{
-                      if (carMakerArr.includes(car.make) === false) carMakerArr.push(car.make);
-                      return
-                  })
-                  setCarMakers(carMakerArr)
+    // const getMaker = async () =>{
+    //     try {
+    //         await app.logIn(credentials).then( async user =>{
+    //           const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+    //           let carMakerArr = []
+    //           const mongoCollection = mongo.db("smoke-show").collection("cars");
+    //         //   const filter = {make: 'aston-martin'} 
+    //           await mongoCollection.find().then(cars =>{
+    //               cars.map(car =>{
+    //                   if (carMakerArr.includes(car.make) === false) carMakerArr.push(car.make);
+    //                   return
+    //               })
+    //               setCarMakers(carMakerArr)
                   
-                  console.log('checkarr',carMakerArr)
-              })
+    //               console.log('checkarr',carMakerArr)
+    //           })
              
-            })
+    //         })
             
-           }catch(error){console.log(error)}
-    }
+    //        }catch(error){console.log(error)}
+    // }
     const getModel = async (e) =>{
         setSelectedCar({...selectedCar, make: e})
         let carModelArr = []
-        try {
-            await app.logIn(credentials).then( async user =>{
-              const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-              const mongoCollection = mongo.db("smoke-show").collection("cars");
-              const makeLowerCase = e.toLowerCase()
-              const filter = {make: makeLowerCase} 
-              await mongoCollection.find(filter).then(cars =>{
-                  cars.map(car =>{
-                      if (carModelArr.includes(car.model) === false) carModelArr.push(car.model);
-                  })
-                  
-                  setModelName(carModelArr.sort())
+        const mongoCollection = mongo.db("smoke-show").collection("cars")
+        const makeLowerCase = e.toLowerCase()
+        const filter = {make: makeLowerCase} 
+        try{
+            await mongoCollection.find(filter).then(cars =>{
+                          cars.map(car =>{
+                              if (carModelArr.includes(car.model) === false) carModelArr.push(car.model);
+                          })
+                          setModelName(carModelArr.sort())
                   setCars(cars)
               })
+        }catch(err){console.log(err)}
+        // try {
+        //     await app.logIn(credentials).then( async user =>{
+        //       const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+        //       const mongoCollection = mongo.db("smoke-show").collection("cars");
+        //       const makeLowerCase = e.toLowerCase()
+        //       const filter = {make: makeLowerCase} 
+        //       await mongoCollection.find(filter).then(cars =>{
+        //           cars.map(car =>{
+        //               if (carModelArr.includes(car.model) === false) carModelArr.push(car.model);
+        //           })
+                  
+        //           setModelName(carModelArr.sort())
+        //           setCars(cars)
+        //       })
              
-            })
+        //     })
             
-           }catch(error){console.log(error)}
+        //    }catch(error){console.log(error)}
         
     }
     const getCarYear = (data) =>{

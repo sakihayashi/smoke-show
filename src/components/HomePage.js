@@ -117,28 +117,32 @@ const app = new Realm.App(appConfig);
     }
  
     const loginCheck = async () =>{
-        let userLogged;
-        // const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
-        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+        const isLoggedIn = localStorage.getItem('session_token')
+        // if(isLoggedIn){
+        //     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        //     const collectionComments = mongo.db("smoke-show").collection("comments")
 
-        try {
-      
-          // an authenticated user is required to access a MongoDB instance
-          await app.logIn(credentials).then( async user =>{
-            const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-            const mongoCollection = mongo.db("smoke-show").collection("comments");
-            const filter = {videoId: 'QHLojVxs'} 
-            await mongoCollection.find(filter).then(resAll =>{
-                console.log('find all', resAll);
-            })
-           
-          }
-          )
-          // the rest of your code ...
-      
-         }catch(error){console.log(error)}
+        // }else{
+        //     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+        //     try {
+        //         // an authenticated user is required to access a MongoDB instance
+        //         await app.logIn(credentials).then( async user =>{
+        //           const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+        //           const mongoCollection = mongo.db("smoke-show").collection("comments");
+        //           const filter = {videoId: 'QHLojVxs'} 
+        //           await mongoCollection.find(filter).then(resAll =>{
+        //               console.log('find all', resAll);
+        //           })
+                 
+        //         }
+        //         )
+            
+        //        }catch(error){console.log(error)}
+        // }
+        
+
+       
     }
-
 
     useEffect( () => {
         loginCheck()

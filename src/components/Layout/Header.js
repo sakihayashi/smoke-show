@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useHistory } from 'react-router-dom'
 import { Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
 import Logo from '../../assets/global/Logo-smoke-show.png'
 import './header.scss'
@@ -12,6 +12,7 @@ import settingsIcon from '../../assets/global/Settings-icon-white.svg'
 // import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 
 const Header = (props) =>{
+    let history = useHistory();
     const location = useLocation()
     const [currentUser, setCurrentUser] = useState('')
     const id = process.env.REACT_APP_REALM_APP_ID
@@ -25,7 +26,7 @@ const Header = (props) =>{
         props.modalShowHide(true)
     }
     const logOut = async () =>{
-        props.changeUserState(false)
+        props.changeUserState(app.currentUser.id)
         localStorage.removeItem('session_token')
         // props.userLoggedOut(app.currentUser.id)
         // console.log('x', app.currentUser.id)
@@ -39,9 +40,12 @@ const Header = (props) =>{
      const toggleModal = () =>{
          setHasAccount(!hasAccount)
      }
+     const handleLink = () =>{
+         history.push('/user/' + currentUser)
+     }
      const loggedInDiv = 
      <Fragment>
-        <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><Link to={'/user/' + currentUser}><img src={settingsIcon} className="setting-icon-nav"/></Link>
+        <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><a href={'http://localhost:3000/user/' + currentUser}><img src={settingsIcon} className="setting-icon-nav"  /></a>
         </div>
      </Fragment>
      useEffect(() => {

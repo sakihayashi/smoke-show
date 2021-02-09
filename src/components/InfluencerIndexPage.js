@@ -21,15 +21,16 @@ const InfluencerIndexPage = () =>{
         // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
+    const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
 
     const getInfluencers = async () =>{
-        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI);
+        // const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI);
         try {
         //   const app = new Realm.App(appConfig);
       
           // an authenticated user is required to access a MongoDB instance
-          await app.logIn(credentials).then( async user =>{
-            const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+        //   await app.logIn(credentials).then( async user =>{
+        //     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
             const mongoCollection = mongo.db("smoke-show").collection("influencers");
             const filter = {isActive: true} 
             await mongoCollection.find(filter).then(resAll =>{
@@ -37,8 +38,8 @@ const InfluencerIndexPage = () =>{
                 setInfluencers(resAll)
             })
            
-          }
-          )
+        //   }
+        //   )
          }catch(error){console.log(error)}
     }
 
