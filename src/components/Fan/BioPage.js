@@ -23,11 +23,7 @@ const BioPage = (props) =>{
     const [refAlt, setRefAlt] = useState()
     const [paramId, setParamId] = useState(props.match.params.id)
     const [parentModal, setParentModal] = useState(null)
-    const measuredRef = useCallback(node => {
-        if (node !== null) {
-            setParentModal({func: node.current.handleLoginModal(true)})
-        }
-      }, []);
+
     // const [ref, setRef] = useState(null)
     // const profileUserId = props.match.params.id
     let userIdParam = props.match.params.id
