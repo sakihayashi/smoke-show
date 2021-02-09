@@ -19,7 +19,7 @@ import moment from 'moment'
 
 const BioPage = (props) =>{
   
-    const refModal = useRef(null)
+    const refModal = useRef()
     const [refAlt, setRefAlt] = useState()
     const [paramId, setParamId] = useState(props.match.params.id)
     const [parentModal, setParentModal] = useState(null)
