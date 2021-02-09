@@ -328,24 +328,6 @@ const BioPage = (props) =>{
    
     }, [])
 
-    // useEffect(() => {
-    //     const token = localStorage.getItem('session_token')
-    //     if(token){
-    //         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
-    //             if (err) {
-    //                 // timeout
-    //                 refModal.current.handleLoginModal(true)
-    //                 getDataAsCurrent()
-    //             }else{
-    //                 getDataAsCurrent()
-    //             }
-    //           });
-            
-    //     }else{
-    //         getDataAsCurrent()
-    //     }
-    // }, [refModal])
-
     return(
         <Layout refModal={refModal} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut} >
         <Helmet>

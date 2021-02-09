@@ -91,14 +91,7 @@ const SignUpModal = (props) =>{
             </div>
           
             <Form className="login-form" onSubmit={handleSubmit}>
-                {/* <Form.Group > */}
-                    {/* <Form.Label>First name</Form.Label>
-                    <Form.Control type="text" placeholder="e.g. John" name="fname" onChange={handleChange}/>
-                </Form.Group>
-                <Form.Group >
-                    <Form.Label>Last name</Form.Label>
-                    <Form.Control type="text" placeholder="e.g. Due" name="lname" onChange={handleChange}/>
-                </Form.Group> */}
+             
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="e.g. example@example.com" name="email" onChange={handleChange} />

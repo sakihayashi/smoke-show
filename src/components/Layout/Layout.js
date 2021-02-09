@@ -17,7 +17,10 @@ const Layout = forwardRef((props, ref, refModal) =>{
     }
     const changeUserState = (id) =>{
         setUser(false)
-        props.userLoggedOut(id)
+        if(props.userLoggedOut){
+            props.userLoggedOut(id)
+        }
+        
     }
     const funcSetUsername = (name) =>{
         setUsername(name)
