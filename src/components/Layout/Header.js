@@ -28,7 +28,7 @@ const Header = (props) =>{
     }
     const logOut = async () =>{
         props.changeUserState(app.currentUser.id)
-        localStorage.removeItem('session_token')
+        sessionStorage.removeItem('session_token')
         // props.userLoggedOut(app.currentUser.id)
         // console.log('x', app.currentUser.id)
         await app.currentUser.logOut().then(res =>{
@@ -50,9 +50,9 @@ const Header = (props) =>{
         </div>
      </Fragment>
      useEffect(() => {
-         let tokenLocalStorage = localStorage.getItem('session_token')
-         if(tokenLocalStorage){
-            jwt.verify(tokenLocalStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+         let tokenSessionStorage = sessionStorage.getItem('session_token')
+         if(tokensessionStorage){
+            jwt.verify(tokenSessionStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
                     console.log(err)
                     props.changeUserState(false)

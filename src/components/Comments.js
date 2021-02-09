@@ -25,11 +25,11 @@ const Comments = (props) =>{
     const handleSubmitComment = async (e) =>{
         e.preventDefault()
         // console.log('props', props)
-        let tokenLocalStorage = localStorage.getItem('session_token')
+        let tokenSessionStorage= sessionStorage.getItem('session_token')
         let newComment ={}
         let credentials = null
-        if(tokenLocalStorage){
-            jwt.verify(tokenLocalStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+        if(tokenSessionStorage){
+            jwt.verify(tokensessionStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
                     console.log('please log in. session time out')
                 }else{
@@ -156,8 +156,8 @@ const Comments = (props) =>{
 
     useEffect( () => {
         getCommentsCurrent()
-        // let tokenLocalStorage = localStorage.getItem('session_token')
-        // if(tokenLocalStorage){
+        // let tokensessionStorage = sessionStorage.getItem('session_token')
+        // if(tokensessionStorage){
         //     setIsLoggedIn(true)
         //     getComments()
         // }else{
@@ -166,8 +166,8 @@ const Comments = (props) =>{
         // }
         
         
-        //  if(tokenLocalStorage){
-        //     jwt.verify(tokenLocalStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+        //  if(tokensessionStorage){
+        //     jwt.verify(tokensessionStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
         //         if(err){
         //             console.log(err)
         //             setIsLoggedIn(false)

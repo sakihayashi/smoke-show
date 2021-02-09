@@ -56,7 +56,7 @@ const BioPage = (props) =>{
         })
     }
     const handleShowSetting = () =>{
-        const token = localStorage.getItem('session_token')
+        const token = sessionStorage.getItem('session_token')
         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
             if (err) {
                 console.log('err', err)
@@ -189,7 +189,7 @@ const BioPage = (props) =>{
         )
     }
     // const regainData = ()=>{
-    //     const token = localStorage.getItem('session_token')
+    //     const token = sessionStorage.getItem('session_token')
     //     if(token){
     //         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
     //             if (err) {
@@ -305,7 +305,7 @@ const BioPage = (props) =>{
     }
     useEffect(() => {
         // setUserIdParam(props.match.params.id)
-        const token = localStorage.getItem('session_token')
+        const token = sessionStorage.getItem('session_token')
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {

@@ -52,7 +52,7 @@ const InfluencerIndexPage = () =>{
         <Layout>
         <Helmet>
           <meta charSet="utf-8" />
-          <title>The list of influencers | The Smoke Show</title>
+          <title>All influencers | The Smoke Show</title>
           <meta name="description" content="Check out our influencers / authors" />
           <meta name="robots" content="noindex, nofollow" />
           {/* <link rel="canonical" href="http://mysite.com/example" /> */}
@@ -60,7 +60,7 @@ const InfluencerIndexPage = () =>{
             <div className="main-wrapper footer-pos">
                 <div className="spacer-4rem"></div>
                 <div className="title title-adj">
-                    <h2 >List of Influencers</h2>
+                    <h2 >All Influencers</h2>
                 </div>
                 <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
                 {influencers && influencers.map(influencer =>{

@@ -113,7 +113,7 @@ const LoginModal = (props) =>{
                         loginUserData.login = userObj
                         token = createToken(loginUserData)
                         
-                        localStorage.setItem('session_token', token)
+                        sessionStorage.setItem('session_token', token)
                         const userData = {loginUserData: loginUserData, credentials: userObj}
                         props.handleuser(loginUserData.fname, user.id)
                         props.authUser(userData)

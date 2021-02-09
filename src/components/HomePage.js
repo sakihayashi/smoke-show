@@ -117,7 +117,7 @@ const app = new Realm.App(appConfig);
     }
  
     const loginCheck = async () =>{
-        const isLoggedIn = localStorage.getItem('session_token')
+        const isLoggedIn = sessionStorage.getItem('session_token')
         // if(isLoggedIn){
         //     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
         //     const collectionComments = mongo.db("smoke-show").collection("comments")

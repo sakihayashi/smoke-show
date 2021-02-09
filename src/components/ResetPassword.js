@@ -68,7 +68,7 @@ const ResetPassword = (props) =>{
                         loginUserData.login = userObj
                         token = createToken(loginUserData)
                         
-                        localStorage.setItem('session_token', token)
+                        sessionStorage.setItem('session_token', token)
                     }).then(()=>{props.history.push("/")})
                     
                     

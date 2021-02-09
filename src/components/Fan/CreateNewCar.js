@@ -126,7 +126,7 @@ const CreateNewCar = (props) =>{
             }
         }else{
             console.log('warning current user and the login user do not match')
-            const token = localStorage.getItem('session_token')
+            const token = sessionStorage.getItem('session_token')
             const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
             const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
             
