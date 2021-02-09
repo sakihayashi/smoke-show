@@ -49,7 +49,14 @@ const EmailConfirmation = (props) =>{
             await mongoCollection.insertOne(userData).then(insertOneResult =>{
                 userData.login = {email: email, password: userObj.password}
                 let token = createToken(userData)
-                sessionStorage.setItem('session_token', token)
+                const oldToken = sessionStorage.getItem('session_token')
+                if(oldToken){
+                    sessionStorage.removeItem('session_token')
+                    sessionStorage.setItem('session_token', token)
+                }else{
+                    sessionStorage.setItem('session_token', token)
+                }
+                
                 childRef.current.handleUserByParent(userObj.fname)
             }).then(()=>{props.history.push("/")})
 

@@ -118,7 +118,47 @@ const SettingModal = (props) =>{
             }
         }else{
         console.log('I have to debug', app.currentUser.id)
-    
+        const token = sessionStorage.getItem('session_token')
+        const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
+        const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+        try{
+            await app.logIn(credentials).then(async user =>{
+                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                const collectionUser = mongo.db("smoke-show").collection("users")
+                await user.functions.putImageObjToS3(imgData64Profile, bucketName, filekey, profilePic.type).then( res =>{
+                    if(typeof(oldProfilePic) !== "undefined"){
+                  
+                        const currentUrl = props.profileUser.profilePic
+                        const splitted = currentUrl.split('/');
+                        const key = splitted.splice(4, 7).join("/")
+                        deleteImgObj(key)
+                    
+                    }
+                })
+                try{
+                    await collectionUser.updateOne(
+                        { "userId": user.userId},
+                        { "$set": { "profilePic": imgUrlWithKey } },
+                        { upsert: true}
+                    ).then(res =>{
+                        console.log('res', res)
+                        setIsSuccess({
+                            ...isSuccess,
+                            profilePic: true
+                        })
+                        setDisableBtnStates({
+                            ...disableBtnStates,
+                            profilePic: true
+                        })
+                        props.updateProfileData(imgUrlWithKey, "profilePic")
+                    })
+                }catch(err){
+                    console.log(err)
+                }
+            })
+        }catch(err){
+            console.log(err)
+        }
         }
     }
     const coverPicUpload = (e) =>{
@@ -153,36 +193,56 @@ const SettingModal = (props) =>{
                     }
                     
                     const collectionUser = mongo.db("smoke-show").collection("users")
-                    try{
-                        await collectionUser.updateOne(
-                            { "userId": app.currentUser.id},
-                            { "$set": { "profileCover": imgUrlWithKey } },
-                            { upsert: true}
-                        ).then(res =>{
-                            console.log('res', res)
-                            setIsSuccess({
-                                ...isSuccess,
-                                coverPic: true
-                            })
-                            setDisableBtnStates({
-                                ...disableBtnStates,
-                                coverPic: true
-                            })
-                            props.updateProfileData(imgUrlWithKey, 'profileCover')
-                        })
-                    }catch(err){
-                        console.log(err)
-                    }
+                    
                 })
             }catch(err){
             console.log(err)
             }
         }else{
-            console.log('I have to debug')
-            
+            const token = sessionStorage.getItem('session_token')
+            const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
+            const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+            try{
+                await app.logIn(credentials).then(async  user =>{
+                    const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                    const collectionUser = mongo.db("smoke-show").collection("users")
+                    await user.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
+                        if( typeof(props.profileUser.profileCover) !== "undefined"){
+                            const currentUrl = props.profileUser.profileCover
+                            const splitted = currentUrl.split('/');
+                            const key = splitted.splice(4, 7).join("/")
+                            deleteImgObj(key)
+                        }
+
+                    })
+                try{
+                    await collectionUser.updateOne(
+                        { "userId": user.userId},
+                        { "$set": { "profileCover": imgUrlWithKey } },
+                        { upsert: true}
+                    ).then(res =>{
+                        console.log('res', res)
+                        setIsSuccess({
+                            ...isSuccess,
+                            coverPic: true
+                        })
+                        setDisableBtnStates({
+                            ...disableBtnStates,
+                            coverPic: true
+                        })
+                        props.updateProfileData(imgUrlWithKey, 'profileCover')
+                    })
+                }catch(err){
+                    console.log(err)
+                }
+                })
+            }catch(err){
+                console.log(err)
+            }
             
         }
     }
+
 
     const handleUpdateProfile = async (e) =>{
         e.preventDefault()
@@ -217,7 +277,39 @@ const SettingModal = (props) =>{
             
         }else{
             console.log('write login function')
-            console.log('id', app.currentUser.id)
+            const token = sessionStorage.getItem('session_token')
+            const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
+            const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+            try{
+                await app.logIn(credentials).then( async user =>{
+                    const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                    collectionUser = mongo.db("smoke-show").collection("users")
+                    try{
+                        await collectionUser.updateOne(
+                            { "userId": user.userId},
+                            {
+                                "$set": {
+                                    "fname": userObj.fname,
+                                    "lname": userObj.lname,
+                                    "username": userObj.username
+                                  }
+                            },
+                            { upsert: true}
+                        ).then( res =>{
+                            console.log(res)
+                            setIsSuccess({
+                                ...isSuccess,
+                                userDetails: true
+                            })
+                            setDisableBtnStates({
+                                ...disableBtnStates,
+                                userDetails: true
+                            })
+                            props.updateUserDetails(userObj.fname, userObj.lname, userObj.username)
+                        })
+                    }catch(err){ console.log(err) }
+                })
+            }catch(err){ console.log(err) }
         }
         
     }
@@ -228,6 +320,17 @@ const deleteImgObj = async (key) =>{
         try{
             await app.currentUser.functions.deleteImageObjToS3(bucketName, key).then(res =>{
                 console.log('res', res)
+            })
+        }catch(err){console.log(err)}
+    }else{
+        const token = sessionStorage.getItem('session_token')
+        const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
+        const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+        try{
+            await app.logIn(credentials).then(async user =>{
+                await user.functions.deleteImageObjToS3(bucketName, key).then(res =>{
+                    console.log('res', res)
+                })
             })
         }catch(err){console.log(err)}
     }

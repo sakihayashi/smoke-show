@@ -63,12 +63,19 @@ const ResetPassword = (props) =>{
                     const mongoCollection = mongo.db("smoke-show").collection("users");
                     let token = ''
                     const queryFilter = { userId: user.id };
-                    await mongoCollection.findOne(queryFilter).then(loginUserData =>{
-                        console.log('login user data', loginUserData)
+                    await mongoCollection.findOne(queryFilter).then(loginUserData =>{  
+                        const oldToken = sessionStorage.getItem('session_token')
                         loginUserData.login = userObj
                         token = createToken(loginUserData)
+                        if(oldToken){
+                            sessionStorage.removeItem('session_token')
+                            sessionStorage.setItem('session_token', token)
+                        }else{
+                            sessionStorage.setItem('session_token', token)
+                        }
                         
-                        sessionStorage.setItem('session_token', token)
+                        
+                        
                     }).then(()=>{props.history.push("/")})
                     
                     

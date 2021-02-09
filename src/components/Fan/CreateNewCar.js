@@ -137,7 +137,6 @@ const CreateNewCar = (props) =>{
                         try{
                             await collectionMyCars.insertOne(newCarData).then(async res =>{
                                 console.log('res', res)
-                                console.log('inserted', res.insertedId)
                                 await collectionUsers.updateOne(
                                     { "userId": app.currentUser.id },
                                     {$push: { myCars:  res.insertedId}},

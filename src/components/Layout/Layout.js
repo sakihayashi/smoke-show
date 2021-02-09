@@ -31,7 +31,10 @@ const Layout = forwardRef((props, ref, refBio) =>{
         setUsername(fname)
         setUserId(userId)
         setModalShow(false)
-        props.userLoggedIn(userId)
+        if(props.userLoggedIn){
+            props.userLoggedIn(userId)
+        }
+        
     }
     // const updateLoggedOut = (id) =>{
     //     props.userLoggedOut(id)
