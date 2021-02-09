@@ -53,9 +53,12 @@ const Layout = forwardRef((props, ref, refModal) =>{
     //         }
     //     })
     // )
-    useImperativeHandle(refModal, 
+    useImperativeHandle(
+        refModal, 
         (state) => ({
-        modalShowHide(state)
+            handleLoginModal(){
+                modalShowHide(state)
+            }
       })
     )
 
