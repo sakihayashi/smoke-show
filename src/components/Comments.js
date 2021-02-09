@@ -29,7 +29,7 @@ const Comments = (props) =>{
         let newComment ={}
         let credentials = null
         if(tokenSessionStorage){
-            jwt.verify(tokensessionStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+            jwt.verify(tokenSessionStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
                     console.log('please log in. session time out')
                 }else{

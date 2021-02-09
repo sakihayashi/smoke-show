@@ -51,7 +51,7 @@ const Header = (props) =>{
      </Fragment>
      useEffect(() => {
          let tokenSessionStorage = sessionStorage.getItem('session_token')
-         if(tokensessionStorage){
+         if(tokenSessionStorage){
             jwt.verify(tokenSessionStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
                     console.log(err)
