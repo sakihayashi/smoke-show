@@ -16,6 +16,8 @@ const SettingModal = (props) =>{
     const [imgData64Profile, setImgData64Profile] = useState('')
     const [imgData64Cover, setImgData64Cover] = useState('')
     const [userObj, setUserObj] = useState({fname: props.profileUser.fname, lname: props.profileUser.lname, email: props.profileUser.email, username: props.profileUser.username})
+    const [bioImgFileKey, setBioImgFileKey] = useState()
+    const [bioImgUrl, setBioImgUrl] = useState()
     const [currentUserId, setCurrentUserId] = useState(app.currentUser.id)
     const [userPw, setUserPw] = useState({newPw: '', conNewPw: '', currentPw: ''})
     // const [file, setFile] = useState({})
@@ -73,12 +75,12 @@ const SettingModal = (props) =>{
         reader.readAsDataURL(file)
     }
     const saveProfilePic = async () =>{
-        
-        const imgId = new Date().getTime()
-        const filekey = props.profileUser.userId + '/profile/' + imgId
-        const imgUrlWithKey = baseImgUrl + filekey
+
         const oldProfilePic = props.profileUser.profilePic
         if( currentUserId === props.profileUser.userId){
+            const imgId = new Date().getTime()
+            const filekey = props.profileUser.userId + '/profile/' + imgId
+            const imgUrlWithKey = baseImgUrl + filekey
             try{
                 await app.currentUser.functions.putImageObjToS3(imgData64Profile, bucketName, filekey, profilePic.type).then( async res =>{
                     console.log('res', res)
@@ -108,6 +110,7 @@ const SettingModal = (props) =>{
                                 profilePic: true
                             })
                             props.updateProfileData(imgUrlWithKey, "profilePic")
+                            return
                         })
                     }catch(err){
                         console.log(err)
@@ -117,15 +120,18 @@ const SettingModal = (props) =>{
             console.log(err)
             }
         }else{
-        console.log('I have to debug', app.currentUser.id)
         const token = sessionStorage.getItem('session_token')
         const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
         const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
         try{
             await app.logIn(credentials).then(async user =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                const imgId = new Date().getTime()
+                const filekey = props.profileUser.userId + '/profile/' + imgId
+                const imgUrlWithKey = baseImgUrl + filekey
                 const collectionUser = mongo.db("smoke-show").collection("users")
                 await user.functions.putImageObjToS3(imgData64Profile, bucketName, filekey, profilePic.type).then( res =>{
+                    console.log(res)
                     if(typeof(oldProfilePic) !== "undefined"){
                   
                         const currentUrl = props.profileUser.profilePic
@@ -151,6 +157,8 @@ const SettingModal = (props) =>{
                             profilePic: true
                         })
                         props.updateProfileData(imgUrlWithKey, "profilePic")
+
+                        return
                     })
                 }catch(err){
                     console.log(err)

@@ -188,7 +188,8 @@ const Garage = (props) =>{
         try{
             await collectionInfluencer.findOne(filter).then(user =>{
                 setProfileUser(user)
-                setFormattedTime(moment(profileUser.joined).local().format('MMMM Do YYYY'))
+                const formatted = moment(profileUser.joined).local().format('MMMM Do YYYY')
+                setFormattedTime(formatted)
                 if(user.fans > 999){
                     setFormattedFans(Math.sign(user.fans)*((Math.abs(user.fans)/1000).toFixed(1)) + 'k')
                 }else{

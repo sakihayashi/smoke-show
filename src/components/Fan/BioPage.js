@@ -228,7 +228,8 @@ const BioPage = (props) =>{
         try{
             await mongoCollectionUser.findOne(filter).then(user =>{
                         setProfileUser(user)
-                        setFormattedTime(moment(profileUser.joined).local().format('MMMM Do YYYY'))
+                        const formatted = moment(profileUser.joined).local().format('MMMM Do YYYY')
+                        setFormattedTime(formatted)
                         getTotalComments(mongo)
                         getMyCars(mongo)
                         return user
