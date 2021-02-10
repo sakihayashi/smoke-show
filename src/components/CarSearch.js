@@ -2,7 +2,7 @@ import React, { Fragment, useState  } from 'react'
 import { Dropdown, DropdownButton, Button } from 'react-bootstrap'
 import Layout from './Layout/Layout'
 import * as Realm from "realm-web"
-import { carsAllYear, carTypes } from './carTempData'
+import { carsAllYear } from './carTempData'
 import './carStats.scss'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -11,15 +11,15 @@ const CarSearch = (props) =>{
     const [selectedCar, setSelectedCar] = useState({make: "Select a maker", model: "Select a model", type: "Select a type", year: "Select a year"})
     const [carTypeArr, setCarTypeArr] = useState([])
     const [carYearArr, setCarYearArr] = useState([])
-    // const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
-    const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+    
     const [cars, setCars] = useState([])
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
       };
     const app = new Realm.App(appConfig)
-    const [carMakers, setCarMakers] = useState([])
+    const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+    // const [carMakers, setCarMakers] = useState([])
     const searchId = uuidv4()
 
     // const getMaker = async () =>{
@@ -53,6 +53,7 @@ const CarSearch = (props) =>{
             await mongoCollection.find(filter).then(cars =>{
                           cars.map(car =>{
                               if (carModelArr.includes(car.model) === false) carModelArr.push(car.model);
+                              return car
                           })
                           setModelName(carModelArr.sort())
                   setCars(cars)

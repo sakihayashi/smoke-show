@@ -103,20 +103,32 @@ const LoginModal = (props) =>{
                 }else{
                     console.log('not match')
                 }
-                    // const key = await user.apiKeys.create(uid)
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
                     const mongoCollection = mongo.db("smoke-show").collection("users");
                     let token = ''
+                    const collectionInfluencer = mongo.db("smoke-show").collection("influencers");
        
                     const queryFilter = { userId: user.id };
-                    await mongoCollection.findOne(queryFilter).then(loginUserData =>{
-                        loginUserData.login = userObj
-                        token = createToken(loginUserData)
+                    await mongoCollection.findOne(queryFilter).then(async loginUserData =>{
+                        if(!loginUserData){
+                            await collectionInfluencer.findOne(queryFilter).then( influencer =>{
+                                console.log('influencer', influencer)
+                                influencer.login = userObj
+                                token = createToken(influencer)
+                                sessionStorage.setItem('session_token', token)
+                                // const userData = {loginUserData: loginUserData, credentials: userObj}
+                                props.handleuser(influencer.username, influencer.userId)
+                            })
+                        }else{
+                            loginUserData.login = userObj
+                            token = createToken(loginUserData)
+                            
+                            sessionStorage.setItem('session_token', token)
+                            // const userData = {loginUserData: loginUserData, credentials: userObj}
+                            props.handleuser(loginUserData.fname, user.id)
+                            // props.authUser(userData)
+                        }
                         
-                        sessionStorage.setItem('session_token', token)
-                        const userData = {loginUserData: loginUserData, credentials: userObj}
-                        props.handleuser(loginUserData.fname, user.id)
-                        props.authUser(userData)
                     })
                 });
 

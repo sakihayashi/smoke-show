@@ -48,16 +48,9 @@ const Layout = forwardRef((props, ref, refBio) =>{
             }
         }),
     )
-    // useImperativeHandle(
-    //     refModal,
-    //     () =>({
-    //         handleLoginModal(state){
-    //             modalShowHide(state)
-    //         }
-    //     })
-    // )
+
     useImperativeHandle(
-        refBio, 
+        ref, 
         () => ({
             handleLoginModal(state){
                 modalShowHide(state)
@@ -68,6 +61,7 @@ const Layout = forwardRef((props, ref, refBio) =>{
     return(
         <div>
             <HeaderWithRouter handleuser={handleuser} modalShowHide={modalShowHide} user={user} username={username} changeUserState={changeUserState} funcSetUsername={funcSetUsername} modalShow={modalShow} userLoggedOut={props.userLoggedOut} userId={userId} />
+    
                 { props.children }
             <Footer />
         </div>

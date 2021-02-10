@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {Helmet} from "react-helmet"
 import * as Realm from "realm-web"
 import Layout from '../Layout/Layout'
@@ -10,22 +10,18 @@ import settingsIcon from '../../assets/global/Settings-icon-white.svg'
 import SettingModal from './SettingModal'
 import { Button, Row, Col, Form } from 'react-bootstrap'
 
-import './biopage.scss'
+import './garage.scss'
 import VehicleCard from './vehicleCard'
 import CreateNewCar from './CreateNewCar'
 import jwt from 'jsonwebtoken'
 import moment from 'moment'
 // import axios from 'axios'
 
-const BioPage = (props) =>{
+const Garage = (props) =>{
   
     const childRef = useRef()
-    // const [refAlt, setRefAlt] = useState()
-    // const [paramId, setParamId] = useState(props.match.params.id)
-    // const [parentModal, setParentModal] = useState(null)
 
     let userIdParam = props.match.params.id
-
     const [profileUser, setProfileUser] = useState({fname: '', lname: '', profilePic: '', profileCover: '', username: '', profileDesc: '', favSong: '', favArtist: ''})
     const [allowEdit, setAllowEdit] = useState(false)
     const [editMode, setEditMode] = useState({about: false, song: false, artist: false})
@@ -59,7 +55,6 @@ const BioPage = (props) =>{
                 console.log('err', err)
                 
             }else{
-                console.log('success', decoded.userData.login.email)
                 setProfileUser({
                     ...profileUser,
                     email: decoded.userData.login.email
@@ -73,18 +68,17 @@ const BioPage = (props) =>{
         setShowSetting(false)
     }
     const userLoggedIn = (id) =>{
-        console.log('working?', id)
-        console.log('profileuser', profileUser.userId)
-        console.log('param', userIdParam)
         
         if(id === profileUser.userId){
-            console.log('working?', id)
+            console.log('loggedin?', id)
             setAllowEdit(true)
-            // regainData()
+            
+        }else{
+            getDataAsCurrent()
         }
     }
     const userLoggedOut = (id) =>{
-        console.log('working?', id)
+        console.log('logged out?', id)
         if(id === userIdParam){
             setAllowEdit(false)
         }
@@ -113,7 +107,7 @@ const BioPage = (props) =>{
   
         if(app.currentUser.id === profileUser.userId){
             const mongodb = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-            const mongoCollection = mongodb.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
+            const mongoCollection = mongodb.db(process.env.REACT_APP_REALM_DB_NAME).collection("influencers")
     
             try{
                 await mongoCollection.updateOne(
@@ -183,57 +177,22 @@ const BioPage = (props) =>{
             </Form>
         )
     }
-    // const regainData = ()=>{
-    //     const token = sessionStorage.getItem('session_token')
-    //     if(token){
-    //         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
-    //             if (err) {
-    //                 getDataAsCurrent()
-    //                 console.log('err login again', err)
-    //                 refModal.current.handleLoginModal(true)
-    //             }else{
-    //                 getDataAsCurrent()
-    //             }
-    //           });
-            
-    //     }else{
-    //         getDataAsCurrent()
-    //     }
-    // }
-    // const getDataAsTheUser = async (decoded) =>{
-    //     setTheUser(decoded.userData)
-    //     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-    //     const mongoCollectionUser = mongo.db("smoke-show").collection("users")
-    //     const filter = {userId: profileUserId}
-    //     try{
-    //         await mongoCollectionUser.findOne(filter).then(user =>{
-    //                     setProfileUser(user)
-    //                     setFormattedTime(moment(profileUser.joined).local().format('MMMM Do YYYY'))
-    //                     getTotalComments(user.userId, mongo)
-    //                     getMyCars(user.userId, mongo)
-    //         })
-    //     }catch(err){
-    //         console.log(err)
-    //     }
-    //     // const mongo = decoded.userData.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-    //     if(theUser.userId === profileUser.userId){
-    //         setAllowEdit(true)
-    //     }
-    
-    // }
+
     const getDataAsCurrent = async () =>{
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-        const mongoCollectionUser = mongo.db("smoke-show").collection("users")
+        const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
         const filter = {userId: userIdParam}
         try{
-            await mongoCollectionUser.findOne(filter).then(user =>{
-                        setProfileUser(user)
-                        setFormattedTime(moment(profileUser.joined).local().format('MMMM Do YYYY'))
-                        getTotalComments(mongo)
-                        getMyCars(mongo)
-                        return user
+            await collectionInfluencer.findOne(filter).then(user =>{
+                setProfileUser(user)
+                setFormattedTime(moment(profileUser.joined).local().format('MMMM Do YYYY'))
+                getTotalComments(mongo)
+                getMyCars(mongo)
+                return user
             }).then(user =>{
-                if( userIdParam === app.currentUser.id){
+                const token = sessionStorage.getItem('session_token')
+                const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
+                if( userIdParam === decoded.userId){
                     setAllowEdit(true)
                 }else{
                     setAllowEdit(false)
@@ -245,48 +204,12 @@ const BioPage = (props) =>{
         
     }
     
-    // const getDataAsPublic = async () =>{
-    //     console.log('working?')
-    //     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI)
-    //     try{
-    //         await app.logIn(credentials).then( async user =>{
-
-    //             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-    //             const mongoCollection = mongo.db("smoke-show").collection("users")
-
-    //             const filter = {userId: profileUserId} 
-               
-    //             await mongoCollection.findOne(filter).then(user =>{
-    //                 console.log('user?', user)
-    //                 if(user === null){
-    //                     setProfileUser({fname: 'No user data', lname: '', profileDesc: 'No user data', profileCover: '' })
-    //                 }else{
-    //                     setProfileUser(user)
-    //                     // console.log('this is profile user', profileUser)
-    //                     // console.log('cars', profileUser.myCars)
-    //                     if(user.joined){
-    //                         setFormattedTime(moment(user.joined).local().format('MMMM Do YYYY'))
-    //                     }else{
-    //                         setFormattedTime('No data')
-    //                     }
-                        
-    //                     getTotalComments(user.userId, mongo)
-    //                     getMyCars(user.userId, mongo)
-    //                 }
-                    
-    //             })
-    //         })
-    //     }catch(err){
-    //         console.log(err)
-    //     }
-    // }
     const getTotalComments = async (mongo) =>{
         
         const mongoCollectionComments = mongo.db("smoke-show").collection("comments")
         
         const filter = {userId: userIdParam}
         await mongoCollectionComments.find(filter).then(res =>{
-            // setProfileUser({...profileUser, totalComments: res.length})
             setNumComments(res.length)
         })
     }
@@ -299,16 +222,15 @@ const BioPage = (props) =>{
         })
     }
     useEffect(() => {
-        // setUserIdParam(props.match.params.id)
+        getDataAsCurrent()
         const token = sessionStorage.getItem('session_token')
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     // timeout
-                    // measuredRef()
-                    // childRef.current.handleLoginModal(true)
-                    getDataAsCurrent()
+                    childRef.current.handleLoginModal(true)
                 }else{
+
                     getDataAsCurrent()
                 }
               });
@@ -320,29 +242,21 @@ const BioPage = (props) =>{
     }, [])
 
     return(
-        <Layout refBio={childRef} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut} >
+        <Layout ref={childRef} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut} >
         <Helmet>
             <meta charSet="utf-8" />
-            <title>User profile page | The Smoke Show</title>
+            <title>Influencer Garage page | The Smoke Show</title>
             <meta name="description" content="Place the meta description text here." />
             <meta name="robots" content="noindex, nofollow" />
-            {/* <link rel="canonical" href="http://mysite.com/example" /> */}
         </Helmet>
         {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal} profileUser={profileUser} updateProfileData={updateProfileData} updateCarData={updateCarData} />}
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} profileUser={profileUser}  updateProfileData={updateProfileData} updateUserDetails={updateUserDetails}/>}
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
-                <h2 className="title">User Profile</h2>
+                
+                <h2 className="title">Influencer Garage</h2>
                 <div className="bio-fleet-img">
                     <img
-                    // sizes="(max-width: 1500px) 100vw, 1500px"
-                    // srcset={`
-                    // ${bioImgXs} 375w,
-                    // ${bioImgS} 752w,
-                    // ${bioImgM} 1040w,
-                    // ${bioImgL} 1280w,
-                    // ${bioImgXL} 1500w
-                    // `}
                     src={ typeof(profileUser.profileCover) == 'undefined' || !profileUser.hasOwnProperty("profileCover") ?  noImg : profileUser.profileCover }
                     alt="user selected profile image"
                      />
@@ -495,4 +409,4 @@ const BioPage = (props) =>{
     )
 }
 
-export default BioPage
+export default Garage

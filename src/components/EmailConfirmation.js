@@ -38,11 +38,13 @@ const EmailConfirmation = (props) =>{
         const credentials = Realm.Credentials.emailPassword(email, userObj.password)
         await app.logIn(credentials).then(async user =>{
             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+            const joined = new Date().getTime()
             const userData = {
                 userId: user.id,
                 fname: userObj.fname,
                 lname: userObj.lname,
-                username: userObj.username
+                username: userObj.username,
+                joined: joined
             }
             
             const mongoCollection = mongo.db("smoke-show").collection("users")

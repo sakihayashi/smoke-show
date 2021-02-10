@@ -18,7 +18,6 @@ const SettingModal = (props) =>{
     const [userObj, setUserObj] = useState({fname: props.profileUser.fname, lname: props.profileUser.lname, email: props.profileUser.email, username: props.profileUser.username})
     const [currentUserId, setCurrentUserId] = useState(app.currentUser.id)
     const [userPw, setUserPw] = useState({newPw: '', conNewPw: '', currentPw: ''})
-    // const [file, setFile] = useState({})
     const [profilePic, setProfilePic] = useState({})
     const [coverPic, setCoverPic] = useState({})
     const [imgThumb, setImgThumb] = useState()
@@ -91,9 +90,9 @@ const SettingModal = (props) =>{
                         
                     }
                     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                    const collectionUser = mongo.db("smoke-show").collection("users")
+                    const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                     try{
-                        await collectionUser.updateOne(
+                        await collectionInfluencer.updateOne(
                             { "userId": app.currentUser.id},
                             { "$set": { "profilePic": imgUrlWithKey } },
                             { upsert: true}
@@ -124,7 +123,7 @@ const SettingModal = (props) =>{
         try{
             await app.logIn(credentials).then(async user =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                const collectionUser = mongo.db("smoke-show").collection("users")
+                const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                 await user.functions.putImageObjToS3(imgData64Profile, bucketName, filekey, profilePic.type).then( res =>{
                     if(typeof(oldProfilePic) !== "undefined"){
                   
@@ -136,7 +135,7 @@ const SettingModal = (props) =>{
                     }
                 })
                 try{
-                    await collectionUser.updateOne(
+                    await collectionInfluencer.updateOne(
                         { "userId": user.userId},
                         { "$set": { "profilePic": imgUrlWithKey } },
                         { upsert: true}
@@ -192,25 +191,28 @@ const SettingModal = (props) =>{
                         deleteImgObj(key)
                     }
                     
-                    const collectionUser = mongo.db("smoke-show").collection("users")
+                    const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                     try{
-                        await collectionUser.updateOne(
+                        await collectionInfluencer.updateOne(
                             { "userId": props.profileUser.userId},
                             { "$set": { "profileCover": imgUrlWithKey } },
                             { upsert: true}
-                        ).then( res =>{
+                        ).then(res =>{
                             console.log('res', res)
                             setIsSuccess({
                                 ...isSuccess,
-                                profilePic: true
+                                coverPic: true
                             })
                             setDisableBtnStates({
                                 ...disableBtnStates,
-                                profilePic: true
+                                coverPic: true
                             })
                             props.updateProfileData(imgUrlWithKey, "profileCover")
                         })
-                    }catch(err){ console.log(err) }
+                    }catch(err){
+                        console.log(err)
+                    }
+                    
                 })
             }catch(err){
             console.log(err)
@@ -222,7 +224,7 @@ const SettingModal = (props) =>{
             try{
                 await app.logIn(credentials).then(async  user =>{
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                    const collectionUser = mongo.db("smoke-show").collection("users")
+                    const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                     await user.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
                         if( typeof(props.profileUser.profileCover) !== "undefined"){
                             const currentUrl = props.profileUser.profileCover
@@ -233,7 +235,7 @@ const SettingModal = (props) =>{
 
                     })
                 try{
-                    await collectionUser.updateOne(
+                    await collectionInfluencer.updateOne(
                         { "userId": user.userId},
                         { "$set": { "profileCover": imgUrlWithKey } },
                         { upsert: true}
@@ -264,11 +266,11 @@ const SettingModal = (props) =>{
     const handleUpdateProfile = async (e) =>{
         e.preventDefault()
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-        const collectionUser = mongo.db("smoke-show").collection("users")
+        const collectionInfluencer = mongo.db("smoke-show").collection("influencer")
        
         if(app.currentUser.id === props.profileUser.userId){
             try{
-                await collectionUser.updateOne(
+                await collectionInfluencer.updateOne(
                     { "userId": app.currentUser.id},
                     {
                         "$set": {
@@ -300,9 +302,9 @@ const SettingModal = (props) =>{
             try{
                 await app.logIn(credentials).then( async user =>{
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                    collectionUser = mongo.db("smoke-show").collection("users")
+                    collectionInfluencer = mongo.db("smoke-show").collection("influencer")
                     try{
-                        await collectionUser.updateOne(
+                        await collectionInfluencer.updateOne(
                             { "userId": user.userId},
                             {
                                 "$set": {

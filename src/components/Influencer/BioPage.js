@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Helmet } from "react-helmet"
 import { Row, Col, Form, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux'
@@ -26,7 +27,7 @@ const BioPage = (props) =>{
     
     const { params: { id } } = props.match
     const videoEmbedURL = 'https://www.youtube.com/embed/'
-    const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
+    // const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
     const [searchKeyword, setSearchKeyword] = useState('')
     const [titleStr, setTitleStr] = useState('Your search result')
     const [searchedCarData, setSearchedCarData] = useState([])
@@ -67,11 +68,9 @@ const BioPage = (props) =>{
         })
     }
     const getInfluencer = async () =>{
-        // const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+
         try {
  
-        //   await app.logIn(credentials).then( async user =>{
-        //     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
             const mongoCollection = mongo.db("smoke-show").collection("influencers");
             const filter = {userId: influencerId} 
             await mongoCollection.findOne(filter).then(res =>{
@@ -127,10 +126,10 @@ const BioPage = (props) =>{
                     </Col>
                     <Col sm={9} className="bio-sub-menu">
                         <ul className="">
-                            <li>All Videos</li>
-                            <li>Garage</li>
-                            <li>Social</li>
-                            <li>Swagg</li>
+                            <Link to={`/all-videos/${influencerId}`}><li>All Videos</li></Link>
+                            <Link href="/garage/:id"><li>Garage</li></Link>
+                            <Link href="/social/:id"><li>Social</li></Link>
+                            <Link href="/influencer-swagg/:id"><li>Swagg</li></Link>
                         </ul>
                     </Col>
                 </Row>

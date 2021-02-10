@@ -46,6 +46,12 @@ h4{
   font-size: xx-large !important;
   font-weight: 600 !important;
 }
+a{
+  color: $black;
+}
+a:hover{
+  color: $theme-darker !important;
+}
 // text color style
 .theme-text-color{
   color: $theme-darker;

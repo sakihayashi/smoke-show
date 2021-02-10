@@ -19,7 +19,7 @@ const Header = (props) =>{
     // const app = new Realm.App({ id: process.env.REALM_APP_ID })
     const app = new Realm.App({ id: id })
     const productionUrl = 'https://master.d3l3iqr3dhkcvm.amplifyapp.com/'
-    const devUrl = 'http://localhost:3000/'
+    // const devUrl = 'http://localhost:3000/'
 
     const [hasAccount, setHasAccount] = useState(true)
     
@@ -41,9 +41,7 @@ const Header = (props) =>{
      const toggleModal = () =>{
          setHasAccount(!hasAccount)
      }
-     const handleLink = () =>{
-         history.push('/user/' + currentUser)
-     }
+
      const loggedInDiv = 
      <Fragment>
         <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><a href={productionUrl + 'user/' + currentUser}><img src={settingsIcon} className="setting-icon-nav"  /></a>
@@ -104,7 +102,7 @@ const Header = (props) =>{
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto nav-style" activeKey={location.pathname}>
                         <Nav.Link href="/" >Home</Nav.Link>
-                        <Nav.Link href="/influencers"   >Influencers</Nav.Link>
+                        <Nav.Link href="/influencers" >Influencers</Nav.Link>
                         <Nav.Link href="/car-search">Car Stats</Nav.Link>
                         <Nav.Link href="/giveaways">Giveaways</Nav.Link>
                         <Nav.Link href="/swagg">Swagg</Nav.Link>

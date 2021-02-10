@@ -21,6 +21,7 @@ import Giveaways from './components/Giveaways'
 import NotFoundPage from './components/NotFoundPage'
 import Swagg from './components/Swagg'
 import BioPageInfluencer from './components/Influencer/BioPage'
+import Garage from './components/Influencer/Garage'
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           {/* <Route exact path="/get-data" component={CreateDta} /> */}
           <Route exact path="/giveaways" component={Giveaways} />
           <Route exact path="/swagg" component={Swagg} />
+          <Route path="/garage/:id" component={Garage} />
           <Route path="/user/:id" component={BioPage} />
           <Route component={NotFoundPage} />
         </Switch>
