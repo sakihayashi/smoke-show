@@ -16,8 +16,7 @@ const SettingModal = (props) =>{
     const [imgData64Profile, setImgData64Profile] = useState('')
     const [imgData64Cover, setImgData64Cover] = useState('')
     const [userObj, setUserObj] = useState({fname: props.profileUser.fname, lname: props.profileUser.lname, email: props.profileUser.email, username: props.profileUser.username})
-    const [bioImgFileKey, setBioImgFileKey] = useState()
-    const [bioImgUrl, setBioImgUrl] = useState()
+
     const [currentUserId, setCurrentUserId] = useState(app.currentUser.id)
     const [userPw, setUserPw] = useState({newPw: '', conNewPw: '', currentPw: ''})
     // const [file, setFile] = useState({})
@@ -185,11 +184,12 @@ const SettingModal = (props) =>{
         reader.readAsDataURL(file)
     }
     const saveProfileCover = async  (e) =>{
-        const imgId = new Date().getTime()
-        const filekey = props.profileUser.userId + '/profile/' + imgId
-        const imgUrlWithKey = baseImgUrl + filekey
+        
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
         if(currentUserId === props.profileUser.userId){
+            const imgId = new Date().getTime()
+            const filekey = props.profileUser.userId + '/profile/' + imgId
+            const imgUrlWithKey = baseImgUrl + filekey
             try{
                 await app.currentUser.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
                     console.log('res', res)
@@ -231,6 +231,9 @@ const SettingModal = (props) =>{
                 await app.logIn(credentials).then(async  user =>{
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                     const collectionUser = mongo.db("smoke-show").collection("users")
+                    const imgId = new Date().getTime()
+                    const filekey = props.profileUser.userId + '/profile/' + imgId
+                    const imgUrlWithKey = baseImgUrl + filekey
                     await user.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
                         if( typeof(props.profileUser.profileCover) !== "undefined"){
                             const currentUrl = props.profileUser.profileCover
