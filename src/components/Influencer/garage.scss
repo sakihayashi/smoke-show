@@ -22,6 +22,41 @@
         object-fit: cover;
     }
 }
+.garage-setting-btn{
+    background-color: $theme-color;
+    border-color: $theme-color;
+    z-index: 100;
+}
+.bio-sub-nav{
+    display: flex;
+    justify-content: start;
+    a{
+        margin-right: 2rem;
+    }
+    a.active{
+        color: $theme-hover !important;
+        cursor: auto;
+    }
+}
+
+.garage-setting-btn:hover{
+    background-color: $theme-hover;
+    border-color: $theme-hover;
+    cursor: pointer;
+}
+.garage-setting-btn:focus{
+    background-color: $theme-hover;
+    border-color: $theme-hover;
+}
+.garage-setting-wrapper{
+    text-align: right;
+    margin-top: -3.5rem;
+    
+}
+.center-btn{
+    margin-top: auto;
+    margin-bottom: auto;
+}
 .btn-close-settings{
     margin-left: 3rem;
     margin-right: 3rem;

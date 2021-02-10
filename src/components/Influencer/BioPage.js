@@ -13,11 +13,11 @@ import { commentsTempData } from '../commentsTempData'
 import Comments from '../Comments'
 import { uid } from 'react-uid'
 import Layout from '../Layout/Layout'
+import SubNav from './SubNav'
 
 import powerIcon from '../../assets/global/Horsepower.png'
 import pistonIcon from '../../assets/global/piston.png'
 import priceIcon from '../../assets/global/Price-Tag-icon.png'
-import InfluencerIndexPage from '../InfluencerIndexPage'
 
 const BioPage = (props) =>{
     const influencerId = props.match.params.id
@@ -113,10 +113,11 @@ const BioPage = (props) =>{
                 <title>Influencer {`${influencer.username}`} Bio | The Smoke Show</title>
             </Helmet>
             <div className="main-wrapper">
-                <div className="banner-wrapper">
+                {/* <div className="banner-wrapper">
                     <img src={influencer.banner_img} alt={influencer.username} className="influencer-banner"/>
-                </div>
-                <Row>
+                </div> */}
+                <SubNav influencer={influencer} formattedFans={formattedFans} />
+                {/* <Row>
                     <Col style={{paddingRight:0}}>
                     <img src={influencer.profile_pic} className="bio-profile-pic" />
                     </Col>
@@ -132,7 +133,7 @@ const BioPage = (props) =>{
                             <Link href="/influencer-swagg/:id"><li>Swagg</li></Link>
                         </ul>
                     </Col>
-                </Row>
+                </Row> */}
                 <div className="spacer-2rem"></div>
                 <Row>
                     <Col sm={6}>

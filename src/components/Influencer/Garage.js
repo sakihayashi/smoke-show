@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react'
 import {Helmet} from "react-helmet"
 import * as Realm from "realm-web"
 import Layout from '../Layout/Layout'
+import SubNav from './SubNav'
 
 import noImg from '../../assets/global/no_image.jpg'
-import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
+// import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 import editIcon from '../../assets/global/edit-icon.svg'
-import settingsIcon from '../../assets/global/Settings-icon-white.svg'
+
 import SettingModal from './SettingModal'
 import { Button, Row, Col, Form } from 'react-bootstrap'
 
@@ -25,6 +26,7 @@ const Garage = (props) =>{
     const [profileUser, setProfileUser] = useState({fname: '', lname: '', profilePic: '', profileCover: '', username: '', profileDesc: '', favSong: '', favArtist: ''})
     const [allowEdit, setAllowEdit] = useState(false)
     const [editMode, setEditMode] = useState({about: false, song: false, artist: false})
+    const [formattedFans, setFormattedFans] = useState('')
     const [showSetting, setShowSetting] = useState(false);
     const [userCars, setUserCars] = useState([])
     const [showAddCar, setShowAddCar] = useState(false)
@@ -49,7 +51,9 @@ const Garage = (props) =>{
         })
     }
     const handleShowSetting = () =>{
+        
         const token = sessionStorage.getItem('session_token')
+        console.log('setting', token)
         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
             if (err) {
                 console.log('err', err)
@@ -178,7 +182,8 @@ const Garage = (props) =>{
         )
     }
 
-    const getDataAsCurrent = async () =>{
+    const getDataAsCurrent = async (decoded) =>{
+        console.log('decoded', decoded)
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
         const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
         const filter = {userId: userIdParam}
@@ -186,17 +191,33 @@ const Garage = (props) =>{
             await collectionInfluencer.findOne(filter).then(user =>{
                 setProfileUser(user)
                 setFormattedTime(moment(profileUser.joined).local().format('MMMM Do YYYY'))
+                if(user.fans > 999){
+                    setFormattedFans(Math.sign(user.fans)*((Math.abs(user.fans)/1000).toFixed(1)) + 'k')
+                }else{
+                    setFormattedFans(Math.sign(user.fans)*Math.abs(user.fans))
+                }
                 getTotalComments(mongo)
                 getMyCars(mongo)
                 return user
             }).then(user =>{
-                const token = sessionStorage.getItem('session_token')
-                const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
-                if( userIdParam === decoded.userId){
-                    setAllowEdit(true)
+                if(decoded){
+                    if( userIdParam === decoded.userData.userId){
+                        console.log('param matched')
+                        setAllowEdit(true)
+                    }else{
+                        console.log('param not matched', decoded)
+                        setAllowEdit(false)
+                    }
                 }else{
-                    setAllowEdit(false)
+                    const token = sessionStorage.getItem('session_token')
+                    const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
+                    if( userIdParam === decoded.userId){
+                        setAllowEdit(true)
+                    }else{
+                        setAllowEdit(false)
+                    }
                 }
+                
             })
         }catch(err){
             console.log(err)
@@ -222,16 +243,17 @@ const Garage = (props) =>{
         })
     }
     useEffect(() => {
-        getDataAsCurrent()
+        // getDataAsCurrent()
         const token = sessionStorage.getItem('session_token')
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     // timeout
                     childRef.current.handleLoginModal(true)
+                    getDataAsCurrent(decoded)
                 }else{
 
-                    getDataAsCurrent()
+                    getDataAsCurrent(decoded)
                 }
               });
             
@@ -253,16 +275,27 @@ const Garage = (props) =>{
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} profileUser={profileUser}  updateProfileData={updateProfileData} updateUserDetails={updateUserDetails}/>}
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
-                
+                <SubNav influencer={profileUser} formattedFans={formattedFans} allowEdit={allowEdit} handleShowSetting={handleShowSetting} page={'garage'} />
+                {/* <div className="garage-setting-wrapper">
+                    {allowEdit && 
+                        <Button className="garage-setting-btn" onClick={handleShowSetting} >
+                            <img src={settingsIcon} alt="setting" className="setting-icon"/>
+                            Settings
+                        </Button>
+                    }
+                </div> */}
+                    
+                <div className="spacer-4rem"></div>
                 <h2 className="title">Influencer Garage</h2>
-                <div className="bio-fleet-img">
+                {/* <div className="bio-fleet-img">
                     <img
                     src={ typeof(profileUser.profileCover) == 'undefined' || !profileUser.hasOwnProperty("profileCover") ?  noImg : profileUser.profileCover }
                     alt="user selected profile image"
                      />
-                </div>
+                </div> */}
+                <div className="spacer-2rem"></div>
                 <div className="bio-content-wrapper">
-                    <div className="bio-main-wrapper">
+                    {/* <div className="bio-main-wrapper">
                         <div className="bio-pic">
                             <img src={profileUser.profilePic ? profileUser.profilePic : bioPic} alt="the user profile picture" />
                         </div>
@@ -278,7 +311,7 @@ const Garage = (props) =>{
                             </Button>
                         }
                         
-                    </div>
+                    </div> */}
            
                     <Row className="bio-height-adj">
                         <Col sm={4}>
