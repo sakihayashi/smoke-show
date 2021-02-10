@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Helmet } from "react-helmet"
 import { Row, Col, Form, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux'
@@ -34,7 +33,8 @@ const BioPage = (props) =>{
     
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
-        timeout: 10000, // timeout in number of milliseconds
+        // timeout: 10000, 
+        // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
@@ -88,20 +88,14 @@ const BioPage = (props) =>{
          }catch(error){console.log(error)}
     }
     useEffect( async () => {
-        // const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+
         try {
-        //   const app = new Realm.App(appConfig);
-      
-          // an authenticated user is required to access a MongoDB instance
-        //   await app.logIn(credentials).then( async user =>{
-        //     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+
             const mongoCollection = mongo.db("smoke-show").collection("comments");
             const filter = {videoId: 'QHLojVxs'} 
             await mongoCollection.find(filter).then(resAll =>{
             })
-           
-        //   }
-        //   )
+
          }catch(error){console.log(error)}
       })
       useEffect(() => {
@@ -113,27 +107,9 @@ const BioPage = (props) =>{
                 <title>Influencer {`${influencer.username}`} Bio | The Smoke Show</title>
             </Helmet>
             <div className="main-wrapper">
-                {/* <div className="banner-wrapper">
-                    <img src={influencer.banner_img} alt={influencer.username} className="influencer-banner"/>
-                </div> */}
+   
                 <SubNav influencer={influencer} formattedFans={formattedFans} />
-                {/* <Row>
-                    <Col style={{paddingRight:0}}>
-                    <img src={influencer.profile_pic} className="bio-profile-pic" />
-                    </Col>
-                    <Col className="bio-text-wrapper" style={{paddingLeft: 0}}>
-                        <div className="bio-creator-name">{influencer.username}</div>
-                        <div className="bio-creator-data">{formattedFans} Fans</div>
-                    </Col>
-                    <Col sm={9} className="bio-sub-menu">
-                        <ul className="">
-                            <Link to={`/all-videos/${influencerId}`}><li>All Videos</li></Link>
-                            <Link href="/garage/:id"><li>Garage</li></Link>
-                            <Link href="/social/:id"><li>Social</li></Link>
-                            <Link href="/influencer-swagg/:id"><li>Swagg</li></Link>
-                        </ul>
-                    </Col>
-                </Row> */}
+
                 <div className="spacer-2rem"></div>
                 <Row>
                     <Col sm={6}>

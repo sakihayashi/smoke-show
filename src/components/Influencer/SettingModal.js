@@ -266,7 +266,7 @@ const SettingModal = (props) =>{
     const handleUpdateProfile = async (e) =>{
         e.preventDefault()
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-        const collectionInfluencer = mongo.db("smoke-show").collection("influencer")
+        const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
        
         if(app.currentUser.id === props.profileUser.userId){
             try{
@@ -302,7 +302,7 @@ const SettingModal = (props) =>{
             try{
                 await app.logIn(credentials).then( async user =>{
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                    collectionInfluencer = mongo.db("smoke-show").collection("influencer")
+                    collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                     try{
                         await collectionInfluencer.updateOne(
                             { "userId": user.userId},

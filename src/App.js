@@ -22,6 +22,7 @@ import NotFoundPage from './components/NotFoundPage'
 import Swagg from './components/Swagg'
 import BioPageInfluencer from './components/Influencer/BioPage'
 import Garage from './components/Influencer/Garage'
+import Social from './components/Influencer/Social'
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
           <Route exact path="/swagg" component={Swagg} />
           <Route path="/garage/:id" component={Garage} />
           <Route path="/user/:id" component={BioPage} />
+          <Route path="/social/:id" component={Social} />
           <Route component={NotFoundPage} />
         </Switch>
     </Router>    

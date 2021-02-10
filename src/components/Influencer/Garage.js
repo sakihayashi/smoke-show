@@ -53,7 +53,6 @@ const Garage = (props) =>{
     const handleShowSetting = () =>{
         
         const token = sessionStorage.getItem('session_token')
-        console.log('setting', token)
         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
             if (err) {
                 console.log('err', err)
@@ -183,7 +182,6 @@ const Garage = (props) =>{
     }
 
     const getDataAsCurrent = async (decoded) =>{
-        console.log('decoded', decoded)
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
         const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
         const filter = {userId: userIdParam}
