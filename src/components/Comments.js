@@ -104,6 +104,11 @@ const Comments = (props) =>{
 
         try{
             await app.logIn(credentials).then(async anonymous =>{
+                if(anonymous.id === app.currentUser.id){
+                    console.log('current user is now anonymous')
+                }else{
+                    console.log('logged in as anonymonus but current user is different')
+                }
                 const mongo = anonymous.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionComments = mongo.db("smoke-show").collection("comments")
                 await collectionComments.find(filter,options).then(resAll =>{
