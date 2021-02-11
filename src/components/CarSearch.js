@@ -1,24 +1,25 @@
-import React, { Fragment, useState  } from 'react'
+import React, { Fragment, useState, useEffect  } from 'react'
 import { Dropdown, DropdownButton, Button } from 'react-bootstrap'
 import Layout from './Layout/Layout'
 import * as Realm from "realm-web"
 import { carsAllYear } from './carTempData'
 import './carStats.scss'
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'
+import jwt from 'jsonwebtoken'
 
 const CarSearch = (props) =>{
     const [modelName, setModelName] = useState([])
     const [selectedCar, setSelectedCar] = useState({make: "Select a maker", model: "Select a model", type: "Select a type", year: "Select a year"})
     const [carTypeArr, setCarTypeArr] = useState([])
     const [carYearArr, setCarYearArr] = useState([])
-    
+    const [mongo, setMongo] = useState()
     const [cars, setCars] = useState([])
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
       };
     const app = new Realm.App(appConfig)
-    const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+    // const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
     // const [carMakers, setCarMakers] = useState([])
     const searchId = uuidv4()
 
@@ -142,7 +143,41 @@ const CarSearch = (props) =>{
         selected: selectedCar
       })
    }
-
+   const checkToken = async () =>{
+    let token = sessionStorage.getItem('session_token')
+    if(token){
+        jwt.verify(token, process.env.REACT_APP_JWT_SECRET, async (err, decoded)=>{
+            if(err){
+                console.log(err)
+                const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
+                try{
+                    await app.logIn(credentials).then(  user =>{
+                        const mongoClient = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                        setMongo(mongoClient)
+                    })
+                }catch(err){
+                    console.log(err)
+                }
+            }else{
+                const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+                try{
+                    await app.logIn(credentials).then( user =>{
+                        const mongoClient = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                        setMongo(mongoClient)
+                    })
+                }catch(err){
+                    console.log(err)
+                }
+            }
+        });
+        
+     }else{
+        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+     }
+   }
+   useEffect(() => {
+    checkToken()
+   }, [])
     return(
         <Layout>
             <div className="spacer-4rem"></div>

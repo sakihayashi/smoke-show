@@ -253,7 +253,7 @@ const Garage = (props) =>{
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     // timeout
-                    childRef.current.handleLoginModal(true)
+                    childRef.current.handleUserByParent({func: 'modal', value: true})
                     getDataAsCurrent(decoded)
                 }else{
 

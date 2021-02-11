@@ -26,8 +26,8 @@ const InfluencerIndexPage = () =>{
     const getInfluencers = async (credentials) =>{
 
         try{
-            await app.logIn(credentials).then(async apiUser =>{
-                const mongo = apiUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+            await app.logIn(credentials).then(async user =>{
+                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const mongoCollection = mongo.db("smoke-show").collection("influencers")
                 try {
             

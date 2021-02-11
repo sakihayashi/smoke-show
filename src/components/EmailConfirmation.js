@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, createRef } from 'react'
 import { Button, Form } from 'react-bootstrap'
 // import Logo from '../assets/global/Logo-smoke-show.png'
 import * as Realm from "realm-web"
@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 import Layout from './Layout/Layout'
 
 const EmailConfirmation = (props) =>{
-    const childRef = useRef(null)
+    const childRef = createRef()
     let token = new URLSearchParams(props.location.search).get("token")
     let tokenId = new URLSearchParams(props.location.search).get("tokenId")
     const [userObj, setUserObj] = useState({fname: '', lname: '', token: token, tokenId: tokenId, username: '', email: '', password: ''})
@@ -80,6 +80,9 @@ const EmailConfirmation = (props) =>{
         // const response = await getApp.emailPasswordAuth.resendConfirmation(email)
         // console.log('response', response)
     }
+    // const test = () =>{
+    //     childRef.current.handleUserByParent({func: 'userUpdate', value: 'test'})
+    // }
     const resendToken = ()=>{
         return(
             <div>
@@ -98,6 +101,7 @@ const EmailConfirmation = (props) =>{
                         <Button className="login-btn" type="submit">
                             Resend Confirmation Email
                         </Button><br /><br />
+                        {/* <Button onClick={test}>check child ref</Button> */}
                     </div>
                 </Form>
             </div>

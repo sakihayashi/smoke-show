@@ -1,11 +1,11 @@
-import React, { useState, useImperativeHandle, forwardRef, useRef } from 'react'
+import React, { useState, useImperativeHandle, forwardRef  } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import { withRouter } from "react-router"
 
 const HeaderWithRouter = withRouter(Header);
 
-const Layout = forwardRef((props, ref, refBio) =>{
+const Layout = forwardRef((props, ref) =>{
     const [modalShow, setModalShow] = useState(false)
     const [user, setUser] = useState(false)
     const [username, setUsername] = useState('')
@@ -41,22 +41,30 @@ const Layout = forwardRef((props, ref, refBio) =>{
     // }
     useImperativeHandle(
         ref,
-        (fname) => ({
-            handleUserByParent(fname){
-                setUser(true)
-                setUsername(fname)
+        (obj) => ({
+            handleUserByParent(obj){
+                if(obj.func === 'userUpdate'){
+                    setUser(true)
+                    setUsername(obj.value)
+                }else if(obj.func === 'modal'){
+                    modalShowHide(obj.value)
+                }
+                
             }
         }),
     )
+    // const updateUserName = (fname) =>{
+    //     setUser(true)
+    //     setUsername(fname)
+    // }
 
-    useImperativeHandle(
-        ref, 
-        () => ({
-            handleLoginModal(state){
-                modalShowHide(state)
-            }
-      })
-    )
+    // useImperativeHandle(
+    //     ref, 
+    //     (value) => ({
+    //         handleLoginModal: modalShowHide(value)
+    //         // handleUserByParent: updateUserName(value)
+    //   })
+    // )
 
     return(
         <div>
