@@ -32,6 +32,7 @@ const SignUpModal = (props) =>{
                     console.log('res token?', res)
                   
                     setEmailSent(true)
+                    e.target.reset()
                     
                 })
        

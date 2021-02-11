@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // const YouTubeKey = 'AIzaSyCNBPDjL805pTu3F9FylWEhpA5Vw7XtG9s'
-const YouTubeKey = 'AIzaSyAJ8i-P2RLWLZo_bNbl5ZWdSw68rOQaBeU'
+const YouTubeKey = process.env.REACT_APP_YOUTUBE_KEY
 
 
 const youtubeAPI = axios.create({

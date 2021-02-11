@@ -53,7 +53,7 @@ const Comments = (props) =>{
 
                     await mongoCollection.insertOne(newComment).then(result =>{
                             e.target.reset();
-                            getCommentsAnon()
+                            getComments()
                     })
                 });
             
@@ -96,20 +96,18 @@ const Comments = (props) =>{
         )
        
     }
-    const getCommentsAnon = async () =>{
-        console.log('checking')
+    const getComments = async (credentials) =>{
         const filter = {videoId: props.videoId} 
         const options = {sort: {date_posted: -1}, limit: 4}
-        const credentials = Realm.Credentials.anonymous();
+        
 
         try{
-            await app.logIn(credentials).then(async anonymous =>{
-                if(anonymous.id === app.currentUser.id){
-                    console.log('current user is now anonymous')
+            await app.logIn(credentials).then(async user =>{
+                if(user.id === app.currentUser.id){
                 }else{
-                    console.log('logged in as anonymonus but current user is different')
+                    console.log('current user and logged in user do not match')
                 }
-                const mongo = anonymous.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionComments = mongo.db("smoke-show").collection("comments")
                 await collectionComments.find(filter,options).then(resAll =>{
                     setCommentsDB(resAll)
@@ -161,29 +159,28 @@ const Comments = (props) =>{
     // }, [props.loginUserData.userId])
 
     useEffect( () => {
-        getCommentsAnon()
-        // let tokensessionStorage = sessionStorage.getItem('session_token')
-        // if(tokensessionStorage){
-        //     setIsLoggedIn(true)
-        //     getComments()
-        // }else{
-        //     setIsLoggedIn(false)
-        //     getComments()
-        // }
         
+        let token = sessionStorage.getItem('session_token')
         
-        //  if(tokensessionStorage){
-        //     jwt.verify(tokensessionStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
-        //         if(err){
-        //             console.log(err)
-        //             setIsLoggedIn(false)
-        //         }else{
-        //             console.log('decoded: ', decoded)
-        //             setIsLoggedIn(true)
-        //         }
-        //     });
+         if(token){
+            jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+                if(err){
+                    console.log(err)
+                    setIsLoggedIn(false)
+                    const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    getComments(credentials)
+                }else{
+                    setIsLoggedIn(true)
+                    const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+                    getComments(credentials)
+                }
+            });
             
-        //  }
+         }else{
+            setIsLoggedIn(false)
+            const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    getComments(credentials)
+         }
     }, [])
     return(
         <React.Fragment>

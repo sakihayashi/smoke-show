@@ -7,6 +7,8 @@ import { uid } from 'react-uid'
 import { NavLink } from 'react-router-dom'
 import Layout from './Layout/Layout'
 import './influencerIndexPage.scss'
+import jwt from 'jsonwebtoken'
+
 
 const InfluencerIndexPage = () =>{
 
@@ -19,30 +21,48 @@ const InfluencerIndexPage = () =>{
         // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
-    const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+   
 
-    const getInfluencers = async () =>{
-        // const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI);
-        try {
-        //   const app = new Realm.App(appConfig);
-      
-          // an authenticated user is required to access a MongoDB instance
-        //   await app.logIn(credentials).then( async user =>{
-        //     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-            const mongoCollection = mongo.db("smoke-show").collection("influencers");
-            const filter = {isActive: true} 
-            await mongoCollection.find(filter).then(resAll =>{
-                console.log('find all', resAll);
-                setInfluencers(resAll)
+    const getInfluencers = async (credentials) =>{
+
+        try{
+            await app.logIn(credentials).then(async apiUser =>{
+                const mongo = apiUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                const mongoCollection = mongo.db("smoke-show").collection("influencers")
+                try {
+            
+                    const filter = {isActive: true} 
+                    await mongoCollection.find(filter).then(resAll =>{
+                        console.log('find all', resAll);
+                        setInfluencers(resAll)
+                    })
+                   
+                 }catch(error){console.log(error)}
             })
-           
-        //   }
-        //   )
-         }catch(error){console.log(error)}
+        }catch(err){
+            console.log(err)
+        }
     }
 
     useEffect(() => {
-        getInfluencers()
+        let token = sessionStorage.getItem('session_token')
+        if(token){
+            jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+                if(err){
+                    console.log(err)
+                    const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    getInfluencers(credentials)
+                }else{
+                    const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+                    getInfluencers(credentials)
+                }
+            });
+            
+         }else{
+            const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+            getInfluencers(credentials)
+         }
+        
 
       }, [])
 
