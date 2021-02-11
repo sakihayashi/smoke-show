@@ -24,7 +24,7 @@ const BioPage = (props) =>{
     // const { banner_img, username, profile_pic, fans } = props.location.state.influencer
     const [formattedFans, setFormattedFans] = useState('')
     
-    const { params: { id } } = props.match
+    // const { params: { id } } = props.match
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     // const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
     const [searchKeyword, setSearchKeyword] = useState('')
@@ -100,7 +100,7 @@ const BioPage = (props) =>{
       })
       useEffect(() => {
         getInfluencer()
-      }, [])
+      })
     return(
         <Layout>
             <Helmet>
@@ -119,7 +119,6 @@ const BioPage = (props) =>{
                                     allow='autoplay; encrypted-media'
                                     allowFullScreen
                                     title='video'
-                            
                             />
                             
                         </div>

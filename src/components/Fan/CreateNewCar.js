@@ -3,6 +3,7 @@ import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import ImageUpload from './ImageUpload'
 import jwt from 'jsonwebtoken'
+import short from 'short-uuid'
 
 const CreateNewCar = (props) =>{
     const bucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
@@ -66,7 +67,7 @@ const CreateNewCar = (props) =>{
     const handleSubmit = async (e) =>{
         e.preventDefault()
         const baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
-        const imgId = new Date().getTime()
+        const imgId = short.generate()
         const filekey = props.profileUser.userId + '/my-cars/' + imgId
         const imgUrlWithKey = baseImgUrl + filekey
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);

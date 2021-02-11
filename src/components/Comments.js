@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Button, Form } from 'react-bootstrap'
+import { Row, Button, Form } from 'react-bootstrap'
 import Avatar from 'react-avatar'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
@@ -52,12 +52,8 @@ const Comments = (props) =>{
                     const mongoCollection = mongo.db("smoke-show").collection("comments");
 
                     await mongoCollection.insertOne(newComment).then(result =>{
-                        if(result){
                             e.target.reset();
                             getCommentsCurrent()
-                        }else{
-                            console.log('error', result)
-                        }
                     })
                 });
             
@@ -108,7 +104,7 @@ const Comments = (props) =>{
             try{
                 await collectionComments.find(filter,options).then(resAll =>{
                     setCommentsDB(resAll)
-                    return resAll
+                    return 
                 })
             }catch(err){console.log(err)}
     }

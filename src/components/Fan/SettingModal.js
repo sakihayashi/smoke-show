@@ -4,6 +4,7 @@ import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 import noImg from '../../assets/global/no_image.jpg'
 import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"
+import short from 'short-uuid'
 
 const appConfig = {
     id: process.env.REACT_APP_REALM_APP_ID,
@@ -74,12 +75,13 @@ const SettingModal = (props) =>{
         reader.readAsDataURL(file)
     }
     const saveProfilePic = async () =>{
-
+        const imgId = short.generate()
+        const filekey = props.profileUser.userId + '/profile/' + imgId
+        const imgUrlWithKey = baseImgUrl + filekey
         const oldProfilePic = props.profileUser.profilePic
+
         if( currentUserId === props.profileUser.userId){
-            const imgId = new Date().getTime()
-            const filekey = props.profileUser.userId + '/profile/' + imgId
-            const imgUrlWithKey = baseImgUrl + filekey
+            
             try{
                 await app.currentUser.functions.putImageObjToS3(imgData64Profile, bucketName, filekey, profilePic.type).then( async res =>{
                     console.log('res', res)
@@ -125,9 +127,6 @@ const SettingModal = (props) =>{
         try{
             await app.logIn(credentials).then(async user =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                const imgId = new Date().getTime()
-                const filekey = props.profileUser.userId + '/profile/' + imgId
-                const imgUrlWithKey = baseImgUrl + filekey
                 const collectionUser = mongo.db("smoke-show").collection("users")
                 await user.functions.putImageObjToS3(imgData64Profile, bucketName, filekey, profilePic.type).then( res =>{
                     console.log(res)
@@ -184,12 +183,12 @@ const SettingModal = (props) =>{
         reader.readAsDataURL(file)
     }
     const saveProfileCover = async  (e) =>{
+        const imgId = short.generate()
+        const filekey = props.profileUser.userId + '/profile/' + imgId
+        const imgUrlWithKey = baseImgUrl + filekey
         
-        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
         if(currentUserId === props.profileUser.userId){
-            const imgId = new Date().getTime()
-            const filekey = props.profileUser.userId + '/profile/' + imgId
-            const imgUrlWithKey = baseImgUrl + filekey
+            const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
             try{
                 await app.currentUser.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
                     console.log('res', res)
@@ -231,9 +230,6 @@ const SettingModal = (props) =>{
                 await app.logIn(credentials).then(async  user =>{
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                     const collectionUser = mongo.db("smoke-show").collection("users")
-                    const imgId = new Date().getTime()
-                    const filekey = props.profileUser.userId + '/profile/' + imgId
-                    const imgUrlWithKey = baseImgUrl + filekey
                     await user.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
                         if( typeof(props.profileUser.profileCover) !== "undefined"){
                             const currentUrl = props.profileUser.profileCover

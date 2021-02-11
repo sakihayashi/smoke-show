@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import {Helmet} from "react-helmet"
+import { Helmet } from "react-helmet"
 import * as Realm from "realm-web"
 import Layout from '../Layout/Layout'
 import SubNav from './SubNav'
@@ -188,8 +188,13 @@ const Garage = (props) =>{
         try{
             await collectionInfluencer.findOne(filter).then(user =>{
                 setProfileUser(user)
-                const formatted = moment(profileUser.joined).local().format('MMMM Do YYYY')
-                setFormattedTime(formatted)
+                if(typeof(user.joined) == 'undefined'){
+                    setFormattedTime('No data')
+                }else{
+                    const formatted = moment(user.joined).local().format('MMMM Do YYYY')
+                    setFormattedTime(formatted)
+                }
+                
                 if(user.fans > 999){
                     setFormattedFans(Math.sign(user.fans)*((Math.abs(user.fans)/1000).toFixed(1)) + 'k')
                 }else{
@@ -274,7 +279,7 @@ const Garage = (props) =>{
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} profileUser={profileUser}  updateProfileData={updateProfileData} updateUserDetails={updateUserDetails}/>}
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
-                <SubNav influencer={profileUser} formattedFans={formattedFans} allowEdit={allowEdit} handleShowSetting={handleShowSetting} page={'garage'} />
+                <SubNav influencer={profileUser} formattedFans={formattedFans} allowEdit={allowEdit} handleShowSetting={handleShowSetting} />
                 {/* <div className="garage-setting-wrapper">
                     {allowEdit && 
                         <Button className="garage-setting-btn" onClick={handleShowSetting} >

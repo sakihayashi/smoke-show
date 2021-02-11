@@ -7,6 +7,7 @@ import ImageUpload from './ImageUpload'
 
 import editIcon from '../../assets/global/edit-icon.svg'
 // import uploadIcon from '../../assets/global/upload.svg'
+import short from 'short-uuid'
 
 const VehicleCard = (props) =>{
     const [imgFile, setImgFile] = useState('')
@@ -66,7 +67,7 @@ const VehicleCard = (props) =>{
     const handleSubmit = async (e) =>{
         console.log('checking')
         const baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
-        const imgId = new Date().getTime()
+        const imgId = short.generate()
         const filekey = props.profileUser.userId + '/my-cars/' + imgId
         const imgUrlWithKey = baseImgUrl + filekey
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);

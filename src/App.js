@@ -23,6 +23,7 @@ import Swagg from './components/Swagg'
 import BioPageInfluencer from './components/Influencer/BioPage'
 import Garage from './components/Influencer/Garage'
 import Social from './components/Influencer/Social'
+import SwaggInfluencer from './components/Influencer/Swagg'
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           <Route path="/garage/:id" component={Garage} />
           <Route path="/user/:id" component={BioPage} />
           <Route path="/social/:id" component={Social} />
+          <Route path="/swagg-influencer/:id" component={SwaggInfluencer} />
           <Route component={NotFoundPage} />
         </Switch>
     </Router>    

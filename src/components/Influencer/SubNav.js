@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment } from 'react'
 import { Row, Col,  Button } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
 import settingsIcon from '../../assets/global/Settings-icon-white.svg'
@@ -14,9 +14,10 @@ const SubNav = (props) =>{
             </div>
             <Row>
                 <Col style={{paddingRight:0}}>
-                <img src={influencer.profile_pic} className="bio-profile-pic" />
+                <img src={influencer.profile_pic} className="bio-profile-pic" alt={`${influencer.username} profile picture`}/>
                 </Col>
                 <Col className="bio-text-wrapper" style={{paddingLeft: 0}}>
+                {/* <img src={influencer.profile_pic} className="bio-profile-pic" /> */}
                     <div className="bio-creator-name">{influencer.username}</div>
                     <div className="bio-creator-data">{props.formattedFans} Fans</div>
                 </Col>
@@ -25,7 +26,7 @@ const SubNav = (props) =>{
                         <NavLink to={`/all-videos/${influencer.userId}`}>All Videos</NavLink>
                         <NavLink to={`/garage/${influencer.userId}`}>Garage</NavLink>
                         <NavLink to={`/social/${influencer.userId}`}>Social</NavLink>
-                        <NavLink to={`/influencer-swagg/${influencer.userId}`}>swagg</NavLink>
+                        <NavLink to={`/swagg-influencer/${influencer.userId}`}>swagg</NavLink>
                     </nav>
                 </Col>
                 <Col className="center-btn">

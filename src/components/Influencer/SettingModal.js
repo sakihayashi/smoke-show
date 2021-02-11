@@ -4,6 +4,7 @@ import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 import noImg from '../../assets/global/no_image.jpg'
 import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"
+import short from 'short-uuid'
 
 const appConfig = {
     id: process.env.REACT_APP_REALM_APP_ID,
@@ -73,7 +74,7 @@ const SettingModal = (props) =>{
     }
     const saveProfilePic = async () =>{
         
-        const imgId = new Date().getTime()
+        const imgId = short.generate()
         const filekey = props.profileUser.userId + '/profile/' + imgId
         const imgUrlWithKey = baseImgUrl + filekey
         const oldProfilePic = props.profileUser.profilePic
@@ -176,7 +177,7 @@ const SettingModal = (props) =>{
         reader.readAsDataURL(file)
     }
     const saveProfileCover = async  (e) =>{
-        const imgId = new Date().getTime()
+        const imgId = short.generate()
         const filekey = props.profileUser.userId + '/profile/' + imgId
         const imgUrlWithKey = baseImgUrl + filekey
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)

@@ -22,7 +22,10 @@ const Social = (props) =>{
     const app = new Realm.App(appConfig);
     const userIdParam = props.match.params.id
     const [influencer, setInfluencer] = useState({profileCover: '', profilePic: '', username: '', userId: '', social: {instagram: '', facebook: '', twitter: ''}})
-
+    // const generateCode = () =>{
+    //     const shortID = short.generate()
+    //     console.log('id', shortID)
+    // }
     const getData = async () =>{
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
         const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
@@ -36,7 +39,7 @@ const Social = (props) =>{
     }
     useEffect(() => {
         getData()
-    }, [])
+    })
     return(
         <Fragment>
             <Helmet>
@@ -102,6 +105,7 @@ const Social = (props) =>{
                             </ul>
                         </Col>
                     </Row>
+                    
                 </div>
             </Layout>
         </Fragment>

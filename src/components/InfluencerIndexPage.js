@@ -13,8 +13,6 @@ const InfluencerIndexPage = () =>{
     const videoEmbedURL = 'https://www.youtube.com/embed/'
 
     const [influencers, setInfluencers] = useState([])
-    // var d = new Date();
-    // var n = new Date().getTime();
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 

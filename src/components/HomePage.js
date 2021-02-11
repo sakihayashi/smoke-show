@@ -25,8 +25,7 @@ const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
 const [searchKeyword, setSearchKeyword] = useState('')
 const [titleStr, setTitleStr] = useState('Your search result')
 const [searchedCarData, setSearchedCarData] = useState([])
-// var d = new Date();
-// var n = new Date().getTime();
+
 const appConfig = {
     id: process.env.REACT_APP_REALM_APP_ID,
     // timeout: 10000, 
