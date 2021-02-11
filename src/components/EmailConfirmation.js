@@ -69,7 +69,6 @@ const EmailConfirmation = (props) =>{
         e.preventDefault()
         console.log('email', userObj.email)
         const email = userObj.email
-        // const credentials = Realm.Credentials.anonymous();
         try{
             await getApp.emailPasswordAuth.resendConfirmation(email).then( res =>{
                 console.log('res', res)

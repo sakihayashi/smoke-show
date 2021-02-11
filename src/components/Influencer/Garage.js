@@ -77,7 +77,7 @@ const Garage = (props) =>{
             setAllowEdit(true)
             
         }else{
-            getDataAsCurrent()
+            getInfluencerData()
         }
     }
     const userLoggedOut = (id) =>{
@@ -181,47 +181,42 @@ const Garage = (props) =>{
         )
     }
 
-    const getDataAsCurrent = async (decoded) =>{
-        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-        const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
-        const filter = {userId: userIdParam}
+    const getInfluencerData = async (credentials) =>{
         try{
-            await collectionInfluencer.findOne(filter).then(user =>{
-                setProfileUser(user)
-                if(typeof(user.joined) == 'undefined'){
-                    setFormattedTime('No data')
+            await app.logIn(credentials).then(async user =>{
+                if(userIdParam === user.userId){
+                    console.log('param matched')
+                    setAllowEdit(true)
                 }else{
-                    const formatted = moment(user.joined).local().format('MMMM Do YYYY')
-                    setFormattedTime(formatted)
+                    console.log('param not matched')
+                    setAllowEdit(false)
                 }
-                
-                if(user.fans > 999){
-                    setFormattedFans(Math.sign(user.fans)*((Math.abs(user.fans)/1000).toFixed(1)) + 'k')
-                }else{
-                    setFormattedFans(Math.sign(user.fans)*Math.abs(user.fans))
+                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
+                const filter = {userId: userIdParam}
+                try{
+                    await collectionInfluencer.findOne(filter).then( user =>{
+                        setProfileUser(user)
+                        if(typeof(user.joined) == 'undefined'){
+                            setFormattedTime('No data')
+                        }else{
+                            const formatted = moment(user.joined).local().format('MMMM Do YYYY')
+                            setFormattedTime(formatted)
+                        }
+                        
+                        if(user.fans > 999){
+                            setFormattedFans(Math.sign(user.fans)*((Math.abs(user.fans)/1000).toFixed(1)) + 'k')
+                        }else{
+                            setFormattedFans(Math.sign(user.fans)*Math.abs(user.fans))
+                        }
+                        getTotalComments(mongo)
+                        getMyCars(mongo)
+                        return user
+                    })
+                }catch(err){
+                    console.log(err)
                 }
-                getTotalComments(mongo)
-                getMyCars(mongo)
-                return user
-            }).then(user =>{
-                if(decoded){
-                    if( userIdParam === decoded.userData.userId){
-                        console.log('param matched')
-                        setAllowEdit(true)
-                    }else{
-                        console.log('param not matched', decoded)
-                        setAllowEdit(false)
-                    }
-                }else{
-                    const token = sessionStorage.getItem('session_token')
-                    const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
-                    if( userIdParam === decoded.userId){
-                        setAllowEdit(true)
-                    }else{
-                        setAllowEdit(false)
-                    }
-                }
-                
+
             })
         }catch(err){
             console.log(err)
@@ -246,24 +241,29 @@ const Garage = (props) =>{
             setUserCars(cars)
         })
     }
-    useEffect(() => {
-        // getDataAsCurrent()
+    const loginCheck = async () =>{
         const token = sessionStorage.getItem('session_token')
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     // timeout
                     childRef.current.handleUserByParent({func: 'modal', value: true})
-                    getDataAsCurrent(decoded)
+                    const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    getInfluencerData(credentials)
                 }else{
-
-                    getDataAsCurrent(decoded)
+                    const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+                    getInfluencerData(credentials)
                 }
               });
             
         }else{
-            getDataAsCurrent()
+            const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+            getInfluencerData(credentials)
         }
+    }
+    useEffect(() => {
+        // getDataAsCurrent()
+        loginCheck()
    
     }, [])
 

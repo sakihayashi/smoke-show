@@ -51,9 +51,10 @@ const Comments = (props) =>{
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
                     const mongoCollection = mongo.db("smoke-show").collection("comments");
 
-                    await mongoCollection.insertOne(newComment).then(result =>{
+                    await mongoCollection.insertOne(newComment).then(res =>{
                             e.target.reset();
-                            getComments()
+                            console.log('new comment', res)
+                            getComments(credentials)
                     })
                 });
             
@@ -157,7 +158,13 @@ const Comments = (props) =>{
     //         setIsLoggedIn(false)
     //     }
     // }, [props.loginUserData.userId])
-
+    useEffect(() => {
+        if(props.currentUser){
+            setIsLoggedIn(true)
+        }else{
+            setIsLoggedIn(false)
+        }
+    }, [props.currentUser])
     useEffect( () => {
         
         let token = sessionStorage.getItem('session_token')

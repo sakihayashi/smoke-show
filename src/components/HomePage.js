@@ -25,7 +25,7 @@ const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
 const [searchKeyword, setSearchKeyword] = useState('')
 const [titleStr, setTitleStr] = useState('Your search result')
 const [searchedCarData, setSearchedCarData] = useState([])
-
+const [currentUser, setCurrentUser] = useState('')
 // const appConfig = {
 //     id: process.env.REACT_APP_REALM_APP_ID,
 //     // timeout: 10000, 
@@ -66,7 +66,13 @@ const [searchedCarData, setSearchedCarData] = useState([])
 // thumbnails: {default: {…}, medium: {…}, high: {…}}
 // title: "The Best Mercedes AMG Ever! | SLS Black Series Review"
 
-  
+  const userLoggedIn = (userId) =>{
+      setCurrentUser(userId)
+  }
+  const userLoggedOut = (id) =>{
+      console.log('user logged out')
+    setCurrentUser('')
+  }
     const handleChangeKeyword = (e) =>{
         setSearchKeyword(e.target.value)
     }
@@ -116,7 +122,7 @@ const [searchedCarData, setSearchedCarData] = useState([])
     }
  
     const loginCheck = async () =>{
-        const isLoggedIn = sessionStorage.getItem('session_token')
+        // const isLoggedIn = sessionStorage.getItem('session_token')
         // if(isLoggedIn){
         //     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
         //     const collectionComments = mongo.db("smoke-show").collection("comments")
@@ -149,7 +155,7 @@ const [searchedCarData, setSearchedCarData] = useState([])
       }, [])
 
     return(
-            <Layout >
+            <Layout userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut}>
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Home | The Smoke Show</title>
@@ -194,7 +200,7 @@ const [searchedCarData, setSearchedCarData] = useState([])
                                                 </div>
                                             </Row>
                                             <Suspense fallback={<div class="loader">Loading...</div>}>
-                                                <Comments comments={commentsTempData[index]} videoId={car.videoId} />
+                                                <Comments comments={commentsTempData[index]} videoId={car.videoId} currentUser={currentUser} />
                                             </Suspense>
                                             
                                         </Col>
