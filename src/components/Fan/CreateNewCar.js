@@ -58,11 +58,6 @@ const CreateNewCar = (props) =>{
             [e.target.name]: e.target.value
         })
     }
-    const createToken = (userData) =>{
-        return jwt.sign({ userData: userData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest});
-    }
-
- 
 
     const handleSubmit = async (e) =>{
         e.preventDefault()

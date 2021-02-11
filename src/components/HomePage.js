@@ -1,6 +1,6 @@
-import React, { useEffect, useState, Fragment, useRef, Suspense } from 'react'
+import React, { useEffect, useState, Fragment, Suspense } from 'react'
 import {Helmet} from "react-helmet"
-import { Row, Col, Form, FormControl, Button } from 'react-bootstrap'
+import { Row, Col, Form, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
 import { youtubeAPI } from '../utils/youtubeAPI'
@@ -26,12 +26,12 @@ const [searchKeyword, setSearchKeyword] = useState('')
 const [titleStr, setTitleStr] = useState('Your search result')
 const [searchedCarData, setSearchedCarData] = useState([])
 
-const appConfig = {
-    id: process.env.REACT_APP_REALM_APP_ID,
-    // timeout: 10000, 
-    // timeout in number of milliseconds
-    };
-const app = new Realm.App(appConfig);
+// const appConfig = {
+//     id: process.env.REACT_APP_REALM_APP_ID,
+//     // timeout: 10000, 
+//     // timeout in number of milliseconds
+//     };
+// const app = new Realm.App(appConfig);
 //     items: Array(5)
 // 0:
 // etag: "IPLLqa9ikvoy_gLqxEcoiqqavC4"
@@ -146,7 +146,7 @@ const app = new Realm.App(appConfig);
     useEffect( () => {
         loginCheck()
 
-      })
+      }, [])
 
     return(
             <Layout >

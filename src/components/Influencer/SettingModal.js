@@ -17,7 +17,7 @@ const SettingModal = (props) =>{
     const [imgData64Profile, setImgData64Profile] = useState('')
     const [imgData64Cover, setImgData64Cover] = useState('')
     const [userObj, setUserObj] = useState({fname: props.profileUser.fname, lname: props.profileUser.lname, email: props.profileUser.email, username: props.profileUser.username})
-    const [currentUserId, setCurrentUserId] = useState(app.currentUser.id)
+    const [currentUserId] = useState(app.currentUser.id)
     const [userPw, setUserPw] = useState({newPw: '', conNewPw: '', currentPw: ''})
     const [profilePic, setProfilePic] = useState({})
     const [coverPic, setCoverPic] = useState({})
@@ -296,14 +296,13 @@ const SettingModal = (props) =>{
             }catch(err){ console.log(err) }
             
         }else{
-            console.log('write login function')
             const token = sessionStorage.getItem('session_token')
             const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
             const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
             try{
                 await app.logIn(credentials).then( async user =>{
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                    collectionInfluencer = mongo.db("smoke-show").collection("influencers")
+                    const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                     try{
                         await collectionInfluencer.updateOne(
                             { "userId": user.userId},

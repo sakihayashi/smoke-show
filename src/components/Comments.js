@@ -53,7 +53,7 @@ const Comments = (props) =>{
 
                     await mongoCollection.insertOne(newComment).then(result =>{
                             e.target.reset();
-                            getCommentsCurrent()
+                            getCommentsAnon()
                     })
                 });
             
@@ -96,16 +96,21 @@ const Comments = (props) =>{
         )
        
     }
-    const getCommentsCurrent = async () =>{
+    const getCommentsAnon = async () =>{
+        console.log('checking')
         const filter = {videoId: props.videoId} 
         const options = {sort: {date_posted: -1}, limit: 4}
-        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-            const collectionComments = mongo.db("smoke-show").collection("comments")
-            try{
+        const credentials = Realm.Credentials.anonymous();
+
+        try{
+            await app.logIn(credentials).then(async anonymous =>{
+                const mongo = anonymous.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                const collectionComments = mongo.db("smoke-show").collection("comments")
                 await collectionComments.find(filter,options).then(resAll =>{
                     setCommentsDB(resAll)
-                    return 
                 })
+            })
+                
             }catch(err){console.log(err)}
     }
     // const getComments = async () =>{
@@ -151,7 +156,7 @@ const Comments = (props) =>{
     // }, [props.loginUserData.userId])
 
     useEffect( () => {
-        getCommentsCurrent()
+        getCommentsAnon()
         // let tokensessionStorage = sessionStorage.getItem('session_token')
         // if(tokensessionStorage){
         //     setIsLoggedIn(true)

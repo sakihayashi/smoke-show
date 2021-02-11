@@ -97,10 +97,10 @@ const BioPage = (props) =>{
             })
 
          }catch(error){console.log(error)}
-      })
+      }, [])
       useEffect(() => {
         getInfluencer()
-      })
+      }, [])
     return(
         <Layout>
             <Helmet>

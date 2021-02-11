@@ -18,7 +18,7 @@ const SettingModal = (props) =>{
     const [imgData64Cover, setImgData64Cover] = useState('')
     const [userObj, setUserObj] = useState({fname: props.profileUser.fname, lname: props.profileUser.lname, email: props.profileUser.email, username: props.profileUser.username})
 
-    const [currentUserId, setCurrentUserId] = useState(app.currentUser.id)
+    const [currentUserId] = useState(app.currentUser.id)
     const [userPw, setUserPw] = useState({newPw: '', conNewPw: '', currentPw: ''})
     // const [file, setFile] = useState({})
     const [profilePic, setProfilePic] = useState({})

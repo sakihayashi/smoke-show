@@ -40,7 +40,7 @@ const SwaggInfluencer = (props) =>{
 
     useEffect(() => {
         getData()
-    })
+    }, [])
     return(
         <Fragment>
             <Helmet>

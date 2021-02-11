@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useCallback } from 'react'
+import React, { useState, Fragment } from 'react'
 import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 // import {useDropzone} from 'react-dropzone'
 import noImg from '../../assets/global/no_image.jpg'

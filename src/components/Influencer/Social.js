@@ -39,7 +39,7 @@ const Social = (props) =>{
     }
     useEffect(() => {
         getData()
-    })
+    }, [])
     return(
         <Fragment>
             <Helmet>
