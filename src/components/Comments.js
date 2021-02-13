@@ -12,7 +12,7 @@ import {uid} from 'react-uid'
 const Comments = (props) =>{
     // const [commentsData, setCommentsData] = useState(props.comments)
     const [commentsDB, setCommentsDB] = useState([])
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    // const [isLoggedIn, setIsLoggedIn] = useState(false)
     // const [modalShow, setModalShow] = useState(false)
     const [userComment, setUserComment] = useState("")
     const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
@@ -26,6 +26,7 @@ const Comments = (props) =>{
         e.preventDefault()
         // console.log('props', props)
         let tokenSessionStorage= sessionStorage.getItem('session_token')
+        const tokenUser = sessionStorage.getItem('session_user')
         let newComment ={}
         let credentials = null
         if(tokenSessionStorage){
@@ -40,7 +41,7 @@ const Comments = (props) =>{
                         videoId: props.videoId,
                         username: decoded.userData.fname
                     }
-                    credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password);
+                    credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
                 }
             })
         }
@@ -158,33 +159,34 @@ const Comments = (props) =>{
     //         setIsLoggedIn(false)
     //     }
     // }, [props.loginUserData.userId])
-    useEffect(() => {
-        if(props.currentUser){
-            setIsLoggedIn(true)
-        }else{
-            setIsLoggedIn(false)
-        }
-    }, [props.currentUser])
+    // useEffect(() => {
+    //     if(props.currentUser){
+    //         setIsLoggedIn(true)
+    //     }else{
+    //         setIsLoggedIn(false)
+    //     }
+    // }, [props.currentUser])
+
     useEffect( () => {
         
         let token = sessionStorage.getItem('session_token')
-        
+        const tokenUser = sessionStorage.getItem('session_user')
          if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
                     console.log(err)
-                    setIsLoggedIn(false)
+                    // setIsLoggedIn(false)
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
                     getComments(credentials)
                 }else{
-                    setIsLoggedIn(true)
-                    const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
-                    getComments(credentials)
+                    // setIsLoggedIn(true)
+                    const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+                    getComments(credentials.cre)
                 }
             });
             
          }else{
-            setIsLoggedIn(false)
+            // setIsLoggedIn(false)
             const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
                     getComments(credentials)
          }
@@ -192,7 +194,7 @@ const Comments = (props) =>{
     return(
         <React.Fragment>
     
-        {isLoggedIn ? writeComment() : loginToComment() }
+        {props.isLoggedIn ? writeComment() : loginToComment() }
 
         { commentsDB.map(comment =>{
             var localtime = moment(comment.date_posted).local().format('YYYY-MM-DD')
@@ -232,8 +234,8 @@ const Comments = (props) =>{
 const mapStateToProps = (state) => {
     //syntax is propName: state.key of combineReducer.key
     return{
-        credentials: state.auth.credentials,
-        loginUserData: state.auth.loginUserData
+        loginUserData: state.auth.loginUserData,
+        isLoggedIn: state.auth.isLoggedIn
     }
   }
 

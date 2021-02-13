@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Modal, Button, Form, Alert } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import { authUser } from '../../store/actions/authActions'
+import { logInUser } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import Logo from '../../assets/global/Logo-smoke-show.png'
 import jwt from 'jsonwebtoken'
@@ -89,55 +90,65 @@ const LoginModal = (props) =>{
     }else{
         resetPassword = ''
     }
-    
-    const handleSubmit = async (e) =>{
+    const handleSubmit =(e)=>{
         e.preventDefault()
-        const emailLowerCase = userObj.email.toLocaleLowerCase()
+        const emailLowerCase = userObj.email.toLowerCase()
         const credentials = Realm.Credentials.emailPassword(emailLowerCase, userObj.password)
-        try{
-            // Authenticate the user
-            await props.app.logIn(credentials).then(async user=>{
-                if(user.id === props.app.currentUser.id){
-                    console.log('matched')
-                    props.getUserId(user.id)
-                }else{
-                    console.log('not match')
-                }
-                    const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-                    const mongoCollection = mongo.db("smoke-show").collection("users");
-                    let token = ''
-                    const collectionInfluencer = mongo.db("smoke-show").collection("influencers");
-       
-                    const queryFilter = { userId: user.id };
-                    await mongoCollection.findOne(queryFilter).then(async loginUserData =>{
-                        if(!loginUserData){
-                            await collectionInfluencer.findOne(queryFilter).then( influencer =>{
-                                console.log('influencer', influencer)
-                                influencer.login = userObj
-                                token = createToken(influencer)
-                                sessionStorage.setItem('session_token', token)
-                                // const userData = {loginUserData: loginUserData, credentials: userObj}
-                                props.handleuser(influencer.username, influencer.userId)
-                            })
-                        }else{
-                            loginUserData.login = userObj
-                            token = createToken(loginUserData)
-                            
-                            sessionStorage.setItem('session_token', token)
-                            // const userData = {loginUserData: loginUserData, credentials: userObj}
-                            props.handleuser(loginUserData.fname, user.id)
-                            // props.authUser(userData)
-                        }
-                        
-                    })
-                });
-
-        }catch(error){
-            console.log('error', error)
-            setHasError(true)
-            setLoginMsg('Email and Password are incorrect')
-        }
+        props.logInUser(credentials, emailLowerCase)
     }
+    // const handleSubmit = async (e) =>{
+    //     e.preventDefault()
+    //     const emailLowerCase = userObj.email.toLocaleLowerCase()
+    //     const credentials = Realm.Credentials.emailPassword(emailLowerCase, userObj.password)
+    //     try{
+    //         await props.app.logIn(credentials).then(async user=>{
+    //             if(user.id === props.app.currentUser.id){
+    //                 console.log('matched')
+    //                 props.getUserId(user.id)
+    //             }else{
+    //                 console.log('not match')
+    //             }
+    //                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+    //                 const mongoCollection = mongo.db("smoke-show").collection("users");
+    //                 let token = ''
+    //                 const collectionInfluencer = mongo.db("smoke-show").collection("influencers");
+       
+    //                 const queryFilter = { userId: user.id };
+    //                 await mongoCollection.findOne(queryFilter).then(async loginUserData =>{
+    //                     if(!loginUserData){
+    //                         await collectionInfluencer.findOne(queryFilter).then( influencer =>{
+    //                             console.log('influencer', influencer)
+    //                             influencer.login = userObj
+    //                             token = createToken(influencer)
+    //                             sessionStorage.setItem('session_token', token)
+    //                             // const userData = {loginUserData: loginUserData, credentials: userObj}
+    //                             props.handleuser(influencer.username, influencer.userId)
+    //                         })
+    //                     }else{
+    //                         loginUserData.login = userObj
+    //                         token = createToken(loginUserData)
+                            
+    //                         sessionStorage.setItem('session_token', token)
+    //                         props.handleuser(loginUserData.fname, user.id)
+    //                     }
+                        
+    //                 })
+    //             });
+
+    //     }catch(error){
+    //         console.log('error', error)
+    //         setHasError(true)
+    //         setLoginMsg('Email and Password are incorrect')
+    //     }
+    // }
+
+    useEffect(() => {
+        if(props.hasLoginErr){
+            setHasError(true)
+        }else{
+            setHasError(false)
+        }
+    }, [props.hasLoginErr])
     
     return (
         <Modal
@@ -172,7 +183,6 @@ const LoginModal = (props) =>{
                     <Button className="login-btn" type="submit">
                         Login
                     </Button><br /><br />
-                    
                     <p className="click-div" onClick={props.toggleModal}>Or Signup here</p>
                 </div>
                 
@@ -187,11 +197,12 @@ const mapStateToProps = (state) => {
     //syntax is propName: state.key of combineReducer.key
     return{
       userData: state.auth.userData,
+      hasLoginErr: state.auth.hasLoginErr
     }
   }
 const mapDispatchToProps = (dispatch) =>{
     return {
-        authUser: (userObj) => dispatch(authUser(userObj))
+        logInUser: (credentials, email) => dispatch(logInUser(credentials, email))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LoginModal)

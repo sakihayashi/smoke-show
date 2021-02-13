@@ -53,8 +53,10 @@ const InfluencerIndexPage = () =>{
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
                     getInfluencers(credentials)
                 }else{
-                    const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
-                    getInfluencers(credentials)
+                    const tokenUser = sessionStorage.getItem('session_user')
+             
+                    const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+                    getInfluencers(credentials.cre)
                 }
             });
             

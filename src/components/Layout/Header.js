@@ -1,22 +1,22 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { Link, useLocation, useHistory } from 'react-router-dom'
-import { Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
+import { Link, useLocation } from 'react-router-dom'
+import { Navbar, Nav, Button} from 'react-bootstrap'
 import Logo from '../../assets/global/Logo-smoke-show.png'
 import './header.scss'
 import * as Realm from "realm-web"
 import LoginModal from './LoginModal'
 import SignUpModal from './SignUpModal'
 import { connect } from 'react-redux'
+import { logOutUser } from '../../store/actions/authActions'
+import { logInUser } from '../../store/actions/authActions'
 import jwt from 'jsonwebtoken'
 import settingsIcon from '../../assets/global/Settings-icon-white.svg'
 // import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 
 const Header = (props) =>{
-    let history = useHistory();
     const location = useLocation()
     const [currentUser, setCurrentUser] = useState('')
     const id = process.env.REACT_APP_REALM_APP_ID
-    // const app = new Realm.App({ id: process.env.REALM_APP_ID })
     const app = new Realm.App({ id: id })
     const productionUrl = 'https://master.d3l3iqr3dhkcvm.amplifyapp.com/'
     // const devUrl = 'http://localhost:3000/'
@@ -26,14 +26,14 @@ const Header = (props) =>{
     const logIn = async ()=>{
         props.modalShowHide(true)
     }
-    const logOut = async () =>{
-        props.changeUserState(app.currentUser.id)
-        sessionStorage.removeItem('session_token')
-        // props.userLoggedOut(app.currentUser.id)
-        // console.log('x', app.currentUser.id)
-        await app.currentUser.logOut().then(res =>{
-            console.log('res', res)
-        })
+    const logOut = () =>{
+        props.logOutUser()
+        // props.changeUserState(app.currentUser.id)
+        // sessionStorage.removeItem('session_token')
+        
+        // await app.currentUser.logOut().then(res =>{
+        //     console.log('res', res)
+        // })
     }
      const getUserId = (id) =>{
          setCurrentUser(id)
@@ -44,33 +44,57 @@ const Header = (props) =>{
 
      const loggedInDiv = 
      <Fragment>
-        <div >Hi {props.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><a href={productionUrl + 'user/' + currentUser}><img src={settingsIcon} className="setting-icon-nav"  /></a>
+        <div >Hi {props.customData.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><a href={productionUrl + 'user/' + currentUser}><img src={settingsIcon} className="setting-icon-nav"  /></a>
         </div>
      </Fragment>
-     useEffect(() => {
-         let tokenSessionStorage = sessionStorage.getItem('session_token')
-         if(tokenSessionStorage){
-            jwt.verify(tokenSessionStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
-                if(err){
-                    console.log(err)
-                    props.changeUserState(false)
-                }else{
-                    props.changeUserState(true)
-                    props.funcSetUsername(decoded.userData.fname)
-                    props.handleuser(decoded.userData.fname, decoded.userData.userId)
-                    setCurrentUser(decoded.userData.userId)
-                    console.log(decoded.userData.userId)
 
+     useEffect(() => {
+         if(props.isLoggedIn){
+            props.modalShowHide(false)
+         }else{
+            logOutUser()
+         }
+     }, [props.isLoggedIn])
+
+     useEffect(() => {
+         let token = sessionStorage.getItem('session_token')
+         if(token){
+            jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+                if(err){
+                    console.log('jwt time out')
+
+                }else{
+                    const tokenUser = sessionStorage.getItem('session_user')
+                    const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+                    props.logInUser(credentials.cre, decoded.userData.email)
                 }
-            });
-            
+            })
          }
      }, [])
+    //  useEffect(() => {
+    //      let tokenSessionStorage = sessionStorage.getItem('session_token')
+    //      if(tokenSessionStorage){
+    //         jwt.verify(tokenSessionStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+    //             if(err){
+    //                 console.log(err)
+    //                 props.changeUserState(false)
+    //             }else{
+    //                 props.changeUserState(true)
+    //                 props.funcSetUsername(decoded.userData.fname)
+    //                 props.handleuser(decoded.userData.fname, decoded.userData.userId)
+    //                 setCurrentUser(decoded.userData.userId)
+    //                 console.log(decoded.userData.userId)
+
+    //             }
+    //         });
+            
+    //      }
+    //  }, [])
 
     return(
         <header>
             <div className="login-wrapper">
-            {props.user ? loggedInDiv : 
+            {props.isLoggedIn ? loggedInDiv : 
             <Button className="btn-login" onClick={logIn}>Login</Button>
             }
             { hasAccount ? <LoginModal 
@@ -120,8 +144,16 @@ const Header = (props) =>{
 
 const mapStateToProps = (state) =>{
     return{
+        isLoggedIn: state.auth.isLoggedIn,
+        customData: state.auth.customData,
         userId: state.userId,
     }
 }
+const mapDispatchToProps = (dispatch) =>{
+    return {
+        logOutUser: () => dispatch(logOutUser()),
+        logInUser: (credentials, email) => dispatch(logInUser(credentials, email))
+    }
+}
 
-export default connect(mapStateToProps)(Header)
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

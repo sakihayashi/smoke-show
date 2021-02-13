@@ -18,6 +18,7 @@ const EmailConfirmation = (props) =>{
     const id = process.env.REACT_APP_REALM_APP_ID
     const config = { id };
     const app = new Realm.App(config);
+    const [clicked, setClicked] = useState(false)
     
     const getApp = Realm.App.getApp(id)
 
@@ -32,37 +33,39 @@ const EmailConfirmation = (props) =>{
     }
     const handleSubmit = async (e) =>{
         e.preventDefault()
-        setHasError(false)
-        const email = userObj.email.toLowerCase()
-        
-        const credentials = Realm.Credentials.emailPassword(email, userObj.password)
-        await app.logIn(credentials).then(async user =>{
-            const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-            const joined = new Date().getTime()
-            const userData = {
-                userId: user.id,
-                fname: userObj.fname,
-                lname: userObj.lname,
-                username: userObj.username,
-                joined: joined
-            }
-            
-            const mongoCollection = mongo.db("smoke-show").collection("users")
-            await mongoCollection.insertOne(userData).then(insertOneResult =>{
-                userData.login = {email: email, password: userObj.password}
-                let token = createToken(userData)
-                const oldToken = sessionStorage.getItem('session_token')
-                if(oldToken){
-                    sessionStorage.removeItem('session_token')
-                    sessionStorage.setItem('session_token', token)
-                }else{
-                    sessionStorage.setItem('session_token', token)
+        if(!clicked){
+            setHasError(false)
+            const email = userObj.email.toLowerCase()
+            const credentials = Realm.Credentials.emailPassword(email, userObj.password)
+            await app.logIn(credentials).then(async user =>{
+                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+                const joined = new Date().getTime()
+                const userData = {
+                    userId: user.id,
+                    fname: userObj.fname,
+                    lname: userObj.lname,
+                    username: userObj.username,
+                    joined: joined
                 }
                 
-                childRef.current.handleUserByParent(userObj.fname)
-            }).then(()=>{props.history.push("/")})
-
-        })
+                const mongoCollection = mongo.db("smoke-show").collection("users")
+                await mongoCollection.insertOne(userData).then(insertOneResult =>{
+                    userData.login = {email: email, password: userObj.password}
+                    let token = createToken(userData)
+                    const oldToken = sessionStorage.getItem('session_token')
+                    if(oldToken){
+                        sessionStorage.removeItem('session_token')
+                        sessionStorage.setItem('session_token', token)
+                    }else{
+                        sessionStorage.setItem('session_token', token)
+                    }
+                    setClicked(true)
+                    childRef.current.handleUserByParent({func: 'userUpdate', value: userObj.fname})
+                }).then(()=>{props.history.push("/")})
+            })
+        }else{
+            return
+        }
     }
 
     const handleResendToken = async (e) =>{

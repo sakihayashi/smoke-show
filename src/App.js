@@ -24,6 +24,8 @@ import BioPageInfluencer from './components/Influencer/BioPage'
 import Garage from './components/Influencer/Garage'
 import Social from './components/Influencer/Social'
 import SwaggInfluencer from './components/Influencer/Swagg'
+import QueryVideoData from './components/Admin/QueryVideoData'
+import EditVideoData from './components/Admin/EditVideoData'
 
 
 function App() {
@@ -46,6 +48,8 @@ function App() {
           <Route path="/user/:id" component={BioPage} />
           <Route path="/social/:id" component={Social} />
           <Route path="/swagg-influencer/:id" component={SwaggInfluencer} />
+          <Route path="/edit-video-data" component={EditVideoData} />
+          {/* <Route path="/query-data" component={QueryVideoData} /> */}
           <Route component={NotFoundPage} />
         </Switch>
     </Router>    

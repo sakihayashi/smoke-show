@@ -4,6 +4,8 @@ import * as Realm from "realm-web"
 import ImageUpload from './ImageUpload'
 import jwt from 'jsonwebtoken'
 import short from 'short-uuid'
+import { createMyCar } from '../../store/actions/bioActions'
+import { connect } from 'react-redux'
 
 const CreateNewCar = (props) =>{
     const bucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
@@ -32,7 +34,9 @@ const CreateNewCar = (props) =>{
         props.handleClose()
     }
 
-
+    const testSubmit = () =>{
+        props.createMyCar({name: 'test car', wheels: 'test'})
+    }
     // const onDrop = useCallback(acceptedFiles => {
         
         // var file = acceptedFiles[0]
@@ -123,11 +127,12 @@ const CreateNewCar = (props) =>{
         }else{
             console.log('warning current user and the login user do not match')
             const token = sessionStorage.getItem('session_token')
+            const tokenUser = sessionStorage.getItem('session_user')
             const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
-            const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+            const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
             
             try{
-                await app.logIn(credentials).then(user =>{
+                await app.logIn(credentials.cre).then(user =>{
                     user.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then( async res =>{
              
                         try{
@@ -244,6 +249,9 @@ const CreateNewCar = (props) =>{
                                 <Button variant="primary" type="submit" onClick={handleSubmit} className="save-changes-btn">
                                 Add my new car
                                 </Button>
+                                {/* <Button onClick={testSubmit}>
+                                    test Submit
+                                </Button> */}
                                 {/* <br></br><br/>
                                 <button onClick={testImgUpload}>test upload</button> */}
                             </Col>                          
@@ -260,4 +268,10 @@ const CreateNewCar = (props) =>{
     )
 }
 
-export default CreateNewCar
+const mapDispatchToProps = (dispatch) =>{
+    return{
+        createMyCar: (car) => dispatch(createMyCar(car))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(CreateNewCar)

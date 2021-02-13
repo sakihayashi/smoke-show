@@ -118,11 +118,11 @@ const SettingModal = (props) =>{
             }
         }else{
         console.log('I have to debug', app.currentUser.id)
-        const token = sessionStorage.getItem('session_token')
+        const token = sessionStorage.getItem('session_user')
         const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
-        const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+
         try{
-            await app.logIn(credentials).then(async user =>{
+            await app.logIn(decoded.cre).then(async user =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                 await user.functions.putImageObjToS3(imgData64Profile, bucketName, filekey, profilePic.type).then( res =>{
@@ -219,11 +219,11 @@ const SettingModal = (props) =>{
             console.log(err)
             }
         }else{
-            const token = sessionStorage.getItem('session_token')
+            const token = sessionStorage.getItem('session_user')
             const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
-            const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+      
             try{
-                await app.logIn(credentials).then(async  user =>{
+                await app.logIn(decoded.cre).then(async  user =>{
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                     const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                     await user.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
@@ -296,11 +296,11 @@ const SettingModal = (props) =>{
             }catch(err){ console.log(err) }
             
         }else{
-            const token = sessionStorage.getItem('session_token')
+            const token = sessionStorage.getItem('session_user')
             const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
-            const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+    
             try{
-                await app.logIn(credentials).then( async user =>{
+                await app.logIn(decoded.cre).then( async user =>{
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                     const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                     try{
@@ -342,11 +342,11 @@ const deleteImgObj = async (key) =>{
             })
         }catch(err){console.log(err)}
     }else{
-        const token = sessionStorage.getItem('session_token')
+        const token = sessionStorage.getItem('session_user')
         const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
-        const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+
         try{
-            await app.logIn(credentials).then(async user =>{
+            await app.logIn(decoded.cre).then(async user =>{
                 await user.functions.deleteImageObjToS3(bucketName, key).then(res =>{
                     console.log('res', res)
                 })

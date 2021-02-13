@@ -145,6 +145,7 @@ const CarSearch = (props) =>{
    }
    const checkToken = async () =>{
     let token = sessionStorage.getItem('session_token')
+    const tokenUser = sessionStorage.getItem('session_user')
     if(token){
         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, async (err, decoded)=>{
             if(err){
@@ -159,9 +160,10 @@ const CarSearch = (props) =>{
                     console.log(err)
                 }
             }else{
-                const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+                const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+             
                 try{
-                    await app.logIn(credentials).then( user =>{
+                    await app.logIn(credentials.cre).then( user =>{
                         const mongoClient = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                         setMongo(mongoClient)
                     })

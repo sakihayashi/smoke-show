@@ -133,12 +133,12 @@ const CreateNewCar = (props) =>{
             }
         }else{
             console.log('warning current user and the login user do not match')
-            const token = sessionStorage.getItem('session_token')
+            const token = sessionStorage.getItem('session_user')
             const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
-            const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
+        
             
             try{
-                await app.logIn(credentials).then(user =>{
+                await app.logIn(decoded.cre).then(user =>{
                     user.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then( async res =>{
              
                         try{

@@ -5,8 +5,12 @@ const userReducer = (state = initState, action) =>{
         case 'CREATE_USER':
             console.log('user from reducer', action.userObj)
             return action.userObj
-        default:
-            console.log('error', action)
+        
+        case 'BECOME_FAN': 
+            console.log('from reducer', action.userObj)
+            return action.userObj
+        // default:
+        //     console.log('error', action)
     }
     return state
 }

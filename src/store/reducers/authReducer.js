@@ -1,6 +1,9 @@
 const initState = {
     credentials: {},
-    loginUserData: {}
+    loginUserData: {},
+    isLoggedIn: false,
+    customData: {},
+    hasLoginErr: false
 }
 
 const authReducer = (state = initState, action) =>{
@@ -11,10 +14,25 @@ const authReducer = (state = initState, action) =>{
                 credentials: action.userData.credentials,
                 loginUserData: action.userData.loginUserData
             }
+        
+        case 'LOGIN_SUCCESS':
+            return{
+                customData: action.customData,
+                isLoggedIn: true
+            }
+        case 'LOGIN_FAIL':
+            return{
+                isLoggedIn: false,
+                hasLoginErr: true
+            }
+        case 'LOGOUT':
+            return{
+                isLoggedIn: false,
+                customData: {}
+            }
         default: return state
     }
-console.log('state', state)
-return state
+// return state
 }
 
 export default authReducer

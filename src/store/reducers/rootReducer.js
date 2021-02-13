@@ -1,10 +1,12 @@
 import authReducer from './authReducer'
 import userReducer from './userReducer'
+import bioReducer from './bioReducer'
 import { combineReducers } from 'redux'
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    user: userReducer
+    user: userReducer,
+    bio: bioReducer
 })
 
 // const initState = {

@@ -1,0 +1,20 @@
+@import "../../scss/config";
+
+.btn-fan{
+    background-color: $theme-color;
+    border-color: $theme-color;
+}
+.btn-fan:hover{
+    background-color: $theme-hover;
+    border-color: $theme-hover;
+}
+.btn-fan:focus{
+    background-color: $theme-hover;
+    border-color: $theme-hover;
+}
+
+.center-btn{
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+}

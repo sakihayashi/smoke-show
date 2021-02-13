@@ -26,7 +26,7 @@ const Layout = forwardRef((props, ref) =>{
         setUsername(name)
     }
     const handleuser = (fname, userId) =>{
-        console.log('value check', userId)
+        // console.log('value check', userId)
         setUser(true)
         setUsername(fname)
         setUserId(userId)

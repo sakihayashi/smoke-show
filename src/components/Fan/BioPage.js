@@ -59,16 +59,16 @@ const BioPage = (props) =>{
                 console.log('err', err)
                 
             }else{
-                console.log('success', decoded.userData.login.email)
                 setProfileUser({
                     ...profileUser,
-                    email: decoded.userData.login.email
+                    email: decoded.userData.email
                 })
                 setShowSetting(true)
             }
           });
         
     }
+    
     const handleCloseSetting = () =>{
         setShowSetting(false)
     }
@@ -112,7 +112,7 @@ const BioPage = (props) =>{
         e.preventDefault()
   
         if(app.currentUser.id === profileUser.userId){
-            const mongodb = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+            const mongodb = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
             const mongoCollection = mongodb.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
     
             try{
@@ -183,110 +183,43 @@ const BioPage = (props) =>{
             </Form>
         )
     }
-    // const regainData = ()=>{
-    //     const token = sessionStorage.getItem('session_token')
-    //     if(token){
-    //         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
-    //             if (err) {
-    //                 getDataAsCurrent()
-    //                 console.log('err login again', err)
-    //                 refModal.current.handleLoginModal(true)
-    //             }else{
-    //                 getDataAsCurrent()
-    //             }
-    //           });
-            
-    //     }else{
-    //         getDataAsCurrent()
-    //     }
-    // }
-    // const getDataAsTheUser = async (decoded) =>{
-    //     setTheUser(decoded.userData)
-    //     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-    //     const mongoCollectionUser = mongo.db("smoke-show").collection("users")
-    //     const filter = {userId: profileUserId}
-    //     try{
-    //         await mongoCollectionUser.findOne(filter).then(user =>{
-    //                     setProfileUser(user)
-    //                     setFormattedTime(moment(profileUser.joined).local().format('MMMM Do YYYY'))
-    //                     getTotalComments(user.userId, mongo)
-    //                     getMyCars(user.userId, mongo)
-    //         })
-    //     }catch(err){
-    //         console.log(err)
-    //     }
-    //     // const mongo = decoded.userData.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-    //     if(theUser.userId === profileUser.userId){
-    //         setAllowEdit(true)
-    //     }
-    
-    // }
-    const getDataAsCurrent = async () =>{
-        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-        const mongoCollectionUser = mongo.db("smoke-show").collection("users")
-        const filter = {userId: userIdParam}
+
+    const getData = async (credentials) =>{
         try{
-            await mongoCollectionUser.findOne(filter).then(user =>{
-                        setProfileUser(user)
-                        console.log(profileUser.joined)
-                        if(user.joined){
-                            const formatted = moment(user.joined).local().format('MMMM Do YYYY')
-                            setFormattedTime(formatted)
+            await app.logIn(credentials).then(async logInUser =>{
+                const mongo = logInUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                const mongoCollectionUser = mongo.db("smoke-show").collection("users")
+                const filter = {userId: userIdParam}
+                try{
+                    await mongoCollectionUser.findOne(filter).then(user =>{
+                            setProfileUser(user)
+                            console.log(profileUser.joined)
+                            if(user.joined){
+                                const formatted = moment(user.joined).local().format('MMMM Do YYYY')
+                                setFormattedTime(formatted)
+                            }else{
+                                setFormattedTime('No data')
+                            }
+                            
+                            getTotalComments(mongo)
+                            getMyCars(mongo)
+                            return user
+                    }).then(user =>{
+                        if( userIdParam === logInUser.id){
+                            setAllowEdit(true)
                         }else{
-                            setFormattedTime('No data')
+                            setAllowEdit(false)
                         }
-                        
-                        getTotalComments(mongo)
-                        getMyCars(mongo)
-                        return user
-            }).then(user =>{
-                if( userIdParam === app.currentUser.id){
-                    setAllowEdit(true)
-                }else{
-                    setAllowEdit(false)
+                    })
+                }catch(err){
+                    console.log(err)
                 }
             })
         }catch(err){
             console.log(err)
         }
-        
     }
-    
-    // const getDataAsPublic = async () =>{
-    //     console.log('working?')
-    //     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTHAPI)
-    //     try{
-    //         await app.logIn(credentials).then( async user =>{
 
-    //             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-    //             const mongoCollection = mongo.db("smoke-show").collection("users")
-
-    //             const filter = {userId: profileUserId} 
-               
-    //             await mongoCollection.findOne(filter).then(user =>{
-    //                 console.log('user?', user)
-    //                 if(user === null){
-    //                     setProfileUser({fname: 'No user data', lname: '', profileDesc: 'No user data', profileCover: '' })
-    //                 }else{
-    //                     setProfileUser(user)
-    //                     // console.log('this is profile user', profileUser)
-    //                     // console.log('cars', profileUser.myCars)
-    //                     if(user.joined){
-    //                         setFormattedTime(moment(user.joined).local().format('MMMM Do YYYY'))
-    //                     }else{
-    //                         setFormattedTime('No data')
-    //                     }
-                        
-    //                     getTotalComments(user.userId, mongo)
-    //                     getMyCars(user.userId, mongo)
-    //                 }
-                    
-    //             })
-    //         })
-    //     }catch(err){
-    //         console.log(err)
-    //     }
-    // }
     const getTotalComments = async (mongo) =>{
         
         const mongoCollectionComments = mongo.db("smoke-show").collection("comments")
@@ -308,20 +241,23 @@ const BioPage = (props) =>{
     useEffect(() => {
         // setUserIdParam(props.match.params.id)
         const token = sessionStorage.getItem('session_token')
+        const tokenUser = sessionStorage.getItem('session_user')
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     // timeout
-                    // measuredRef()
                     // childRef.current.handleLoginModal(true)
-                    getDataAsCurrent()
+                    const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
+                    getData(credentials)
                 }else{
-                    getDataAsCurrent()
+                    const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+                    getData(credentials.cre)
                 }
               });
             
         }else{
-            getDataAsCurrent()
+            const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
+            getData(credentials)
         }
    
     }, [])

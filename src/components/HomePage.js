@@ -2,7 +2,6 @@ import React, { useEffect, useState, Fragment, Suspense } from 'react'
 import {Helmet} from "react-helmet"
 import { Row, Col, Form, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import * as Realm from "realm-web"
 import { youtubeAPI } from '../utils/youtubeAPI'
 import { carTempData } from './carTempData'
 import { commentsTempData } from './commentsTempData' 

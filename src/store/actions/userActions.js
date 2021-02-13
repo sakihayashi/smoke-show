@@ -15,4 +15,16 @@ export const createNewUser = (userObj) =>{
         
     }
 }
+export const openLoginModal = (state) =>{
+    return (dispatch, getState)=>{
+        dispatch({type: 'OPEN_LOGIN_MODAL', state})
+    }
+}
 
+export const becomeAFan = (data) =>{
+    return (dispatch, getState) =>{
+        //save data to mongodb
+        dispatch({type: 'BECOME_FAN', data})
+    }
+
+}

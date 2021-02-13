@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet"
 import * as Realm from "realm-web"
 import Layout from '../Layout/Layout'
 import SubNav from './SubNav'
-
+import { connect } from 'react-redux'
 import noImg from '../../assets/global/no_image.jpg'
 // import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 import editIcon from '../../assets/global/edit-icon.svg'
@@ -16,12 +16,10 @@ import VehicleCard from './vehicleCard'
 import CreateNewCar from './CreateNewCar'
 import jwt from 'jsonwebtoken'
 import moment from 'moment'
-// import axios from 'axios'
 
 const Garage = (props) =>{
   
     const childRef = useRef()
-
     let userIdParam = props.match.params.id
     const [profileUser, setProfileUser] = useState({fname: '', lname: '', profilePic: '', profileCover: '', username: '', profileDesc: '', favSong: '', favArtist: ''})
     const [allowEdit, setAllowEdit] = useState(false)
@@ -60,7 +58,7 @@ const Garage = (props) =>{
             }else{
                 setProfileUser({
                     ...profileUser,
-                    email: decoded.userData.login.email
+                    email: decoded.userData.email
                 })
                 setShowSetting(true)
             }
@@ -243,6 +241,7 @@ const Garage = (props) =>{
     }
     const loginCheck = async () =>{
         const token = sessionStorage.getItem('session_token')
+        const tokenUser = sessionStorage.getItem('session_user')
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
@@ -251,8 +250,8 @@ const Garage = (props) =>{
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
                     getInfluencerData(credentials)
                 }else{
-                    const credentials = Realm.Credentials.emailPassword(decoded.userData.login.email, decoded.userData.login.password)
-                    getInfluencerData(credentials)
+                    const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+                    getInfluencerData(credentials.cre)
                 }
               });
             
@@ -445,5 +444,10 @@ const Garage = (props) =>{
         </Layout>
     )
 }
-
-export default Garage
+const mapStateToProps = (state) =>{
+    console.log('props state from garage', state)
+    // return{
+    //     isLoggedIn: state.auth.,
+    // }
+}
+export default connect(mapStateToProps)(Garage)
