@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect } from 'react'
 import * as Realm from "realm-web"
 
 import { Container, Row, Col, Form, Pagination, Button } from 'react-bootstrap'
-import { white1X1 } from 'aws-amplify-react'
+import jwt from 'jsonwebtoken'
 
 const EditVideoData = () =>{
     const [activePag, setActivePag] = useState(0)
@@ -14,6 +14,8 @@ const EditVideoData = () =>{
     const [carDataId, setCarDataId] = useState('')
     const [editVideoId, setEditVideoId] = useState('')
     const [editMode, setEditMode] = useState(false)
+    const maxAgeTest = 1 * 60 * 60
+
     const handleChange = (e) =>[
         setUserObj({
             ...userObj,
@@ -45,6 +47,11 @@ const EditVideoData = () =>{
         try{
             app.logIn(credentials).then(async user =>{
                 setIsLoggedIn(true)
+                const customData = user.customData
+                const token = jwt.sign({ userData: customData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest})
+                const tokenCredentials = jwt.sign({ cre: credentials }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest})
+                sessionStorage.setItem('session_token', token)
+                sessionStorage.setItem('session_user', tokenCredentials)
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
                 const mongoCollection = mongo.db("smoke-show").collection("youtube-videos")
                 const filter = {channelId: 'UCdOXRB936PKSwx0J7SgF6SQ'}
@@ -134,12 +141,22 @@ const EditVideoData = () =>{
             </Form>
         )
     }
+    const queryData = async () =>{
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+        const collectionYoutube = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("youtube-videos")
+        const filter = {channelId: 'UCdOXRB936PKSwx0J7SgF6SQ'}
+        await collectionYoutube.find(filter).then( videos =>{
+            const chunkedVideos = chunkArray(videos)
+            setAllVideos(chunkedVideos)
+        })
+    }
     useEffect(() => {
         const tokenUser = sessionStorage.getItem('session_user')
         if(tokenUser){
             setIsLoggedIn(true)
+            queryData()
         }else{
-            isLoggedIn(false)
+            setIsLoggedIn(false)
         }
 
     }, [])
