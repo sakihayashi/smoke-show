@@ -93,6 +93,7 @@ const EditVideoData = () =>{
         e.preventDefault()
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
         const collectionYoutube = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("youtube-videos")
+        carDataId(carDataId.replace(/\s/g, ''))
         try{
             await collectionYoutube.updateOne(
                 { "videoId": editVideoId},
@@ -120,7 +121,7 @@ const EditVideoData = () =>{
         return(
             <Form>
                 <Form.Group >
-                    <Form.Label>Edit VideoID:  {video.videoId && video.videoId}</Form.Label>
+                    <Form.Label>Edit car data of VideoID: {video.videoId && video.videoId}</Form.Label>
                     <Form.Control as="textarea" rows={2} name={video.videoId} value={allVideos[activePag].carDataId && allVideos[activePag].carDataId } onChange={handleChangeCarData} />
                 </Form.Group>
                 
@@ -155,13 +156,14 @@ const EditVideoData = () =>{
                                 {video.carDataId ? 
                                 <div>
                                 <p>Youtube video ID: {video.carDataId ? video.carDataId : 'No data'}</p>
-                                <Button onClick={()=>setEditMode(true)}>Edit</Button>
+                                 {/* <Button onClick={()=>setEditMode(true)}>Edit</Button> */}
+                                
                                 </div>
                                 
                                  :
                                 editCarData(video)
                                 }
-                                {editMode && editCarData(video)}
+                                {/* {editMode && editCarData(video)} */}
                             </Col>
                         )
                         
