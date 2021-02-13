@@ -134,6 +134,15 @@ const EditVideoData = () =>{
             </Form>
         )
     }
+    useEffect(() => {
+        const tokenUser = sessionStorage.getItem('session_user')
+        if(tokenUser){
+            setIsLoggedIn(true)
+        }else{
+            isLoggedIn(false)
+        }
+
+    }, [])
     return(
         <Fragment>
             {isLoggedIn ? 
