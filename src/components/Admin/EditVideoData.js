@@ -100,7 +100,9 @@ const EditVideoData = () =>{
         e.preventDefault()
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
         const collectionYoutube = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("youtube-videos")
-        carDataId(carDataId.replace(/\s/g, ''))
+        let str = carDataId
+        str = str.replace(/\s/g, '')
+        setCarDataId(str)
         try{
             await collectionYoutube.updateOne(
                 { "videoId": editVideoId},
