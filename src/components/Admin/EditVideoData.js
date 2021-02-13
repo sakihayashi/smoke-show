@@ -16,6 +16,20 @@ const EditVideoData = () =>{
     const [editMode, setEditMode] = useState(false)
     const maxAgeTest = 1 * 60 * 60
 
+    const handlePagNum = (num) =>{
+        console.log('num', num)
+        setActivePag(num)
+        setAllVideos({...allVideos})
+    }
+    let items = [];
+    for (let number = 0; number <= 10; number++) {
+    items.push(
+        <Pagination.Item key={number} active={number === activePag} onClick={()=>{handlePagNum(number)}}>
+        {number}
+        </Pagination.Item>,
+    );
+    }
+    
     const handleChange = (e) =>[
         setUserObj({
             ...userObj,
@@ -130,7 +144,7 @@ const EditVideoData = () =>{
         return(
             <Form>
                 <Form.Group >
-                    <Form.Label>Edit car data of VideoID: {video.videoId && video.videoId}</Form.Label>
+                    <Form.Label>Edit car data ID</Form.Label>
                     <Form.Control as="textarea" rows={2} name={video.videoId} value={allVideos[activePag].carDataId && allVideos[activePag].carDataId } onChange={handleChangeCarData} />
                 </Form.Group>
                 
@@ -167,6 +181,8 @@ const EditVideoData = () =>{
             {isLoggedIn ? 
             <Container>
                 <h1>Edit video data</h1>
+                <center><Pagination>{items}</Pagination></center>
+                <hr />
                 <Row>
                 {console.log('array 0', allVideos[0])}
                 { allVideos[activePag] && 
@@ -181,9 +197,10 @@ const EditVideoData = () =>{
                                 />
                                 <h3>{video.snippet.title}</h3>
                                 <p>Date: {video.snippet.publishedAt}</p>
+                                <p>Youtube videoId: {video.videoId}</p>
                                 {video.carDataId ? 
                                 <div>
-                                <p>Youtube video ID: {video.carDataId ? video.carDataId : 'No data'}</p>
+                                <p>Car data ID: {video.carDataId ? video.carDataId : 'No data'}</p>
                                  {/* <Button onClick={()=>setEditMode(true)}>Edit</Button> */}
                                 
                                 </div>
