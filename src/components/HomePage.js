@@ -18,7 +18,6 @@ const Comments = React.lazy(() => import('./Comments'))
 
 const HomePage = (props) =>{
     
-// const childRef = useRef();
 const videoEmbedURL = 'https://www.youtube.com/embed/'
 const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
 const [searchKeyword, setSearchKeyword] = useState('')
@@ -198,7 +197,7 @@ const [currentUser, setCurrentUser] = useState('')
 
                                                 </div>
                                             </Row>
-                                            <Suspense fallback={<div class="loader">Loading...</div>}>
+                                            <Suspense fallback={<div className="loader">Loading...</div>}>
                                                 <Comments comments={commentsTempData[index]} videoId={car.videoId} currentUser={currentUser} />
                                             </Suspense>
                                             

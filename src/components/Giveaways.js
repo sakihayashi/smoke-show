@@ -45,7 +45,7 @@ const Giveaways = (props) =>{
                                 <Card.Img variant="top" src={data.imgUrl} />
                                     
                                 <Card.Body>
-                                    <Card.Title class="card-title">
+                                    <Card.Title className="card-title">
                                     <div className="card-title-text">
                                         <div className="card-left"></div>
                                         <strong>{data.item}</strong>{' '} giveaway

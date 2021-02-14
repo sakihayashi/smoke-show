@@ -38,7 +38,6 @@ export const logOutUser = () =>{
     }
 }
 
-
 export const authUser = (userData) =>{
     //with thunk, we can reutrn function but otherwise, return state
     return (dispatch, getState) =>{

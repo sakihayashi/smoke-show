@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import {Helmet} from "react-helmet"
 import * as Realm from "realm-web"
 import Layout from '../Layout/Layout'
@@ -18,11 +18,6 @@ import moment from 'moment'
 // import axios from 'axios'
 
 const BioPage = (props) =>{
-  
-    const childRef = useRef()
-    // const [refAlt, setRefAlt] = useState()
-    // const [paramId, setParamId] = useState(props.match.params.id)
-    // const [parentModal, setParentModal] = useState(null)
 
     let userIdParam = props.match.params.id
 
@@ -263,7 +258,7 @@ const BioPage = (props) =>{
     }, [])
 
     return(
-        <Layout refBio={childRef} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut} >
+        <Layout userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut} >
         <Helmet>
             <meta charSet="utf-8" />
             <title>User profile page | The Smoke Show</title>

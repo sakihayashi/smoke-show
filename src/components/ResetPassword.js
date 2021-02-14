@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Form } from 'react-bootstrap'
 // import Logo from '../assets/global/Logo-smoke-show.png'
 import * as Realm from "realm-web"
@@ -6,11 +6,8 @@ import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import Layout from './Layout/Layout'
 
-// http://localhost:3000/reset-password?token=a13bd84a8417b512344a3b6c6368d531048b3b8f5da61189c760dd5e43324097e56f8347c7540fe61ea9f090516223e3df94116aa32212ebebc6022aaa34d788&tokenId=601f01fd96554f5bcb2dd04d
-
 const ResetPassword = (props) =>{
 
-    const childRef = useRef()
     const token = new URLSearchParams(props.location.search).get("token")
     const tokenId = new URLSearchParams(props.location.search).get("tokenId")
     console.log(token)
@@ -35,7 +32,7 @@ const ResetPassword = (props) =>{
         return jwt.sign({ userData: userData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest});
     }
     const handeleRestPw = async (e) =>{
-        console.log('pw', token, tokenId, userObj.password)
+        // console.log('pw', token, tokenId, userObj.password)
         e.preventDefault()
         try{
             // await app.emailPasswordAuth.resetPassword("newPassw0rd", token, tokenId);
@@ -56,30 +53,16 @@ const ResetPassword = (props) =>{
 
         try{
             // Authenticate the user
-            await app.logIn(credentials).then(async user=>{
+            await app.logIn(credentials).then( user=>{
                     console.log('working?', user)
                     // const key = await user.apiKeys.create(uid)
-                    const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-                    const mongoCollection = mongo.db("smoke-show").collection("users");
-                    let token = ''
-                    const queryFilter = { userId: user.id };
-                    await mongoCollection.findOne(queryFilter).then(loginUserData =>{  
-                        const oldToken = sessionStorage.getItem('session_token')
-                        loginUserData.login = userObj
-                        token = createToken(loginUserData)
-                        if(oldToken){
-                            sessionStorage.removeItem('session_token')
-                            sessionStorage.setItem('session_token', token)
-                        }else{
-                            sessionStorage.setItem('session_token', token)
-                        }
-                        
-                        
-                        
-                    }).then(()=>{props.history.push("/")})
+                    const customData = user.customData
+                    const token = jwt.sign({ userData: customData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest})
+                    sessionStorage.setItem('session_token', token)
+                    const tokenUser = jwt.sign({ cre: credentials }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest})
+                    sessionStorage.setItem('session_user', tokenUser)
                     
-                    
-                });
+                }).then(()=>{props.history.push("/")})
             
       
         }catch(error){
@@ -88,11 +71,11 @@ const ResetPassword = (props) =>{
         }
     }
     useEffect(() => {
-        
+        handeleRestPw()
     }, [])
 
     return (
-        <Layout ref={childRef}>
+        <Layout>
             <div className="custom-modal-body theme-text-p height-adj-main">
                 <div style={{marginTop:'4rem'}}></div>
                 {hasReset ? 

@@ -14,33 +14,43 @@ const LoginModal = (props) =>{
     const [hasError, setHasError] = useState(false)
     const [forgotPw, setForgotPw] = useState(false)
     const [resetPwSent, setResetPwSent] = useState(false)
-    const uid = useUID()
+    // const uid = useUID()
     const [loginMsg, setLoginMsg] = useState('')
     const [errMsg, setErrMsg] = useState('')
     const appId = process.env.REACT_APP_REALM_APP_ID
-    const appConfig = {
-        id: appId,
-        timeout: 10000, // timeout in number of milliseconds
-      };
+    // const appConfig = {
+    //     id: appId,
+    //     timeout: 10000, // timeout in number of milliseconds
+    //   };
     const getApp = Realm.App.getApp(appId)
+    const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
+
     //max age one day number of day, hours, min and sec
-    const maxAge = 1 * 24 * 60 * 60
+    // const maxAge = 1 * 24 * 60 * 60
     const maxAgeTest = 1 * 60 * 60
 
     const createToken = (userData) =>{
         return jwt.sign({ userData: userData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest});
     }
+  
     const handleResetPw = async (e) =>{
         e.preventDefault()
+        const lowerCase = userObj.email.toLowerCase()
         // const newPW = uuidv4()
         // Additional arguments for the reset function
+        console.log('userobj', userObj)
         if(userObj.password === userObj.confirmPw){
             const args = [];
-            await getApp.emailPasswordAuth.callResetPasswordFunction(userObj.email, userObj.password, args).then(res =>{
-                console.log('res', res)
-                setUserObj({fname: '', lname: '', email: '', password: '', confirmPw: ''})
-                setResetPwSent(true)
-            })
+            try{
+                await getApp.emailPasswordAuth.callResetPasswordFunction(lowerCase, userObj.password, args).then(res =>{
+                    console.log('res', res)
+                    setUserObj({fname: '', lname: '', email: '', password: '', confirmPw: ''})
+                    setResetPwSent(true)
+                })
+            }catch(err){
+                console.log(err)
+            }
+            
         }else{
             setErrMsg('the password and the confirm password do not match. Try again.')
         }
@@ -59,7 +69,7 @@ const LoginModal = (props) =>{
     if(resetPwSent){
         resetPassword =
         <div>
-            <p class="login-form" style={{textAlign: 'center', marginBottom: '2rem'}}>We've sent you an email link to reset your password.<br/><br /> Please check your email inbox.</p><br/>
+            <p className="login-form" style={{textAlign: 'center', marginBottom: '2rem'}}>We've sent you an email link to reset your password.<br/><br /> Please check your email inbox.</p><br/>
             <div className="text-center" ><Button className="comment-btn" onClick={props.onHide} style={{minWidth: '200px'}}>Close</Button></div>
             
         </div>
@@ -190,7 +200,7 @@ const LoginModal = (props) =>{
         }
           </Modal.Body>
         </Modal>
-      );
+      )
 }
 
 const mapStateToProps = (state) => {

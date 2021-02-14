@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Helmet } from "react-helmet"
 import * as Realm from "realm-web"
 import Layout from '../Layout/Layout'
@@ -19,7 +19,6 @@ import moment from 'moment'
 
 const Garage = (props) =>{
   
-    const childRef = useRef()
     let userIdParam = props.match.params.id
     const [profileUser, setProfileUser] = useState({fname: '', lname: '', profilePic: '', profileCover: '', username: '', profileDesc: '', favSong: '', favArtist: ''})
     const [allowEdit, setAllowEdit] = useState(false)
@@ -246,7 +245,7 @@ const Garage = (props) =>{
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     // timeout
-                    childRef.current.handleUserByParent({func: 'modal', value: true})
+                    // childRef.current.handleUserByParent({func: 'modal', value: true})
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
                     getInfluencerData(credentials)
                 }else{
@@ -267,7 +266,7 @@ const Garage = (props) =>{
     }, [])
 
     return(
-        <Layout ref={childRef} userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut} >
+        <Layout  userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut} >
         <Helmet>
             <meta charSet="utf-8" />
             <title>Influencer Garage page | The Smoke Show</title>

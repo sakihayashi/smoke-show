@@ -33,7 +33,7 @@ const SignUpModal = (props) =>{
                   
                     setEmailSent(true)
                     e.target.reset()
-                    
+
                 })
        
                 
@@ -133,7 +133,7 @@ const SignUpModal = (props) =>{
 }
 const mapDispatchToProps = (dispatch) =>{
     return {
-        createNewUser: (userObj) => dispatch(createNewUser(userObj))
+        // createNewUser: (userObj) => dispatch(createNewUser(userObj))
     }
 }
 

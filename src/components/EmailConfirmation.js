@@ -1,13 +1,13 @@
-import React, { useState, useEffect, createRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Form } from 'react-bootstrap'
 // import Logo from '../assets/global/Logo-smoke-show.png'
 import * as Realm from "realm-web"
 import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import Layout from './Layout/Layout'
+import { openLoginModal } from '../store/actions/userActions'
 
 const EmailConfirmation = (props) =>{
-    const childRef = createRef()
     let token = new URLSearchParams(props.location.search).get("token")
     let tokenId = new URLSearchParams(props.location.search).get("tokenId")
     const [userObj, setUserObj] = useState({fname: '', lname: '', token: token, tokenId: tokenId, username: '', email: '', password: ''})
@@ -60,7 +60,7 @@ const EmailConfirmation = (props) =>{
                         sessionStorage.setItem('session_token', token)
                     }
                     setClicked(true)
-                    childRef.current.handleUserByParent({func: 'userUpdate', value: userObj.fname})
+         
                 }).then(()=>{props.history.push("/")})
             })
         }else{
@@ -130,7 +130,7 @@ const EmailConfirmation = (props) =>{
     }, [])
 
     return (
-        <Layout ref={childRef}>
+        <Layout >
             <div className="custom-modal-body">
                 <div style={{marginTop:'3rem'}}></div>
                 {hasRegistered ? 
@@ -181,6 +181,12 @@ const EmailConfirmation = (props) =>{
     )
 }
 
-export default connect()(EmailConfirmation)
+const mapDispatchToProps = (dispatch) =>{
+    return {
+        openLoginModal: (state) => dispatch(openLoginModal(state))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(EmailConfirmation)
 
 

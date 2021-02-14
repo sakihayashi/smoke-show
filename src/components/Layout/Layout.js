@@ -1,19 +1,24 @@
-import React, { useState, useImperativeHandle, forwardRef  } from 'react'
+import React, { useState, useEffect  } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import { withRouter } from "react-router"
-
+import { connect } from 'react-redux'
+// import { openLoginModal } from '../../store/actions/userActions'
 const HeaderWithRouter = withRouter(Header);
 
-const Layout = forwardRef((props, ref) =>{
+const Layout = (props) =>{
     const [modalShow, setModalShow] = useState(false)
     const [user, setUser] = useState(false)
     const [username, setUsername] = useState('')
     const [userId, setUserId] = useState('')
     
-    // const parentRef = useRef()
     const modalShowHide = (state)=>{
         setModalShow(state)
+        // props.openLoginModal()
+    }
+    const handleModal = () =>{
+        console.log('modal state', props.openModal)
+        setModalShow(props.openModal)
     }
     const changeUserState = (id) =>{
         setUser(false)
@@ -39,32 +44,15 @@ const Layout = forwardRef((props, ref) =>{
     // const updateLoggedOut = (id) =>{
     //     props.userLoggedOut(id)
     // }
-    useImperativeHandle(
-        ref,
-        (obj) => ({
-            handleUserByParent(obj){
-                if(obj.func === 'userUpdate'){
-                    setUser(true)
-                    setUsername(obj.value)
-                }else if(obj.func === 'modal'){
-                    modalShowHide(obj.value)
-                }
-                
-            }
-        }),
-    )
+
     // const updateUserName = (fname) =>{
     //     setUser(true)
     //     setUsername(fname)
     // }
 
-    // useImperativeHandle(
-    //     ref, 
-    //     (value) => ({
-    //         handleLoginModal: modalShowHide(value)
-    //         // handleUserByParent: updateUserName(value)
-    //   })
-    // )
+    useEffect(() => {
+        handleModal()
+    }, [props.openModal])
 
     return(
         <div>
@@ -75,6 +63,18 @@ const Layout = forwardRef((props, ref) =>{
         </div>
 
     )
-})
+}
 
-export default Layout 
+const mapStateToProps = (state) =>{
+    // console.log('redux', state)
+    return{
+        openModal: state.user.openModal
+    }
+}
+const mapDispatchToProps = (dispatch) =>{
+    return{
+        // modalShowHide: (state) =>dispatch(modalShowHide(state))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout)

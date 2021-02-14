@@ -16,7 +16,7 @@ const AboutPage = () =>{
 
         {/* <link rel="canonical" href="http://mysite.com/example" /> */}
     </Helmet>
-        <div class="spacer-4rem"></div>
+        <div className="spacer-4rem"></div>
         <div className="main-wrapper">
             <div className="mission-wrapper">
                 <h4 className="theme-text-color">The Smoke Show Mission Statement</h4>
