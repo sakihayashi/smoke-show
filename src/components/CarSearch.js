@@ -175,6 +175,14 @@ const CarSearch = (props) =>{
         
      }else{
         const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+        try{
+            await app.logIn(credentials).then(  user =>{
+                const mongoClient = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                setMongo(mongoClient)
+            })
+        }catch(err){
+            console.log(err)
+        }
      }
    }
    useEffect(() => {

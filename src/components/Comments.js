@@ -169,7 +169,7 @@ const Comments = (props) =>{
 
     useEffect( () => {
         
-        let token = sessionStorage.getItem('session_token')
+        const token = sessionStorage.getItem('session_token')
         const tokenUser = sessionStorage.getItem('session_user')
          if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{

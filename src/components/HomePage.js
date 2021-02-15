@@ -148,7 +148,7 @@ const [currentUser, setCurrentUser] = useState('')
     }
 
     useEffect( () => {
-        loginCheck()
+        // loginCheck()
 
       }, [])
 

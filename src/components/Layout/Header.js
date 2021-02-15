@@ -56,21 +56,21 @@ const Header = (props) =>{
          }
      }, [props.isLoggedIn])
 
-     useEffect(() => {
-         let token = sessionStorage.getItem('session_token')
-         if(token){
-            jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
-                if(err){
-                    console.log('jwt time out')
+    //  useEffect(() => {
+    //      let token = sessionStorage.getItem('session_token')
+    //      if(token){
+    //         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+    //             if(err){
+    //                 console.log('jwt time out')
 
-                }else{
-                    const tokenUser = sessionStorage.getItem('session_user')
-                    const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
-                    props.logInUser(credentials.cre, decoded.userData.email)
-                }
-            })
-         }
-     }, [])
+    //             }else{
+    //                 const tokenUser = sessionStorage.getItem('session_user')
+    //                 const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+    //                 props.logInUser(credentials.cre, decoded.userData.email)
+    //             }
+    //         })
+    //      }
+    //  }, [])
     //  useEffect(() => {
     //      let tokenSessionStorage = sessionStorage.getItem('session_token')
     //      if(tokenSessionStorage){

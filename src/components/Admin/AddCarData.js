@@ -231,6 +231,30 @@ const AddCarData = () =>{
                     </Form.Group>
                     <Form.Group as={Row} >
                         <Form.Label column sm="4">
+                        Make
+                        </Form.Label>
+                        <Col sm="8">
+                        <Form.Control type="text" placeholder="Maker" />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} >
+                        <Form.Label column sm="4">
+                        Model
+                        </Form.Label>
+                        <Col sm="8">
+                        <Form.Control type="text" placeholder="Model" />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} >
+                        <Form.Label column sm="4">
+                        year
+                        </Form.Label>
+                        <Col sm="8">
+                        <Form.Control type="number" pattern="\d*" placeholder="Type number" />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} >
+                        <Form.Label column sm="4">
                         Price | base MSRP
                         </Form.Label>
                         <Col sm="8">
@@ -419,6 +443,7 @@ const AddCarData = () =>{
                         Object.keys(carObj.features['Interior Options']).map(key =>{
                         return <FormCheckbox objKey={key} />
                     })}
+                    
                 </Form>
             </Container>
              : <LoginDiv handleSubmitLogin={handleSubmitLogin} handleChange={handleChange} />}
