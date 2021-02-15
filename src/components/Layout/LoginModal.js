@@ -29,12 +29,13 @@ const LoginModal = (props) =>{
     // const maxAge = 1 * 24 * 60 * 60
     const maxAgeTest = 1 * 60 * 60
 
-    const createToken = (userData) =>{
-        return jwt.sign({ userData: userData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest});
-    }
+    // const createToken = (userData) =>{
+    //     return jwt.sign({ userData: userData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest});
+    // }
   
     const handleResetPw = async (e) =>{
         e.preventDefault()
+        setErrMsg('')
         const lowerCase = userObj.email.toLowerCase()
         // const newPW = uuidv4()
         // Additional arguments for the reset function
@@ -49,16 +50,14 @@ const LoginModal = (props) =>{
                 })
             }catch(err){
                 console.log(err)
+                setErrMsg('This email address is not in our system. Please signup.')
             }
             
         }else{
             setErrMsg('the password and the confirm password do not match. Try again.')
         }
     }
-    const closeWindow = () =>{
-        setForgotPw(false)
-
-    }
+ 
     const handleChange =(e) =>{
         setUserObj({
             ...userObj,
@@ -94,7 +93,11 @@ const LoginModal = (props) =>{
             <div className="spacer-1rem"></div>
             {errMsg && <Alert variant="danger" style={{padding: '5px', marginTop: '1rem', textAlign:'center'}}><small>{errMsg}</small></Alert>}
             <Button className="login-btn" type="submit">Reset Password</Button>
-            <p className="click-div" style={{marginTop: '1rem'}} onClick={()=>setForgotPw(false)}>Go back to login</p>
+            <div className="forgot-pw-memo">
+                <p className="click-div" style={{marginTop: '1rem'}} onClick={()=>setForgotPw(false)}>Go back to login</p>
+                <p className="click-div" style={{marginTop: '1rem'}} onClick={props.toggleModal}>Signup</p>
+            </div>
+            
             <div style={{marginTop:"4rem"}}></div>
         </Form>
     }else{
@@ -106,51 +109,6 @@ const LoginModal = (props) =>{
         const credentials = Realm.Credentials.emailPassword(emailLowerCase, userObj.password)
         props.logInUser(credentials, emailLowerCase)
     }
-    // const handleSubmit = async (e) =>{
-    //     e.preventDefault()
-    //     const emailLowerCase = userObj.email.toLocaleLowerCase()
-    //     const credentials = Realm.Credentials.emailPassword(emailLowerCase, userObj.password)
-    //     try{
-    //         await props.app.logIn(credentials).then(async user=>{
-    //             if(user.id === props.app.currentUser.id){
-    //                 console.log('matched')
-    //                 props.getUserId(user.id)
-    //             }else{
-    //                 console.log('not match')
-    //             }
-    //                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-    //                 const mongoCollection = mongo.db("smoke-show").collection("users");
-    //                 let token = ''
-    //                 const collectionInfluencer = mongo.db("smoke-show").collection("influencers");
-       
-    //                 const queryFilter = { userId: user.id };
-    //                 await mongoCollection.findOne(queryFilter).then(async loginUserData =>{
-    //                     if(!loginUserData){
-    //                         await collectionInfluencer.findOne(queryFilter).then( influencer =>{
-    //                             console.log('influencer', influencer)
-    //                             influencer.login = userObj
-    //                             token = createToken(influencer)
-    //                             sessionStorage.setItem('session_token', token)
-    //                             // const userData = {loginUserData: loginUserData, credentials: userObj}
-    //                             props.handleuser(influencer.username, influencer.userId)
-    //                         })
-    //                     }else{
-    //                         loginUserData.login = userObj
-    //                         token = createToken(loginUserData)
-                            
-    //                         sessionStorage.setItem('session_token', token)
-    //                         props.handleuser(loginUserData.fname, user.id)
-    //                     }
-                        
-    //                 })
-    //             });
-
-    //     }catch(error){
-    //         console.log('error', error)
-    //         setHasError(true)
-    //         setLoginMsg('Email and Password are incorrect')
-    //     }
-    // }
 
     useEffect(() => {
         if(props.hasLoginErr){

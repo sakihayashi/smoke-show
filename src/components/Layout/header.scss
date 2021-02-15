@@ -100,6 +100,10 @@ nav{
     font-size: $font-s;
 
 }
+.forgot-pw-memo{
+    display: flex;
+    justify-content: space-between;
+}
 .error-msg{
     color: red;
     font-weight: $font-s;
