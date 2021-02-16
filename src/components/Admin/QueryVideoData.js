@@ -6,8 +6,9 @@ import { youtubeAPI } from '../../utils/youtubeAPI'
 
 
 const QueryVideoData = () =>{
-    const [videoData, setVideoData] = useState([])
-    const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
+    // const [videoData, setVideoData] = useState([])
+    // const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
+    const KirkChannelId = 'UCXPVB7s1TJTE0WjDpakGp5Q'
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
@@ -20,9 +21,9 @@ const QueryVideoData = () =>{
         await youtubeAPI.get('/search', {
             params: {
                 // q: searchKeyword,
-                channelId: EddieXChannelId,
+                channelId: KirkChannelId,
                 publishedAfter: '2021-02-01T00:00:00Z',
-                publishedBefore: '2021-02-12T00:00:00Z',
+                publishedBefore: '2021-02-15T00:00:00Z',
                 order: 'date'
             }
         }).then(async youtubeObj =>{
@@ -31,8 +32,9 @@ const QueryVideoData = () =>{
             const formatted = youtubeObj.data.items.map(video =>{
 
                 video.videoId = video.id.videoId
-                video.userId = '60230361f63ff517d4fdad14'
-                video.channelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
+                // video.userId = '60230361f63ff517d4fdad14'
+                video.userId = '602303890ff2832f7d19a2af'
+                video.channelId = KirkChannelId
                 delete video.kind
                 delete video.etag
                 delete video.id
@@ -49,7 +51,7 @@ const QueryVideoData = () =>{
         <h1>query youtube data</h1>
             <div></div>
             <center>
-                {/* <button onClick={handleVideoSearch}>Click me</button> */}
+                <button onClick={handleVideoSearch}>Click me</button>
             </center>
             
         </div>

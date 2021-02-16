@@ -44,7 +44,8 @@ const Header = (props) =>{
 
      const loggedInDiv = 
      <Fragment>
-        <div >Hi {props.customData.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button><a href={productionUrl + 'user/' + currentUser}><img src={settingsIcon} className="setting-icon-nav"  /></a>
+        <div >Hi {props.customData.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button>
+        <Link to={`/user/${props.customData.userId}`}><img src={settingsIcon} className="setting-icon-nav"  /></Link>
         </div>
      </Fragment>
 
@@ -55,6 +56,7 @@ const Header = (props) =>{
             logOutUser()
          }
      }, [props.isLoggedIn])
+
 
     //  useEffect(() => {
     //      let token = sessionStorage.getItem('session_token')
@@ -101,15 +103,15 @@ const Header = (props) =>{
             show={props.modalShow}  
             onHide={()=>props.modalShowHide(false)}
             app={app}
-            handleuser={props.handleuser}
+            // handleuser={props.handleuser}
             toggleModal={toggleModal}
-            getUserId={getUserId}
+            // getUserId={getUserId}
             />
             : <SignUpModal
             show={props.modalShow}  
             onHide={()=>props.modalShowHide(false)}
             app={app}
-            handleuser={props.handleuser}
+            // handleuser={props.handleuser}
             toggleModal={toggleModal}
              />
             }
@@ -143,10 +145,11 @@ const Header = (props) =>{
 }
 
 const mapStateToProps = (state) =>{
+    console.log('check state', state)
     return{
         isLoggedIn: state.auth.isLoggedIn,
         customData: state.auth.customData,
-        userId: state.userId,
+        userId: state.userId
     }
 }
 const mapDispatchToProps = (dispatch) =>{

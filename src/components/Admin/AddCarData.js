@@ -126,6 +126,22 @@ const AddCarData = () =>{
                 "tire pressure monitoring": false,
                 "traction control": false,
                 "Ventilated front disc / solid rear disc brakes": false
+//                 0: "Rear door child safety locks"
+// 1: "daytime running lights"
+// 2: "stability control"
+// 3: "Passenger airbag occupant sensing deactivation"
+// 4: "remote anti-theft alarm system"
+// 5: "2 front headrests"
+// 6: "tire pressure monitoring"
+// 7: "traction control"
+// 8: "4-wheel ABS"
+// 9: "Rear center 3-point belt"
+// 10: "child seat anchors"
+// 11: "front and rear head airbags"
+// 12: "dusk sensing headlamps"
+// 13: "3 rear headrests"
+// 14: "dual front side-mounted airbags"
+// 15: "Ventilated front disc / solid rear disc brakes"
             },
             "Tires and Wheels": {
                 "temporary spare tire": false,

@@ -12,7 +12,11 @@ const maxAgeTest = 1 * 60 * 60
 export const logInUser = (credentials, email) =>{
     return (dispatch, getState)=>{
         app.logIn(credentials).then(user=>{
-
+            if(app.currentUser.id === user.id){
+                console.log('current user updated')
+            }else{
+                console.log('current user not match')
+            }
             const customData = user.customData
             customData.email = email
             const token = jwt.sign({ userData: customData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest})
@@ -36,6 +40,69 @@ export const logOutUser = () =>{
             dispatch({type: 'LOGOUT'})
         })
     }
+}
+
+export const logInAsPublic = () =>{
+    return(dispatch, getState)=>{
+        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+        app.logIn(credentials).then( user =>{
+            if(app.currentUser.id === user.id){
+                console.log('app user is public')
+            }else{
+                console.log('app user id is not updated')
+            }
+            dispatch({type: 'LOGIN_PUBLIC'})
+        })
+    }
+}
+
+export const updateLogin = (credentials) =>{
+    console.log(credentials)
+    return(dispatch, getState)=>{
+        app.logIn(credentials).then(user =>{
+            const customData = user.customData
+            if(app.currentUser.id === user.id){
+
+                console.log('user updated')
+                
+            }else{
+                console.log('user id not updated but loggedin')
+             
+            }
+            dispatch({type: 'LOGIN_UPDATE', customData})
+        })
+    }
+}
+export const logInAsCurrent = () =>{
+    return(dispatch, getState)=>{
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        dispatch({type: 'LOGIN_CURRENT', mongo})
+    }
+}
+
+export const checkLogin = () =>{
+    const token = sessionStorage.getItem('session_user')
+    return (dispatch, getState)=>{
+        if(token){
+            jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+                if(err){
+                    
+                }else{
+                    app.logIn(decoded.cre).then( user =>{
+                        const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                        dispatch({type: 'LOGIN_CHECK', mongo})
+                    })
+                }
+            })
+        }else{
+            const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+            app.logIn(credentials).then( user =>{
+                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                dispatch({type: 'LOGIN_CHECK', mongo})
+            })
+        }
+    }
+
 }
 
 export const authUser = (userData) =>{

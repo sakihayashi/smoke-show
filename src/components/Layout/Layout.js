@@ -3,7 +3,8 @@ import Header from './Header'
 import Footer from './Footer'
 import { withRouter } from "react-router"
 import { connect } from 'react-redux'
-// import { openLoginModal } from '../../store/actions/userActions'
+import jwt from 'jsonwebtoken'
+import { updateLogin, logInAsPublic } from '../../store/actions/authActions'
 const HeaderWithRouter = withRouter(Header);
 
 const Layout = (props) =>{
@@ -30,33 +31,29 @@ const Layout = (props) =>{
     const funcSetUsername = (name) =>{
         setUsername(name)
     }
-    const handleuser = (fname, userId) =>{
-        // console.log('value check', userId)
-        setUser(true)
-        setUsername(fname)
-        setUserId(userId)
-        setModalShow(false)
-        if(props.userLoggedIn){
-            props.userLoggedIn(userId)
-        }
-        
-    }
-    // const updateLoggedOut = (id) =>{
-    //     props.userLoggedOut(id)
-    // }
 
-    // const updateUserName = (fname) =>{
-    //     setUser(true)
-    //     setUsername(fname)
-    // }
+    useEffect(() => {
+        const token = sessionStorage.getItem('session_token')
+        jwt.verify(token, process.env.REACT_APP_JWT_SECRET, async (err, decoded)=>{
+            if(err){
+                props.logInAsPublic()
+            }else{
+                const tokenUser = sessionStorage.getItem('session_user')
+                const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+                console.log('value', credentials)
+                props.updateLogin(credentials.cre)
+            }
+        })
+    }, [])
 
     useEffect(() => {
         handleModal()
     }, [props.openModal])
+   
 
     return(
         <div>
-            <HeaderWithRouter handleuser={handleuser} modalShowHide={modalShowHide} user={user} username={username} changeUserState={changeUserState} funcSetUsername={funcSetUsername} modalShow={modalShow} userLoggedOut={props.userLoggedOut} userId={userId} />
+            <HeaderWithRouter modalShowHide={modalShowHide} user={user} username={username} changeUserState={changeUserState} funcSetUsername={funcSetUsername} modalShow={modalShow} userLoggedOut={props.userLoggedOut} userId={userId} />
     
                 { props.children }
             <Footer />
@@ -73,6 +70,8 @@ const mapStateToProps = (state) =>{
 }
 const mapDispatchToProps = (dispatch) =>{
     return{
+        logInAsPublic: ()=>dispatch(logInAsPublic()),
+        updateLogin: (credentials)=>dispatch(updateLogin(credentials))
         // modalShowHide: (state) =>dispatch(modalShowHide(state))
     }
 }

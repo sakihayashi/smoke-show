@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Row, Col,  Button, Tooltip, OverlayTrigger } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
 import settingsIcon from '../../assets/global/Settings-icon-white.svg'
@@ -6,9 +6,11 @@ import './subnav.scss'
 import * as Realm from "realm-web"
 import jwt from 'jsonwebtoken'
 import { becomeAFan } from '../../store/actions/userActions'
+import { openLoginModal } from '../../store/actions/userActions'
 import { connect } from 'react-redux'
 
 const SubNav = (props) =>{
+    console.log('open', props.openModal)
     const [isFanOf, setIsFanOf] = useState(false)
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -25,14 +27,15 @@ const SubNav = (props) =>{
       );
 
     const handleBecomeAFan = async ()=>{
-        const token = sessionStorage.getItem('session_token')
+        const token = sessionStorage.getItem('session_user')
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, async (err, decoded)=>{
                 if(err){
                     console.log('open login modal', err)
-                   
+                    props.openLoginModal(true)
                     // open login modal 
                 }else{
+                    console.log('running?', decoded)
                     try{
                         await app.logIn(decoded.cre).then( async user =>{
                             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
@@ -41,10 +44,11 @@ const SubNav = (props) =>{
                             try{
                                 await collectionUsers.updateOne(
                                     { "userId": user.id },
-                                    { $push: { fansOf: influencer.userId } },
+                                    { $push: { fansOf: {id: influencer.userId, username: influencer.username} } },
                                     { upsert: true }
                                 ).then(res =>{
                                     console.log('become a fan of ', influencer.username)
+                                    setIsFanOf(true)
                                     
                                 })
                             }catch(err){console.log(err)}
@@ -54,8 +58,23 @@ const SubNav = (props) =>{
                     }
                 }
             });
+        }else{
+            console.log('this working')
+            props.openLoginModal(true)
         }
     }
+    useEffect(() => {
+        props.customData.fansOf.map(user =>{
+            if(user.id === influencer.userId){
+                console.log('id', user.id)
+                console.log('infle', influencer.userId)
+                setIsFanOf(true)
+            }else{
+                setIsFanOf(false)
+            }
+        })
+        
+    }, [])
     return(
         <Fragment>
             <div className="banner-wrapper">
@@ -70,7 +89,7 @@ const SubNav = (props) =>{
                     <div className="bio-creator-name">{influencer.username}</div>
                     <div className="bio-creator-data">{props.formattedFans} Fans</div>
                 </Col>
-                <Col sm={7} className="bio-sub-menu">
+                <Col sm={6} className="bio-sub-menu">
                     <nav className="bio-sub-nav">
                         <NavLink to={`/all-videos/${influencer.userId}`}>All Videos</NavLink>
                         <NavLink to={`/garage/${influencer.userId}`}>Garage</NavLink>
@@ -79,14 +98,19 @@ const SubNav = (props) =>{
                     </nav>
                 </Col>
                 <Col className="center-btn">
-                <Button className="btn-fan">Become a fan</Button>
-                <OverlayTrigger
-                    placement="left"
-                    delay={{ show: 250, hide: 200 }}
-                    overlay={renderTooltip}
-                >
-                <small>What this means?</small>
-                </OverlayTrigger>
+                {isFanOf ? <Button className="btn-fan" disabled="true">Fan of {influencer.username}</Button> :
+                <Fragment>
+                    <Button className="btn-fan" onClick={handleBecomeAFan}>Become a fan</Button>
+                    <OverlayTrigger
+                        placement="left"
+                        delay={{ show: 250, hide: 200 }}
+                        overlay={renderTooltip}
+                    >
+                    <small>What this means?</small>
+                    </OverlayTrigger>
+                    
+                </Fragment>
+                }
                 {props.allowEdit && 
                         <Button className="garage-setting-btn" onClick={props.handleShowSetting} >
                             <img src={settingsIcon} alt="setting" className="setting-icon"/>
@@ -101,14 +125,15 @@ const SubNav = (props) =>{
 
 const mapDispatchToProps = (dispatch) =>{
     return{
-        becomeAFan: (data) => dispatch(becomeAFan(data))
+        becomeAFan: (data) => dispatch(becomeAFan(data)),
+        openLoginModal: (state) =>dispatch(openLoginModal(state))
     }
 }
 const mapStateToProps = (state) =>{
-    console.log(state)
     return{
-
+        openModal: state.user.openModal,
+        customData: state.auth.customData
     }
 }
 
-export default connect(mapStateToProps)(SubNav)
+export default connect(mapStateToProps, mapDispatchToProps)(SubNav)

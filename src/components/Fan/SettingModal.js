@@ -312,7 +312,7 @@ const SettingModal = (props) =>{
                     collectionUser = mongo.db("smoke-show").collection("users")
                     try{
                         await collectionUser.updateOne(
-                            { "userId": user.userId},
+                            { "userId": user.userId },
                             {
                                 "$set": {
                                     "fname": userObj.fname,
@@ -320,7 +320,7 @@ const SettingModal = (props) =>{
                                     "username": userObj.username
                                   }
                             },
-                            { upsert: true}
+                            { upsert: true }
                         ).then( res =>{
                             console.log(res)
                             setIsSuccess({

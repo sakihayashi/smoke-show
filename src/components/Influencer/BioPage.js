@@ -13,12 +13,14 @@ import Comments from '../Comments'
 import { uid } from 'react-uid'
 import Layout from '../Layout/Layout'
 import SubNav from './SubNav'
+import jwt from 'jsonwebtoken'
 
 import powerIcon from '../../assets/global/Horsepower.png'
 import pistonIcon from '../../assets/global/piston.png'
 import priceIcon from '../../assets/global/Price-Tag-icon.png'
 
 const BioPage = (props) =>{
+    console.log('pro', props.mongo)
     const influencerId = props.match.params.id
     const [influencer, setInfluencer] = useState({userId: '', fname: '', lname: '', username: '', fans: null, desc: '', channelId: '', banner_img: '', profile_pic: '', featuredVideo: {id: '', title: ''}})
     // const { banner_img, username, profile_pic, fans } = props.location.state.influencer
@@ -37,7 +39,7 @@ const BioPage = (props) =>{
         // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
-    const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+    // const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
     const handleChangeKeyword = (e) =>{
         setSearchKeyword(e.target.value)
     }
@@ -67,40 +69,54 @@ const BioPage = (props) =>{
             
         })
     }
-    const getInfluencer = async () =>{
+    const getInfluencer = async (mongo) =>{
 
-        try {
- 
-            const mongoCollection = mongo.db("smoke-show").collection("influencers");
-            const filter = {userId: influencerId} 
-            await mongoCollection.findOne(filter).then(res =>{
-                console.log('res', res)
-                setInfluencer(res)
-                if(res.fans > 999){
-                    setFormattedFans(Math.sign(res.fans)*((Math.abs(res.fans)/1000).toFixed(1)) + 'k')
+            try {
+                const mongoCollection = mongo.db("smoke-show").collection("influencers");
+                const filter = {userId: influencerId} 
+                await mongoCollection.findOne(filter).then(res =>{
+                    console.log('res', res)
+                    setInfluencer(res)
+                    if(res.fans > 999){
+                        setFormattedFans(Math.sign(res.fans)*((Math.abs(res.fans)/1000).toFixed(1)) + 'k')
+                    }else{
+                        setFormattedFans(Math.sign(res.fans)*Math.abs(res.fans))
+                    }
+                })
+             }catch(error){console.log(error)}
+        
+    }
+
+    const checkToken = async () =>{
+        const token = sessionStorage.getItem('session_user')
+        if(token){
+            jwt.verify(token, process.env.REACT_APP_JWT_SECRET, async( err, decoded) =>{
+                if(err){
+                    const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    await app.logIn(credentials).then( user =>{
+                    const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                    return mongo
+                }).then( mongo => getInfluencer(mongo))
                 }else{
-                    setFormattedFans(Math.sign(res.fans)*Math.abs(res.fans))
+                    const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                    getInfluencer(mongo)
                 }
             })
-           
-        //   }
-        //   )
-         }catch(error){console.log(error)}
+        }else{
+            const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    await app.logIn(credentials).then( user =>{
+                    const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                    return mongo
+                }).then( mongo => getInfluencer(mongo))
+        }
     }
-    useEffect( async () => {
-
-        try {
-
-            const mongoCollection = mongo.db("smoke-show").collection("comments");
-            const filter = {videoId: 'QHLojVxs'} 
-            await mongoCollection.find(filter).then(resAll =>{
-            })
-
-         }catch(error){console.log(error)}
-      }, [])
       useEffect(() => {
-        getInfluencer()
+        checkToken()
+        
       }, [])
+    // useEffect(() => {
+        
+    // }, [])
     return(
         <Layout>
             <Helmet>
@@ -226,12 +242,21 @@ const BioPage = (props) =>{
         
     )
 }
+
+
+const mapDispatchToProps = (dispatch) =>{
+    return{
+        
+    }
+}
 const mapStateToProps = (state) => {
+    console.log('no state?', state.auth.mongo)
     //syntax is propName: state.key of combineReducer.key
     return{
       username: state.user.username,
+      mongo: state.auth.mongo
     }
   }
 
-export default connect(mapStateToProps)(BioPage)
+export default connect(mapStateToProps, mapDispatchToProps)(BioPage)
 

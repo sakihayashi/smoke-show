@@ -196,11 +196,11 @@ const Comments = (props) =>{
     
         {props.isLoggedIn ? writeComment() : loginToComment() }
 
-        { commentsDB.map(comment =>{
+        { commentsDB.map((comment, index) =>{
             var localtime = moment(comment.date_posted).local().format('YYYY-MM-DD')
            
             return(
-                <Row className="comment-wrapper" key={uid(comment)}>
+                <Row className="comment-wrapper" key={localtime + index}>
                     
                     <div style={{margin:0,padding:0}} className="col-1">
                         <Link to={{

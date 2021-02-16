@@ -27,6 +27,8 @@ import SwaggInfluencer from './components/Influencer/Swagg'
 import QueryVideoData from './components/Admin/QueryVideoData'
 import EditVideoData from './components/Admin/EditVideoData'
 import AddCarData from './components/Admin/AddCarData'
+import CheckCarData from './components/Admin/CheckCarData'
+import EditVideoDataKirk from './components/Admin/EditVideoDataKirk'
 
 
 function App() {
@@ -51,7 +53,9 @@ function App() {
           <Route path="/swagg-influencer/:id" component={SwaggInfluencer} />
           <Route path="/add-car-data" component={AddCarData} />
           <Route path="/edit-video-data" component={EditVideoData} />
+          <Route path="/edit-video-data-kirk" component={EditVideoDataKirk} />
           {/* <Route path="/query-data" component={QueryVideoData} /> */}
+          <Route path="/check-data" component={CheckCarData} />
           <Route component={NotFoundPage} />
         </Switch>
     </Router>    

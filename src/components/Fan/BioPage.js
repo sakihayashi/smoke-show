@@ -351,7 +351,7 @@ const BioPage = (props) =>{
                                         <p className="no-m-b">
                                             { profileUser.fansOf &&
                                                 profileUser.fansOf.map((name, i) =>{
-                                                    return <span>{i > 0 && ', '}{name}</span>
+                                                    return <span>{i > 0 && ', '}{name.username}</span>
                                                 })
                                             }
                                         </p>

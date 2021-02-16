@@ -3,15 +3,21 @@
 .btn-fan{
     background-color: $theme-color;
     border-color: $theme-color;
+    &:hover{
+        background-color: $theme-hover;
+        border-color: $theme-hover;
+    }
+    &:focus{
+        background-color: $theme-hover;
+        border-color: $theme-hover;
+    }
+    &:disabled{
+        background-color: $theme-hover;
+        border-color: $theme-hover;
+        color: black !important;
+    }
 }
-.btn-fan:hover{
-    background-color: $theme-hover;
-    border-color: $theme-hover;
-}
-.btn-fan:focus{
-    background-color: $theme-hover;
-    border-color: $theme-hover;
-}
+
 
 .center-btn{
     margin-top: auto;

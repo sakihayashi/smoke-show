@@ -5,8 +5,8 @@ import { authUser } from '../../store/actions/authActions'
 import { logInUser } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import Logo from '../../assets/global/Logo-smoke-show.png'
-import jwt from 'jsonwebtoken'
-import { useUID } from 'react-uid'
+// import jwt from 'jsonwebtoken'
+// import { useUID } from 'react-uid'
 
 const LoginModal = (props) =>{
     
