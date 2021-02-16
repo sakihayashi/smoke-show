@@ -12,9 +12,9 @@
         border-color: $theme-hover;
     }
     &:disabled{
-        background-color: $theme-hover;
-        border-color: $theme-hover;
-        color: black !important;
+        background-color: $black;
+        border-color: $black;
+        // color: black !important;
     }
 }
 

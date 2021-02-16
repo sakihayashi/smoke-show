@@ -5,11 +5,13 @@ import { authUser } from '../../store/actions/authActions'
 import { logInUser } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import Logo from '../../assets/global/Logo-smoke-show.png'
+import { openLoginModal } from '../../store/actions/userActions'
+
 // import jwt from 'jsonwebtoken'
 // import { useUID } from 'react-uid'
 
 const LoginModal = (props) =>{
-    
+    console.log('check props',props)
     const [userObj, setUserObj] = useState({fname: '', lname: '', email: '', password: '', confirmPw: ''})
     const [hasError, setHasError] = useState(false)
     const [forgotPw, setForgotPw] = useState(false)
@@ -24,14 +26,16 @@ const LoginModal = (props) =>{
     //   };
     const getApp = Realm.App.getApp(appId)
     const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
+    const [show, setShow] = useState(false);
 
+    const handleClose = () => {
+        setShow(false);
+        props.openLoginModal(false)
+    }
+ 
     //max age one day number of day, hours, min and sec
     // const maxAge = 1 * 24 * 60 * 60
     const maxAgeTest = 1 * 60 * 60
-
-    // const createToken = (userData) =>{
-    //     return jwt.sign({ userData: userData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest});
-    // }
   
     const handleResetPw = async (e) =>{
         e.preventDefault()
@@ -95,7 +99,7 @@ const LoginModal = (props) =>{
             <Button className="login-btn" type="submit">Reset Password</Button>
             <div className="forgot-pw-memo">
                 <p className="click-div" style={{marginTop: '1rem'}} onClick={()=>setForgotPw(false)}>Go back to login</p>
-                <p className="click-div" style={{marginTop: '1rem'}} onClick={props.toggleModal}>Signup</p>
+                <p className="click-div" style={{marginTop: '1rem'}} onClick={props.toggleAuthModal}>Signup</p>
             </div>
             
             <div style={{marginTop:"4rem"}}></div>
@@ -117,10 +121,14 @@ const LoginModal = (props) =>{
             setHasError(false)
         }
     }, [props.hasLoginErr])
-    
+    useEffect(() => {
+        setShow(props.openModal)
+    }, [props.openModal])
     return (
         <Modal
           {...props}
+          show={show}
+          onHide={handleClose}
           size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
@@ -151,7 +159,7 @@ const LoginModal = (props) =>{
                     <Button className="login-btn" type="submit">
                         Login
                     </Button><br /><br />
-                    <p className="click-div" onClick={props.toggleModal}>Or Signup here</p>
+                    <p className="click-div" onClick={props.toggleAuthModal}>Or Signup here</p>
                 </div>
                 
             </Form>
@@ -165,12 +173,14 @@ const mapStateToProps = (state) => {
     //syntax is propName: state.key of combineReducer.key
     return{
       userData: state.auth.userData,
-      hasLoginErr: state.auth.hasLoginErr
+      hasLoginErr: state.auth.hasLoginErr,
+      openModal: state.user.openModal
     }
   }
 const mapDispatchToProps = (dispatch) =>{
     return {
-        logInUser: (credentials, email) => dispatch(logInUser(credentials, email))
+        logInUser: (credentials, email) => dispatch(logInUser(credentials, email)),
+        openLoginModal: (state)=> dispatch(openLoginModal(state))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LoginModal)

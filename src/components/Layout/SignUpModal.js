@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import { createNewUser } from '../../store/actions/userActions'
 import { connect } from 'react-redux'
 import Logo from '../../assets/global/Logo-smoke-show.png'
+import { openLoginModal } from '../../store/actions/userActions'
 
 
 const SignUpModal = (props) =>{
@@ -14,7 +15,15 @@ const SignUpModal = (props) =>{
     //this is different from props.app -getApp
     const appId = process.env.REACT_APP_REALM_APP_ID
     const getApp = Realm.App.getApp(appId);
-    
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => {
+        setShow(false);
+        props.openLoginModal(false)
+    }
+    const handleShow = () =>{
+        setShow(true)
+    }
     // console.log('check from signin', props)
     const handleChange =(e) =>{
         setUserObj({
@@ -64,9 +73,15 @@ const SignUpModal = (props) =>{
     // const handleSubmitToDispatch = () =>{
     //     props.createNewUser(userObj)
     // }
+    useEffect(() => {
+        setShow(props.openModal)
+    }, [props.openModal])
+    
     return (
         <Modal
           {...props}
+          show={show}
+          onHide={handleClose}
           size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
@@ -121,7 +136,7 @@ const SignUpModal = (props) =>{
                     <Button className="login-btn" type="submit">
                         Signup
                     </Button><br /><br />
-                    <p className="click-div" onClick={ props.toggleModal}>Or Login here</p>
+                    <p className="click-div" onClick={ props.toggleAuthModal}>Or Login here</p>
                 </div>
                 
             </Form>
@@ -133,10 +148,15 @@ const SignUpModal = (props) =>{
 }
 const mapDispatchToProps = (dispatch) =>{
     return {
-        // createNewUser: (userObj) => dispatch(createNewUser(userObj))
+        openLoginModal: (state) => dispatch(openLoginModal(state))
     }
 }
-
-export default connect(null, mapDispatchToProps)(SignUpModal)
+const mapStateToProps = (state) =>{
+    console.log('check state', state)
+    return{
+        openModal: state.user.openModal
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpModal)
 
 // export default SignUpModal

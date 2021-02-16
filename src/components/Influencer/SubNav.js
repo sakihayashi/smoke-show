@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken'
 import { becomeAFan } from '../../store/actions/userActions'
 import { openLoginModal } from '../../store/actions/userActions'
 import { connect } from 'react-redux'
+import doneIcon from '../../assets/global/done-white.svg'
 
 const SubNav = (props) =>{
     console.log('open', props.openModal)
@@ -20,8 +21,10 @@ const SubNav = (props) =>{
     const app = new Realm.App(appConfig);
 
     const influencer = props.influencer
+
     const renderTooltip = (props) => (
         <Tooltip  id="button-tooltip" {...props}>
+        { console.log('what is in', props)}
           <p style={{marginBottom: 0}}>You will receive newsletters when the influencer publishes a new video.</p>
         </Tooltip>
       );
@@ -63,18 +66,28 @@ const SubNav = (props) =>{
             props.openLoginModal(true)
         }
     }
+    const checkFanOf = () =>{
+        if(props.customData.fansOf){
+            props.customData.fansOf.map(user =>{
+                if(user.id === influencer.userId){
+                    console.log('id', user.id)
+                    console.log('infle', influencer.userId)
+                    setIsFanOf(true)
+                }else{
+                    console.log('user has no fans', props.customData.fansOf)
+                    setIsFanOf(false)
+                }
+            })
+        }
+    }
     useEffect(() => {
-        props.customData.fansOf.map(user =>{
-            if(user.id === influencer.userId){
-                console.log('id', user.id)
-                console.log('infle', influencer.userId)
-                setIsFanOf(true)
-            }else{
-                setIsFanOf(false)
-            }
-        })
-        
+        checkFanOf()
+    }, [props.customData.fansOf])
+
+    useEffect(() => {
+        checkFanOf()
     }, [])
+
     return(
         <Fragment>
             <div className="banner-wrapper">
@@ -98,7 +111,8 @@ const SubNav = (props) =>{
                     </nav>
                 </Col>
                 <Col className="center-btn">
-                {isFanOf ? <Button className="btn-fan" disabled="true">Fan of {influencer.username}</Button> :
+                {isFanOf ? <Button className="btn-fan" disabled="true">
+                <img src={doneIcon} alt="you are already done this" />Fan of {influencer.username}</Button> :
                 <Fragment>
                     <Button className="btn-fan" onClick={handleBecomeAFan}>Become a fan</Button>
                     <OverlayTrigger

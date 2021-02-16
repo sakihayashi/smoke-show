@@ -11,34 +11,30 @@ import { logOutUser } from '../../store/actions/authActions'
 import { logInUser } from '../../store/actions/authActions'
 import jwt from 'jsonwebtoken'
 import settingsIcon from '../../assets/global/Settings-icon-white.svg'
-// import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
+import { openLoginModal } from '../../store/actions/userActions'
 
 const Header = (props) =>{
     const location = useLocation()
     const [currentUser, setCurrentUser] = useState('')
     const id = process.env.REACT_APP_REALM_APP_ID
     const app = new Realm.App({ id: id })
-    const productionUrl = 'https://master.d3l3iqr3dhkcvm.amplifyapp.com/'
-    // const devUrl = 'http://localhost:3000/'
+    
 
     const [hasAccount, setHasAccount] = useState(true)
     
     const logIn = async ()=>{
-        props.modalShowHide(true)
+        // props.modalShowHide(true)
+        props.openLoginModal(true)
     }
     const logOut = () =>{
         props.logOutUser()
-        // props.changeUserState(app.currentUser.id)
-        // sessionStorage.removeItem('session_token')
-        
-        // await app.currentUser.logOut().then(res =>{
-        //     console.log('res', res)
-        // })
+
     }
      const getUserId = (id) =>{
          setCurrentUser(id)
      }
-     const toggleModal = () =>{
+     const toggleAuthModal = () =>{
+         console.log('fired?')
          setHasAccount(!hasAccount)
      }
 
@@ -49,50 +45,9 @@ const Header = (props) =>{
         </div>
      </Fragment>
 
-     useEffect(() => {
-         if(props.isLoggedIn){
-            props.modalShowHide(false)
-         }else{
-            logOutUser()
-         }
-     }, [props.isLoggedIn])
-
-
-    //  useEffect(() => {
-    //      let token = sessionStorage.getItem('session_token')
-    //      if(token){
-    //         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
-    //             if(err){
-    //                 console.log('jwt time out')
-
-    //             }else{
-    //                 const tokenUser = sessionStorage.getItem('session_user')
-    //                 const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
-    //                 props.logInUser(credentials.cre, decoded.userData.email)
-    //             }
-    //         })
-    //      }
-    //  }, [])
-    //  useEffect(() => {
-    //      let tokenSessionStorage = sessionStorage.getItem('session_token')
-    //      if(tokenSessionStorage){
-    //         jwt.verify(tokenSessionStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
-    //             if(err){
-    //                 console.log(err)
-    //                 props.changeUserState(false)
-    //             }else{
-    //                 props.changeUserState(true)
-    //                 props.funcSetUsername(decoded.userData.fname)
-    //                 props.handleuser(decoded.userData.fname, decoded.userData.userId)
-    //                 setCurrentUser(decoded.userData.userId)
-    //                 console.log(decoded.userData.userId)
-
-    //             }
-    //         });
-            
-    //      }
-    //  }, [])
-
+    // useEffect(() => {
+    //     setShow(props.openModal)
+    // }, [props.openModal])
     return(
         <header>
             <div className="login-wrapper">
@@ -100,29 +55,26 @@ const Header = (props) =>{
             <Button className="btn-login" onClick={logIn}>Login</Button>
             }
             { hasAccount ? <LoginModal 
-            show={props.modalShow}  
-            onHide={()=>props.modalShowHide(false)}
+            // show={show}  
+            // onHide={handleClose}
             app={app}
             // handleuser={props.handleuser}
-            toggleModal={toggleModal}
+            toggleAuthModal={toggleAuthModal}
             // getUserId={getUserId}
             />
             : <SignUpModal
-            show={props.modalShow}  
-            onHide={()=>props.modalShowHide(false)}
+            // show={props.modalShow}  
+            // onHide={handleClose}
             app={app}
             // handleuser={props.handleuser}
-            toggleModal={toggleModal}
+            toggleAuthModal={toggleAuthModal}
              />
             }
                 
             </div>
             <Navbar expand="lg" className="header-wrapper">
-                <Navbar.Brand href="#home">
-                    <Link to="/">
-                        <img className="logo-header" src={Logo} alt="The Smoke Show logo"/>
-                    </Link>
-                    
+                <Navbar.Brand href="/">
+                        <img className="logo-header" src={Logo} alt="The Smoke Show logo"/>                    
                 </Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -149,13 +101,15 @@ const mapStateToProps = (state) =>{
     return{
         isLoggedIn: state.auth.isLoggedIn,
         customData: state.auth.customData,
-        userId: state.userId
+        userId: state.userId,
+        openModal: state.user.openModal
     }
 }
 const mapDispatchToProps = (dispatch) =>{
     return {
         logOutUser: () => dispatch(logOutUser()),
-        logInUser: (credentials, email) => dispatch(logInUser(credentials, email))
+        logInUser: (credentials, email) => dispatch(logInUser(credentials, email)),
+        openLoginModal: (state) => dispatch(openLoginModal(state))
     }
 }
 

@@ -13,14 +13,11 @@ const Layout = (props) =>{
     const [username, setUsername] = useState('')
     const [userId, setUserId] = useState('')
     
-    const modalShowHide = (state)=>{
-        setModalShow(state)
-        // props.openLoginModal()
-    }
-    const handleModal = () =>{
-        console.log('modal state', props.openModal)
-        setModalShow(props.openModal)
-    }
+
+    // const handleModal = () =>{
+    //     console.log('modal state', props.openModal)
+    //     setModalShow(props.openModal)
+    // }
     const changeUserState = (id) =>{
         setUser(false)
         if(props.userLoggedOut){
@@ -36,6 +33,7 @@ const Layout = (props) =>{
         const token = sessionStorage.getItem('session_token')
         jwt.verify(token, process.env.REACT_APP_JWT_SECRET, async (err, decoded)=>{
             if(err){
+                
                 props.logInAsPublic()
             }else{
                 const tokenUser = sessionStorage.getItem('session_user')
@@ -46,14 +44,12 @@ const Layout = (props) =>{
         })
     }, [])
 
-    useEffect(() => {
-        handleModal()
-    }, [props.openModal])
+    
    
 
     return(
         <div>
-            <HeaderWithRouter modalShowHide={modalShowHide} user={user} username={username} changeUserState={changeUserState} funcSetUsername={funcSetUsername} modalShow={modalShow} userLoggedOut={props.userLoggedOut} userId={userId} />
+            <HeaderWithRouter  user={user} username={username} changeUserState={changeUserState} funcSetUsername={funcSetUsername}  userLoggedOut={props.userLoggedOut} userId={userId} />
     
                 { props.children }
             <Footer />
@@ -65,7 +61,7 @@ const Layout = (props) =>{
 const mapStateToProps = (state) =>{
     // console.log('redux', state)
     return{
-        openModal: state.user.openModal
+        // openModal: state.user.openModal
     }
 }
 const mapDispatchToProps = (dispatch) =>{

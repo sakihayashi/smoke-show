@@ -44,6 +44,7 @@ const authReducer = (state = initState, action) =>{
         case 'LOGIN_PUBLIC':
             return{
                 ...state,
+                isLoggedIn: false,
                 isPublicView: true
             }
         case 'LOGIN_CURRENT':
