@@ -182,7 +182,7 @@ const CarStats = (props) =>{
             case 'Warranty':
                 return <Fragment>
                         {warranty && Object.entries(warranty).map(([key, value]) =>{
-                            return <div className="stats-box"><strong>{key}</strong>:  {value}</div>
+                            return <div className="stats-box" key={key}><strong>{key}</strong>:  {value}</div>
                         })}
                       </Fragment>
             case 'Measurements':
@@ -191,11 +191,11 @@ const CarStats = (props) =>{
                             <div className="stats-box">Total Seating: {totalSeating}</div>
                         }
                         {rearseats && Object.entries(rearseats).map(([key, value]) =>{
-                            return <div className="stats-box"><strong>{key}</strong>:  {value}</div>
+                            return <div className="stats-box" key={key}><strong>{key}</strong>:  {value}</div>
                         })
                         }
                         { measurements && Object.entries(measurements).map(([key, value]) =>{
-                            return <div className="stats-box"><strong>{key}</strong>:  {value}</div>
+                            return <div className="stats-box" key={key}><strong>{key}</strong>:  {value}</div>
                         })}
                           
                      
@@ -203,7 +203,7 @@ const CarStats = (props) =>{
             case 'Comfort & Convenience':
                 return <Fragment>
                         { comfort && Object.keys(comfort).map((key, index)=>{
-                            return <div className="stats-box">{key}</div>
+                            return <div className="stats-box" key={key}>{key}</div>
                         })}
                           
                        
@@ -212,9 +212,9 @@ const CarStats = (props) =>{
                 return <Fragment>
                         { drivetrain && Object.entries(drivetrain).map(([key, value]) =>{
                             if(value === true){
-                                return <div className="stats-box">{key}<strong></strong></div>
+                                return <div className="stats-box" key={key}>{key}<strong></strong></div>
                             }else{
-                                return <div className="stats-box"><strong>{key}</strong>:  {value}</div>
+                                return <div className="stats-box" key={key}><strong>{key}</strong>:  {value}</div>
                             }
                             
                         })}
@@ -222,7 +222,7 @@ const CarStats = (props) =>{
             case 'Suspension':
                 return <Fragment>
                         { suspension && Object.keys(suspension).map((key, index)=>{
-                            return <div className="stats-box">{key}</div>
+                            return <div className="stats-box" key={key}>{key}</div>
                         })}
                           
                        
@@ -232,8 +232,8 @@ const CarStats = (props) =>{
                         <p><strong>Exterior</strong></p>
                         { colors && colors['EXTERIOR'].map((color, index)=>{
                             const uuid = uuidv4()
-                            return <Fragment>
-                                    <div className="stats-box-outline" key={uuid}>
+                            return <Fragment key={uuid}>
+                                    <div className="stats-box-outline" >
                                     <div className="color-thumbnail" style={{backgroundColor: `rgb(${color.rgb})`}}></div>
                                     <div className="color-name">{color.name}</div>
                                     </div>
@@ -242,7 +242,7 @@ const CarStats = (props) =>{
                           <hr />
                        <p><strong>Interior</strong></p>
                        { colors && colors['INTERIOR'].map((color, index)=>{
-                            return <div className="stats-box-outline">
+                            return <div className="stats-box-outline" key={color.name}>
                                     <div className="color-thumbnail" style={{backgroundColor: `rgb(${color.rgb})`}}></div>
                                     <div className="color-name">{color.name}</div>
                                     </div>
@@ -277,7 +277,7 @@ const CarStats = (props) =>{
                     car.tabs = statsArr
                     const maker = car.make.toUpperCase()
                     const model = car.model.toUpperCase()
-                    console.log('check', carImages)
+                    {/* console.log('check', carImages) */}
                     let carImg;
                     if(carImages[0]){
                         carImg = carImages[0].link

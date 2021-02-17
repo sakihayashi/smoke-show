@@ -6,7 +6,7 @@ import './subnav.scss'
 import * as Realm from "realm-web"
 import jwt from 'jsonwebtoken'
 import { becomeAFan } from '../../store/actions/userActions'
-import { openLoginModal } from '../../store/actions/userActions'
+import { openLoginModal } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import doneIcon from '../../assets/global/done-white.svg'
 
@@ -73,14 +73,14 @@ const SubNav = (props) =>{
                     console.log('id', user.id)
                     console.log('infle', influencer.userId)
                     setIsFanOf(true)
-                }else{
-                    console.log('user has no fans', props.customData.fansOf)
-                    setIsFanOf(false)
                 }
             })
+        }else{
+            setIsFanOf(false)
         }
     }
     useEffect(() => {
+        console.log('fired?')
         checkFanOf()
     }, [props.customData.fansOf])
 
@@ -112,14 +112,15 @@ const SubNav = (props) =>{
                 </Col>
                 <Col className="center-btn">
                 {isFanOf ? <Button className="btn-fan" disabled="true">
-                <img src={doneIcon} alt="you are already done this" />Fan of {influencer.username}</Button> :
+                <img src={doneIcon} style={{width: '1rem'}} alt="you are already done this" />{' '}Fan of {influencer.username}</Button> :
                 <Fragment>
-                    <Button className="btn-fan" onClick={handleBecomeAFan}>Become a fan</Button>
+                    <Button className="btn-fan" onClick={handleBecomeAFan}>Become a fan</Button><br/>
                     <OverlayTrigger
                         placement="left"
                         delay={{ show: 250, hide: 200 }}
                         overlay={renderTooltip}
                     >
+                    
                     <small>What this means?</small>
                     </OverlayTrigger>
                     
@@ -145,7 +146,7 @@ const mapDispatchToProps = (dispatch) =>{
 }
 const mapStateToProps = (state) =>{
     return{
-        openModal: state.user.openModal,
+        openModal: state.auth.openModal,
         customData: state.auth.customData
     }
 }

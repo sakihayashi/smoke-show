@@ -25,7 +25,7 @@ const AboutPage = () =>{
             </div>
             <div className="spacer-4rem"></div>
             <Row>
-                <Col sm={6} >
+                <Col sm={6} className="mb-2rem">
                 <div className="contact-div">
                     <h3 className="theme-text-color">Become an influencer</h3>
                     <p className="contact-p">
@@ -37,7 +37,7 @@ const AboutPage = () =>{
                     </p>
                 </div>
                 </Col>
-                <Col sm={6} >
+                <Col sm={6} className="mb-2rem" >
                 <div className="contact-div">
                     <h3 className="theme-text-color">Advertising with us</h3>
                     <p className="contact-p">Want to have a direct channel for advertising next to sponsored content and reaching the automotive community?
@@ -47,7 +47,30 @@ const AboutPage = () =>{
                     sales@thehoongroup.com
                     </p>
                 </div>
-                
+                </Col>
+                <Col sm={6} className="mb-2rem">
+                <div className="contact-div">
+                    <h3 className="theme-text-color">Support</h3>
+                    <p className="contact-p">
+                    Having technical trouble?
+                    <br /><br />
+                    Send us an email at:
+                    <br /><br />
+                    support@thehoongroup.com
+                    </p>
+                </div>
+                </Col>
+                <Col sm={6} className="mb-2rem">
+                <div className="contact-div">
+                    <h3 className="theme-text-color">Feedback</h3>
+                    <p className="contact-p">We thrive on feedback, do you have some suggestion to improve The Smoke Show?
+
+                    <br /><br />
+                    Send it our way at:
+                    <br /><br />
+                    feedback@thehoongroup.com
+                    </p>
+                </div>
                 </Col>
             </Row>
         </div>

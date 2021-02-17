@@ -5,13 +5,12 @@ import { authUser } from '../../store/actions/authActions'
 import { logInUser } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import Logo from '../../assets/global/Logo-smoke-show.png'
-import { openLoginModal } from '../../store/actions/userActions'
+import { openLoginModal } from '../../store/actions/authActions'
 
 // import jwt from 'jsonwebtoken'
 // import { useUID } from 'react-uid'
 
 const LoginModal = (props) =>{
-    console.log('check props',props)
     const [userObj, setUserObj] = useState({fname: '', lname: '', email: '', password: '', confirmPw: ''})
     const [hasError, setHasError] = useState(false)
     const [forgotPw, setForgotPw] = useState(false)
@@ -43,7 +42,6 @@ const LoginModal = (props) =>{
         const lowerCase = userObj.email.toLowerCase()
         // const newPW = uuidv4()
         // Additional arguments for the reset function
-        console.log('userobj', userObj)
         if(userObj.password === userObj.confirmPw){
             const args = [];
             try{
@@ -174,7 +172,7 @@ const mapStateToProps = (state) => {
     return{
       userData: state.auth.userData,
       hasLoginErr: state.auth.hasLoginErr,
-      openModal: state.user.openModal
+      openModal: state.auth.openModal
     }
   }
 const mapDispatchToProps = (dispatch) =>{

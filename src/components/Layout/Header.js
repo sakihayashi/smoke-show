@@ -11,7 +11,7 @@ import { logOutUser } from '../../store/actions/authActions'
 import { logInUser } from '../../store/actions/authActions'
 import jwt from 'jsonwebtoken'
 import settingsIcon from '../../assets/global/Settings-icon-white.svg'
-import { openLoginModal } from '../../store/actions/userActions'
+import { openLoginModal } from '../../store/actions/authActions'
 
 const Header = (props) =>{
     const location = useLocation()
@@ -102,7 +102,7 @@ const mapStateToProps = (state) =>{
         isLoggedIn: state.auth.isLoggedIn,
         customData: state.auth.customData,
         userId: state.userId,
-        openModal: state.user.openModal
+        openModal: state.auth.openModal
     }
 }
 const mapDispatchToProps = (dispatch) =>{

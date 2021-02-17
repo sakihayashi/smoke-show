@@ -245,7 +245,6 @@ const Garage = (props) =>{
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     // timeout
-                    // childRef.current.handleUserByParent({func: 'modal', value: true})
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
                     getInfluencerData(credentials)
                 }else{

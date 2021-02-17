@@ -233,6 +233,17 @@ label{
   min-height: calc(100vh - 21rem);
   
 }
+@media (min-width: 576px) { 
+  .main-wrapper{
+    padding: 0;
+  }
+  .spec-col{
+    padding-left: 0  !important;
+  }
+  .main-col{
+    margin-bottom: 0;
+  }
+}
 @media (min-width: 1025px){
   .main-wrapper{
     max-width: $main-width-tablet;
@@ -244,14 +255,3 @@ label{
   }
 }
 
-@media (min-width: 576px) { 
-  .main-wrapper{
-    padding: 0;
-  }
-  .spec-col{
-    padding-left: 0;
-  }
-  .main-col{
-    margin-bottom: 0;
-  }
-}

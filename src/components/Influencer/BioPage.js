@@ -20,7 +20,6 @@ import pistonIcon from '../../assets/global/piston.png'
 import priceIcon from '../../assets/global/Price-Tag-icon.png'
 
 const BioPage = (props) =>{
-    console.log('pro', props.mongo)
     const influencerId = props.match.params.id
     const [influencer, setInfluencer] = useState({userId: '', fname: '', lname: '', username: '', fans: null, desc: '', channelId: '', banner_img: '', profile_pic: '', featuredVideo: {id: '', title: ''}})
     // const { banner_img, username, profile_pic, fans } = props.location.state.influencer
@@ -167,19 +166,6 @@ const BioPage = (props) =>{
                                     />
                                 </div>
                                 <h3 style={{marginTop:'10px'}}>{car.youtube.snippet.title}</h3>
-                                {/* <Row className="comment-wrapper">
-                                    <Col sm={1} style={{margin:0,padding:0}}>
-                                    {car.profile_pic ? <img src={car.profile_pic} className="creator-profile-pic" /> :
-                                    <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="creator-profile-pic" name={car.creator} />
-                                    }
-                                        
-                                    </Col>
-                                    <Col sm={11} style={{margin: 0, paddingRight:0, margin: 'auto'}}>
-                                    <div className="creator-name"><strong>{car.creator}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{' '} {car.fans} fans</span></div>
-
-                                    </Col>
-                                </Row> */}
-                    
                                 <Comments comments={commentsTempData[index]} videoId={car.videoId}/>
                             </Col>
                             <Col sm={4} className="bio-stats">

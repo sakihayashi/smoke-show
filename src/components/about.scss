@@ -18,10 +18,15 @@
     padding: 2rem;
     text-align: center;
     height: 100%;
+    // background-color: $theme-ultlalight;
     h3{
         font-size: $font-l !important;
         color: $theme-darker;
     }
+}
+.mb-2rem{
+    margin-bottom: 2rem;
+    
 }
 .contact-p{
     text-align: left;

@@ -41,7 +41,12 @@ export const logOutUser = () =>{
         })
     }
 }
-
+export const openLoginModal = (state) =>{
+    console.log('working?', state)
+    return (dispatch, getState)=>{
+        dispatch({type: 'OPEN_LOGIN_MODAL', state})
+    }
+}
 export const logInAsPublic = () =>{
     return(dispatch, getState)=>{
         const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);

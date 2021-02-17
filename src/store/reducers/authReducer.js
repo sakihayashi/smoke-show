@@ -5,7 +5,8 @@ const initState = {
     customData: {},
     hasLoginErr: false,
     mongo: null,
-    isPublicView: false
+    isPublicView: false,
+    openModal: false
 }
 
 const authReducer = (state = initState, action) =>{
@@ -22,7 +23,8 @@ const authReducer = (state = initState, action) =>{
             return{
                 ...state,
                 customData: action.customData,
-                isLoggedIn: true
+                isLoggedIn: true,
+                openModal: false
             }
         case 'LOGIN_FAIL':
             return{
@@ -58,6 +60,12 @@ const authReducer = (state = initState, action) =>{
                 ...state,
                 customData: action.customData,
                 isLoggedIn: true
+            }
+        case 'OPEN_LOGIN_MODAL':
+            console.log('user from reducer', action.state)
+            return {
+                ...state,
+                openModal: action.state
             }
         // default: return state
     }

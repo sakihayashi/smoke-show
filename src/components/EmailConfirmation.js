@@ -5,7 +5,7 @@ import * as Realm from "realm-web"
 import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import Layout from './Layout/Layout'
-import { openLoginModal } from '../store/actions/userActions'
+import { openLoginModal } from '../store/actions/authActions'
 
 const EmailConfirmation = (props) =>{
     let token = new URLSearchParams(props.location.search).get("token")
@@ -79,12 +79,9 @@ const EmailConfirmation = (props) =>{
         }catch(err){
             console.log(err)
         }
-        // const response = await getApp.emailPasswordAuth.resendConfirmation(email)
-        // console.log('response', response)
+   
     }
-    // const test = () =>{
-    //     childRef.current.handleUserByParent({func: 'userUpdate', value: 'test'})
-    // }
+
     const resendToken = ()=>{
         return(
             <div>

@@ -4,7 +4,7 @@ import * as Realm from "realm-web"
 import { createNewUser } from '../../store/actions/userActions'
 import { connect } from 'react-redux'
 import Logo from '../../assets/global/Logo-smoke-show.png'
-import { openLoginModal } from '../../store/actions/userActions'
+import { openLoginModal } from '../../store/actions/authActions'
 
 
 const SignUpModal = (props) =>{
@@ -154,7 +154,7 @@ const mapDispatchToProps = (dispatch) =>{
 const mapStateToProps = (state) =>{
     console.log('check state', state)
     return{
-        openModal: state.user.openModal
+        openModal: state.auth.openModal
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpModal)

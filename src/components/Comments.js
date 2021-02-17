@@ -58,8 +58,7 @@ const Comments = (props) =>{
                             getComments(credentials)
                     })
                 });
-            
-      
+
         }catch(error){
             console.log('error', error)
 
@@ -118,54 +117,7 @@ const Comments = (props) =>{
                 
             }catch(err){console.log(err)}
     }
-    // const getComments = async () =>{
-    //     const filter = {videoId: props.videoId} 
-    //     const options = {sort: {date_posted: -1}, limit: 4}
-    //     if(isLoggedIn){
-    //         console.log('loggedin')
-    //         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-    //         const collectionComments = mongo.db("smoke-show").collection("comments")
-    //         try{
-    //             await collectionComments.find(filter,options).then(resAll =>{
-    //                 setCommentsDB(resAll)
-    //                 return resAll
-    //             })
-    //         }catch(err){console.log(err)}
-            
-    //     }else{
-    //         const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-    //         try {
-          
-    //           await app.logIn(credentials).then( async user =>{
-    //             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-    //             const mongoCollection = mongo.db("smoke-show").collection("comments")
-       
-    //             await mongoCollection.find(filter,options).then(resAll =>{
-    //                 setCommentsDB(resAll)
-    //                 return resAll
-    //             })
-               
-    //           }
-    //           )          
-    //          }catch(error){console.log(error)}
-    //     }
-        
-    // }
-    // useEffect(() => {
-        
-    //     if(props.loginUserData.userId){
-    //         setIsLoggedIn(true)
-    //     }else{
-    //         setIsLoggedIn(false)
-    //     }
-    // }, [props.loginUserData.userId])
-    // useEffect(() => {
-    //     if(props.currentUser){
-    //         setIsLoggedIn(true)
-    //     }else{
-    //         setIsLoggedIn(false)
-    //     }
-    // }, [props.currentUser])
+
 
     useEffect( () => {
         
@@ -197,7 +149,7 @@ const Comments = (props) =>{
         {props.isLoggedIn ? writeComment() : loginToComment() }
 
         { commentsDB.map((comment, index) =>{
-            var localtime = moment(comment.date_posted).local().format('YYYY-MM-DD')
+            var localtime = moment(comment.date_posted).local().format('MM-DD-YYYY')
            
             return(
                 <Row className="comment-wrapper" key={localtime + index}>

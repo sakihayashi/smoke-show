@@ -38,7 +38,10 @@
     &:active {
         background-color: $theme-hover !important;
     }
-    &focus{
+    &:focus{
+        background-color: $theme-hover !important;
+    }
+    &:disabled{
         background-color: $theme-hover !important;
     }
 }

@@ -15,12 +15,12 @@ const getApp = Realm.App.getApp(process.env.REACT_APP_REALM_APP_ID);
         
 //     }
 // }
-export const openLoginModal = (state) =>{
-    console.log('working?', state)
-    return (dispatch, getState)=>{
-        dispatch({type: 'OPEN_LOGIN_MODAL', state})
-    }
-}
+// export const openLoginModal = (state) =>{
+//     console.log('working?', state)
+//     return (dispatch, getState)=>{
+//         dispatch({type: 'OPEN_LOGIN_MODAL', state})
+//     }
+// }
 
 export const becomeAFan = (data) =>{
     return (dispatch, getState) =>{

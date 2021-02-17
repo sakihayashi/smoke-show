@@ -29,6 +29,7 @@ import EditVideoData from './components/Admin/EditVideoData'
 import AddCarData from './components/Admin/AddCarData'
 import CheckCarData from './components/Admin/CheckCarData'
 import EditVideoDataKirk from './components/Admin/EditVideoDataKirk'
+import AllVideos from './components/Influencer/AllVideos'
 
 
 function App() {
@@ -54,7 +55,7 @@ function App() {
           <Route path="/add-car-data" component={AddCarData} />
           <Route path="/edit-video-data" component={EditVideoData} />
           <Route path="/edit-video-data-kirk" component={EditVideoDataKirk} />
-          {/* <Route path="/query-data" component={QueryVideoData} /> */}
+          <Route path="/all-videos/:id" component={AllVideos} />
           <Route path="/check-data" component={CheckCarData} />
           <Route component={NotFoundPage} />
         </Switch>
