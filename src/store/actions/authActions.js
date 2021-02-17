@@ -42,9 +42,15 @@ export const logOutUser = () =>{
     }
 }
 export const openLoginModal = (state) =>{
-    console.log('working?', state)
+    const date = true
     return (dispatch, getState)=>{
         dispatch({type: 'OPEN_LOGIN_MODAL', state})
+    }
+}
+
+export const attachMsg = (msg) =>{
+    return(dispatch, getState)=>{
+        dispatch({type: 'ATTACH_MSG', msg})
     }
 }
 export const logInAsPublic = () =>{

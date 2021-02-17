@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Button, Form } from 'react-bootstrap'
+import { Row, Button, Form, Accordion, Card } from 'react-bootstrap'
 import Avatar from 'react-avatar'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
@@ -7,11 +7,12 @@ import { Link } from 'react-router-dom'
 // import { authUser } from '../store/actions/authActions'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
-import {uid} from 'react-uid'
+import { openLoginModal, attachMsg } from '../store/actions/authActions'
+import './comments.scss'
 
 const Comments = (props) =>{
-    // const [commentsData, setCommentsData] = useState(props.comments)
     const [commentsDB, setCommentsDB] = useState([])
+    const [moreComments, setMoreComments] = useState([])
     // const [isLoggedIn, setIsLoggedIn] = useState(false)
     // const [modalShow, setModalShow] = useState(false)
     const [userComment, setUserComment] = useState("")
@@ -69,6 +70,7 @@ const Comments = (props) =>{
         return (
         <Row className="comment-wrapper">
             <div className="col-1" style={{margin:0,padding:0}}>
+
                 <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="profile-pic" name="saki" />
             </div>
             <div className="col-11" style={{margin: 0, paddingRight:0}}>
@@ -80,27 +82,53 @@ const Comments = (props) =>{
                         </div>
                     </Form.Group>
                 </Form>
-                
             </div>
         </Row>
         )
         
     }
         
-       
+    const askLogin = () =>{
+        props.openLoginModal(true)
+        props.attachMsg('Please login to comment.')
+    }
     const loginToComment = () => {
         return (
-            <>
-                <div>Please login to comment</div>
-                <hr />
-            </>
+            <div className="col-11" style={{margin: 0, paddingRight:0}}>
+                <Form onSubmit={handleSubmitComment} >
+                    <Form.Group >
+                    <Form.Control className="comment-input" type="text" placeholder="Write a comment here" name="comment" onChange={askLogin} required/>
+                        <div className="comment-login-wrapper">
+                            <Button disabled="true" className="comment-btn" type="submit">Post comment</Button>
+                        </div>
+                    </Form.Group>
+                </Form>
+            </div>
         )
        
     }
+    const chunkArray = (allComments) =>{
+        let all = allComments.slice(2)
+        let chunk_size = 10
+        let index = 0;
+        let arrayLength = all.length;
+        let tempArray = [];
+        let myChunk
+        
+        for (index = 0; index < arrayLength; index += chunk_size) {
+            myChunk = all.slice(index, index+chunk_size);
+            // Do something if you want with the group
+            console.log('mychunk', myChunk)
+            tempArray.push(myChunk);
+        }
+
+        return tempArray;
+    }
+
     const getComments = async (credentials) =>{
         const filter = {videoId: props.videoId} 
-        const options = {sort: {date_posted: -1}, limit: 4}
-        
+        const options = {sort: {date_posted: -1}, limit: 12}
+        setCommentsDB([])
 
         try{
             await app.logIn(credentials).then(async user =>{
@@ -111,7 +139,13 @@ const Comments = (props) =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionComments = mongo.db("smoke-show").collection("comments")
                 await collectionComments.find(filter,options).then(resAll =>{
-                    setCommentsDB(resAll)
+
+                    for(let i=0;i<2; i++){
+                        setCommentsDB(commentsDB=>[...commentsDB, resAll[i]])
+                    }
+                    const chunked = chunkArray(resAll)
+                    console.log('chunked', chunked)
+                    setMoreComments(chunked)
                 })
             })
                 
@@ -147,19 +181,19 @@ const Comments = (props) =>{
         <React.Fragment>
     
         {props.isLoggedIn ? writeComment() : loginToComment() }
-
         { commentsDB.map((comment, index) =>{
-            var localtime = moment(comment.date_posted).local().format('MM-DD-YYYY')
+            {/* var localtime = moment(comment.date_posted).local().format('MM-DD-YYYY') */}
+            let localtime = moment(comment.date_posted).fromNow()
            
             return(
                 <Row className="comment-wrapper" key={localtime + index}>
-                    
+
                     <div style={{margin:0,padding:0}} className="col-1">
                         <Link to={{
                             pathname: `/user/${comment.userId}`
                         }}>
                             {comment.profile_pic ? <img src={comment.profile_pic} className="profile-pic " alt={comment.username} /> :
-                            <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="profile-pic" name={comment.username} />
+                            <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/>
                             }
                         </Link>
                     </div>
@@ -178,17 +212,76 @@ const Comments = (props) =>{
             )
         })
         }
+        <Accordion defaultActiveKey="0">
+            {/* <Card>
+                <Card.Header>
+                <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                    Click me!
+                </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                <Card.Body>Hello! I'm the body</Card.Body>
+                </Accordion.Collapse>
+            </Card> */}
+            <Card className="card-comments">
+                <Card.Header className="card-comments-h">
+                <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                    Load more
+                </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="1">
+                <Card.Body className="collapsed-body">
+                { moreComments[0] == null && <p>No more comment</p>}
+                {moreComments[0] && moreComments[0].map((comment, index) =>{
+                    let localtime = moment(comment.date_posted).fromNow()
+                    return(
+                        <Row className="comment-wrapper" key={localtime + index}>
+
+                            <div style={{margin:0,padding:0}} className="col-1">
+                                <Link to={{
+                                    pathname: `/user/${comment.userId}`
+                                }}>
+                                    {comment.profile_pic ? <img src={comment.profile_pic} className="profile-pic " alt={comment.username} /> :
+                                    <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/>
+                                    }
+                                </Link>
+                            </div>
+                            
+                            <div  style={{margin: 0, paddingRight:0}} className="col-11">
+                            <div className="comment-username ">
+                                <Link to={{
+                                    pathname: `/user/${comment.userId}`
+                                }}>
+                                    <strong>{comment.username}</strong>
+                                </Link>
+                            {" "} | <span style={{color:'gray'}}>{localtime}</span></div>
+                            <div className="comment-txt" s>{comment.comment}</div>
+                            </div>
+                        </Row>
+                    )
+                })}
+                </Card.Body>
+                </Accordion.Collapse>
+            </Card>
+        </Accordion>
         </React.Fragment>
         
         
     )
 }
+const mapDispatchToProps = (dispatch)=>{
+    return{
+        openLoginModal: (state) => dispatch(openLoginModal(state)),
+        attachMsg: (msg)=> dispatch(attachMsg(msg))
+    }
+}
 const mapStateToProps = (state) => {
     //syntax is propName: state.key of combineReducer.key
     return{
         loginUserData: state.auth.loginUserData,
-        isLoggedIn: state.auth.isLoggedIn
+        isLoggedIn: state.auth.isLoggedIn,
+        customData: state.auth.customData
     }
   }
 
-export default connect(mapStateToProps)(Comments)
+export default connect(mapStateToProps, mapDispatchToProps)(Comments)

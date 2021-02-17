@@ -37,7 +37,7 @@ const AllVideos = (props) =>{
                 if(app.currentUser.id === user.id){
                     console.log('user login updated')
                 }
-                props.getInfluencer(influencerReducer)
+                props.getInfluencer(influencerId)
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const mongoCollection = mongo.db("smoke-show").collection("youtube-videos")
                 const collectionCars = mongo.db("smoke-show").collection("cars")

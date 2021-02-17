@@ -18,6 +18,7 @@ const LoginModal = (props) =>{
     // const uid = useUID()
     const [loginMsg, setLoginMsg] = useState('')
     const [errMsg, setErrMsg] = useState('')
+    const [msgModal, setMsgModal] = useState('')
     const appId = process.env.REACT_APP_REALM_APP_ID
     // const appConfig = {
     //     id: appId,
@@ -121,7 +122,12 @@ const LoginModal = (props) =>{
     }, [props.hasLoginErr])
     useEffect(() => {
         setShow(props.openModal)
+
     }, [props.openModal])
+    useEffect(() => {
+        setMsgModal(props.modalMsg)
+console.log('login', props.modalMsg)
+    }, [props.modalMsg])
     return (
         <Modal
           {...props}
@@ -138,7 +144,8 @@ const LoginModal = (props) =>{
             <img src={Logo} alt="The Smoke Show" className="logo-header" />
           </div>
           <Modal.Body className="custom-modal-body">
-         
+            {<p style={{color: 'red', textAlign: 'center'}}>{msgModal}</p>}
+          
             <div style={{marginBottom: '15px'}}></div>
             {forgotPw ? resetPassword :
             <Form className="login-form" onSubmit={handleSubmit}>
@@ -169,10 +176,12 @@ const LoginModal = (props) =>{
 
 const mapStateToProps = (state) => {
     //syntax is propName: state.key of combineReducer.key
+    console.log('state auth', state.auth)
     return{
       userData: state.auth.userData,
       hasLoginErr: state.auth.hasLoginErr,
-      openModal: state.auth.openModal
+      openModal: state.auth.openModal,
+      modalMsg: state.auth.modalMsg
     }
   }
 const mapDispatchToProps = (dispatch) =>{

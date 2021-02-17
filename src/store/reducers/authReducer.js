@@ -6,7 +6,8 @@ const initState = {
     hasLoginErr: false,
     mongo: null,
     isPublicView: false,
-    openModal: false
+    openModal: false,
+    modalMsg: ''
 }
 
 const authReducer = (state = initState, action) =>{
@@ -62,10 +63,15 @@ const authReducer = (state = initState, action) =>{
                 isLoggedIn: true
             }
         case 'OPEN_LOGIN_MODAL':
-            console.log('user from reducer', action.state)
             return {
                 ...state,
                 openModal: action.state
+            }
+        case 'ATTACH_MSG':
+            console.log('msg', action.msg)
+            return{
+                ...state,
+                modalMsg: action.msg
             }
         // default: return state
     }
