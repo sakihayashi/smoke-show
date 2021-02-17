@@ -1,0 +1,28 @@
+@import "../../scss/config";
+
+.desc-box{
+    margin-top: 1rem;
+    width: 100%;
+    max-height: 3rem;
+    // text-overflow: ellipsis;
+    // white-space: nowrap;
+    overflow: hidden;
+    display: block;
+}
+.desc-box-expanded{
+    width: 100%;
+    margin-top: 1rem;
+    height: auto;
+}
+
+.btn-show-more{
+    margin-top: 1rem;
+    border: 1px solid $theme-darker;
+    border-radius: 4px;
+    padding: 5px 1rem;
+    background-color: $theme-ultlalight;
+    &:hover{
+        cursor: pointer;
+        background-color: white;
+    }
+}

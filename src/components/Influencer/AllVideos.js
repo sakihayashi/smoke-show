@@ -14,22 +14,26 @@ import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import noImg from '../../assets/global/no_image.jpg'
 import { getInfluencer }from '../../store/actions/influencerActions'
-import influencerReducer from '../../store/reducers/influencerReducer'
 import SubNav from './SubNav'
+import './allVideos.scss'
 
 const AllVideos = (props) =>{
     const influencerId = props.match.params.id
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     const [videoArr, setVideoArr] = useState([])
-
+    const [showMore, setShowMore] = useState(false)
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
         // timeout in number of milliseconds
         };
     const app = new Realm.App(appConfig);
+    const [divId, setDivId] = useState(null)
 
-
+    const expandDiv = (index)=>{
+        setDivId(index)
+        setShowMore(!showMore)
+    }
     const getVideos = async (credentials) =>{
         setVideoArr([])
         try{
@@ -67,6 +71,10 @@ const AllVideos = (props) =>{
         }catch(err){
 
         }
+    }
+
+    const numberWithCommas = (x) =>{
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     const loginCheck = async () =>{
         const tokenUser = sessionStorage.getItem('session_user')
@@ -108,8 +116,11 @@ const AllVideos = (props) =>{
             <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
             {
                 videoArr.map((video, index) =>{
+                    const str = video.carData.model
+                    const model = str.charAt(0).toUpperCase() +str.slice(1)
                     const name = video.carData.make
-                    const titleCase = name.charAt(0).toUpperCase() +name.slice(1); 
+                    const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
+                    const price = numberWithCommas(video.carData.price.baseMSRP)
                     {/* console.log(titleCase) */}
                     const uuid = uuidv4()
                     return(
@@ -141,9 +152,11 @@ const AllVideos = (props) =>{
                                             <div className="col-11" style={{paddingRight:0, margin: 'auto'}} >
                                             <div className="creator-name"><strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{' '} {video.snippet.channelTitle} fans</span></div>
                                            
-
                                             </div>
-                                            <small>{video.snippet.description}</small>
+                                            <div className={showMore && divId === index ? "desc-box-expanded" : "desc-box"}>
+                                                {video.snippet.description}
+                                            </div>
+                                            <p className="btn-show-more" onClick={()=>expandDiv(index)}>{showMore && divId === index ? 'Show less' : 'Show more'}</p>
                                         </Row>
                                         {/* <Suspense fallback={<div class="loader">Loading...</div>}>
                                             <Comments comments={commentsTempData[index]} videoId={car.videoId} />
@@ -154,8 +167,8 @@ const AllVideos = (props) =>{
                                         <div className="spec-wrapper">
                                         <img alt={video.snippet.channelTitle} src={require(`../../assets/maker_logos/${titleCase}_Logo.png`).default} className="icon-s" />
                                         {' '}
-                                        <span className="spec-text" ><strong >{video.carData.name}</strong></span><br/>
-                                        <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" >{' '}${video.carData.price.baseMSRP}</span><br />
+                                        <span className="spec-text" ><strong >{video.carData.year}{' '}{titleCase}{' '}{model}</strong></span><br/>
+                                        <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" >{' '}${price}</span><br />
                                         <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text">{' '}{video.carData.features.Engine.Torque}</span><br />
                                         <img alt="piston" key={pistonIcon} src={pistonIcon}  className="icon-s" /><span className="spec-text">{' '}{video.carData.features.Engine.Horsepower}</span><br />
                                         </div>
