@@ -3,16 +3,18 @@
 .desc-box{
     margin-top: 1rem;
     width: 100%;
-    max-height: 3rem;
+    max-height: 2.6rem;
     // text-overflow: ellipsis;
     // white-space: nowrap;
     overflow: hidden;
     display: block;
+    font-size: 14px;
 }
 .desc-box-expanded{
     width: 100%;
     margin-top: 1rem;
     height: auto;
+    font-size: 14px;
 }
 
 .btn-show-more{
@@ -20,9 +22,15 @@
     border: 1px solid $theme-darker;
     border-radius: 4px;
     padding: 5px 1rem;
+    width: 100%;
+    text-align: center;
     background-color: $theme-ultlalight;
     &:hover{
         cursor: pointer;
         background-color: white;
     }
+}
+.video-title-div{
+    margin-top: 10px;
+    min-height: 38px;
 }

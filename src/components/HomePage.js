@@ -182,7 +182,7 @@ const [currentUser, setCurrentUser] = useState('')
                                                 />
                                 
                                             </div>
-                                            <h3 style={{marginTop:'10px'}} >{car.youtube.snippet.title}</h3>
+                                            <h3 style={{marginTop:'10px'}} className="video-title">{car.youtube.snippet.title}</h3>
                                             <Row className="comment-wrapper" >
                                                 <div className="col-1" style={{margin:0,padding:0}} >
                                                 {car.profile_pic ? <img src={car.profile_pic} 

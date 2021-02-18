@@ -57,6 +57,9 @@ function App() {
           <Route path="/edit-video-data-kirk" component={EditVideoDataKirk} />
           <Route path="/all-videos/:id" component={AllVideos} />
           <Route path="/check-data" component={CheckCarData} />
+
+          {/* <Route path="/update-video" component={QueryVideoData} /> */}
+
           <Route component={NotFoundPage} />
         </Switch>
     </Router>    

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import { Row, Button, Form, Accordion, Card } from 'react-bootstrap'
 import Avatar from 'react-avatar'
 import { connect } from 'react-redux'
@@ -76,9 +76,9 @@ const Comments = (props) =>{
             <div className="col-11" style={{margin: 0, paddingRight:0}}>
                 <Form onSubmit={handleSubmitComment} >
                     <Form.Group >
-                    <Form.Control className="comment-input" type="text" placeholder="Write a comment here" name="comment" onChange={handleChange} required/>
+                    <Form.Control className="comment-input" type="text" placeholder="Add a comment here" name="comment" onChange={handleChange} required/>
                         <div className="comment-login-wrapper">
-                            <Button className="comment-btn" type="submit">Post comment</Button>
+                            <Button className="comment-btn" type="submit"> Comment</Button>
                         </div>
                     </Form.Group>
                 </Form>
@@ -94,16 +94,23 @@ const Comments = (props) =>{
     }
     const loginToComment = () => {
         return (
-            <div className="col-11" style={{margin: 0, paddingRight:0}}>
-                <Form onSubmit={handleSubmitComment} >
-                    <Form.Group >
-                    <Form.Control className="comment-input" type="text" placeholder="Write a comment here" name="comment" onChange={askLogin} required/>
-                        <div className="comment-login-wrapper">
-                            <Button disabled="true" className="comment-btn" type="submit">Post comment</Button>
-                        </div>
-                    </Form.Group>
-                </Form>
-            </div>
+            <Row className="comment-wrapper">
+                <div className="col-1" style={{margin:0,padding:0}}>
+
+                <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="profile-pic" name="" />
+                </div>
+                 <div className="col-11" style={{margin: 0, paddingRight:0}}>
+                    <Form onSubmit={handleSubmitComment} >
+                        <Form.Group >
+                        <Form.Control className="comment-input" type="text" placeholder="Write a comment here" name="comment" onChange={askLogin} />
+                            <div className="comment-login-wrapper">
+                                <Button disabled="true" className="comment-btn" type="submit">Comment</Button>
+                            </div>
+                        </Form.Group>
+                    </Form>
+                </div>
+            </Row>
+           
         )
        
     }
@@ -213,16 +220,7 @@ const Comments = (props) =>{
         })
         }
         <Accordion defaultActiveKey="0">
-            {/* <Card>
-                <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                    Click me!
-                </Accordion.Toggle>
-                </Card.Header>
-                <Accordion.Collapse eventKey="0">
-                <Card.Body>Hello! I'm the body</Card.Body>
-                </Accordion.Collapse>
-            </Card> */}
+         
             <Card className="card-comments">
                 <Card.Header className="card-comments-h">
                 <Accordion.Toggle as={Button} variant="link" eventKey="1">

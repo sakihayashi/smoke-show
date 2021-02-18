@@ -45,20 +45,32 @@ const AllVideos = (props) =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const mongoCollection = mongo.db("smoke-show").collection("youtube-videos")
                 const collectionCars = mongo.db("smoke-show").collection("cars")
+                const collectionManual = mongo.db("smoke-show").collection("cars-manual")
                 const filter = {userId: influencerId}
-                await mongoCollection.find(filter, {limit: 4}).then(async videos =>{
+                await mongoCollection.find(filter, {limit: 6}).then(async videos =>{
+                    console.log('videos', videos)
                     videos.map(async video =>{
-
+                        
                         const filterCar = {_id: {"$oid": video.carDataId}}
                         
                         try{
-                            await collectionCars.findOne(filterCar).then(data =>{
-                               
+                            await collectionCars.findOne(filterCar).then(async data =>{
+                                console.log('data', data)
+                               if(data){
                                 video.carData = data
                                 setVideoArr(videoArr =>[...videoArr, video])
+                               }else{
+                                   console.log('fired?')
+                                await collectionManual.findOne(filterCar).then(data =>{
+                                    video.carData = data
+                                    setVideoArr(videoArr =>[...videoArr, video])
+                                })
+                               }
+                                
                             })
                         }catch(err){
-                            console.log(err)
+                         console.log(err)
+                            
                         }
                         
                     })
@@ -114,7 +126,7 @@ const AllVideos = (props) =>{
             <div className="spacer-4rem"></div>
             <h2 className="title">All Videos from {props.influencerObj.username}</h2>
             <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
-            {
+            {   videoArr[0] &&
                 videoArr.map((video, index) =>{
                     const str = video.carData.model
                     const model = str.charAt(0).toUpperCase() +str.slice(1)
@@ -137,8 +149,8 @@ const AllVideos = (props) =>{
                                             />
                             
                                         </div>
-                                        <h3 style={{marginTop:'10px'}} >{video.snippet.title}</h3>
-                                        
+                                        {/* <h3 style={{marginTop:'10px'}} aria-hidden={true} >{video.snippet.title}</h3> */}
+                                        <div className="video-title-div" dangerouslySetInnerHTML={{__html: video.snippet.title}} />
                                         <Row className="comment-wrapper" >
                                             <div className="col-1" style={{margin:0,padding:0}} >
                                             {props.influencerObj.profilePic ? <img src={props.influencerObj.profilePic} 
