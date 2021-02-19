@@ -18,7 +18,7 @@ const AddCarData = () =>{
     const [powerFeatures, setPowerFeatures] = useState({})
     const [colorExterior, setColorExterior] = useState([{name: '', rgb: null}])
     const [colorInterior, setColorInterior] = useState([{name: '', rgb: null}])
-    // let colorCounter = 0
+    const [basicData, setBasicData] = useState({make: '', model: '', year: null, id: null, name: '', totalSeating: null, })
     const [carObj, setCarObj] = useState({
         id: null,
         name: '',
@@ -195,6 +195,18 @@ const AddCarData = () =>{
             [e.target.name]: e.target.value
         })
     ]
+    const changeBasicData = (e) =>{
+        setBasicData({
+            ...basicData,
+            [e.target.name]: e.target.value
+        })
+    }
+    const changePrice =(e)=>{
+        setPrice({
+            ...price,
+            [e.target.name]: e.target.value
+        })
+    }
     const handleSubmitLogin = async (e) =>{
         e.preventDefault()
         const emailLowerCase = userObj.email.toLowerCase()
@@ -233,7 +245,7 @@ const AddCarData = () =>{
                         ID
                         </Form.Label>
                         <Col sm="8">
-                        <Form.Control type="number" pattern="\d*" placeholder="type number | leave blank if no data found" />
+                        <Form.Control type="number" pattern="\d*" placeholder="type number | leave blank if no data found" name="id" onChange={changeBasicData}/>
                         </Col>
                     </Form.Group>
 
@@ -242,7 +254,7 @@ const AddCarData = () =>{
                         Name
                         </Form.Label>
                         <Col sm="8">
-                        <Form.Control type="text" placeholder="Name" />
+                        <Form.Control type="text" placeholder="Name" name="name" onChange={changeBasicData}/>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} >
@@ -250,7 +262,7 @@ const AddCarData = () =>{
                         Make
                         </Form.Label>
                         <Col sm="8">
-                        <Form.Control type="text" placeholder="Maker" />
+                        <Form.Control type="text" placeholder="Maker" onChange={changeBasicData} name="make" />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} >
@@ -258,7 +270,7 @@ const AddCarData = () =>{
                         Model
                         </Form.Label>
                         <Col sm="8">
-                        <Form.Control type="text" placeholder="Model" />
+                        <Form.Control type="text" placeholder="Model" onChange={changeBasicData} name="model"/>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} >
@@ -266,7 +278,7 @@ const AddCarData = () =>{
                         year
                         </Form.Label>
                         <Col sm="8">
-                        <Form.Control type="number" pattern="\d*" placeholder="Type number" />
+                        <Form.Control type="number" pattern="\d*" placeholder="Type number" onChange={changeBasicData} name="year" />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} >
@@ -274,7 +286,7 @@ const AddCarData = () =>{
                         Price | base MSRP
                         </Form.Label>
                         <Col sm="8">
-                        <Form.Control type="number" pattern="\d*" placeholder="Type number" />
+                        <Form.Control type="number" pattern="\d*" placeholder="Type number" name="baseMSRP" onChange={changePrice}/>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} >
@@ -282,7 +294,7 @@ const AddCarData = () =>{
                         Price | base Invoice
                         </Form.Label>
                         <Col sm="8">
-                        <Form.Control type="number" pattern="\d*" placeholder="Type number" />
+                        <Form.Control type="number" pattern="\d*" placeholder="Type number" onChange={changePrice} name="baseInvoice" />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} >
@@ -290,7 +302,7 @@ const AddCarData = () =>{
                         totalSeating
                         </Form.Label>
                         <Col sm="8">
-                        <Form.Control type="number" placeholder="Type number" />
+                        <Form.Control type="number" placeholder="Type number" onChange={changeBasicData} name="totalSeating"/>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} >

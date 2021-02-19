@@ -137,9 +137,9 @@ const AllVideos = (props) =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const mongoCollection = mongo.db("smoke-show").collection("youtube-videos")
                 const filter = {userId: influencerId}
-                // const option = {limit: 12}
+                const options = {sort: {"snippet.publishedAt": -1}}
                 try{
-                    await mongoCollection.find(filter).then(async videos =>{
+                    await mongoCollection.find(filter, options).then(async videos =>{
                       
                         const res = Math.floor(videos.length / 12)
                         setPgNum(res)

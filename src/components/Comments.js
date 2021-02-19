@@ -102,7 +102,7 @@ const Comments = (props) =>{
                  <div className="col-11" style={{margin: 0, paddingRight:0}}>
                     <Form onSubmit={handleSubmitComment} >
                         <Form.Group >
-                        <Form.Control className="comment-input" type="text" placeholder="Write a comment here" name="comment" onChange={askLogin} />
+                        <Form.Control className="comment-input" type="text" placeholder="Write a comment" name="comment" onChange={askLogin} />
                             <div className="comment-login-wrapper">
                                 <Button disabled="true" className="comment-btn" type="submit">Comment</Button>
                             </div>
@@ -145,7 +145,7 @@ const Comments = (props) =>{
                 }
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionComments = mongo.db("smoke-show").collection("comments")
-                await collectionComments.find(filter,options).then(resAll =>{
+                await collectionComments.find(filter, options).then(resAll =>{
 
                     for(let i=0;i<2; i++){
                         setCommentsDB(commentsDB=>[...commentsDB, resAll[i]])
@@ -162,10 +162,10 @@ const Comments = (props) =>{
 
     useEffect( () => {
         
-        const token = sessionStorage.getItem('session_token')
+        // const token = sessionStorage.getItem('session_token')
         const tokenUser = sessionStorage.getItem('session_user')
-         if(token){
-            jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+         if(tokenUser){
+            jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
                     console.log(err)
                     // setIsLoggedIn(false)
@@ -173,8 +173,8 @@ const Comments = (props) =>{
                     getComments(credentials)
                 }else{
                     // setIsLoggedIn(true)
-                    const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
-                    getComments(credentials.cre)
+                    
+                    getComments(decoded.cre)
                 }
             });
             

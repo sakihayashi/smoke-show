@@ -30,16 +30,13 @@ const Layout = (props) =>{
     }
 
     useEffect(() => {
-        const token = sessionStorage.getItem('session_token')
-        jwt.verify(token, process.env.REACT_APP_JWT_SECRET, async (err, decoded)=>{
+        const tokenUser = sessionStorage.getItem('session_user')
+        jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, async (err, decoded)=>{
             if(err){
                 
                 props.logInAsPublic()
             }else{
-                const tokenUser = sessionStorage.getItem('session_user')
-                const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
-                console.log('value', credentials)
-                props.updateLogin(credentials.cre)
+                props.updateLogin(decoded.cre)
             }
         })
     }, [])
