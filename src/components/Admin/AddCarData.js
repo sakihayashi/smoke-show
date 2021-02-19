@@ -3,13 +3,16 @@ import * as Realm from "realm-web"
 import jwt from 'jsonwebtoken'
 
 import LoginDiv from './LoginDiv'
-import { Container, Button, Form, Col, Row } from 'react-bootstrap'
+import { Container, Button, Form, Col, Row, Alert } from 'react-bootstrap'
 import ColorDiv from './colorDiv'
 import ColorInterior from './colorInterior'
 import FormText from './FormText'
 import FormCheckbox from './FormCheckbox'
+import { logInUser } from '../../store/actions/authActions'
+import { connect } from 'react-redux'
 
-const AddCarData = () =>{
+
+const AddCarData = (props) =>{
     const [userObj, setUserObj] = useState({email: '', password: ''})
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const maxAgeTest = 1 * 60 * 60
@@ -18,15 +21,66 @@ const AddCarData = () =>{
     const [powerFeatures, setPowerFeatures] = useState({})
     const [colorExterior, setColorExterior] = useState([{name: '', rgb: null}])
     const [colorInterior, setColorInterior] = useState([{name: '', rgb: null}])
-    const [basicData, setBasicData] = useState({make: '', model: '', year: null, id: null, name: '', totalSeating: null, })
+    const [basicData, setBasicData] = useState({make: '', model: '', year: null, id: null, name: '', totalSeating: null })
+    const [warranty, setWarranty] = useState({Basic: "", Drivetrain: "", Rust: "", Roadside: ""})
+    const [isSaved, setIsSaved] = useState(false)
+    const [measurements, setMeasurements] = useState({
+        "Maximum cargo capacity": "",
+        "Curb weight": "",
+        "Cargo capacity, all seats in place": "",
+        "Angle of approach": "",
+        "Angle of departure": "",
+        Length: "",
+        "Ground clearance": "",
+        Height: "",
+        "Wheel base": "",
+        Width: ""
+    })
+    const [fuel, setFuel] = useState({
+        "Range in miles (cty/hwy)": "",
+        "Fuel tank capacity": "",
+        "Combined MPG": "",
+        "Fuel type": ""
+    })
+    const [fuelMileage, setFuelMileage] = useState({
+        "EPA mileage est": {
+            "(cty/hwy)": ""
+        }
+    })
+    const [engine, setEngine] = useState({
+        Torque: "",
+        "Base engine size": "",
+        Horsepower: "",
+        "Turning circle": "",
+        Valves: "",
+        "Base engine type": "",
+        "Valve timing": "",
+        "Cam type": "",
+        Cylinders: ""
+    })
+    const [rearseats, setRearseats] = useState({})
+    const [comfort, setComfort] = useState({})
+    const [exteriorOptions, setExteriorOptions] = useState({})
+    const [driveTrain, setDriveTrain] = useState({})
+    const [suspension, setSuspension] = useState({})
+    const [instrumentation, setInstrumentation] = useState({})
+    const [entertainment, setEntertainment] = useState({})
+    const [frontseats, setFrontseats] = useState({})
+    const [safety, setSafety] = useState({})
+    const [tires, setTires] = useState({})
+    const [interiorOptions, setInteriorOptions] = useState({})
     const [carObj, setCarObj] = useState({
         id: null,
         name: '',
+        make: '',
+        model: '',
+        year: null,
+        totalSeating: null,
+        typeCategories: {},
         price: {
             baseMSRP: null,
             baseInvoice: null
         },
-        totalSeating: null,
         color: {
             EXTERIOR: [],
             INTERIOR: []
@@ -163,13 +217,9 @@ const AddCarData = () =>{
                 "Interior Light Kit": false,
                 "Cargo Mat": false
             }
-        },
-        make: '',
-        model: '',
-        year: null,
-        typeCategories: {}
+        }
     })
-    console.log('obj', carObj.features['Comfort & Convenience'])
+    // console.log('obj', carObj.features['Comfort & Convenience'])
     const addDiv = () =>{
         setColorExterior(colorExterior=>[...colorExterior, {name: '', rgb: null}])
     }
@@ -204,26 +254,209 @@ const AddCarData = () =>{
     const changePrice =(e)=>{
         setPrice({
             ...price,
+            [e.target.name]: Number(e.target.value)
+        })
+    }
+    const changeWarranty = (e)=>{
+        setWarranty({
+            ...warranty,
             [e.target.name]: e.target.value
         })
     }
+    const changeMeasurements = (e) =>{
+        setMeasurements({
+            ...measurements,
+            [e.target.name]: e.target.value
+        })
+    }
+    const changeFuel = (e)=>{
+        setFuel({
+            ...fuel,
+            [e.target.name]: e.target.value
+        })
+    }
+    const changeFuelMileage = (e)=>{
+        setFuelMileage({ 
+            "(cty/hwy)": e.target.value
+        })
+    }
+    const changeEngine = (e)=>{
+        console.log('engine', engine)
+        setEngine({
+            ...engine,
+            [e.target.name]: e.target.value
+        })
+    }
+    const changePowerFeatures = (e) =>{
+        if(e.target.checked === true){
+            setPowerFeatures({
+                ...powerFeatures,
+                [e.target.name]: e.target.checked
+            })
+        }
+    }
+    const changeRearseats = (e) =>{
+        if(e.target.checked){
+            if(e.target.checked === true){
+                setRearseats({
+                    ...rearseats,
+                    [e.target.name]: e.target.checked
+                })
+            }
+        }else{
+            setRearseats({
+                ...rearseats,
+                [e.target.name]: e.target.value
+            })
+        }
+    }
+    const changeComfort = (e) =>{
+        if(e.target.checked === true){
+            setComfort({
+                ...comfort,
+                [e.target.name]: e.target.checked
+            })
+        }
+    }
+    const changeExteriorOptions = (e) =>{
+        if(e.target.checked === true){
+            setExteriorOptions({
+                ...exteriorOptions,
+                [e.target.name]: e.target.checked
+            })
+        }
+    }
+    const changeDriveTrain = (e) =>{
+        setDriveTrain({
+            ...driveTrain,
+            [e.target.name]: e.target.value
+        })
+    }
+    const changeSuspension = (e) =>{
+        setSuspension({
+            ...suspension,
+            [e.target.name]: e.target.value
+        })
+    }
+    const changeInstrumentation = (e) =>{
+        if(e.target.checked === true){
+            setInstrumentation({
+                ...instrumentation,
+                [e.target.name]: e.target.checked
+            })
+        }
+    }
+    const changeFrontseats = (e)=>{
+        if(e.target.checked){
+            if(e.target.checked === true){
+                setFrontseats({
+                    ...frontseats,
+                    [e.target.name]: e.target.checked
+                })
+            }
+        }else{
+            setFrontseats({
+                ...frontseats,
+                [e.target.name]: e.target.value
+            })
+        }
+    }
+    const changeSafety = (e) =>{
+        if(e.target.checked === true){
+            setSafety({
+                ...safety,
+                [e.target.name]: e.target.checked
+            })
+        }
+    }
+    const changeTires = (e) =>{
+        if(e.target.checked === true){
+            setTires({
+                ...tires,
+                [e.target.name]: e.target.checked
+            })
+        }
+    }
+    const changeInteriorOptions = (e) =>{
+        if(e.target.checked === true){
+            setInteriorOptions({
+                ...interiorOptions,
+                [e.target.name]: e.target.checked
+            })
+        }
+    }
+    const changeEntertainment = (e) =>{
+        if(e.target.checked === true){
+            setEntertainment({
+                ...entertainment,
+                [e.target.name]: e.target.checked
+            })
+        }
+    }
     const handleSubmitLogin = async (e) =>{
+        e.preventDefault()
         e.preventDefault()
         const emailLowerCase = userObj.email.toLowerCase()
         const credentials = Realm.Credentials.emailPassword(emailLowerCase, userObj.password)
+        props.logInUser(credentials, emailLowerCase)
+        
+    }
+    const handleSubmitData = async (e) =>{
+        // e.preventDefault()
+        setFuel({
+            ...fuel,
+            "EPA mileage est": fuelMileage
+        })
+        const carData = {
+            isManual: true,
+            id: basicData.id,
+            name: basicData.name,
+            make: basicData.make,
+            model: basicData.model,
+            year: Number(basicData.year),
+            totalSeating: Number(basicData.totalSeating),
+            price: price,
+            color: {
+                EXTERIOR: colorExterior,
+                INTERIOR: colorInterior
+            },
+            features: {
+                "Power Feature": powerFeatures,
+                Rearseats: rearseats,
+                Warranty: warranty,
+                Measurements: measurements,
+                "Comfort & Convenience": comfort,
+                "Exterior Options": exteriorOptions,
+                "Drive Train": driveTrain,
+                Suspension: suspension,
+                Instrumentation: instrumentation,
+                "In Car Entertainment": entertainment,
+                Frontseats: frontseats,
+                Fuel: fuel,
+                Safety: safety,
+                "Tires and Wheels": tires,
+                Engine: engine,
+                "Interior Options": interiorOptions
+            }
+        }
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        const collection = mongo.db("smoke-show").collection("cars-manual")
         try{
-            app.logIn(credentials).then( user =>{
-                setIsLoggedIn(true)
-                const customData = user.customData
-                const token = jwt.sign({ userData: customData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest})
-                sessionStorage.setItem('session_token', token)
-         
-                })
+            await collection.insertOne(carData).then(res =>{
+                console.log('success!')
+                setIsSaved(true)
+            })
         }catch(err){
             console.log(err)
         }
-        
     }
+    useEffect(() => {
+        if(props.isLoggedIn){
+            setIsLoggedIn(true)
+        }else{
+            setIsLoggedIn(false)
+        }
+    }, [props.isLoggedIn])
     useEffect(() => {
         const token = sessionStorage.getItem('session_token')
         if(token){
@@ -359,46 +592,45 @@ const AddCarData = () =>{
                     <h3>Power Feature</h3>
                     {  
                         Object.keys(carObj.features['Power Feature']).map(key =>{
-                        return <FormCheckbox objKey={key} />
+                        return <FormCheckbox objKey={key} handleChange={changePowerFeatures}/>
                     })}
                     <hr/>
                     <h3>Rearseats</h3>
                     { Object.keys(carObj.features.Rearseats).map(key=>{
                         if(carObj.features.Rearseats[key]=== false || carObj.features.Rearseats[key]=== true){
-                            return <FormCheckbox objKey={key} />
+                            return <FormCheckbox objKey={key} handleChange={changeRearseats} />
                         }else{
-                            return <Fragment>
-                                    <FormText objKey={key} />
+                            return (<Fragment>
+                                    <FormText objKey={key} handleChange={changeRearseats} />
                                     <hr/>
-                                    </Fragment>
+                                    </Fragment>)
                         }
                     })}
                     <h3>Warranty</h3>
                     {Object.keys(carObj.features.Warranty).map(key =>{
-                        return <FormText objKey={key} />
+                        return <FormText objKey={key} handleChange={changeWarranty}/>
                     })}
                     <hr />
                     <h3>Measurements</h3>
                     {Object.keys(carObj.features.Measurements).map(key =>{
-                        return <FormText objKey={key} />
+                        return <FormText objKey={key} handleChange={changeMeasurements} />
                     })}
                     <hr />
                     <h3>Comfort & Convenience</h3>
                     {  
                         Object.keys(carObj.features['Comfort & Convenience']).map(key =>{
-                        console.log(key)
-                        return <FormCheckbox objKey={key} />
+                        return <FormCheckbox objKey={key} handleChange={changeComfort}/>
                     })}
                     <h3>Exterior Options</h3>
                     {  
                         Object.keys(carObj.features['Exterior Options']).map(key =>{
                         console.log(key)
-                        return <FormCheckbox objKey={key} />
+                        return <FormCheckbox objKey={key} handleChange={changeExteriorOptions}/>
                     })}
                     <hr />
                     <h3>Drive Train</h3>
                     { Object.keys(carObj.features['Drive Train']).map(key =>{
-                        return <FormText objKey={key} />
+                        return <FormText objKey={key} handleChange={changeDriveTrain} />
                     })
                     }
                     <hr />
@@ -406,26 +638,26 @@ const AddCarData = () =>{
                     {  
                         Object.keys(carObj.features.Suspension).map(key =>{
                         console.log(key)
-                        return <FormCheckbox objKey={key} />
+                        return <FormCheckbox objKey={key} handleChange={changeSuspension}/>
                     })}
                     <hr />
                     <h3>Instrumentation</h3>
                     {  
                         Object.keys(carObj.features.Instrumentation).map(key =>{
-                        return <FormCheckbox objKey={key} />
+                        return <FormCheckbox objKey={key} handleChange={changeInstrumentation}/>
                     })}
                     <h3>In Car Entertainment</h3>
                     {  
                         Object.keys(carObj.features['In Car Entertainment']).map(key =>{
-                        return <FormCheckbox objKey={key} />
+                        return <FormCheckbox objKey={key} handleChange={changeEntertainment}/>
                     })}
                     <h3>Frontseats</h3>
                     { Object.keys(carObj.features.Frontseats).map(key=>{
                         if(carObj.features.Frontseats[key]=== false || carObj.features.Frontseats[key]=== true){
-                            return <FormCheckbox objKey={key} />
+                            return <FormCheckbox objKey={key} handleChange={changeFrontseats} />
                         }else{
                             return <Fragment>
-                                    <FormText objKey={key} />
+                                    <FormText objKey={key} handleChange={changeFrontseats}/>
                                     <hr/>
                                     </Fragment>
                         }
@@ -436,14 +668,14 @@ const AddCarData = () =>{
                         EPA mileage est | (cty/hwy)
                         </Form.Label>
                         <Col sm="8">
-                        <Form.Control type="text" placeholder="Type text" />
+                        <Form.Control type="text" placeholder="Type text" onChange={changeFuelMileage}/>
                         </Col>
                     </Form.Group>
                     { Object.keys(carObj.features.Fuel).map(key =>{
                         if(key === carObj.features.Fuel['EPA mileage est'] ){
                             return ''
                         }else{
-                            return <FormText objKey={key} />
+                            return <FormText objKey={key} handleChange={changeFuel} />
                         }
                         
                     })
@@ -452,31 +684,42 @@ const AddCarData = () =>{
                     <h3>Safety</h3>
                     {  
                         Object.keys(carObj.features.Safety).map(key =>{
-                        return <FormCheckbox objKey={key} />
+                        return <FormCheckbox objKey={key} handleChange={changeSafety}/>
                     })}
                     <hr />
                     <h3>Tires and Wheels</h3>
                     {  
                         Object.keys(carObj.features['Tires and Wheels']).map(key =>{
-                        return <FormCheckbox objKey={key} />
+                        return <FormCheckbox objKey={key} handleChange={changeTires} />
                     })}
                     <h3>Engine</h3>
                     { Object.keys(carObj.features.Engine).map(key =>{
-                        return <FormText objKey={key} />
+                        return <FormText objKey={key} handleChange={changeEngine} />
                     })
                     }
                     <hr />
                     <h3>Interior Options</h3>
                     {  
                         Object.keys(carObj.features['Interior Options']).map(key =>{
-                        return <FormCheckbox objKey={key} />
+                        return <FormCheckbox objKey={key} handleChange={changeInteriorOptions}/>
                     })}
-                    
+                    {isSaved && <Alert variant="success">Successfully saved!</Alert>}
+                    <Button style={{margin:'4rem auto', width: '100%'}} onClick={handleSubmitData}>Save data</Button>
                 </Form>
             </Container>
              : <LoginDiv handleSubmitLogin={handleSubmitLogin} handleChange={handleChange} />}
         </Fragment>
     )
 }
-
-export default AddCarData
+const mapDispatchToProps = (dispatch) =>{
+    return {
+        logInUser: (credentials, email) => dispatch(logInUser(credentials, email))
+    }
+}
+const mapStateToProps = (state) => {
+    //syntax is propName: state.key of combineReducer.key
+    return{
+        isLoggedIn: state.auth.isLoggedIn
+    }
+  }
+export default connect(mapStateToProps, mapDispatchToProps)(AddCarData)

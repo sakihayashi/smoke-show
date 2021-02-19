@@ -13,6 +13,7 @@ const FormCheckbox = (props) =>{
                 type="checkbox"
                 name={props.objKey}
                 label={`Check if True`}
+                onChange={props.handleChange}
                 inline
                 />
                 </Col>

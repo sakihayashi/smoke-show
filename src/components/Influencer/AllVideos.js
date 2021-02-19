@@ -245,8 +245,9 @@ const AllVideos = (props) =>{
                     const model = str.charAt(0).toUpperCase() +str.slice(1)
                     const name = video.carData.make
                     const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
-                    let price
-                    if(video.carData.price.baseMSRP){
+                    let price 
+                    console.log(typeof(video.carData.price))
+                    if(video.carData.price && video.carData.price.baseMSRP){
                         price = numberWithCommas(video.carData.price.baseMSRP)
                     }else{ price = ''}
                     
