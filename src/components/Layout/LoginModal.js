@@ -126,7 +126,6 @@ const LoginModal = (props) =>{
     }, [props.openModal])
     useEffect(() => {
         setMsgModal(props.modalMsg)
-console.log('login', props.modalMsg)
     }, [props.modalMsg])
     return (
         <Modal

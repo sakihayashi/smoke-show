@@ -1,7 +1,8 @@
-import React, { useEffect, useState, Fragment, Suspense } from 'react'
+import React, { useEffect, useState, Fragment, Suspense, useContext } from 'react'
 import {Helmet} from "react-helmet"
 import { Row, Col } from 'react-bootstrap'
 import * as Realm from "realm-web"
+import Pagination from 'react-bootstrap/Pagination'
 // import Comments from './Comments'
 import Avatar from 'react-avatar'
 import { v4 as uuidv4 } from 'uuid';
@@ -12,7 +13,7 @@ import Layout from '../Layout/Layout'
 import { logInAsPublic, updateLogin } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
-import noImg from '../../assets/global/no_image.jpg'
+// import noImg from '../../assets/global/no_image.jpg'
 import { getInfluencer }from '../../store/actions/influencerActions'
 import SubNav from './SubNav'
 import './allVideos.scss'
@@ -21,7 +22,15 @@ const AllVideos = (props) =>{
     const influencerId = props.match.params.id
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     const [videoArr, setVideoArr] = useState([])
+    const [allVideoData, setAllVideoData] = useState([])
     const [showMore, setShowMore] = useState(false)
+    // const [videoIds, setVideoIds] = useState([])
+    const [pageNum, setPageNum] = useState(0)
+    const [pgNum, setPgNum] = useState(null)
+    const [credentials, setCredentials] = useState(null)
+    const [active, setActive] = useState(1)
+    // let active = 1;
+  
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
@@ -29,60 +38,129 @@ const AllVideos = (props) =>{
         };
     const app = new Realm.App(appConfig);
     const [divId, setDivId] = useState(null)
+    
+    const chunkArray = (allVideos) =>{
+        let chunk_size = 12
+        let index = 0;
+        let arrayLength = allVideos.length;
+        let tempArray = [];
+        let myChunk
+        
+        for (index = 0; index < arrayLength; index += chunk_size) {
+            myChunk = allVideos.slice(index, index+chunk_size);
+            // Do something if you want with the group
+            tempArray.push(myChunk);
+        }
+
+        return tempArray;
+    }
 
     const expandDiv = (index)=>{
         setDivId(index)
         setShowMore(!showMore)
     }
-    const getVideos = async (credentials) =>{
-        setVideoArr([])
-        try{
-            await app.logIn(credentials).then(async  user =>{
-                if(app.currentUser.id === user.id){
-                    console.log('user login updated')
-                }
-                props.getInfluencer(influencerId)
-                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                const mongoCollection = mongo.db("smoke-show").collection("youtube-videos")
+    const attachCarData = async (chunk, num) =>{
+       setVideoArr([])
+        // try{
+        //     await app.logIn(credentials).then( user =>{
+                const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionCars = mongo.db("smoke-show").collection("cars")
                 const collectionManual = mongo.db("smoke-show").collection("cars-manual")
-                const filter = {userId: influencerId}
-                await mongoCollection.find(filter, {limit: 6}).then(async videos =>{
-                    console.log('videos', videos)
-                    videos.map(async video =>{
-                        
+                if(chunk){
+                    chunk[num].map(async video =>{
+
                         const filterCar = {_id: {"$oid": video.carDataId}}
                         
                         try{
                             await collectionCars.findOne(filterCar).then(async data =>{
-                                console.log('data', data)
+                            
                                if(data){
                                 video.carData = data
                                 setVideoArr(videoArr =>[...videoArr, video])
                                }else{
-                                   console.log('fired?')
                                 await collectionManual.findOne(filterCar).then(data =>{
                                     video.carData = data
                                     setVideoArr(videoArr =>[...videoArr, video])
                                 })
                                }
                                 
+                            }).then(res =>{
+                                
                             })
                         }catch(err){
                          console.log(err)
-                            
                         }
                         
                     })
+                }else{
+                    allVideoData[num].map(async video =>{
 
-                }).then(res =>{
-                    
-                })
+                        const filterCar = {_id: {"$oid": video.carDataId}}
+                        
+                        try{
+                            await collectionCars.findOne(filterCar).then(async data =>{
+                            
+                               if(data){
+                                video.carData = data
+                                setVideoArr(videoArr =>[...videoArr, video])
+                               }else{
+                                await collectionManual.findOne(filterCar).then(data =>{
+                                    video.carData = data
+                                    setVideoArr(videoArr =>[...videoArr, video])
+                                })
+                               }
+                                
+                            }).then(res =>{
+                                
+                            })
+                        }catch(err){
+                         console.log(err)
+                        }
+                        
+                    })
+                }
                 
+        //     })
+        // }catch(err){
+        //     console.log(err)
+        // }
+        
+    }
+    const getVideos = async (cre) =>{
+        
+        // setVideoArr([])
+        try{
+            await app.logIn(cre).then(async  user =>{
+                if(app.currentUser.id === user.id){
+                    console.log('user login updated')
+                }
+                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                const mongoCollection = mongo.db("smoke-show").collection("youtube-videos")
+                const filter = {userId: influencerId}
+                // const option = {limit: 12}
+                try{
+                    await mongoCollection.find(filter).then(async videos =>{
+                      
+                        const res = Math.floor(videos.length / 12)
+                        setPgNum(res)
+                        const chunk = chunkArray(videos)
+                        setAllVideoData(chunk)
+
+                        return chunk
+                    }).then( chunk =>{
+                        attachCarData(chunk, 0)
+                    })
+                }catch(err){
+                    console.log(err)
+                }
+                
+                
+            }).then(i =>{
             })
         }catch(err){
 
         }
+        
     }
 
     const numberWithCommas = (x) =>{
@@ -94,21 +172,50 @@ const AllVideos = (props) =>{
             jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     // timeout
-                    const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-                    getVideos(credentials)
+                    const cre = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    setCredentials(cre)
+                    getVideos(cre)
+                    
                 }else{
-                   
+                    setCredentials(decoded.cre)
                     getVideos(decoded.cre)
+                    // getVideos(decoded.cre)
                 }
               });
             
         }else{
-            const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-            getVideos(credentials)
+            const cre = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+            setCredentials(cre)
+            getVideos(cre)
+            
         }
     }
+    const getselectedPage =(number)=>{
+        setActive(number)
+        attachCarData(null, number)
+    }
+    const paginationItems = () =>{
+        let items = [];
+        for (let number = 1; number <= pgNum; number++) {
+            items.push(
+                <Pagination.Item key={number} active={number === active} onClick={()=>getselectedPage(number)} >
+                {number}
+                </Pagination.Item>
+            )
+        }
+        return items
+    }
+// useEffect(()=>{
+//     paginationItems()
+  
+// }, [setPgNum])
+
+
+
     useEffect( () => {
         loginCheck()
+        
+        props.getInfluencer(influencerId)
     }, [])
     
     return(
@@ -120,20 +227,29 @@ const AllVideos = (props) =>{
                 <meta name="robots" content="noindex, nofollow" />
                 {/* <link rel="canonical" href="http://mysite.com/example" /> */}
             </Helmet>
-            {console.log('arr?', videoArr)}
+            
             <div className="main-wrapper">
             <SubNav influencer={props.influencerObj} formattedFans={props.formattedFans} />
             <div className="spacer-4rem"></div>
             <h2 className="title">All Videos from {props.influencerObj.username}</h2>
+            <div className="pagination-wrapper">
+                <Pagination>
+                    { pgNum && paginationItems() }
+                </Pagination>
+            </div>
             <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
             {   videoArr[0] &&
                 videoArr.map((video, index) =>{
                     const str = video.carData.model
+                    const id = video.videoId
                     const model = str.charAt(0).toUpperCase() +str.slice(1)
                     const name = video.carData.make
                     const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
-                    const price = numberWithCommas(video.carData.price.baseMSRP)
-                    {/* console.log(titleCase) */}
+                    let price
+                    if(video.carData.price.baseMSRP){
+                        price = numberWithCommas(video.carData.price.baseMSRP)
+                    }else{ price = ''}
+                    
                     const uuid = uuidv4()
                     return(
                         <Fragment key={uuid}>
@@ -141,7 +257,7 @@ const AllVideos = (props) =>{
                                 <Row >
                                     <Col sm={8} >
                                         <div className="videoWrapper">
-                                            <iframe src={videoEmbedURL + video.videoId}
+                                            <iframe src={videoEmbedURL + id}
                                                     frameBorder='0'
                                                     allow='autoplay; encrypted-media'
                                                     allowFullScreen
@@ -170,6 +286,7 @@ const AllVideos = (props) =>{
                                             </div>
                                             <p className="btn-show-more" onClick={()=>expandDiv(index)}>{showMore && divId === index ? 'Show less' : 'Show more'}</p>
                                         </Row>
+                                  
                                         {/* <Suspense fallback={<div class="loader">Loading...</div>}>
                                             <Comments comments={commentsTempData[index]} videoId={car.videoId} />
                                         </Suspense> */}
@@ -180,7 +297,7 @@ const AllVideos = (props) =>{
                                         <img alt={video.snippet.channelTitle} src={require(`../../assets/maker_logos/${titleCase}_Logo.png`).default} className="icon-s" />
                                         {' '}
                                         <span className="spec-text" ><strong >{video.carData.year}{' '}{titleCase}{' '}{model}</strong></span><br/>
-                                        <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" >{' '}${price}</span><br />
+                                        <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" >{' '}${price && price}</span><br />
                                         <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text">{' '}{video.carData.features.Engine.Torque}</span><br />
                                         <img alt="piston" key={pistonIcon} src={pistonIcon}  className="icon-s" /><span className="spec-text">{' '}{video.carData.features.Engine.Horsepower}</span><br />
                                         </div>

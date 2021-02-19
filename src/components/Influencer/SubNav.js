@@ -11,7 +11,6 @@ import { connect } from 'react-redux'
 import doneIcon from '../../assets/global/done-white.svg'
 
 const SubNav = (props) =>{
-    console.log('open', props.openModal)
     const [isFanOf, setIsFanOf] = useState(false)
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -24,7 +23,6 @@ const SubNav = (props) =>{
 
     const renderTooltip = (props) => (
         <Tooltip  id="button-tooltip" {...props}>
-        { console.log('what is in', props)}
           <p style={{marginBottom: 0}}>You will receive newsletters when the influencer publishes a new video.</p>
         </Tooltip>
       );

@@ -97,7 +97,6 @@ const Header = (props) =>{
 }
 
 const mapStateToProps = (state) =>{
-    console.log('check state', state)
     return{
         isLoggedIn: state.auth.isLoggedIn,
         customData: state.auth.customData,
