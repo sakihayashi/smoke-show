@@ -13,8 +13,16 @@
 .desc-box-expanded{
     width: 100%;
     margin-top: 1rem;
-    height: auto;
+    overflow: visible;
+    // background-color: white;
+    // height: auto;
     font-size: 14px;
+    background-color: aliceblue;
+    font-size: 14px;
+    /* height: 2.6rem; */
+    position: absolute;
+    z-index: 100;
+    top: 22rem;
 }
 
 .btn-show-more{
@@ -42,3 +50,49 @@
     margin-top: 10px;
     min-height: 38px;
 }
+.card-header{
+    padding: 0;
+}
+.accordion-style{
+    width: 100%;
+    margin-top: 1rem;
+    text-align: left;
+    background-color: transparent;
+    border: 0;
+    .card{
+        border: 0;
+        background-color: transparent;
+        .card-header{
+            background-color: transparent;
+            border-bottom: 0;
+        }
+    }
+}
+.acccordion-text{
+    text-align: left;
+    padding: 0;
+}
+.accordion>.card{
+    overflow: visible !important;
+}
+.accordion-body-custom{
+    padding: 0;
+}
+.btn-acd{
+    text-align: left;
+    padding-left: 0 !important;
+}
+.card-header-acd{
+    border-bottom: 0;
+}
+// .accordion-body-custom{
+//     position: absolute;
+//     overflow: visible;
+//     z-index: 100;
+//     top: 2.4rem;
+//     left: -1px;
+//     width: calc(100% + 2px);
+//     height: max-content;
+//     background: white;
+//     border: 1px solid #ccc;
+// }

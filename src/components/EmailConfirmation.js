@@ -73,7 +73,7 @@ const EmailConfirmation = (props) =>{
         console.log('email', userObj.email)
         const email = userObj.email
         try{
-            await getApp.emailPasswordAuth.resendConfirmation(email).then( res =>{
+            await app.emailPasswordAuth.resendConfirmation(email).then( res =>{
                 console.log('res', res)
             })
         }catch(err){
@@ -84,7 +84,7 @@ const EmailConfirmation = (props) =>{
 
     const resendToken = ()=>{
         return(
-            <div>
+            <div className="min-height-all">
                 <center>
                     <h3>{msg}</h3>
                 </center>

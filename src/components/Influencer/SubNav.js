@@ -36,7 +36,6 @@ const SubNav = (props) =>{
                     props.openLoginModal(true)
                     // open login modal 
                 }else{
-                    console.log('running?', decoded)
                     try{
                         await app.logIn(decoded.cre).then( async user =>{
                             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
@@ -68,8 +67,7 @@ const SubNav = (props) =>{
         if(props.customData.fansOf){
             props.customData.fansOf.map(user =>{
                 if(user.id === influencer.userId){
-                    console.log('id', user.id)
-                    console.log('infle', influencer.userId)
+                   
                     setIsFanOf(true)
                 }
             })
@@ -100,15 +98,16 @@ const SubNav = (props) =>{
                     <div className="bio-creator-name">{influencer.username}</div>
                     <div className="bio-creator-data">{props.formattedFans} Fans</div>
                 </Col>
-                <Col sm={6} className="bio-sub-menu">
+                <Col sm={7} className="bio-sub-menu">
                     <nav className="bio-sub-nav">
+                    <NavLink to={`/influencer/${influencer.userId}`}>Featured</NavLink>
                         <NavLink to={`/all-videos/${influencer.userId}`}>All Videos</NavLink>
                         <NavLink to={`/garage/${influencer.userId}`}>Garage</NavLink>
                         <NavLink to={`/social/${influencer.userId}`}>Social</NavLink>
                         <NavLink to={`/swagg-influencer/${influencer.userId}`}>swagg</NavLink>
                     </nav>
                 </Col>
-                <Col className="center-btn">
+                <Col className="center-btn col-2">
                 {isFanOf ? <Button className="btn-fan" disabled="true">
                 <img src={doneIcon} style={{width: '1rem'}} alt="you are already done this" />{' '}Fan of {influencer.username}</Button> :
                 <Fragment>
@@ -118,8 +117,7 @@ const SubNav = (props) =>{
                         delay={{ show: 250, hide: 200 }}
                         overlay={renderTooltip}
                     >
-                    
-                    <small>What this means?</small>
+                        <small>What this means?</small>
                     </OverlayTrigger>
                     
                 </Fragment>

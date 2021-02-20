@@ -97,7 +97,9 @@ header{
 .btn-search{
   background-color: #2D1468;
 }
-
+.min-height-all{
+  min-height: calc(100vh - 21rem);
+}
 .form-adj{
   height: 22px;
   margin-bottom: 5px;
@@ -243,7 +245,7 @@ label{
     padding-left: 0  !important;
   }
   .main-col{
-    margin-bottom: 0;
+    margin-bottom: 2rem;
   }
 }
 @media (min-width: 1025px){

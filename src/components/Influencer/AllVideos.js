@@ -1,9 +1,12 @@
-import React, { useEffect, useState, Fragment, Suspense, useContext } from 'react'
+import React, { useEffect, useState, Fragment, Suspense } from 'react'
 import {Helmet} from "react-helmet"
 import { Row, Col } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import Pagination from 'react-bootstrap/Pagination'
-// import Comments from './Comments'
+import Accordion from 'react-bootstrap/Accordion'
+import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
+import Comments from '../Comments'
 import Avatar from 'react-avatar'
 import { v4 as uuidv4 } from 'uuid';
 import powerIcon from '../../assets/global/Horsepower.png'
@@ -240,13 +243,13 @@ const AllVideos = (props) =>{
             <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
             {   videoArr[0] &&
                 videoArr.map((video, index) =>{
+                    console.log('id', video.videoId)
                     const str = video.carData.model
                     const id = video.videoId
                     const model = str.charAt(0).toUpperCase() +str.slice(1)
                     const name = video.carData.make
                     const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
-                    let price 
-                    console.log(typeof(video.carData.price))
+                    let price;
                     if(video.carData.price && video.carData.price.baseMSRP){
                         price = numberWithCommas(video.carData.price.baseMSRP)
                     }else{ price = ''}
@@ -284,13 +287,29 @@ const AllVideos = (props) =>{
                                             </div>
                                             <div className={showMore && divId === index ? "desc-box-expanded" : "desc-box"}>
                                                 {video.snippet.description}
-                                            </div>
-                                            <p className="btn-show-more" onClick={()=>expandDiv(index)}>{showMore && divId === index ? 'Show less' : 'Show more'}</p>
+                                            </div> 
+                                            {/* <p className="btn-show-more" onClick={()=>expandDiv(index)}>{showMore && divId === index ? 'Show less' : 'Show more'}</p>  */}
+
+                                            <Accordion defaultActiveKey="0" className="accordion-style">
+                                                <Card>
+                                                    <Card.Header className="card-header-acd">
+                                                    <Accordion.Toggle as={Button}  eventKey={index} variant="link" className="btn-acd" >
+                                                        Show more<br />
+
+                                                    </Accordion.Toggle>
+                                                    </Card.Header>
+                                                    <Accordion.Collapse eventKey={index} className="accordion-body-custom">
+                                                    <Card.Body className="acccordion-text">
+                                                    <small>{video.snippet.description}</small></Card.Body>
+                                                    </Accordion.Collapse>
+                                                </Card>
+                                            </Accordion>
+
                                         </Row>
                                   
-                                        {/* <Suspense fallback={<div class="loader">Loading...</div>}>
-                                            <Comments comments={commentsTempData[index]} videoId={car.videoId} />
-                                        </Suspense> */}
+                                         {/* <Suspense fallback={<div class="loader">Loading...</div>}> */}
+                                            <Comments videoId={id} />
+                                        {/* </Suspense>  */}
                                         
                                     </Col>
                                     <Col sm={4} className="spec-col"  >

@@ -13,12 +13,11 @@ import './comments.scss'
 const Comments = (props) =>{
     const [commentsDB, setCommentsDB] = useState([])
     const [moreComments, setMoreComments] = useState([])
-    // const [isLoggedIn, setIsLoggedIn] = useState(false)
-    // const [modalShow, setModalShow] = useState(false)
+    const [isComment, setIsComment] = useState(false)
+
     const [userComment, setUserComment] = useState("")
     const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
     // const getApp = Realm.App.getApp(process.env.REACT_APP_REALM_APP_ID);
-    // console.log('comment props', props)
 
     const handleChange = (e) =>{
         setUserComment(e.target.value)
@@ -48,7 +47,7 @@ const Comments = (props) =>{
         }
         try{
             // Authenticate the user
-            await app.logIn(credentials).then(async user=>{
+            await app.logIn(credentials.cre).then(async user=>{
                 
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
                     const mongoCollection = mongo.db("smoke-show").collection("comments");
@@ -56,7 +55,7 @@ const Comments = (props) =>{
                     await mongoCollection.insertOne(newComment).then(res =>{
                             e.target.reset();
                             console.log('new comment', res)
-                            getComments(credentials)
+                            getComments(credentials.cre)
                     })
                 });
 
@@ -125,7 +124,6 @@ const Comments = (props) =>{
         for (index = 0; index < arrayLength; index += chunk_size) {
             myChunk = all.slice(index, index+chunk_size);
             // Do something if you want with the group
-            console.log('mychunk', myChunk)
             tempArray.push(myChunk);
         }
 
@@ -146,13 +144,27 @@ const Comments = (props) =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionComments = mongo.db("smoke-show").collection("comments")
                 await collectionComments.find(filter, options).then(resAll =>{
-
-                    for(let i=0;i<2; i++){
-                        setCommentsDB(commentsDB=>[...commentsDB, resAll[i]])
+                    if( resAll.length !== 0){
+                        console.log('not empty!', resAll)
+                        setIsComment(true)
+                        if(resAll.length == 1){
+                            setCommentsDB(resAll)
+                        }else{
+                            for(let i=0;i<2; i++){
+                                setCommentsDB(commentsDB=>[...commentsDB, resAll[i]])
+                            }
+                        }
+                        
+                        if(resAll.length >= 3){
+                            const chunked = chunkArray(resAll)
+                            setMoreComments(chunked)
+                        }
+                        
+                    }else if(resAll.length == 0){
+                        setIsComment(false)
+                        setCommentsDB([])
                     }
-                    const chunked = chunkArray(resAll)
-                    console.log('chunked', chunked)
-                    setMoreComments(chunked)
+                    
                 })
             })
                 
@@ -167,7 +179,6 @@ const Comments = (props) =>{
          if(tokenUser){
             jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
-                    console.log(err)
                     // setIsLoggedIn(false)
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
                     getComments(credentials)
@@ -188,7 +199,9 @@ const Comments = (props) =>{
         <React.Fragment>
     
         {props.isLoggedIn ? writeComment() : loginToComment() }
-        { commentsDB.map((comment, index) =>{
+        { isComment === true && commentsDB.length !== 0 ? commentsDB.map((comment, index) =>{
+            console.log('comment.date_posted', comment.date_posted)
+            console.log('is', isComment)
             {/* var localtime = moment(comment.date_posted).local().format('MM-DD-YYYY') */}
             let localtime = moment(comment.date_posted).fromNow()
            
@@ -217,15 +230,18 @@ const Comments = (props) =>{
                     </div>
                 </Row>
             )
-        })
+        }) : ''
         }
         <Accordion defaultActiveKey="0">
          
             <Card className="card-comments">
                 <Card.Header className="card-comments-h">
-                <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                { moreComments[0] && 
+                    <Accordion.Toggle as={Button} variant="link" eventKey="1" className="btn-load">
                     Load more
-                </Accordion.Toggle>
+                    </Accordion.Toggle>
+                }
+                
                 </Card.Header>
                 <Accordion.Collapse eventKey="1">
                 <Card.Body className="collapsed-body">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Button, Form, Alert } from 'react-bootstrap'
 import * as Realm from "realm-web"
-import { authUser } from '../../store/actions/authActions'
+// import { authUser } from '../../store/actions/authActions'
 import { logInUser } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import Logo from '../../assets/global/Logo-smoke-show.png'
@@ -25,7 +25,7 @@ const LoginModal = (props) =>{
     //     timeout: 10000, // timeout in number of milliseconds
     //   };
     const getApp = Realm.App.getApp(appId)
-    const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
+    // const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
     const [show, setShow] = useState(false);
 
     const handleClose = () => {
@@ -107,10 +107,13 @@ const LoginModal = (props) =>{
         resetPassword = ''
     }
     const handleSubmit =(e)=>{
+        setErrMsg('')
         e.preventDefault()
-        const emailLowerCase = userObj.email.toLowerCase()
-        const credentials = Realm.Credentials.emailPassword(emailLowerCase, userObj.password)
-        props.logInUser(credentials, emailLowerCase)
+            const emailLowerCase = userObj.email.toLowerCase()
+            const credentials = Realm.Credentials.emailPassword(emailLowerCase, userObj.password)
+            props.logInUser(credentials, emailLowerCase)
+     
+        
     }
 
     useEffect(() => {

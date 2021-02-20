@@ -281,7 +281,6 @@ const AddCarData = (props) =>{
         })
     }
     const changeEngine = (e)=>{
-        console.log('engine', engine)
         setEngine({
             ...engine,
             [e.target.name]: e.target.value
@@ -333,10 +332,12 @@ const AddCarData = (props) =>{
         })
     }
     const changeSuspension = (e) =>{
-        setSuspension({
-            ...suspension,
-            [e.target.name]: e.target.value
-        })
+        if(e.target.checked === true){
+            setSuspension({
+                ...suspension,
+                [e.target.name]: e.target.checked
+            })
+        }
     }
     const changeInstrumentation = (e) =>{
         if(e.target.checked === true){
