@@ -119,6 +119,7 @@ const LoginModal = (props) =>{
     useEffect(() => {
         if(props.hasLoginErr){
             setHasError(true)
+            setLoginMsg(props.errMsg)
         }else{
             setHasError(false)
         }
@@ -128,6 +129,7 @@ const LoginModal = (props) =>{
 
     }, [props.openModal])
     useEffect(() => {
+
         setMsgModal(props.modalMsg)
     }, [props.modalMsg])
     return (
@@ -146,7 +148,7 @@ const LoginModal = (props) =>{
             <img src={Logo} alt="The Smoke Show" className="logo-header" />
           </div>
           <Modal.Body className="custom-modal-body">
-            {<p style={{color: 'red', textAlign: 'center'}}>{msgModal}</p>}
+            {<p style={{color: 'red', textAlign: 'center'}}>{msgModal && msgModal}</p>}
           
             <div style={{marginBottom: '15px'}}></div>
             {forgotPw ? resetPassword :
@@ -178,12 +180,12 @@ const LoginModal = (props) =>{
 
 const mapStateToProps = (state) => {
     //syntax is propName: state.key of combineReducer.key
-    console.log('state auth', state.auth)
     return{
       userData: state.auth.userData,
       hasLoginErr: state.auth.hasLoginErr,
       openModal: state.auth.openModal,
-      modalMsg: state.auth.modalMsg
+      modalMsg: state.auth.modalMsg,
+      errMsg: state.auth.errMsg
     }
   }
 const mapDispatchToProps = (dispatch) =>{

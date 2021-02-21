@@ -7,10 +7,9 @@ import { connect } from 'react-redux'
 import noImg from '../../assets/global/no_image.jpg'
 // import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 import editIcon from '../../assets/global/edit-icon.svg'
-
 import SettingModal from './SettingModal'
 import { Button, Row, Col, Form } from 'react-bootstrap'
-
+import { attachMsg, logOutUser, openLoginModal } from '../../store/actions/authActions'
 import './garage.scss'
 import VehicleCard from './vehicleCard'
 import CreateNewCar from './CreateNewCar'
@@ -19,7 +18,7 @@ import moment from 'moment'
 
 const Garage = (props) =>{
   
-    let userIdParam = props.match.params.id
+    const userIdParam = props.match.params.id
     const [profileUser, setProfileUser] = useState({fname: '', lname: '', profilePic: '', profileCover: '', username: '', profileDesc: '', favSong: '', favArtist: ''})
     const [allowEdit, setAllowEdit] = useState(false)
     const [editMode, setEditMode] = useState({about: false, song: false, artist: false})
@@ -246,10 +245,16 @@ const Garage = (props) =>{
                 if (err) {
                     // timeout
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    props.logOutUser()
+                    props.openLoginModal(true)
                     getInfluencerData(credentials)
                 }else{
                     const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
                     getInfluencerData(credentials.cre)
+                    console.log(decoded)
+                    if(decoded.userData.userId === userIdParam){
+                        setAllowEdit(true)
+                    }else{setAllowEdit(false)}
                 }
               });
             
@@ -258,6 +263,14 @@ const Garage = (props) =>{
             getInfluencerData(credentials)
         }
     }
+    useEffect(() => {
+        if(props.customData.userId === userIdParam){
+            setAllowEdit(true)
+        }else{
+            setAllowEdit(false)
+        }
+    }, [props.customData])
+
     useEffect(() => {
         // getDataAsCurrent()
         loginCheck()
@@ -296,23 +309,6 @@ const Garage = (props) =>{
                 </div> */}
                 <div className="spacer-2rem"></div>
                 <div className="bio-content-wrapper">
-                    {/* <div className="bio-main-wrapper">
-                        <div className="bio-pic">
-                            <img src={profileUser.profilePic ? profileUser.profilePic : bioPic} alt="the user profile picture" />
-                        </div>
-                        
-                        <div className="bio-title-text">
-                            <h3 className="bio-name-title">{profileUser.fname && profileUser.fname} {profileUser.lname && profileUser.lname}</h3>
-                            <p>{profileUser.title}</p>
-                        </div>
-                        {allowEdit && 
-                            <Button className="bio-setting-btn" onClick={handleShowSetting}>
-                                <img src={settingsIcon} alt="setting" className="setting-icon"/>
-                                Settings
-                            </Button>
-                        }
-                        
-                    </div> */}
            
                     <Row className="bio-height-adj">
                         <Col sm={4}>
@@ -442,10 +438,17 @@ const Garage = (props) =>{
         </Layout>
     )
 }
+const mapDispatchToProps = (dispatch) =>{
+    return{
+        openLoginModal: (state) => dispatch(openLoginModal(state)),
+        attachMsg: (msg)=> dispatch(attachMsg(msg)),
+        logOutUser: ()=>dispatch(logOutUser())
+    }
+}
 const mapStateToProps = (state) =>{
     console.log('props state from garage', state)
-    // return{
-    //     isLoggedIn: state.auth.,
-    // }
+    return{
+        customData: state.auth.customData
+    }
 }
-export default connect(mapStateToProps)(Garage)
+export default connect(mapStateToProps, mapDispatchToProps)(Garage)

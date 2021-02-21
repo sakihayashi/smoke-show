@@ -72,7 +72,12 @@
 .bio-content-wrapper{
     background: $theme-lighter;
 }
-
+.mini-btn{
+    width: max-content;
+    background-color: $theme-color !important;
+    border-color: $theme-color !important;
+    margin: 0 1rem;
+}
 
 .bio-title-text {
     position: relative;

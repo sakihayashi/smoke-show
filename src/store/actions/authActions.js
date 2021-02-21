@@ -25,7 +25,8 @@ export const logInUser = (credentials, email) =>{
             sessionStorage.setItem('session_user', tokenCredentials)
             dispatch({type: 'LOGIN_SUCCESS', customData})
         }).catch(err =>{
-            dispatch({type: 'LOGIN_FAIL'})
+            const msg = "Your email and passwrod do not match our record."
+            dispatch({type: 'LOGIN_FAIL', msg})
         })
     }
 }
@@ -42,7 +43,6 @@ export const logOutUser = () =>{
     }
 }
 export const openLoginModal = (state) =>{
-    const date = true
     return (dispatch, getState)=>{
         dispatch({type: 'OPEN_LOGIN_MODAL', state})
     }

@@ -7,7 +7,8 @@ const initState = {
     mongo: null,
     isPublicView: false,
     openModal: false,
-    modalMsg: ''
+    modalMsg: '',
+    errMsg: ''
 }
 
 const authReducer = (state = initState, action) =>{
@@ -31,7 +32,8 @@ const authReducer = (state = initState, action) =>{
             return{
                 ...state,
                 isLoggedIn: false,
-                hasLoginErr: true
+                hasLoginErr: true,
+                errMsg: action.msg
             }
         case 'LOGOUT':
             return{

@@ -145,7 +145,6 @@ const Comments = (props) =>{
                 const collectionComments = mongo.db("smoke-show").collection("comments")
                 await collectionComments.find(filter, options).then(resAll =>{
                     if( resAll.length !== 0){
-                        console.log('not empty!', resAll)
                         setIsComment(true)
                         if(resAll.length == 1){
                             setCommentsDB(resAll)
@@ -200,8 +199,7 @@ const Comments = (props) =>{
     
         {props.isLoggedIn ? writeComment() : loginToComment() }
         { isComment === true && commentsDB.length !== 0 ? commentsDB.map((comment, index) =>{
-            console.log('comment.date_posted', comment.date_posted)
-            console.log('is', isComment)
+         
             {/* var localtime = moment(comment.date_posted).local().format('MM-DD-YYYY') */}
             let localtime = moment(comment.date_posted).fromNow()
            

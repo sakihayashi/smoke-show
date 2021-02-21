@@ -34,23 +34,6 @@ const CreateNewCar = (props) =>{
         props.handleClose()
     }
 
-    const testSubmit = () =>{
-        props.createMyCar({name: 'test car', wheels: 'test'})
-    }
-    // const onDrop = useCallback(acceptedFiles => {
-        
-        // var file = acceptedFiles[0]
-        // const reader = new FileReader();
-        // reader.onload = (event) => {
-        // setImgFile(acceptedFiles[0])
-        // const base64 = event.target.result.split(",").pop()
-        //   setImgData64(base64)
-        // //   console.log(event.target.result);
-        // };
-        // reader.readAsDataURL(file);
-    //     // Do something with the files
-    //   }, [])
-    // const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
     
     const carColors = ['White', 'Black', 'Grey', 'Blue', 'Silver', 'Red', 'Orange', 'Bronze', 'Yellow', 'Green', 'Navy']
     const carCategories = ['Dream Car', 'Daily Driver', 'Vehicle #2']
@@ -98,7 +81,11 @@ const CreateNewCar = (props) =>{
                                 { upsert: true }
                                 ).then(res =>{
                                     console.log('res', res)
-                                    const oldArr = props.profileUser.myCars
+                                    let oldArr = []
+                                    if(props.profileUser.myCars){
+                                        oldArr.push(props.profileUser.myCars)
+                                    }
+                                    
                                     const cars = {myCars: oldArr.push(newCarData)}
                                     props.updateProfileData(cars, 'myCars')
                                     props.updateCarData(newCarData)

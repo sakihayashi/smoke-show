@@ -9,8 +9,8 @@ import editIcon from '../../assets/global/edit-icon.svg'
 import settingsIcon from '../../assets/global/Settings-icon-white.svg'
 import SettingModal from './SettingModal'
 import { Button, Row, Col, Form } from 'react-bootstrap'
-
 import './biopage.scss'
+import { connect } from 'react-redux'
 import VehicleCard from './vehicleCard'
 import CreateNewCar from './CreateNewCar'
 import jwt from 'jsonwebtoken'
@@ -234,6 +234,18 @@ const BioPage = (props) =>{
         })
     }
     useEffect(() => {
+        if(props.isLoggedIn){
+            if(props.customData.userId === profileUser.userId){
+                setAllowEdit(true)
+            }else{
+                setAllowEdit(false)
+            }
+        }else{
+            setAllowEdit(false)
+
+        }
+    }, [props.isLoggedIn])
+    useEffect(() => {
         // setUserIdParam(props.match.params.id)
         const token = sessionStorage.getItem('session_token')
         const tokenUser = sessionStorage.getItem('session_user')
@@ -432,5 +444,10 @@ const BioPage = (props) =>{
         </Layout>
     )
 }
-
-export default BioPage
+const mapStateToProps = (state) =>{
+    return{
+        isLoggedIn: state.auth.isLoggedIn,
+        customData: state.auth.customData
+    }
+}
+export default connect(mapStateToProps)(BioPage)

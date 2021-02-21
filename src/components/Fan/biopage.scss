@@ -118,7 +118,12 @@
     height: 100%;
     object-fit: cover;
 }
-
+.mini-btn{
+    width: max-content;
+    background-color: $theme-color !important;
+    border-color: $theme-color !important;
+    margin: 0 1rem;
+}
 .setting-icon{
     width: 18px;
     height: 18px;

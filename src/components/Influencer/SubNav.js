@@ -65,10 +65,12 @@ const SubNav = (props) =>{
     }
     const checkFanOf = () =>{
         if(props.customData.fansOf){
-            props.customData.fansOf.map(user =>{
-                if(user.id === influencer.userId){
-                   
+            props.customData.fansOf.map(fan =>{
+                console.log('fan', props.influencer)
+                if(fan.id === influencer.userId){
+                    console.log('true?', fan.id === props.influencer.userId)
                     setIsFanOf(true)
+                    return
                 }
             })
         }else{
@@ -82,7 +84,7 @@ const SubNav = (props) =>{
 
     useEffect(() => {
         checkFanOf()
-    }, [])
+    }, [influencer.userId])
 
     return(
         <Fragment>
@@ -108,26 +110,28 @@ const SubNav = (props) =>{
                     </nav>
                 </Col>
                 <Col className="center-btn col-2">
-                {isFanOf ? <Button className="btn-fan" disabled="true">
-                <img src={doneIcon} style={{width: '1rem'}} alt="you are already done this" />{' '}Fan of {influencer.username}</Button> :
-                <Fragment>
-                    <Button className="btn-fan" onClick={handleBecomeAFan}>Become a fan</Button><br/>
-                    <OverlayTrigger
-                        placement="left"
-                        delay={{ show: 250, hide: 200 }}
-                        overlay={renderTooltip}
-                    >
-                        <small>What this means?</small>
-                    </OverlayTrigger>
-                    
-                </Fragment>
-                }
-                {props.allowEdit && 
+                
+                {props.allowEdit ?
                         <Button className="garage-setting-btn" onClick={props.handleShowSetting} >
                             <img src={settingsIcon} alt="setting" className="setting-icon"/>
                             Settings
                         </Button>
-                    }
+                :
+                    [isFanOf ? <Button className="btn-fan" disabled="true">
+                    <img src={doneIcon} style={{width: '1rem'}} alt="you are already done this" />{' '}Fan of {influencer.username}</Button> :
+                    <Fragment>
+                        <Button className="btn-fan" onClick={handleBecomeAFan}>Become a fan</Button><br/>
+                        <OverlayTrigger
+                            placement="left"
+                            delay={{ show: 250, hide: 200 }}
+                            overlay={renderTooltip}
+                        >
+                            <small>What this means?</small>
+                        </OverlayTrigger>
+                        
+                    </Fragment>
+                    ]
+                }
                 </Col>
             </Row>
         </Fragment>
