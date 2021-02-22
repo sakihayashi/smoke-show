@@ -18,7 +18,16 @@ const Header = (props) =>{
     const [currentUser, setCurrentUser] = useState('')
     const id = process.env.REACT_APP_REALM_APP_ID
     const app = new Realm.App({ id: id })
-    
+    let linkUrl = ''
+    if(props.customData.isInfluencer !== undefined){
+        if(props.customData.isInfluencer){
+            linkUrl = `/influencer/${props.customData.userId}`
+        }else{
+            linkUrl = `/user/${props.customData.userId}`
+        }
+    }else{
+        linkUrl = `/user/${props.customData.userId}`
+    }
 
     const [hasAccount, setHasAccount] = useState(true)
     
@@ -41,16 +50,13 @@ const Header = (props) =>{
      const loggedInDiv = 
      <Fragment>
         <div >Hi {props.customData.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button>
-        <Link to={`/user/${props.customData.userId}`}>
+        <Link to={linkUrl}>
             {/* <img src={settingsIcon} className="setting-icon-nav"  /> */}
             <span className="profile-link">My Smoke Show</span>
         </Link>
         </div>
      </Fragment>
 
-    // useEffect(() => {
-    //     setShow(props.openModal)
-    // }, [props.openModal])
     return(
         <header>
             <div className="login-wrapper">

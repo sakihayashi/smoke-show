@@ -180,11 +180,11 @@ const Garage = (props) =>{
     const getInfluencerData = async (credentials) =>{
         try{
             await app.logIn(credentials).then(async user =>{
-                if(userIdParam === user.userId){
+                if(userIdParam === user.id){
                     console.log('param matched')
                     setAllowEdit(true)
                 }else{
-                    console.log('param not matched')
+                    console.log('param not matched', user.id)
                     setAllowEdit(false)
                 }
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
@@ -243,15 +243,16 @@ const Garage = (props) =>{
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
+                    console.log('time out')
                     // timeout
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
                     props.logOutUser()
                     props.openLoginModal(true)
                     getInfluencerData(credentials)
                 }else{
+                    console.log('logged in')
                     const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
                     getInfluencerData(credentials.cre)
-                    console.log(decoded)
                     if(decoded.userData.userId === userIdParam){
                         setAllowEdit(true)
                     }else{setAllowEdit(false)}
@@ -259,6 +260,7 @@ const Garage = (props) =>{
               });
             
         }else{
+            console.log('no token')
             const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
             getInfluencerData(credentials)
         }

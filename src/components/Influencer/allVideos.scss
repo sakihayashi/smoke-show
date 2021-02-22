@@ -102,7 +102,7 @@
 .acd-input {
     display: none;
 }
-label {
+.acd-label {
     display: block;    
     padding: 8px 0;
     margin: 0 0 1px 0;
@@ -113,13 +113,13 @@ label {
     transition: ease .5s;
     text-decoration: underline;
 }
-label::after {
+.acd-label::after {
     content: ' more';
 }
-.acd-input:checked + label::after {
+.acd-input:checked + .acd-label::after {
     content: ' less';
 }
-label:hover {
+.acd-label:hover {
     background: transparent;
 }
 .content {
@@ -130,7 +130,7 @@ label:hover {
     // border-radius: 3px;
 }
 
-.acd-input + label + .content {
+.acd-input + .acd-label + .content {
     display: none;
 }
 

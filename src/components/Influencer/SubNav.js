@@ -92,7 +92,7 @@ const SubNav = (props) =>{
             </div>
             <Row>
                 <Col style={{paddingRight:0}}>
-                <img src={influencer.profile_pic} className="bio-profile-pic" alt={`${influencer.username} profile picture`}/>
+                <img src={influencer.profilePic} className="bio-profile-pic" alt={`${influencer.username} profile picture`}/>
                 </Col>
                 <Col className="bio-text-wrapper" style={{paddingLeft: 0}}>
                 {/* <img src={influencer.profile_pic} className="bio-profile-pic" /> */}

@@ -99,14 +99,14 @@ const CreateNewCar = (props) =>{
                                 { upsert: true }
                                 ).then(res =>{
                                     console.log('res', res)
-                                    const oldArr = []
+                                    let oldArr = []
                                     if(props.profileUser.myCars){
                                         oldArr = props.profileUser.myCars
                                     }else{
                                         oldArr = []
                                     }
                                     
-                                    const cars = {myCars: oldArr.push(newCarData)}
+                                    let cars = {myCars: oldArr.push(newCarData)}
                                     props.updateProfileData(cars, 'myCars')
                                     props.updateCarData(newCarData)
                                     closeModal()

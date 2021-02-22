@@ -53,7 +53,7 @@ const VehicleCard = (props) =>{
                 { $set: carData }
             ).then(res =>{
                 console.log('res', res)
-                props.getMyCars(props.car.userId, mongo)
+                props.getMyCars(mongo)
                 handleClose()
             })
             
@@ -225,7 +225,7 @@ const VehicleCard = (props) =>{
                         <br/>
                         <Form.Group >
                             <Form.Label>Upgrade</Form.Label>
-                            <Form.Control type="text" placeholder="Enter your update" onChange={handleChange} name={carObj.upgrades} />
+                            <Form.Control type="text" placeholder={carObj.upgrades} onChange={handleChange} name="upgrades" />
                         </Form.Group>
                         <br/><br/>
                         <Row>
