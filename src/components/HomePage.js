@@ -229,8 +229,8 @@ const [currentUser, setCurrentUser] = useState('')
                     searchedCarData.map((car, index) =>{
                         const uuid = uuidv4()
                         return(
-                            <Fragment>
-                                <Col sm={6} key={uuid}>
+                            <Fragment key={uuid} >
+                                <Col sm={6}>
                                     <Row >
                                         <Col sm={8} >
                                             <div className="videoWrapper">

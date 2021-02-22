@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import { logOutUser } from '../../store/actions/authActions'
 import { logInUser } from '../../store/actions/authActions'
 import jwt from 'jsonwebtoken'
-import settingsIcon from '../../assets/global/Settings-icon-white.svg'
+// import settingsIcon from '../../assets/global/Settings-icon-white.svg'
 import { openLoginModal } from '../../store/actions/authActions'
 
 const Header = (props) =>{
@@ -41,7 +41,10 @@ const Header = (props) =>{
      const loggedInDiv = 
      <Fragment>
         <div >Hi {props.customData.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button>
-        <Link to={`/user/${props.customData.userId}`}><img src={settingsIcon} className="setting-icon-nav"  /></Link>
+        <Link to={`/user/${props.customData.userId}`}>
+            {/* <img src={settingsIcon} className="setting-icon-nav"  /> */}
+            <span className="profile-link">My Smoke Show</span>
+        </Link>
         </div>
      </Fragment>
 

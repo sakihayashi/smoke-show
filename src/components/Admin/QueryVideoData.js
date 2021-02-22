@@ -6,6 +6,9 @@ import { youtubeAPI } from '../../utils/youtubeAPI'
 
 
 const QueryVideoData = () =>{
+
+    //last query data Feb 20 2021 for both Kirk and Eddie
+
     // const [videoData, setVideoData] = useState([])
     const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
     const EddiXuserId = '60230361f63ff517d4fdad14'
@@ -20,8 +23,7 @@ const QueryVideoData = () =>{
 
     const handleVideoSearch = async e =>{
         e.preventDefault()
-        //last date query Feb 15th 2021
-        //last day query for Eddie was Feb 18th 2021
+
         await youtubeAPI.get('/search', {
             params: {
                 // q: searchKeyword,
@@ -149,6 +151,106 @@ const QueryVideoData = () =>{
         }
       
     }
+    const handleCheckVideoId =async ()=>{
+        const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+        try{
+            await app.logIn(credentials).then(user=>{
+                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                const collection = mongo.db("smoke-show").collection("youtube-videos")
+                let tempArr = []
+                const filter = {userId: KirkUserId}
+                collection.find(filter).then(videos =>{
+                    videos.map(video =>{
+                        tempArr.push(video.videoId)
+                    })
+                    return tempArr
+                }).then(async arr =>{
+                    console.log('all videos: ', arr)
+                    const collectionTemp = mongo.db("smoke-show").collection("cars-data-analysis")
+                    const allIds =  {allVideoIds: arr}
+                    const res = await collectionTemp.insertOne(allIds)
+                    console.log(res)
+                })
+            })
+        }catch(err){
+            console.log(err)
+        }
+    }
+    const checkYoutubeId = async() =>{
+        let tempArr = []
+        await youtubeAPI.get('/search', {
+            params: {
+                channelId: KirkChannelId,
+                publishedAfter: '2021-01-01T00:00:00Z',
+                publishedBefore: '2021-02-20T23:59:59Z',
+                order: 'date'
+            }
+        }).then(async youtubeObj =>{
+            console.log('res from youtube', youtubeObj)
+            youtubeObj.data.items.map(video =>{
+                tempArr.push(video.id.videoId)
+            })  
+            return tempArr
+            
+        }).then( async arr =>{
+            const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+            const collection = mongo.db("smoke-show").collection("cars-data-analysis")
+            const youtubeIds = {allVideoIds: arr, source: 'youtube'}
+            const result = await collection.insertOne(youtubeIds)
+            // const result = await collection.updateOne(
+            //     {source: 'youtube'},
+            //     { $push: {allVideoIds: { $each: arr }}}
+            // )
+            console.log(result)
+        })
+    }
+    const filterArray = (arr1, arr2) => {
+        const filtered = arr1.filter(el => {
+            console.log('doing?', arr2.indexOf(el) === -1)
+           return arr2.indexOf(el) === -1;
+        });
+        return filtered;
+     };
+    const checkMissing = async () =>{
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        const collection = mongo.db("smoke-show").collection("cars-data-analysis")
+        let tempArr = []
+        const filterSmoke = {source: 'smokeShow'}
+        const filterYoutube = {source: 'youtube'}
+        const smokeShow = await collection.findOne(filterSmoke)
+        const youtube = await collection.findOne(filterYoutube)
+       
+         const result = filterArray(youtube.allVideoIds, smokeShow.allVideoIds)
+         console.log(result);
+    }
+    const addMissing = async () =>{
+        const videoId = 'lPXBjgr_qvA'
+        await youtubeAPI.get('/videos', {
+            params: {
+                id: videoId
+            }
+        }).then(async res =>{
+            const youtubeData = res.data.items[0]
+            const formatted = {
+                videoId: videoId,
+                userId: KirkUserId,
+                channelId: KirkChannelId,
+                snippet: {
+                    publishedAt: youtubeData.snippet.publishedAt,
+                    title:  youtubeData.snippet.title,
+                    description: youtubeData.snippet.description,
+                    thumbnails: youtubeData.snippet.thumbnails,
+                    channelTitle: youtubeData.snippet.channelTitle,
+                    liveBroadcastContent: youtubeData.snippet.liveBroadcastContent
+                }            
+            }
+            const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+            const collection = mongo.db("smoke-show").collection("youtube-videos")
+            const result = await collection.insertOne(formatted)
+            console.log(result)
+        })
+    }
+
     return(
         <div>
         <h1>query youtube data</h1>
@@ -157,6 +259,10 @@ const QueryVideoData = () =>{
                 {/* <Button onClick={handleVideoSearch}>Query data</Button> */}
                 {/* <Button onClick={handleUpdateDesc}>Click me to update description</Button> */}
                 {/* <Button onClick={updateLatest}>updateLatest</Button> */}
+                {/* <Button onClick={checkYoutubeId}>Check all videoId in youtube</Button> */}
+                {/* <Button onClick={handleCheckVideoId}>Check video ids in DB</Button> */}
+                {/* <Button onClick={checkMissing}>filter arrays</Button> */}
+                {/* <Button onClick={addMissing}>Add missing data</Button> */}
             </center>
             
         </div>
@@ -164,3 +270,4 @@ const QueryVideoData = () =>{
 }
 
 export default QueryVideoData
+

@@ -10,7 +10,7 @@ import FormText from './FormText'
 import FormCheckbox from './FormCheckbox'
 import { logInUser } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
-
+import short from 'short-uuid'
 
 const AddCarData = (props) =>{
     const [userObj, setUserObj] = useState({email: '', password: ''})
@@ -557,8 +557,9 @@ const AddCarData = (props) =>{
                     </Form.Group>
                     {
                         colorExterior.map((exterior, index) =>{
+                            const unique = short.generate()
                             return(
-                                <ColorDiv num={index + 1} changeColorExterior={changeColorExterior} />
+                                <ColorDiv num={index + 1} changeColorExterior={changeColorExterior} key={unique}/>
                             )
                             
                         })
@@ -582,8 +583,9 @@ const AddCarData = (props) =>{
                     </Form.Group>
                     {
                         colorInterior.map((interior, index) =>{
+                            const unique = short.generate()
                             return(
-                                <ColorInterior changeColorInterior={changeColorInterior} num={index +1} />
+                                <ColorInterior changeColorInterior={changeColorInterior} num={index +1} key={unique}/>
                             )
                             
                         })
@@ -593,15 +595,17 @@ const AddCarData = (props) =>{
                     <h3>Power Feature</h3>
                     {  
                         Object.keys(carObj.features['Power Feature']).map(key =>{
-                        return <FormCheckbox objKey={key} handleChange={changePowerFeatures}/>
+                            const unique = short.generate()
+                        return <FormCheckbox key={unique} objKey={key} handleChange={changePowerFeatures}/>
                     })}
                     <hr/>
                     <h3>Rearseats</h3>
                     { Object.keys(carObj.features.Rearseats).map(key=>{
+                        const unique = short.generate()
                         if(carObj.features.Rearseats[key]=== false || carObj.features.Rearseats[key]=== true){
-                            return <FormCheckbox objKey={key} handleChange={changeRearseats} />
+                            return <FormCheckbox key={unique} objKey={key} handleChange={changeRearseats} />
                         }else{
-                            return (<Fragment>
+                            return (<Fragment key={unique}>
                                     <FormText objKey={key} handleChange={changeRearseats} />
                                     <hr/>
                                     </Fragment>)
@@ -609,56 +613,63 @@ const AddCarData = (props) =>{
                     })}
                     <h3>Warranty</h3>
                     {Object.keys(carObj.features.Warranty).map(key =>{
-                        return <FormText objKey={key} handleChange={changeWarranty}/>
+                        const unique = short.generate()
+                        return <FormText key={unique} objKey={key} handleChange={changeWarranty}/>
                     })}
                     <hr />
                     <h3>Measurements</h3>
                     {Object.keys(carObj.features.Measurements).map(key =>{
-                        return <FormText objKey={key} handleChange={changeMeasurements} />
+                        const unique = short.generate()
+                        return <FormText key={unique} objKey={key} handleChange={changeMeasurements} />
                     })}
                     <hr />
                     <h3>Comfort & Convenience</h3>
                     {  
                         Object.keys(carObj.features['Comfort & Convenience']).map(key =>{
-                        return <FormCheckbox objKey={key} handleChange={changeComfort}/>
+                            const unique = short.generate()
+                        return <FormCheckbox key={unique} objKey={key} handleChange={changeComfort}/>
                     })}
                     <h3>Exterior Options</h3>
                     {  
                         Object.keys(carObj.features['Exterior Options']).map(key =>{
-                        console.log(key)
-                        return <FormCheckbox objKey={key} handleChange={changeExteriorOptions}/>
+                            const unique = short.generate()
+                        return <FormCheckbox key={unique} objKey={key} handleChange={changeExteriorOptions}/>
                     })}
                     <hr />
                     <h3>Drive Train</h3>
                     { Object.keys(carObj.features['Drive Train']).map(key =>{
-                        return <FormText objKey={key} handleChange={changeDriveTrain} />
+                        const unique = short.generate()
+                        return <FormText key={unique} objKey={key} handleChange={changeDriveTrain} />
                     })
                     }
                     <hr />
                     <h3>Suspension</h3>
                     {  
                         Object.keys(carObj.features.Suspension).map(key =>{
-                        console.log(key)
-                        return <FormCheckbox objKey={key} handleChange={changeSuspension}/>
+                            const unique = short.generate()
+                        return <FormCheckbox key={unique} objKey={key} handleChange={changeSuspension}/>
                     })}
                     <hr />
                     <h3>Instrumentation</h3>
                     {  
                         Object.keys(carObj.features.Instrumentation).map(key =>{
-                        return <FormCheckbox objKey={key} handleChange={changeInstrumentation}/>
+                            const unique = short.generate()
+                        return <FormCheckbox key={unique} objKey={key} handleChange={changeInstrumentation}/>
                     })}
                     <h3>In Car Entertainment</h3>
                     {  
                         Object.keys(carObj.features['In Car Entertainment']).map(key =>{
-                        return <FormCheckbox objKey={key} handleChange={changeEntertainment}/>
+                            const unique = short.generate()
+                        return <FormCheckbox key={unique} objKey={key} handleChange={changeEntertainment}/>
                     })}
                     <h3>Frontseats</h3>
                     { Object.keys(carObj.features.Frontseats).map(key=>{
+                        const unique = short.generate()
                         if(carObj.features.Frontseats[key]=== false || carObj.features.Frontseats[key]=== true){
-                            return <FormCheckbox objKey={key} handleChange={changeFrontseats} />
+                            return <FormCheckbox key={unique} objKey={key} handleChange={changeFrontseats} />
                         }else{
                             return <Fragment>
-                                    <FormText objKey={key} handleChange={changeFrontseats}/>
+                                    <FormText key={unique} objKey={key} handleChange={changeFrontseats}/>
                                     <hr/>
                                     </Fragment>
                         }
@@ -673,10 +684,11 @@ const AddCarData = (props) =>{
                         </Col>
                     </Form.Group>
                     { Object.keys(carObj.features.Fuel).map(key =>{
+                        const unique = short.generate()
                         if(key === carObj.features.Fuel['EPA mileage est'] ){
                             return ''
                         }else{
-                            return <FormText objKey={key} handleChange={changeFuel} />
+                            return <FormText key={unique} objKey={key} handleChange={changeFuel} />
                         }
                         
                     })
@@ -685,24 +697,28 @@ const AddCarData = (props) =>{
                     <h3>Safety</h3>
                     {  
                         Object.keys(carObj.features.Safety).map(key =>{
-                        return <FormCheckbox objKey={key} handleChange={changeSafety}/>
+                            const unique = short.generate()
+                        return <FormCheckbox key={unique} objKey={key} handleChange={changeSafety}/>
                     })}
                     <hr />
                     <h3>Tires and Wheels</h3>
                     {  
                         Object.keys(carObj.features['Tires and Wheels']).map(key =>{
-                        return <FormCheckbox objKey={key} handleChange={changeTires} />
+                            const unique = short.generate()
+                        return <FormCheckbox key={unique} objKey={key} handleChange={changeTires} />
                     })}
                     <h3>Engine</h3>
                     { Object.keys(carObj.features.Engine).map(key =>{
-                        return <FormText objKey={key} handleChange={changeEngine} />
+                        const unique = short.generate()
+                        return <FormText key={unique} objKey={key} handleChange={changeEngine} />
                     })
                     }
                     <hr />
                     <h3>Interior Options</h3>
                     {  
                         Object.keys(carObj.features['Interior Options']).map(key =>{
-                        return <FormCheckbox objKey={key} handleChange={changeInteriorOptions}/>
+                            const unique = short.generate()
+                        return <FormCheckbox key={unique} objKey={key} handleChange={changeInteriorOptions}/>
                     })}
                     {isSaved && <Alert variant="success">Successfully saved!</Alert>}
                     <Button style={{margin:'4rem auto', width: '100%'}} onClick={handleSubmitData}>Save data</Button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment, Suspense } from 'react'
+import React, { useEffect, useState, Fragment } from 'react'
 import {Helmet} from "react-helmet"
 import { Row, Col } from 'react-bootstrap'
 import * as Realm from "realm-web"
@@ -8,7 +8,6 @@ import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Comments from '../Comments'
 import Avatar from 'react-avatar'
-import { v4 as uuidv4 } from 'uuid';
 import powerIcon from '../../assets/global/Horsepower.png'
 import pistonIcon from '../../assets/global/piston.png'
 import priceIcon from '../../assets/global/Price-Tag-icon.png'
@@ -20,6 +19,7 @@ import jwt from 'jsonwebtoken'
 import { getInfluencer }from '../../store/actions/influencerActions'
 import SubNav from './SubNav'
 import './allVideos.scss'
+import short from 'short-uuid'
 
 const AllVideos = (props) =>{
     const influencerId = props.match.params.id
@@ -30,7 +30,7 @@ const AllVideos = (props) =>{
     // const [videoIds, setVideoIds] = useState([])
     const [pageNum, setPageNum] = useState(0)
     const [pgNum, setPgNum] = useState(null)
-    const [credentials, setCredentials] = useState(null)
+    // const [credentials, setCredentials] = useState(null)
     const [active, setActive] = useState(1)
     // let active = 1;
   
@@ -58,10 +58,10 @@ const AllVideos = (props) =>{
         return tempArray;
     }
 
-    const expandDiv = (index)=>{
-        setDivId(index)
-        setShowMore(!showMore)
-    }
+    // const expandDiv = (index)=>{
+    //     setDivId(index)
+    //     setShowMore(!showMore)
+    // }
     const attachCarData = async (chunk, num) =>{
        setVideoArr([])
         // try{
@@ -131,7 +131,6 @@ const AllVideos = (props) =>{
     }
     const getVideos = async (cre) =>{
         
-        // setVideoArr([])
         try{
             await app.logIn(cre).then(async  user =>{
                 if(app.currentUser.id === user.id){
@@ -169,26 +168,25 @@ const AllVideos = (props) =>{
     const numberWithCommas = (x) =>{
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-    const loginCheck = async () =>{
+    const loginCheck = () =>{
         const tokenUser = sessionStorage.getItem('session_user')
         if(tokenUser){
             jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     // timeout
                     const cre = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-                    setCredentials(cre)
+                    // setCredentials(cre)
                     getVideos(cre)
                     
                 }else{
-                    setCredentials(decoded.cre)
+                    // setCredentials(decoded.cre)
                     getVideos(decoded.cre)
-                    // getVideos(decoded.cre)
                 }
               });
             
         }else{
             const cre = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-            setCredentials(cre)
+            // setCredentials(cre)
             getVideos(cre)
             
         }
@@ -201,23 +199,16 @@ const AllVideos = (props) =>{
         let items = [];
         for (let number = 1; number <= pgNum; number++) {
             items.push(
-                <Pagination.Item key={number} active={number === active} onClick={()=>getselectedPage(number)} >
+                <Pagination.Item key={`page-${number}`} active={number === active} onClick={()=>getselectedPage(number)} >
                 {number}
                 </Pagination.Item>
             )
         }
         return items
     }
-// useEffect(()=>{
-//     paginationItems()
-  
-// }, [setPgNum])
-
-
 
     useEffect( () => {
         loginCheck()
-        
         props.getInfluencer(influencerId)
     }, [])
     
@@ -232,9 +223,9 @@ const AllVideos = (props) =>{
             </Helmet>
             
             <div className="main-wrapper">
-            <SubNav influencer={props.influencerObj} formattedFans={props.formattedFans} />
+                <SubNav influencer={props.influencerObj} formattedFans={props.formattedFans} />
             <div className="spacer-4rem"></div>
-            <h2 className="title">All Videos from {props.influencerObj.username}</h2>
+            <h2 className="title">All Videos from {props.influencerObj.username && props.influencerObj.username}</h2>
             <div className="pagination-wrapper">
                 <Pagination>
                     { pgNum && paginationItems() }
@@ -243,7 +234,7 @@ const AllVideos = (props) =>{
             <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
             {   videoArr[0] &&
                 videoArr.map((video, index) =>{
-                    console.log('id', video.videoId)
+                    const unique = short.generate()
                     const str = video.carData.model
                     const id = video.videoId
                     const model = str.charAt(0).toUpperCase() +str.slice(1)
@@ -254,9 +245,8 @@ const AllVideos = (props) =>{
                         price = numberWithCommas(video.carData.price.baseMSRP)
                     }else{ price = ''}
                     
-                    const uuid = uuidv4()
                     return(
-                        <Fragment key={uuid}>
+                        <Fragment key={unique} >
                             <Col sm={6} className="main-col" >
                                 <Row >
                                     <Col sm={8} >
@@ -285,25 +275,36 @@ const AllVideos = (props) =>{
                                             <div className="creator-name"><strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{' '} {video.snippet.channelTitle} fans</span></div>
                                            
                                             </div>
-                                            <div className={showMore && divId === index ? "desc-box-expanded" : "desc-box"}>
+                                            <div className="desc-box">
                                                 {video.snippet.description}
                                             </div> 
                                             {/* <p className="btn-show-more" onClick={()=>expandDiv(index)}>{showMore && divId === index ? 'Show less' : 'Show more'}</p>  */}
+                                            <div className="acd">
+                                                <input className="acd-input" type="checkbox" id={`title${index}`} />
+                                                <label for={`title${index}`}>Show </label>
 
-                                            <Accordion defaultActiveKey="0" className="accordion-style">
+                                                <div class="content">
+                                                <small>{video.snippet.description}</small>
+                                                </div>
+                                            </div>
+                                            
+
+
+{/*                                             
+                                            <Accordion  className="accordion-style">
                                                 <Card>
                                                     <Card.Header className="card-header-acd">
-                                                    <Accordion.Toggle as={Button}  eventKey={index} variant="link" className="btn-acd" >
+                                                    <Accordion.Toggle as={Button}  eventKey={unique + index +1} variant="link" className="btn-acd" >
                                                         Show more<br />
 
                                                     </Accordion.Toggle>
                                                     </Card.Header>
-                                                    <Accordion.Collapse eventKey={index} className="accordion-body-custom">
+                                                    <Accordion.Collapse eventKey={unique + index +1} className="accordion-body-custom">
                                                     <Card.Body className="acccordion-text">
                                                     <small>{video.snippet.description}</small></Card.Body>
                                                     </Accordion.Collapse>
                                                 </Card>
-                                            </Accordion>
+                                            </Accordion> */}
 
                                         </Row>
                                   

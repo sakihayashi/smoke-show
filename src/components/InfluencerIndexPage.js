@@ -3,13 +3,13 @@ import {Helmet} from "react-helmet"
 import { Row, Col, Card, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
-import { uid } from 'react-uid'
-import { NavLink, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Layout from './Layout/Layout'
 import './influencerIndexPage.scss'
 import jwt from 'jsonwebtoken'
 import noImg from '../assets/global/no_image.jpg'
 import short from 'short-uuid'
+
 const InfluencerIndexPage = () =>{
 
     const videoEmbedURL = 'https://www.youtube.com/embed/'
@@ -84,8 +84,9 @@ const InfluencerIndexPage = () =>{
                 </div>
                 <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
                 {influencers && influencers.map(influencer =>{
+                    const unique = short.generate()
                     return(
-                        <Col sm={6} md={4} key={uid(influencer)}>
+                        <Col sm={6} md={4} key={unique}>
                             <Card className="card-influencer" >
                                 <div className="videoWrapper">
                                         <iframe src={videoEmbedURL + influencer.featuredVideo.id}
@@ -98,18 +99,18 @@ const InfluencerIndexPage = () =>{
                                 <Card.Body>
                                     <Card.Title>{influencer.username}</Card.Title>
                                     <Card.Text className="influencer-desc">{influencer.desc}</Card.Text>
-                                    <NavLink 
+                                    <Link 
                                     to={{
                                         pathname: `/influencer/${influencer.userId}`,
                                         state: { influencer: influencer }
                                         // influencer: influencer
                                     }}
-                                    activeStyle={{
-                                        color: "gray"
-                                    }}
+                                    // activeStyle={{
+                                    //     color: "gray"
+                                    // }}
                                     >
                                         <Button className="login-btn">See {influencer.username}'s Bio</Button>
-                                    </NavLink>
+                                    </Link>
                                     
                                 </Card.Body>
                             </Card>
@@ -131,7 +132,7 @@ const InfluencerIndexPage = () =>{
                                 <Card.Body>
                                     <Card.Title>More coming soon</Card.Title>
                                     <Card.Text className="influencer-desc">We are accepting applications<br/><br/>
-                                    <Link to="/about"><p>Please visit here for the details</p></Link>
+                                    <Link to="/about"><span>Please visit here for the details</span></Link>
                                     </Card.Text>
                                     {/* <NavLink 
                                     to={{
@@ -143,7 +144,7 @@ const InfluencerIndexPage = () =>{
                                         color: "gray"
                                     }}
                                     > */}
-                                        <Button className="login-btn" disabled="true">No bio available</Button>
+                                        <Button className="login-btn" disabled>No bio available</Button>
                                     {/* </NavLink> */}
                                     
                                 </Card.Body>

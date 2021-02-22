@@ -9,7 +9,7 @@ import {
     FacebookShareButton,
     TwitterShareButton,
   } from "react-share";
-
+import short from 'short-uuid'
 import {
 FacebookShareCount
 } from "react-share";
@@ -39,8 +39,9 @@ const Giveaways = (props) =>{
             </div>
                 <Row>
                 { giveAwaysArr.map(data =>{
+                    const unique = short.generate()
                     return(
-                        <Col sm={6}>
+                        <Col sm={6} key={unique}>
                             <Card className="givaways-card">
                                 <Card.Img variant="top" src={data.imgUrl} />
                                     

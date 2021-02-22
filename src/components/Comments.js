@@ -103,7 +103,9 @@ const Comments = (props) =>{
                         <Form.Group >
                         <Form.Control className="comment-input" type="text" placeholder="Write a comment" name="comment" onChange={askLogin} />
                             <div className="comment-login-wrapper">
-                                <Button disabled="true" className="comment-btn" type="submit">Comment</Button>
+                                <Button 
+                                disabled
+                                className="comment-btn" type="submit">Comment</Button>
                             </div>
                         </Form.Group>
                     </Form>
@@ -224,7 +226,7 @@ const Comments = (props) =>{
                             <strong>{comment.username}</strong>
                         </Link>
                      {" "} | <span style={{color:'gray'}}>{localtime}</span></div>
-                    <div className="comment-txt" s>{comment.comment}</div>
+                    <div className="comment-txt" >{comment.comment}</div>
                     </div>
                 </Row>
             )
@@ -267,7 +269,7 @@ const Comments = (props) =>{
                                     <strong>{comment.username}</strong>
                                 </Link>
                             {" "} | <span style={{color:'gray'}}>{localtime}</span></div>
-                            <div className="comment-txt" s>{comment.comment}</div>
+                            <div className="comment-txt" >{comment.comment}</div>
                             </div>
                         </Row>
                     )

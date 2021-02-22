@@ -22,7 +22,7 @@ const SubNav = (props) =>{
     const influencer = props.influencer
 
     const renderTooltip = (props) => (
-        <Tooltip  id="button-tooltip" {...props}>
+        <Tooltip  id="button-tooltip" {...props} key="button-tooltip">
           <p style={{marginBottom: 0}}>You will receive newsletters when the influencer publishes a new video.</p>
         </Tooltip>
       );
@@ -68,7 +68,6 @@ const SubNav = (props) =>{
             props.customData.fansOf.map(fan =>{
                 console.log('fan', props.influencer)
                 if(fan.id === influencer.userId){
-                    console.log('true?', fan.id === props.influencer.userId)
                     setIsFanOf(true)
                     return
                 }
@@ -102,11 +101,11 @@ const SubNav = (props) =>{
                 </Col>
                 <Col sm={7} className="bio-sub-menu">
                     <nav className="bio-sub-nav">
-                    <NavLink to={`/influencer/${influencer.userId}`}>Featured</NavLink>
-                        <NavLink to={`/all-videos/${influencer.userId}`}>All Videos</NavLink>
-                        <NavLink to={`/garage/${influencer.userId}`}>Garage</NavLink>
-                        <NavLink to={`/social/${influencer.userId}`}>Social</NavLink>
-                        <NavLink to={`/swagg-influencer/${influencer.userId}`}>swagg</NavLink>
+                    <NavLink key={`${influencer.userId}-nav-1`} to={`/influencer/${influencer.userId}`}>Featured</NavLink>
+                    <NavLink key={`${influencer.userId}-nav-2`} to={`/all-videos/${influencer.userId}`}>All Videos</NavLink>
+                    <NavLink key={`${influencer.userId}-nav-3`} to={`/garage/${influencer.userId}`}>Garage</NavLink>
+                    <NavLink key={`${influencer.userId}-nav-4`} to={`/social/${influencer.userId}`}>Social</NavLink>
+                    <NavLink key={`${influencer.userId}-nav-5`} to={`/swagg-influencer/${influencer.userId}`}>swagg</NavLink>
                     </nav>
                 </Col>
                 <Col className="center-btn col-2">
@@ -117,7 +116,7 @@ const SubNav = (props) =>{
                             Settings
                         </Button>
                 :
-                    [isFanOf ? <Button className="btn-fan" disabled="true">
+                    [isFanOf ? <Button className="btn-fan" disabled>
                     <img src={doneIcon} style={{width: '1rem'}} alt="you are already done this" />{' '}Fan of {influencer.username}</Button> :
                     <Fragment>
                         <Button className="btn-fan" onClick={handleBecomeAFan}>Become a fan</Button><br/>

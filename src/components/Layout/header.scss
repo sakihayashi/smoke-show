@@ -97,6 +97,18 @@ nav{
 .modal-header{
     border: 0 !important;
 }
+.profile-link{
+    border: 1px solid white;
+    border-radius: 4px;
+    padding: 5px;
+    background-color: rgba(255, 255, 255, 0.40);
+    color: $theme-darker;
+    &:hover{
+        background-color: $theme-color;
+        color: white;
+        text-decoration: none;
+    }
+}
 .note-text{
     color: $gray;
     font-weight: 100;

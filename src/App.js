@@ -59,7 +59,7 @@ function App() {
           
           <Route path="/check-data" component={CheckCarData} />
 
-          {/* <Route path="/update-video" component={QueryVideoData} /> */}
+          <Route path="/update-video" component={QueryVideoData} />
 
           <Route component={NotFoundPage} />
         </Switch>
