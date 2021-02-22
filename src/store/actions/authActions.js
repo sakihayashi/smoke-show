@@ -25,7 +25,7 @@ export const logInUser = (credentials, email) =>{
             sessionStorage.setItem('session_user', tokenCredentials)
             dispatch({type: 'LOGIN_SUCCESS', customData})
         }).catch(err =>{
-            const msg = "Your email and passwrod do not match our record."
+            const msg = "Your email and passwrod do not match our records."
             dispatch({type: 'LOGIN_FAIL', msg})
         })
     }
@@ -73,7 +73,6 @@ export const updateLogin = (credentials) =>{
         app.logIn(credentials).then(user =>{
             const customData = user.customData
             if(app.currentUser.id === user.id){
-
                 console.log('user updated')
                 
             }else{

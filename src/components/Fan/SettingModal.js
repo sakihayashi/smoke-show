@@ -446,7 +446,7 @@ const deleteImgObj = async (key) =>{
                         <br/>
                         <Form.Group >
                             <Form.Label>Username</Form.Label>
-                            <Form.Control type="text" name="username" placeholder={props.profileUser.username ? props.profileUser.username : "Please add your username"} onChange={handleChange} />
+                            <Form.Control type="text" name="username" placeholder={props.profileUser.username ? props.profileUser.username : "Please add your username"} disabled/>
                         </Form.Group>
                         <br/>
                         {isSuccess.userDetails ? <Alert variant="success" style={{padding: '5px', marginTop: '1rem', textAlign:'center'}}><small>{msg.userDetails}</small></Alert> : ""}

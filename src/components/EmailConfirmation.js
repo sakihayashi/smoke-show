@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import Layout from './Layout/Layout'
 import { openLoginModal } from '../store/actions/authActions'
+import axios from 'axios'
 
 const EmailConfirmation = (props) =>{
     let token = new URLSearchParams(props.location.search).get("token")
@@ -19,7 +20,7 @@ const EmailConfirmation = (props) =>{
     const config = { id };
     const app = new Realm.App(config);
     const [clicked, setClicked] = useState(false)
-    
+    const [resendMsg, setResendMsg] = useState('')
     const getApp = Realm.App.getApp(id)
 
     const handleChange =(e) =>{
@@ -50,14 +51,18 @@ const EmailConfirmation = (props) =>{
                 
                 const mongoCollection = mongo.db("smoke-show").collection("users")
                 await mongoCollection.insertOne(userData).then(insertOneResult =>{
-                    userData.login = {email: email, password: userObj.password}
+                    // userData.login = {email: email, password: userObj.password}
                     let token = createToken(userData)
+                    const tokenCredentials = jwt.sign({ cre: credentials }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest})
                     const oldToken = sessionStorage.getItem('session_token')
                     if(oldToken){
                         sessionStorage.removeItem('session_token')
+                        sessionStorage.removeItem('session_user')
                         sessionStorage.setItem('session_token', token)
+                        sessionStorage.setItem('session_user', tokenCredentials)
                     }else{
                         sessionStorage.setItem('session_token', token)
+                        sessionStorage.setItem('session_user', tokenCredentials)
                     }
                     setClicked(true)
          
@@ -72,12 +77,16 @@ const EmailConfirmation = (props) =>{
         e.preventDefault()
         console.log('email', userObj.email)
         const email = userObj.email
+        
         try{
-            await app.emailPasswordAuth.resendConfirmation(email).then( res =>{
-                console.log('res', res)
+            axios.post(`https://stitch.mongodb.com/api/client/v2.0/app/${process.env.REACT_APP_REALM_APP_ID}/auth/providers/local-userpass/confirm/call`, { email }).then(res => {
+                console.log(res);
+                setMsg('We have sent you a confirmation email. Please check your inbox.')
             })
+         
         }catch(err){
             console.log(err)
+            setMsg('The email address you typed is not in our record. Please check your email address.')
         }
    
     }
@@ -91,12 +100,13 @@ const EmailConfirmation = (props) =>{
                 
                 <div className="spacer-4rem"></div>
                 <Form className="login-form" onSubmit={handleResendToken}>
-                    <Form.Group controlId="formBasicEmail">
+                    <Form.Group >
                         <Form.Label>Email address</Form.Label>
                         <Form.Control type="email" placeholder="e.g. example@example.com" name="email" onChange={handleChange} required />
                     </Form.Group>
                     <div className="spacer-2rem"></div>
                     <div className="login-btn-wrapper">
+                    { resendMsg && resendMsg }
                         <Button className="login-btn" type="submit">
                             Resend Confirmation Email
                         </Button><br /><br />
@@ -128,8 +138,8 @@ const EmailConfirmation = (props) =>{
 
     return (
         <Layout >
-            <div className="custom-modal-body">
-                <div style={{marginTop:'3rem'}}></div>
+            <div className="custom-modal-body" style={{padding:'1rem'}}>
+                <div className="spacer-4rem"></div>
                 {hasRegistered ? 
                 <React.Fragment>
                     <div className="login-logo-wrapper">

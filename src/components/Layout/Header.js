@@ -9,12 +9,12 @@ import SignUpModal from './SignUpModal'
 import { connect } from 'react-redux'
 import { logOutUser } from '../../store/actions/authActions'
 import { logInUser } from '../../store/actions/authActions'
-import jwt from 'jsonwebtoken'
 // import settingsIcon from '../../assets/global/Settings-icon-white.svg'
 import { openLoginModal } from '../../store/actions/authActions'
 
 const Header = (props) =>{
     const location = useLocation()
+    const [tooLong, setTooLong] = useState(false)
     const [currentUser, setCurrentUser] = useState('')
     const id = process.env.REACT_APP_REALM_APP_ID
     const app = new Realm.App({ id: id })
@@ -49,14 +49,27 @@ const Header = (props) =>{
 
      const loggedInDiv = 
      <Fragment>
-        <div >Hi {props.customData.username}, <Button className="btn-login"  onClick={logOut}>Logout</Button>
+        <div className="nav-top">Hi {props.customData.fname}, <Button className="btn-login"  onClick={logOut}>Logout</Button>
+        {tooLong && <br/>}
         <Link to={linkUrl}>
             {/* <img src={settingsIcon} className="setting-icon-nav"  /> */}
             <span className="profile-link">My Smoke Show</span>
         </Link>
         </div>
      </Fragment>
-
+    useEffect(() => {
+        console.log()
+        if(typeof(props.customData.fname) !== 'undefined'){
+            const name = props.customData.fname
+            console.log(name.length )
+            if(name.length > 6){
+                setTooLong(true)
+            }else{
+                setTooLong(false)
+            }
+        }
+        
+    }, [props.customData.fname])
     return(
         <header>
             <div className="login-wrapper">

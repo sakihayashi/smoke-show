@@ -279,13 +279,14 @@ const AllVideos = (props) =>{
                                                 {video.snippet.description}
                                             </div> 
                                             {/* <p className="btn-show-more" onClick={()=>expandDiv(index)}>{showMore && divId === index ? 'Show less' : 'Show more'}</p>  */}
-                                            <div className="acd">
-                                                <input className="acd-input" type="checkbox" id={`title${index}`} />
-                                                <label for={`title${index}`} className="acd-label">Show </label>
+                                            <input className="acd-input" type="checkbox" id={`title${index}`} />
+                                            {/* <div className="desc-box">
+                                                {video.snippet.description}
+                                            </div>  */}
+                                            <label for={`title${index}`} className="acd-label">Show </label>
 
-                                                <div class="content">
-                                                <small>{video.snippet.description}</small>
-                                                </div>
+                                            <div class="content">
+                                            <small>{video.snippet.description}</small>
                                             </div>
                                             
 

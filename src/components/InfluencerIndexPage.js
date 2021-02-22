@@ -9,6 +9,7 @@ import './influencerIndexPage.scss'
 import jwt from 'jsonwebtoken'
 import noImg from '../assets/global/no_image.jpg'
 import short from 'short-uuid'
+import Logo from '../assets/global/Logo-smoke-show.png'
 
 const InfluencerIndexPage = () =>{
 
@@ -86,7 +87,7 @@ const InfluencerIndexPage = () =>{
                 {influencers && influencers.map(influencer =>{
                     const unique = short.generate()
                     return(
-                        <Col sm={6} md={4} key={unique}>
+                        <Col sm={6} md={4} key={unique} className="bottom-space">
                             <Card className="card-influencer" >
                                 <div className="videoWrapper">
                                         <iframe src={videoEmbedURL + influencer.featuredVideo.id}
@@ -122,6 +123,7 @@ const InfluencerIndexPage = () =>{
                             <Card className="card-influencer" >
                                 <div className="videoWrapper">
                                 <img src={noImg} alt="coming soon" style={{width: '100%'}}/>
+                                <img src={Logo} className="overlay-logo"/>
                                         {/* <iframe src={videoEmbedURL + influencer.featuredVideo.id}
                                                 frameBorder='0'
                                                 allow='autoplay; encrypted-media'

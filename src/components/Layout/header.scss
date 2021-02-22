@@ -29,6 +29,9 @@
     padding-top: 15px;
     color: white;
 }
+.nav-top{
+    margin: 0 15px;
+}
 .btn-login{
     background-color: transparent;
     border: 0;;
@@ -175,6 +178,11 @@ nav{
 }
 .modal-dialog {
     height: 100vh !important;
+}
+@media (min-width: 576px){
+    .nav-top{
+        margin: 0;
+    }
 }
 @media (min-width: 992px){
     .navbar-collapse{

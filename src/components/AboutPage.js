@@ -21,7 +21,9 @@ const AboutPage = () =>{
             <div className="mission-wrapper">
                 <h4 className="theme-text-color">The Smoke Show Mission Statement</h4>
                 <div className="spacer-2rem"></div>
-                <p className="about-p">We are tired of old school auto magazine. Our goal is to create he next generation of the auto community, by consolidating car entertainment and information. Everything you want to see, with nothing that you don’t. This will be a home for Auto Fans, built by auto fans.</p>
+                <p className="about-p">
+                Tired of BigTech and Old School Auto Magazines? Welcome to The Smoke Show, aka the world’s best auto social platform. What are we trying to achieve? That’s simple, compiling everything we like to see all in one place and cutting out everything we don’t. The Smoke Show lets users have more fun, gives more control to creators, and further analytics to relevant advertisers. The Smoke Show is a home for auto fans, built by auto fans.We are tired of old school auto magazine. Our goal is to create he next generation of the auto community, by consolidating car entertainment and information. Everything you want to see, with nothing that you don’t. This will be a home for Auto Fans, built by auto fans.
+                </p>
             </div>
             <div className="spacer-4rem"></div>
             <Row>

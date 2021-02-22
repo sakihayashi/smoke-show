@@ -57,7 +57,7 @@ const LoginModal = (props) =>{
             }
             
         }else{
-            setErrMsg('the password and the confirm password do not match. Try again.')
+            setErrMsg('Your passwords do not match. Please try again.')
         }
     }
  
@@ -71,8 +71,9 @@ const LoginModal = (props) =>{
     if(resetPwSent){
         resetPassword =
         <div>
-            <p className="login-form" style={{textAlign: 'center', marginBottom: '2rem'}}>We've sent you an email link to reset your password.<br/><br /> Please check your email inbox.</p><br/>
-            <div className="text-center" ><Button className="comment-btn" onClick={props.onHide} style={{minWidth: '200px'}}>Close</Button></div>
+            <p className="login-form" style={{textAlign: 'center', marginBottom: '2rem'}}>We've sent you an email link to reset your password.<br/><br /> Please check your email inbox.</p>
+            <div className="text-center" ><Button className="comment-btn" onClick={handleClose} style={{minWidth: '200px'}}>Close</Button></div>
+            <div style={{marginBottom: '2rem'}}></div>
             
         </div>
         

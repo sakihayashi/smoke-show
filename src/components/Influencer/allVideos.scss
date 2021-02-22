@@ -134,7 +134,7 @@
     display: none;
 }
 
-.acd-input:checked + label + .content {
+.acd-input:checked + .acd-label + .content {
     display: block;
     .acd-wrapper:first-child & {
         background-color: white;
@@ -143,6 +143,6 @@
 }
 
 
-.acd-input:checked + label + .desc-box{
+.acd-input:checked + .acd-label + .desc-box{
     display: none;
 }

@@ -64,13 +64,6 @@ const [currentUser, setCurrentUser] = useState('')
 // thumbnails: {default: {…}, medium: {…}, high: {…}}
 // title: "The Best Mercedes AMG Ever! | SLS Black Series Review"
 
-  const userLoggedIn = (userId) =>{
-      setCurrentUser(userId)
-  }
-  const userLoggedOut = (id) =>{
-      console.log('user logged out')
-    setCurrentUser('')
-  }
     const handleChangeKeyword = (e) =>{
         setSearchKeyword(e.target.value)
     }
@@ -153,7 +146,7 @@ const [currentUser, setCurrentUser] = useState('')
       }, [])
 
     return(
-            <Layout userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut}>
+            <Layout >
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Home | The Smoke Show</title>
@@ -218,13 +211,13 @@ const [currentUser, setCurrentUser] = useState('')
                 }
             </Row>
             <div className="spacer-4rem"></div>
-            <div className="title title-adj">
+            {/* <div className="title title-adj">
                 <h2 style={{marginBottom: '-1rem'}}>{titleStr}</h2>
                 <Form inline onSubmit={handleVideoSearch} style={{marginRight: '-8px'}}>
                     <FormControl type="text" placeholder="Search" className="mr-sm-2 form-adj" onChange={handleChangeKeyword}/>
                 </Form>
-                </div>
-                <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
+            </div> */}
+            {/* <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
                 {searchedCarData &&
                     searchedCarData.map((car, index) =>{
                         const uuid = uuidv4()
@@ -246,21 +239,15 @@ const [currentUser, setCurrentUser] = useState('')
                                         </Col>
                                         <Col sm={4} style={{paddingLeft:0}} >
                                             <div className="spec-wrapper">
-                                            {/* <img alt={car.name} key={car.logoUrl} src={require(`../assets/car-brand-logos/${car.logoUrl}`).default} className="icon-s" />{' '}<span className="spec-text"><strong>{car.name}</strong></span><br/>
-                                            <img alt="price" key={priceIcon} src={priceIcon} className="icon-s" /><span className="spec-text">{' '}${car.price}</span><br />
-                                            <img alt="power " key={powerIcon} src={powerIcon} className="icon-s" /><span className="spec-text">{' '}{car.engine}</span><br />
-                                            <img alt="piston" key={pistonIcon} src={pistonIcon} className="icon-s" /><span className="spec-text">{' '}{car.hoursepower}</span><br /> */}
                                             </div>
                                         </Col>
                                     </Row>
                                 </Col>
                             </Fragment>
-
                         )
-                    
                 })
                 }
-                </Row>
+                </Row> */}
             </div>
             </Layout>
     )
