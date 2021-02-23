@@ -15,6 +15,7 @@ import VehicleCard from './vehicleCard'
 import CreateNewCar from './CreateNewCar'
 import jwt from 'jsonwebtoken'
 import moment from 'moment'
+import { getInfluencer }from '../../store/actions/influencerActions'
 
 const Garage = (props) =>{
   
@@ -22,7 +23,7 @@ const Garage = (props) =>{
     const [profileUser, setProfileUser] = useState({fname: '', lname: '', profilePic: '', profileCover: '', username: '', profileDesc: '', favSong: '', favArtist: ''})
     const [allowEdit, setAllowEdit] = useState(false)
     const [editMode, setEditMode] = useState({about: false, song: false, artist: false})
-    const [formattedFans, setFormattedFans] = useState('')
+    // const [formattedFans, setFormattedFans] = useState('')
     const [showSetting, setShowSetting] = useState(false);
     const [userCars, setUserCars] = useState([])
     const [showAddCar, setShowAddCar] = useState(false)
@@ -200,11 +201,11 @@ const Garage = (props) =>{
                             setFormattedTime(formatted)
                         }
                         
-                        if(user.fans > 999){
-                            setFormattedFans(Math.sign(user.fans)*((Math.abs(user.fans)/1000).toFixed(1)) + 'k')
-                        }else{
-                            setFormattedFans(Math.sign(user.fans)*Math.abs(user.fans))
-                        }
+                        // if(user.fans > 999){
+                        //     setFormattedFans(Math.sign(user.fans)*((Math.abs(user.fans)/1000).toFixed(1)) + 'k')
+                        // }else{
+                        //     setFormattedFans(Math.sign(user.fans)*Math.abs(user.fans))
+                        // }
                         getTotalComments(mongo)
                         getMyCars(mongo)
                         return user
@@ -276,7 +277,7 @@ const Garage = (props) =>{
     useEffect(() => {
         // getDataAsCurrent()
         loginCheck()
-   
+        props.getInfluencer(userIdParam)
     }, [])
 
     return(
@@ -291,7 +292,7 @@ const Garage = (props) =>{
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} profileUser={profileUser}  updateProfileData={updateProfileData} updateUserDetails={updateUserDetails}/>}
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
-                <SubNav influencer={profileUser} formattedFans={formattedFans} allowEdit={allowEdit} handleShowSetting={handleShowSetting} />
+                <SubNav influencer={profileUser} formattedFans={props.formattedFans} allowEdit={allowEdit} handleShowSetting={handleShowSetting} />
                 {/* <div className="garage-setting-wrapper">
                     {allowEdit && 
                         <Button className="garage-setting-btn" onClick={handleShowSetting} >
@@ -444,13 +445,16 @@ const mapDispatchToProps = (dispatch) =>{
     return{
         openLoginModal: (state) => dispatch(openLoginModal(state)),
         attachMsg: (msg)=> dispatch(attachMsg(msg)),
-        logOutUser: ()=>dispatch(logOutUser())
+        logOutUser: ()=>dispatch(logOutUser()),
+        getInfluencer: (id)=> dispatch(getInfluencer(id))
     }
 }
 const mapStateToProps = (state) =>{
     console.log('props state from garage', state)
     return{
-        customData: state.auth.customData
+        customData: state.auth.customData,
+        influencerObj: state.influ.influencerObj,
+        formattedFans: state.influ.formattedFans
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Garage)

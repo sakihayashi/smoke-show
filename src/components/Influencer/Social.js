@@ -6,12 +6,14 @@ import { Helmet } from "react-helmet"
 import SubNav from './SubNav'
 import * as Realm from "realm-web"
 import './social.scss'
-
+import { getInfluencer }from '../../store/actions/influencerActions'
 import instaIcon from '../../assets/social/instagram.svg'
 import fbIcon from '../../assets/social/facebook.svg'
 import twitterIcon from '../../assets/social/twitter.svg'
 import tiktokIcon from '../../assets/social/TikTok.svg'
 import amazonIcon from '../../assets/social/Amazon-Affiliate-program.jpg'
+import { connect } from 'react-redux'
+import jwt from 'jsonwebtoken'
 
 const Social = (props) =>{
     const appConfig = {
@@ -26,19 +28,50 @@ const Social = (props) =>{
     //     const shortID = short.generate()
     //     console.log('id', shortID)
     // }
-    const getData = async () =>{
-        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-        const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
-        const filter = {userId: userIdParam}
-        try{
-            await collectionInfluencer.findOne(filter).then(user =>{
-                setInfluencer(user)
+    // const getData = async () =>{
+    //     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+    //     const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
+    //     const filter = {userId: userIdParam}
+    //     try{
+    //         await collectionInfluencer.findOne(filter).then(user =>{
+    //             setInfluencer(user)
 
-            })
-        }catch(err){ console.log(err) }
+    //         })
+    //     }catch(err){ console.log(err) }
+    // }
+    const userLogin =async (cre) =>{
+         try{
+             await app.logIn(cre).then(user =>{
+                 console.log('user logged in', user.id)
+             })
+         }catch(err){console.log(err)}
+    }
+    const loginCheck = () =>{
+        const tokenUser = sessionStorage.getItem('session_user')
+        if(tokenUser){
+            jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
+                if (err) {
+                    // timeout
+                    const cre = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    userLogin(cre)
+                    
+                }else{
+                    userLogin(decoded.cre)
+                }
+              });
+            
+        }else{
+            const cre = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+            userLogin(cre)
+        }
     }
     useEffect(() => {
-        getData()
+        setInfluencer(props.influencerObj)
+    }, [props.influencerObj])
+    
+    useEffect(() => {
+        loginCheck()
+        props.getInfluencer(userIdParam)
     }, [])
     return(
         <Fragment>
@@ -50,7 +83,7 @@ const Social = (props) =>{
             <Layout>
                 <div className="main-wrapper">
                     <div className="spacer-4rem"></div>
-                    <SubNav influencer={influencer} />
+                    <SubNav influencer={influencer} formattedFans={props.formattedFans}/>
                     <div className="spacer-4rem"></div>
                     <h2 className="title">{influencer.username} Social Media</h2>
                     <div className="spacer-4rem"></div>
@@ -112,5 +145,16 @@ const Social = (props) =>{
         
     )
 }
+const mapDispatchToProps = (dispatch) =>{
+    return{
+        getInfluencer: (id)=> dispatch(getInfluencer(id))
+    }
+}
+const mapStateToProps = (state)=>{
+    return{
+        influencerObj: state.influ.influencerObj,
+        formattedFans: state.influ.formattedFans
+    }
+}
 
-export default Social
+export default connect(mapStateToProps, mapDispatchToProps)(Social)

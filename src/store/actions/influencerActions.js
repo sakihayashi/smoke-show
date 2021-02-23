@@ -16,12 +16,23 @@ export const getInfluencer = (influencerId) =>{
         const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
         const filter = {userId: influencerId}
         collectionInfluencer.findOne(filter).then(influencer =>{
-            if(influencer.fans > 999){
-                formattedFans = Math.sign(influencer.fans)*((Math.abs(influencer.fans)/1000).toFixed(1)) + 'k'
-            }else{
-                formattedFans = Math.sign(influencer.fans)*Math.abs(influencer.fans)
-            }
-            dispatch({type: 'GET_INFLUENCER', influencer, formattedFans})
+            const collectionFans = mongo.db("smoke-show").collection(`fans-${influencer.username}`)
+            collectionFans.count().then(num =>{
+                if(num > 999){
+                    return formattedFans = Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k'
+                }else{
+                    return formattedFans = Math.sign(num)*Math.abs(num)
+                }
+            }).then(formattedFans =>{
+                dispatch({type: 'GET_INFLUENCER', influencer, formattedFans})
+            })
+            // console.log('fans', fansCount)
+            // if(fansCount > 999){
+            //     formattedFans = Math.sign(fansCount)*((Math.abs(fansCount)/1000).toFixed(1)) + 'k'
+            // }else{
+            //     formattedFans = Math.sign(fansCount)*Math.abs(fansCount)
+            // }
+            
         }).catch(err =>{
             console.log(err)
             dispatch({type: 'NO_INFLUENCER'})

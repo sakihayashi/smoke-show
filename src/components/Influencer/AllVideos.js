@@ -3,9 +3,7 @@ import {Helmet} from "react-helmet"
 import { Row, Col } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import Pagination from 'react-bootstrap/Pagination'
-import Accordion from 'react-bootstrap/Accordion'
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
+
 import Comments from '../Comments'
 import Avatar from 'react-avatar'
 import powerIcon from '../../assets/global/Horsepower.png'
@@ -173,11 +171,9 @@ const AllVideos = (props) =>{
                 if (err) {
                     // timeout
                     const cre = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-                    // setCredentials(cre)
                     getVideos(cre)
                     
                 }else{
-                    // setCredentials(decoded.cre)
                     getVideos(decoded.cre)
                 }
               });
@@ -281,7 +277,7 @@ const AllVideos = (props) =>{
                                             {/* <div className="desc-box">
                                                 {video.snippet.description}
                                             </div>  */}
-                                            <label for={`title${index}`} className="acd-label">Show </label>
+                                            <label htmlFor={`title${index}`} className="acd-label">Show </label>
 
                                             <div class="content">
                                             <small>{video.snippet.description}</small>

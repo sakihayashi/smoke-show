@@ -8,6 +8,10 @@ import { Row, Col } from 'react-bootstrap'
 import './social.scss'
 import teeSpringIcon from '../../assets/swagg/teespring-logo.jpg'
 import printfulIcon from '../../assets/swagg/printful.jpg'
+import { getInfluencer }from '../../store/actions/influencerActions'
+import jwt from 'jsonwebtoken'
+import { connect } from 'react-redux'
+
 
 const SwaggInfluencer = (props) =>{
     const [influencer, setInfluencer] = useState({profileCover: '', profilePic: '', username: '', userId: '', swagg: {teeSpring: '', printful: ''}})
@@ -37,9 +41,45 @@ const SwaggInfluencer = (props) =>{
             })
         }catch(err){ console.log(err) }
     }
+    const userLogin =async (cre) =>{
+        try{
+            await app.logIn(cre).then(user =>{
+                console.log('user logged in', user.id)
+            })
+        }catch(err){console.log(err)}
+   }
+   const loginCheck = () =>{
+    const tokenUser = sessionStorage.getItem('session_user')
+    if(tokenUser){
+        jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
+            if (err) {
+                // timeout
+                const cre = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                userLogin(cre)
+                
+            }else{
+                userLogin(decoded.cre)
+            }
+          });
+        
+    }else{
+        const cre = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+        userLogin(cre)
+    }
+}
+    useEffect(() => {
+
+        if(typeof(props.influencerObj.swagg) !== 'undefined'){
+            setInfluencer(props.influencerObj)
+            if(!props.influencerObj.swagg.teeSpring && !props.influencerObj.swagg.printful) setNodata(true)
+        }
+        
+    }, [props.influencerObj])
 
     useEffect(() => {
-        getData()
+        // getData()
+        loginCheck()
+        props.getInfluencer(userIdParam)
     }, [])
     return(
         <Fragment>
@@ -49,7 +89,7 @@ const SwaggInfluencer = (props) =>{
             <Layout>
                 <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem)'}}>
                     <div className="spacer-4rem"></div>
-                    <SubNav influencer={influencer} formattedFans={formattedFans}/>
+                    <SubNav influencer={influencer} formattedFans={props.formattedFans}/>
                     <div className="spacer-4rem"></div>
                     <h2 className="title">{influencer.username} Swagg</h2>
                     <div className="spacer-4rem"></div>
@@ -84,5 +124,16 @@ const SwaggInfluencer = (props) =>{
         </Fragment>
     )
 }
+const mapDispatchToProps = (dispatch) =>{
+    return{
+        getInfluencer: (id)=> dispatch(getInfluencer(id))
+    }
+}
+const mapStateToProps = (state)=>{
+    return{
+        influencerObj: state.influ.influencerObj,
+        formattedFans: state.influ.formattedFans
+    }
+}
 
-export default SwaggInfluencer
+export default connect(mapStateToProps, mapDispatchToProps)(SwaggInfluencer)
