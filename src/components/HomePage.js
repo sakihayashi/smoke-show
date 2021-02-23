@@ -157,7 +157,7 @@ const [currentUser, setCurrentUser] = useState('')
                 <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
                 <h2 className="title">New Today</h2>
-                <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
+                <Row className="parent-row">
                 {
                     carTempData.map((car, index) =>{
                         const uuid = uuidv4()
@@ -202,6 +202,9 @@ const [currentUser, setCurrentUser] = useState('')
                                             <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text">{' '}{car.engine}</span><br />
                                             <img alt="piston" key={pistonIcon} src={pistonIcon}  className="icon-s" /><span className="spec-text">{' '}{car.hoursepower}</span><br />
                                             </div>
+                                            <div className="ad-container">
+                                                <p style={{color: 'gray'}}>ads will go here</p>
+                                            </div>
                                         </Col>
                                     </Row>
                                 </Col>
@@ -210,7 +213,7 @@ const [currentUser, setCurrentUser] = useState('')
                     })
                 }
             </Row>
-            <div className="spacer-4rem"></div>
+            {/* <div className="spacer-4rem"></div> */}
             {/* <div className="title title-adj">
                 <h2 style={{marginBottom: '-1rem'}}>{titleStr}</h2>
                 <Form inline onSubmit={handleVideoSearch} style={{marginRight: '-8px'}}>

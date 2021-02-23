@@ -237,6 +237,19 @@ label{
   min-height: calc(100vh - 21rem);
   
 }
+.ad-container{
+  height: 100%;
+  background-color: #eee;
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.parent-row{
+  padding-left: -7px;
+  padding-right: -7px;
+  overflow: hidden;
+}
 @media (min-width: 576px) { 
   .main-wrapper{
     padding: 0;

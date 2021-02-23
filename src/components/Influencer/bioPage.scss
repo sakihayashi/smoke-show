@@ -26,9 +26,11 @@
   }
   .bio-sub-menu{
       margin: auto;
-      font-size: $font-l;
+      font-size: $font-m;
       font-family: 'X-Heighting';
       color: $black;
+    //   overflow-wrap: break-word;
+      flex-wrap: wrap;
       ul{
           margin: auto;
           li{
@@ -45,12 +47,26 @@
     height: 100%;
     padding: 5px;
 }
-
+.bio-main-row{
+    overflow: hidden;
+    padding: 0 -7px;
+}
+.bio-ad-container{
+    height: 100%;
+    background-color: #eee;
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {
     .bio-stats{
         padding-left: 0;
         margin-bottom: 0;
+    }
+    .bio-sub-menu{
+        font-size: $font-l;
     }
 }
 

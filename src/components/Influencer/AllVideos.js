@@ -248,7 +248,7 @@ const AllVideos = (props) =>{
                     return(
                         <Fragment key={unique} >
                             <Col sm={6} className="main-col" >
-                                <Row >
+                                <Row className="video-row">
                                     <Col sm={8} >
                                         <div className="videoWrapper">
                                             <iframe src={videoEmbedURL + id}
@@ -322,6 +322,9 @@ const AllVideos = (props) =>{
                                         <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" >{' '}${price && price}</span><br />
                                         <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text">{' '}{video.carData.features.Engine.Torque}</span><br />
                                         <img alt="piston" key={pistonIcon} src={pistonIcon}  className="icon-s" /><span className="spec-text">{' '}{video.carData.features.Engine.Horsepower}</span><br />
+                                        </div>
+                                        <div className="ads-container-all">
+                                            ads go here
                                         </div>
                                     </Col>
                                 </Row>

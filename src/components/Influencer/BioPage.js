@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Helmet } from "react-helmet"
-import { Row, Col, Form, FormControl } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
 // import Avatar from 'react-avatar'
@@ -126,7 +126,7 @@ const BioPage = (props) =>{
                 <SubNav influencer={influencer} formattedFans={formattedFans} />
 
                 <div className="spacer-2rem"></div>
-                <Row>
+                <Row className="bio-main-row">
                     <Col sm={6}>
                         <div className="videoWrapper">
                             <iframe src={ typeof(influencer.featuredVideo.id) == 'undefined' ? '' : videoEmbedURL + influencer.featuredVideo.id}
@@ -148,7 +148,7 @@ const BioPage = (props) =>{
                 </Row>
                 <div className="spacer-4rem"></div>
                 <h2 className="title">New This Week</h2>
-                <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
+                <Row className="bio-main-row">
                 {
                     carTempData.map((car, index) =>{
         
@@ -175,6 +175,9 @@ const BioPage = (props) =>{
                                 <img alt="power " key={powerIcon} src={powerIcon} className="icon-s" /><span className="spec-text">{' '}{car.engine}</span><br />
                                 <img alt="piston" key={pistonIcon} src={pistonIcon} className="icon-s" /><span className="spec-text">{' '}{car.hoursepower}</span><br />
                                 </div>
+                                <div className="bio-ad-container">
+                                    ads go here
+                                </div>
                             </Col>
                         </Row>
                     </Col>
@@ -182,14 +185,14 @@ const BioPage = (props) =>{
                     })
                 }
             </Row>
-            <div className="spacer-4rem"></div>
-            <div className="title title-adj">
+            {/* <div className="spacer-4rem"></div> */}
+            {/* <div className="title title-adj">
                 <h2 style={{marginBottom: '-1rem'}}>{titleStr}</h2>
                 <Form inline onSubmit={handleVideoSearch} style={{marginRight: '-8px'}}>
                     <FormControl type="text" placeholder="Search" className="mr-sm-2 form-adj" onChange={handleChangeKeyword}/>
                 </Form>
-                </div>
-                <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
+            </div> */}
+            {/* <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
                 {searchedCarData &&
                     searchedCarData.map((car, index) =>{
         
@@ -211,10 +214,7 @@ const BioPage = (props) =>{
                             </Col>
                             <Col sm={4} style={{paddingLeft:0}}>
                                 <div className="spec-wrapper">
-                                {/* <img alt={car.name} key={car.logoUrl} src={require(`../assets/car-brand-logos/${car.logoUrl}`).default} className="icon-s" />{' '}<span className="spec-text"><strong>{car.name}</strong></span><br/>
-                                <img alt="price" key={priceIcon} src={priceIcon} className="icon-s" /><span className="spec-text">{' '}${car.price}</span><br />
-                                <img alt="power " key={powerIcon} src={powerIcon} className="icon-s" /><span className="spec-text">{' '}{car.engine}</span><br />
-                                <img alt="piston" key={pistonIcon} src={pistonIcon} className="icon-s" /><span className="spec-text">{' '}{car.hoursepower}</span><br /> */}
+                 
                                 </div>
                             </Col>
                         </Row>
@@ -222,7 +222,7 @@ const BioPage = (props) =>{
                         </>
                 })
                 }
-                </Row>
+                </Row> */}
             </div>
         </Layout>
         

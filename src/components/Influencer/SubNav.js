@@ -40,13 +40,22 @@ const SubNav = (props) =>{
                         await app.logIn(decoded.cre).then( async user =>{
                             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                             const collectionUsers = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
+                            const collectionInfluencer = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("influencers")
                 
                             try{
                                 await collectionUsers.updateOne(
                                     { "userId": user.id },
                                     { $push: { fansOf: {id: influencer.userId, username: influencer.username} } },
                                     { upsert: true }
-                                ).then(res =>{
+                                ).then(async res =>{
+                                    try{
+                                        await collectionInfluencer.updateOne(
+                                            {userId: influencer.userId},
+                                            { $push: {fans: {id: user.id}}}
+                                        )
+                                    }catch(err){
+                                        console.log(err)
+                                    }
                                     console.log('become a fan of ', influencer.username)
                                     setIsFanOf(true)
                                     
@@ -108,7 +117,7 @@ const SubNav = (props) =>{
                     <NavLink key={`${influencer.userId}-nav-5`} to={`/swagg-influencer/${influencer.userId}`}>swagg</NavLink>
                     </nav>
                 </Col>
-                <Col className="center-btn col-2">
+                <Col className="center-btn" sm={2}>
                 
                 {props.allowEdit ?
                         <Button className="garage-setting-btn" onClick={props.handleShowSetting} >
