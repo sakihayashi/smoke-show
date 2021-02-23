@@ -238,12 +238,13 @@ label{
   
 }
 .ad-container{
-  height: 100%;
+  height: 250px;
   background-color: #eee;
   margin: 1rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 .parent-row{
   padding-left: -7px;
@@ -258,6 +259,16 @@ label{
   .spec-col{
     padding-left: 0  !important;
   }
+  .spec-col-test{
+    padding-left: 0  !important;
+    width: 300px;
+  }
+  .ad-size{
+    width: 300px;
+  }
+  // .spec-wrapper{
+  //   width: 300px;
+  // }
   .main-col{
     margin-bottom: 2rem;
   }
