@@ -73,14 +73,21 @@ const BioPage = (props) =>{
             try {
                 const mongoCollection = mongo.db("smoke-show").collection("influencers");
                 const filter = {userId: influencerId} 
-                await mongoCollection.findOne(filter).then(res =>{
+                await mongoCollection.findOne(filter).then( async res =>{
                     console.log('res', res)
                     setInfluencer(res)
-                    if(res.fans > 999){
-                        setFormattedFans(Math.sign(res.fans)*((Math.abs(res.fans)/1000).toFixed(1)) + 'k')
-                    }else{
-                        setFormattedFans(Math.sign(res.fans)*Math.abs(res.fans))
-                    }
+                    const collectionFans = mongo.db("smoke-show").collection(`fans-${res.username}`)
+                    try{
+                        await collectionFans.count().then(num =>{
+                            console.log(num)
+                            if(num > 999){
+                                setFormattedFans(Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k')
+                            }else{
+                                setFormattedFans(Math.sign(num)*Math.abs(num))
+                            }
+                        })
+                    }catch(err){console.log(err)}
+                    
                 })
              }catch(error){console.log(error)}
         
@@ -155,7 +162,7 @@ const BioPage = (props) =>{
                         return <>
                         <Col sm={6} key={uid(car)}>
                         <Row>
-                            <Col sm={8} >
+                            <Col sm={7} >
                                 <div className="videoWrapper">
                                     <iframe src={videoEmbedURL + car.videoId}
                                             frameBorder='0'
@@ -168,7 +175,7 @@ const BioPage = (props) =>{
                                 <h3 style={{marginTop:'10px'}}>{car.youtube.snippet.title}</h3>
                                 <Comments comments={commentsTempData[index]} videoId={car.videoId}/>
                             </Col>
-                            <Col sm={4} className="bio-stats">
+                            <Col sm={5} className="bio-stats">
                                 <div className="spec-wrapper">
                                 <img alt={car.name} key={car.logoUrl} src={require(`../../assets/car-brand-logos/${car.logoUrl}`).default} className="icon-s" />{' '}<span className="spec-text"><strong>{car.name}</strong></span><br/>
                                 <img alt="price" key={priceIcon} src={priceIcon} className="icon-s" /><span className="spec-text">{' '}${car.price}</span><br />

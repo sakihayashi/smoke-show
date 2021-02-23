@@ -195,17 +195,21 @@ nav{
 }
 @media (min-width: 1025px){
     .header-wrapper {
-      max-width: $main-width-tablet;
+        max-width: 90vw;
+    //   max-width: $main-width-tablet;
     }
     .login-wrapper{
-        max-width: $main-width-tablet;
+        max-width: 90vw;
+        // max-width: $main-width-tablet;
     }
   }
   @media (min-width: 1250px){
     .header-wrapper{
-      max-width: $main-width-pc;
+    //   max-width: $main-width-pc;
+    max-width: 90vw;
     }
     .login-wrapper{
-        max-width: $main-width-pc;
+        max-width: 90vw;
+        // max-width: $main-width-pc;
     }
   }

@@ -18,7 +18,6 @@ const SubNav = (props) =>{
         // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
-
     const influencer = props.influencer
 
     const renderTooltip = (props) => (
@@ -40,7 +39,7 @@ const SubNav = (props) =>{
                         await app.logIn(decoded.cre).then( async user =>{
                             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                             const collectionUsers = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
-                            const collectionInfluencer = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("influencers")
+                            const collectionFans = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection(`fans-${influencer.username}`)
                 
                             try{
                                 await collectionUsers.updateOne(
@@ -48,11 +47,12 @@ const SubNav = (props) =>{
                                     { $push: { fansOf: {id: influencer.userId, username: influencer.username} } },
                                     { upsert: true }
                                 ).then(async res =>{
+                                    const fanData = {userId: user.id, date: new Date().getTime(), username: props.customData.username}
                                     try{
-                                        await collectionInfluencer.updateOne(
-                                            {userId: influencer.userId},
-                                            { $push: {fans: {id: user.id}}}
-                                        )
+                                        await collectionFans.insertOne(fanData).then(res =>{
+                                            console.log(res)
+
+                                        })
                                     }catch(err){
                                         console.log(err)
                                     }

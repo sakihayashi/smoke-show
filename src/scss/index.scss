@@ -250,6 +250,7 @@ label{
   padding-right: -7px;
   overflow: hidden;
 }
+
 @media (min-width: 576px) { 
   .main-wrapper{
     padding: 0;
@@ -263,12 +264,15 @@ label{
 }
 @media (min-width: 1025px){
   .main-wrapper{
-    max-width: $main-width-tablet;
+    // max-width: $main-width-tablet;
+    max-width: 90vw;
   }
+
 }
 @media (min-width: 1250px){
   .main-wrapper{
-    max-width: $main-width-pc;
+    // max-width: $main-width-pc;
+    max-width: 90vw;
   }
 }
 

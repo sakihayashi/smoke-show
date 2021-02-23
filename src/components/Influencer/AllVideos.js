@@ -156,11 +156,9 @@ const AllVideos = (props) =>{
                     console.log(err)
                 }
                 
-                
-            }).then(i =>{
             })
         }catch(err){
-
+            console.log(err)
         }
         
     }
@@ -289,8 +287,6 @@ const AllVideos = (props) =>{
                                             <small>{video.snippet.description}</small>
                                             </div>
                                             
-
-
 {/*                                             
                                             <Accordion  className="accordion-style">
                                                 <Card>

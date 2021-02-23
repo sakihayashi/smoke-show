@@ -165,7 +165,7 @@ const [currentUser, setCurrentUser] = useState('')
                             <Fragment key={uuid}>
                                 <Col sm={6} className="main-col" >
                                     <Row >
-                                        <Col sm={8} >
+                                        <Col sm={7} >
                                             <div className="videoWrapper">
                                                 <iframe src={videoEmbedURL + car.videoId}
                                                         frameBorder='0'
@@ -195,7 +195,7 @@ const [currentUser, setCurrentUser] = useState('')
                                             </Suspense>
                                             
                                         </Col>
-                                        <Col sm={4} className="spec-col"  >
+                                        <Col sm={5} className="spec-col"  >
                                             <div className="spec-wrapper" key={'spec-wrapper' + uuid}>
                                             <img alt={car.name} src={require(`../assets/car-brand-logos/${car.logoUrl}`).default} className="icon-s" />{' '}<span className="spec-text" ><strong >{car.name}</strong></span><br/>
                                             <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" >{' '}${car.price}</span><br />
