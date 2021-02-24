@@ -183,7 +183,7 @@ const [influencerObj, setInfluencerObj] = useState([])
             </Helmet>
                 <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
-                <h2 className="title">Latest 7 days</h2>
+                <h2 className="title">New This Week</h2>
                 <Row className="parent-row">
                 {latestVideos &&
                     latestVideos.map((video, index) =>{
@@ -192,7 +192,6 @@ const [influencerObj, setInfluencerObj] = useState([])
                         const model = str.charAt(0).toUpperCase() +str.slice(1)
                         const name = video.carData.make
                         const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
-                        console.log(titleCase)
                         let price;
                         if(video.carData.price && video.carData.price.baseMSRP){
                             price = numberWithCommas(video.carData.price.baseMSRP)

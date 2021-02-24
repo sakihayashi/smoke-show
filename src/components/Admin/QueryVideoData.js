@@ -27,8 +27,8 @@ const QueryVideoData = () =>{
             params: {
                 // q: searchKeyword,
                 channelId: KirkChannelId,
-                publishedAfter: '2021-02-13T00:00:00Z',
-                publishedBefore: '2021-02-19T00:00:00Z',
+                publishedAfter: '2021-02-21T00:00:00Z',
+                publishedBefore: '2021-02-23T23:59:59Z',
                 order: 'date'
             }
         }).then(async youtubeObj =>{
@@ -99,6 +99,7 @@ const QueryVideoData = () =>{
         }
         
     }
+
     const handleUpdateDesc = async (e) =>{
         const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
         try{
@@ -223,7 +224,7 @@ const QueryVideoData = () =>{
          console.log(result);
     }
     const addMissing = async () =>{
-        const videoId = 'lPXBjgr_qvA'
+        const videoId = 'lv9Jpvi8bYo'
         await youtubeAPI.get('/videos', {
             params: {
                 id: videoId
@@ -232,8 +233,8 @@ const QueryVideoData = () =>{
             const youtubeData = res.data.items[0]
             const formatted = {
                 videoId: videoId,
-                userId: KirkUserId,
-                channelId: KirkChannelId,
+                userId: EddiXuserId,
+                channelId: EddieXChannelId,
                 snippet: {
                     publishedAt: youtubeData.snippet.publishedAt,
                     title:  youtubeData.snippet.title,
@@ -249,7 +250,9 @@ const QueryVideoData = () =>{
             console.log(result)
         })
     }
+    // const handleUpdateById = async () =>{
 
+    // }
     return(
         <div>
         <h1>query youtube data</h1>
@@ -261,7 +264,7 @@ const QueryVideoData = () =>{
                 {/* <Button onClick={checkYoutubeId}>Check all videoId in youtube</Button> */}
                 {/* <Button onClick={handleCheckVideoId}>Check video ids in DB</Button> */}
                 {/* <Button onClick={checkMissing}>filter arrays</Button> */}
-                {/* <Button onClick={addMissing}>Add missing data</Button> */}
+                <Button onClick={addMissing}>Add data</Button>
             </center>
             
         </div>

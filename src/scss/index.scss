@@ -238,7 +238,7 @@ label{
   
 }
 .ad-container{
-  height: 600px;
+  height: 250px;
   background-color: #eee;
   margin: 1rem 0;
   display: flex;
@@ -265,6 +265,9 @@ label{
   }
   .ad-size{
     width: 160px;
+  }
+  .ad-container{
+    height: 600px;
   }
   // .spec-wrapper{
   //   width: 300px;
