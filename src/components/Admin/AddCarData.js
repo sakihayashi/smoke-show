@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import * as Realm from "realm-web"
-import jwt from 'jsonwebtoken'
 
 import LoginDiv from './LoginDiv'
 import { Container, Button, Form, Col, Row, Alert } from 'react-bootstrap'
@@ -15,7 +14,7 @@ import short from 'short-uuid'
 const AddCarData = (props) =>{
     const [userObj, setUserObj] = useState({email: '', password: ''})
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const maxAgeTest = 1 * 60 * 60
+    // const maxAgeTest = 1 * 60 * 60
     const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
     const [price, setPrice] = useState({baseMSRP: null, baseInvoice: null})
     const [powerFeatures, setPowerFeatures] = useState({})

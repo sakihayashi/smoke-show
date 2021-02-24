@@ -19,6 +19,8 @@ const SettingModal = (props) =>{
     const [userObj, setUserObj] = useState({fname: props.profileUser.fname, lname: props.profileUser.lname, email: props.profileUser.email, username: props.profileUser.username})
     const [currentUserId] = useState(app.currentUser.id)
     const [userPw, setUserPw] = useState({newPw: '', conNewPw: '', currentPw: ''})
+    const [uploadMsg, setUploadMsg] = useState({profile: '', cover: ''})
+    const [tooBig, setTooBig] = useState({profile: false, cover: false})
     const [profilePic, setProfilePic] = useState({})
     const [coverPic, setCoverPic] = useState({})
     const [imgThumb, setImgThumb] = useState()
@@ -58,6 +60,11 @@ const SettingModal = (props) =>{
     }
 
     const profilePicUpload = (e) =>{
+        if (e.target.files[0].size / (1024 * 1024) > 3){
+            setTooBig({...tooBig, profile: true})
+            setUploadMsg({...uploadMsg, profile: 'The file size is too big. Please choose different file.'})
+            return
+        }else{
         setProfilePic(e.target.files[0])
         setImgThumb(URL.createObjectURL(e.target.files[0]))
         setDisableBtnStates({
@@ -71,6 +78,7 @@ const SettingModal = (props) =>{
           setImgData64Profile(base64)
         };
         reader.readAsDataURL(file)
+        }
     }
     const saveProfilePic = async () =>{
         
@@ -162,6 +170,11 @@ const SettingModal = (props) =>{
         }
     }
     const coverPicUpload = (e) =>{
+        if (e.target.files[0].size / (1024 * 1024) > 3){
+            setTooBig({...tooBig, cover: true})
+            setUploadMsg({...uploadMsg, cover: 'The file size is too big. Please choose different file.'})
+            return
+        }else{
         setCoverPic(e.target.files[0])
         setCoverImgThumb(URL.createObjectURL(e.target.files[0]))
         setDisableBtnStates({
@@ -175,6 +188,7 @@ const SettingModal = (props) =>{
           setImgData64Cover(base64)
         };
         reader.readAsDataURL(file)
+        }
     }
     const saveProfileCover = async  (e) =>{
         const imgId = short.generate()

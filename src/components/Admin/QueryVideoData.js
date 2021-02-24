@@ -1,5 +1,4 @@
-import React, { useEffect, useState  } from 'react'
-import {Helmet} from "react-helmet"
+import React from 'react'
 import { Button } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import { youtubeAPI } from '../../utils/youtubeAPI'

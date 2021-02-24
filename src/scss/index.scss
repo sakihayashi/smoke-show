@@ -238,7 +238,7 @@ label{
   
 }
 .ad-container{
-  height: 250px;
+  height: 600px;
   background-color: #eee;
   margin: 1rem 0;
   display: flex;
@@ -264,7 +264,7 @@ label{
     width: 300px;
   }
   .ad-size{
-    width: 300px;
+    width: 160px;
   }
   // .spec-wrapper{
   //   width: 300px;
@@ -281,9 +281,18 @@ label{
 
 }
 @media (min-width: 1250px){
+  
   .main-wrapper{
     // max-width: $main-width-pc;
     max-width: 90vw;
   }
 }
 
+@media (min-width: 1400px){
+  .ad-size{
+    width: 300px;
+  }
+  .ad-container{
+    height: 250px;
+  }
+}

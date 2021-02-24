@@ -24,9 +24,9 @@ const AllVideos = (props) =>{
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     const [videoArr, setVideoArr] = useState([])
     const [allVideoData, setAllVideoData] = useState([])
-    const [showMore, setShowMore] = useState(false)
+    // const [showMore, setShowMore] = useState(false)
     // const [videoIds, setVideoIds] = useState([])
-    const [pageNum, setPageNum] = useState(0)
+    // const [pageNum, setPageNum] = useState(0)
     const [pgNum, setPgNum] = useState(null)
     // const [credentials, setCredentials] = useState(null)
     const [active, setActive] = useState(1)
@@ -38,7 +38,7 @@ const AllVideos = (props) =>{
         // timeout in number of milliseconds
         };
     const app = new Realm.App(appConfig);
-    const [divId, setDivId] = useState(null)
+    // const [divId, setDivId] = useState(null)
     
     const chunkArray = (allVideos) =>{
         let chunk_size = 12

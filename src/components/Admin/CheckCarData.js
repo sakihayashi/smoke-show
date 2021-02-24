@@ -3,7 +3,7 @@ import * as Realm from "realm-web"
 import { Button } from 'react-bootstrap'
 
 const CheckCarData = () =>{
-    const [cars, setCars] = useState([])
+    // const [cars, setCars] = useState([])
     const [safety, setSafety] = useState([])
     // const field = features['Safety']
     const appConfig = {
@@ -12,7 +12,7 @@ const CheckCarData = () =>{
         // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
-    const maxAgeTest = 1 * 60 * 60
+    // const maxAgeTest = 1 * 60 * 60
     const credentials = Realm.Credentials.emailPassword('saki@thehoongroup.com', 'aaaaaa')
     const queryData = async () =>{
         try{

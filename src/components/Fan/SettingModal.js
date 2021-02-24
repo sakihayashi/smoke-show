@@ -17,10 +17,10 @@ const SettingModal = (props) =>{
     const [imgData64Profile, setImgData64Profile] = useState('')
     const [imgData64Cover, setImgData64Cover] = useState('')
     const [userObj, setUserObj] = useState({fname: props.profileUser.fname, lname: props.profileUser.lname, email: props.profileUser.email, username: props.profileUser.username})
-
+    const [uploadMsg, setUploadMsg] = useState({profile: '', cover: ''})
     const [currentUserId] = useState(app.currentUser.id)
     const [userPw, setUserPw] = useState({newPw: '', conNewPw: '', currentPw: ''})
-    // const [file, setFile] = useState({})
+    const [tooBig, setTooBig] = useState({profile: false, cover: false})
     const [profilePic, setProfilePic] = useState({})
     const [coverPic, setCoverPic] = useState({})
     const [imgThumb, setImgThumb] = useState()
@@ -60,6 +60,11 @@ const SettingModal = (props) =>{
     }
 
     const profilePicUpload = (e) =>{
+        if (e.target.files[0].size / (1024 * 1024) > 3){
+            setTooBig({...tooBig, profile: true})
+            setUploadMsg({...uploadMsg, profile: 'The file size is too big. Please choose different file.'})
+            return
+        }else{
         setProfilePic(e.target.files[0])
         setImgThumb(URL.createObjectURL(e.target.files[0]))
         setDisableBtnStates({
@@ -73,6 +78,7 @@ const SettingModal = (props) =>{
           setImgData64Profile(base64)
         };
         reader.readAsDataURL(file)
+        }
     }
     const saveProfilePic = async () =>{
         const imgId = short.generate()
@@ -169,19 +175,30 @@ const SettingModal = (props) =>{
         }
     }
     const coverPicUpload = (e) =>{
-        setCoverPic(e.target.files[0])
-        setCoverImgThumb(URL.createObjectURL(e.target.files[0]))
-        setDisableBtnStates({
-            ...disableBtnStates,
-            coverPic: false
-        })
-        const file = e.target.files[0] 
-        const reader = new FileReader()
-        reader.onload = (event) => {
-        const base64 = event.target.result.split(",").pop()
-          setImgData64Cover(base64)
-        };
-        reader.readAsDataURL(file)
+        
+        if (e.target.files[0].size / (1024 * 1024) > 3){
+            setTooBig({...tooBig, cover: true})
+            setUploadMsg({...uploadMsg, cover: 'The file size is too big. Please choose different file.'})
+            return
+        }else{
+            setTooBig({...tooBig, cover: false})
+            setUploadMsg({...uploadMsg, cover: ''})
+            console.log(e.target.files[0])
+            setCoverPic(e.target.files[0])
+            setCoverImgThumb(URL.createObjectURL(e.target.files[0]))
+            setDisableBtnStates({
+                ...disableBtnStates,
+                coverPic: false
+            })
+            const file = e.target.files[0] 
+            const reader = new FileReader()
+            reader.onload = (event) => {
+            const base64 = event.target.result.split(",").pop()
+              setImgData64Cover(base64)
+            };
+            reader.readAsDataURL(file)
+        }
+        
     }
     const saveProfileCover = async  (e) =>{
         const imgId = short.generate()
@@ -224,7 +241,6 @@ const SettingModal = (props) =>{
             console.log(err)
             }
         }else{
-            // const token = sessionStorage.getItem('session_token')
             const tokenUser = sessionStorage.getItem('session_user')
             // const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
             const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
@@ -411,6 +427,7 @@ const deleteImgObj = async (key) =>{
                                 {isSuccess.profilePic ? <Alert variant="success" style={{padding: '5px', marginTop: '1rem', textAlign:'center'}}><small>{msg.profilePic}</small></Alert> :
                                 <div style={{marginTop: '1rem'}}></div>
                                 }
+                                {tooBig.profile && <Alert variant="danger">{uploadMsg.profile}</Alert>}
                                 <Button variant="primary" onClick={saveProfilePic} className="save-changes-btn" disabled={disableBtnStates.profilePic}>
                                 Upload
                                 </Button>
@@ -479,6 +496,7 @@ const deleteImgObj = async (key) =>{
                                     {isSuccess.coverPic ? <Alert variant="success" style={{padding: '5px', marginTop: '1rem', textAlign:'center'}}><small>{msg.coverPic}</small></Alert> :
                                     <div style={{marginTop: '1rem'}}></div>
                                     }
+                                    {tooBig.cover && <Alert variant="danger">{uploadMsg.cover}</Alert>}
                                     <Button variant="primary" onClick={saveProfileCover} className="save-changes-btn " disabled={disableBtnStates.coverPic}>
                                     Upload
                                     </Button>

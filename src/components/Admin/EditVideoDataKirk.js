@@ -106,8 +106,7 @@ const EditVideoDataKirk = () =>{
     </Container>
     
     const handleChangeCarData = (e) =>{
-        console.log('change', e.target.value)
-        console.log('name', e.target.name)
+      
         setCarDataId(e.target.value)
         setEditVideoId(e.target.name)
     }

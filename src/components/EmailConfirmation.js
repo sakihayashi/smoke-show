@@ -21,7 +21,8 @@ const EmailConfirmation = (props) =>{
     const app = new Realm.App(config);
     const [clicked, setClicked] = useState(false)
     const [resendMsg, setResendMsg] = useState('')
-    const getApp = Realm.App.getApp(id)
+    // const getApp = Realm.App.getApp(id)
+    // const researvedNames = ["EddieX", "Lexurious Fleet", "Stradman", "Burlacher", "SummitLife", "HeavyD", "Hoovies Garage", "Streetspeed717", "RFRacing", "Bertrand850", "InShane Designs", "Savage Garage", "effSpot", "Goonzquad", "Tavarish", "VinWiki", "TJ Hunt", "DDE", "Emelia Hartford", "Doug Demuro", "StraightPipes", "Savage Geese", "SaabKyle04", "ThatDudeInBlue", "JR Garage", "Alex Rebuilds", "vTuned", "Cleetus McFarland", "Chevy Dude", "Seen Through Glass", "Shmee150", "SOL", "Mr JWW", "itsjusta6", "WhistlinDiesel", "Samcrac", "Car Wizard", "The Smoking Tire", "Manny Khoshbin", "Donut Media", "Scotty Kilmer", "Jay Leno's Garage", "WatchJRGo", "Rich Rebuilds", "Speed Phenom", "RDB LA", "Salomondrin", "Buddy Wyrick", "Ken Block", "B is for Build", "SuperSpeeders", "Royalty Exotic Cars", "Adam LZ", "Rob Dahm", "ThrottleHouse", "LegitStreetCars", "Supercar Blondie", "Wrench Everyday", "Lambo Jesus", "Lambo Fan", "Motor Tube", "Redline Reviews"]
 
     const handleChange =(e) =>{
         setUserObj({
@@ -48,8 +49,13 @@ const EmailConfirmation = (props) =>{
                     username: userObj.username,
                     joined: joined
                 }
-                
+                // const filterUsername = {username: userObj.username}
                 const mongoCollection = mongo.db("smoke-show").collection("users")
+                // await mongoCollection.findOne(filterUsername).then(res =>{
+                    
+                // }).catch(err){
+
+                // }
                 await mongoCollection.insertOne(userData).then(insertOneResult =>{
                     // userData.login = {email: email, password: userObj.password}
                     let token = createToken(userData)

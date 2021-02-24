@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import uploadIcon from '../../assets/global/upload.svg'
-
+import { Alert } from 'react-bootstrap'
 import { useDropzone } from 'react-dropzone'
 
   const thumbsContainer = {
@@ -55,6 +55,8 @@ const ImageUpload = (props ) => {
               
               if(acceptedFiles.length > 1){
                   setMsg('You can upload only one image.')
+              }else if(acceptedFiles[0].size / (1024 * 1024) > 3){
+                  setMsg('The file size is too big. Please choose different file.')
               }else{
                     getFileData(acceptedFiles[0])
                     setUploaded(true)
@@ -89,7 +91,7 @@ const ImageUpload = (props ) => {
 
     return ( 
         <React.Fragment>
-            {msg ? <p>{msg}</p> : ''}
+            {/* {msg ? <p>{msg}</p> : ''} */}
                 <div {...getRootProps({className: 'dropzone'})} className="dropzone dropzone-wrapper" >
                     <input {...getInputProps()} required/>
                     {
@@ -101,6 +103,7 @@ const ImageUpload = (props ) => {
                                     <p style={{padding: '5px'}}>
                                       { uploaded ? 'Change Image' : 'Drop an image file here or click to upload an image'}
                                     </p>
+                                    {msg ? <Alert variant="danger">{msg}</Alert> : ''}
                                     <p>*3MB max image file size<br/>
                                     *accepted file formats: jpg, png, gif</p>
                                     <aside style={thumbsContainer}>

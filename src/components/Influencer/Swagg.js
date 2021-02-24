@@ -68,7 +68,6 @@ const SwaggInfluencer = (props) =>{
     }
 }
     useEffect(() => {
-
         if(typeof(props.influencerObj.swagg) !== 'undefined'){
             setInfluencer(props.influencerObj)
             if(!props.influencerObj.swagg.teeSpring && !props.influencerObj.swagg.printful) setNodata(true)
