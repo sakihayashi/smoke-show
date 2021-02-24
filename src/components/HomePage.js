@@ -3,10 +3,10 @@ import {Helmet} from "react-helmet"
 import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
 // import { youtubeAPI } from '../utils/youtubeAPI'
-import { carTempData } from './carTempData'
+// import { carTempData } from './carTempData'
 import { commentsTempData } from './commentsTempData' 
 // import Comments from './Comments'
-import Avatar from 'react-avatar'
+// import Avatar from 'react-avatar'
 import { v4 as uuidv4 } from 'uuid';
 import powerIcon from '../assets/global/Horsepower.png'
 import pistonIcon from '../assets/global/piston.png'
@@ -15,6 +15,7 @@ import Layout from './Layout/Layout'
 import '../scss/spinner.css'
 import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"
+import moment from 'moment'
 
 
 const Comments = React.lazy(() => import('./Comments'))
@@ -129,10 +130,29 @@ const [influencerObj, setInfluencerObj] = useState([])
                         }
                     })
                     obj.id.map(async id =>{
+                        let formattedFans
                         const filter = {userId: id}
                         try {
-                            await collectionInfluencer.findOne(filter).then(user =>{
-                                influencerArr.push(user)
+                            await collectionInfluencer.findOne(filter).then(async influencer =>{
+                                const collectionFans = mongo.db("smoke-show").collection(`fans-${influencer.username}`)
+                                try {
+                                    await collectionFans.count().then(num =>{
+                                        
+                                        if(num > 999){
+                                            formattedFans = Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k'
+                                            influencer.fans = formattedFans
+                                            influencerArr.push(influencer)
+                                        }else{
+                                            formattedFans = Math.sign(num)*Math.abs(num)
+                                            influencer.fans = formattedFans
+                                            influencerArr.push(influencer)
+                                        }
+                                    })
+                                    
+                                } catch (error) {
+                                    console.log(error)
+                                }
+                                
                             })
                         } catch (error) {
                             console.log(error)
@@ -181,7 +201,7 @@ const [influencerObj, setInfluencerObj] = useState([])
                 <meta name="robots" content="noindex, nofollow" />
                 {/* <link rel="canonical" href="http://mysite.com/example" /> */}
             </Helmet>
-                <div className="main-wrapper">
+                <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem'}}>
                 <div className="spacer-4rem"></div>
                 <h2 className="title">New This Week</h2>
                 <Row className="parent-row">
@@ -189,6 +209,7 @@ const [influencerObj, setInfluencerObj] = useState([])
                     latestVideos.map((video, index) =>{
                         const str = video.carData.model
                         const id = video.videoId
+                        
                         const model = str.charAt(0).toUpperCase() +str.slice(1)
                         const name = video.carData.make
                         const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
@@ -199,8 +220,11 @@ const [influencerObj, setInfluencerObj] = useState([])
                         const uuid = uuidv4()
                         let theInfluencer;
                         if(influencerObj){
-                            theInfluencer = influencerObj.filter(obj => obj.userId === video.userId)
+                            const result = influencerObj.filter(obj => obj.userId === video.userId)
+                            theInfluencer = result[0]
+                           
                         }
+                        const date = moment(video.snippet.publishedAt).fromNow()
                         return(
                             <Fragment key={uuid}>
                                 <Col sm={6} className="main-col" >
@@ -216,19 +240,20 @@ const [influencerObj, setInfluencerObj] = useState([])
                                 
                                             </div>
                                             <h3 style={{marginTop:'10px'}} className="video-title">{video.snippet.title}</h3>
+                                            <small>{date}</small>
                                             <Row className="comment-wrapper" >
                                                 <div className="col-1" style={{margin:0,padding:0}} >
-                                                {theInfluencer[0] ? <img src={theInfluencer[0].profilePic} 
+                                                {theInfluencer ? <img src={theInfluencer.profilePic} 
                                                 
-                                                className="creator-profile-pic" alt="car"/> :
-                                                <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} 
-                                                style={{width:'46px', height: '46px'}}
-                                                className="creator-profile-pic" name={video.snippet.channelTitle} />
+                                                className="creator-profile-pic" alt={video.snippet.channelTitle}/> :
+                                                <div
+                                                style={{width:'46px', height: '46px', backgroundColor: 'teal'}}
+                                                className="creator-profile-pic" name={video.snippet.channelTitle}></div>
                                                 }
                                                     
                                                 </div>
                                                 <div className="col-11" style={{paddingRight:0, margin: 'auto'}} >
-                                                <div className="creator-name"><strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{' '} {''} fans</span></div>
+                                                <div className="creator-name"><strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{theInfluencer && theInfluencer.fans} {''} fans</span></div>
 
                                                 </div>
                                             </Row>

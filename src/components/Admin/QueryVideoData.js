@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import { youtubeAPI } from '../../utils/youtubeAPI'
+import {Helmet} from "react-helmet"
 
 
 const QueryVideoData = () =>{
@@ -255,6 +256,9 @@ const QueryVideoData = () =>{
     // }
     return(
         <div>
+        <Helmet>
+            <meta name="robots" content="noindex, nofollow" />
+        </Helmet>
         <h1>query youtube data</h1>
             <div></div>
             <center>
