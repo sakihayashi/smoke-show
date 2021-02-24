@@ -13,6 +13,7 @@ import pistonIcon from '../assets/global/piston.png'
 import priceIcon from '../assets/global/Price-Tag-icon.png'
 import Layout from './Layout/Layout'
 import '../scss/spinner.css'
+import './homepage.scss'
 import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"
 import moment from 'moment'
@@ -193,7 +194,7 @@ const [influencerObj, setInfluencerObj] = useState([])
       }, [])
 
     return(
-            <Layout >
+        <Layout >
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Home | The Smoke Show</title>
@@ -204,7 +205,10 @@ const [influencerObj, setInfluencerObj] = useState([])
                 <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem'}}>
                 <div className="spacer-4rem"></div>
                 <h2 className="title">New This Week</h2>
-                <Row className="parent-row">
+
+                {/* <Row className="parent-row"> */}
+                
+                <Row className="bio-main-row">
                 {latestVideos &&
                     latestVideos.map((video, index) =>{
                         const str = video.carData.model
@@ -241,6 +245,7 @@ const [influencerObj, setInfluencerObj] = useState([])
                                             </div>
                                             <h3 style={{marginTop:'10px'}} className="video-title">{video.snippet.title}</h3>
                                             <small>{date}</small>
+                                           
                                             <Row className="comment-wrapper" >
                                                 <div className="col-1" style={{margin:0,padding:0}} >
                                                 {theInfluencer ? <img src={theInfluencer.profilePic} 
@@ -254,9 +259,19 @@ const [influencerObj, setInfluencerObj] = useState([])
                                                 </div>
                                                 <div className="col-11" style={{paddingRight:0, margin: 'auto'}} >
                                                 <div className="creator-name"><strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{theInfluencer && theInfluencer.fans} {''} fans</span></div>
-
                                                 </div>
+                                                
                                             </Row>
+                                            <div className="desc-box">
+                                                {video.snippet.description}
+                                            </div> 
+                                            <input className="acd-input" type="checkbox" id={`title${index}`} />
+                                    
+                                            <label className="show-label" htmlFor={`title${index}`} className="acd-label">Show </label>
+
+                                            <div className="content">
+                                            <small className="wrap-text-desc">{video.snippet.description}</small>
+                                            </div>
                                             <Suspense fallback={<div className="loader">Loading...</div>}>
                                                 <Comments comments={commentsTempData[index]} videoId={video.videoId} currentUser={currentUser} />
                                             </Suspense>
@@ -285,6 +300,7 @@ const [influencerObj, setInfluencerObj] = useState([])
                     })
                 }
             </Row>
+           
             {/* <div className="spacer-4rem"></div> */}
             {/* <div className="title title-adj">
                 <h2 style={{marginBottom: '-1rem'}}>{titleStr}</h2>
@@ -324,7 +340,7 @@ const [influencerObj, setInfluencerObj] = useState([])
                 }
                 </Row> */}
             </div>
-            </Layout>
+        </Layout>
     )
 }
 const mapStateToProps = (state) => {
@@ -336,4 +352,4 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps)(HomePage)
 
-// --data '{"personalizations": [{"to": [{"email": "saki@musicofsnow.io"}]}],"from": {"email": "saki@thehoongroup.com"},"subject": "Hello, World!","content": [{"type": "text/plain", "value": "Heya!"}]}'
+

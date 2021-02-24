@@ -4,11 +4,10 @@
     margin-top: 1rem;
     width: 100%;
     max-height: 2.6rem;
-    // text-overflow: ellipsis;
-    // white-space: nowrap;
     overflow: hidden;
     display: block;
     font-size: 14px;
+    overflow-wrap: anywhere;
 }
 .desc-box-expanded{
     width: 100%;
@@ -24,7 +23,12 @@
     z-index: 100;
     top: 22rem;
 }
-
+.wrap-text-desc{
+    overflow-wrap: anywhere;
+}
+.show-label{
+    font-size: 14px;
+}
 .btn-show-more{
     margin-top: 1rem;
     border: 1px solid $theme-darker;
@@ -53,31 +57,31 @@
 .card-header{
     padding: 0;
 }
-.accordion-style{
-    width: 100%;
-    margin-top: 1rem;
-    text-align: left;
-    background-color: transparent;
-    border: 0;
-    .card{
-        border: 0;
-        background-color: transparent;
-        .card-header{
-            background-color: transparent;
-            border-bottom: 0;
-        }
-    }
-}
-.acccordion-text{
-    text-align: left;
-    padding: 0;
-}
-.accordion>.card{
-    overflow: visible !important;
-}
-.accordion-body-custom{
-    padding: 0;
-}
+// .accordion-style{
+//     width: 100%;
+//     margin-top: 1rem;
+//     text-align: left;
+//     background-color: transparent;
+//     border: 0;
+//     .card{
+//         border: 0;
+//         background-color: transparent;
+//         .card-header{
+//             background-color: transparent;
+//             border-bottom: 0;
+//         }
+//     }
+// }
+// .acccordion-text{
+//     text-align: left;
+//     padding: 0;
+// }
+// .accordion>.card{
+//     overflow: visible !important;
+// }
+// .accordion-body-custom{
+//     padding: 0;
+// }
 .btn-acd{
     text-align: left;
     padding-left: 0 !important;
@@ -136,17 +140,12 @@
     background: transparent;
 }
 .content {
-    // background: #E2E5F6;
     padding: 10px 0;
-    // border: 1px solid #A7A7A7;
     margin: 0 0 1px 0;
-    // border-radius: 3px;
 }
-
 .acd-input + .acd-label + .content {
     display: none;
 }
-
 .acd-input:checked + .acd-label + .content {
     display: block;
     .acd-wrapper:first-child & {
@@ -154,8 +153,6 @@
         margin-top: -5rem;
     }
 }
-
-
 .acd-input:checked + .acd-label + .desc-box{
     display: none;
 }

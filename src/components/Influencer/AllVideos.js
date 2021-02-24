@@ -267,7 +267,7 @@ const AllVideos = (props) =>{
                                             
                                             </div>
                                             <div className="col-11" style={{paddingRight:0, margin: 'auto'}} >
-                                            <div className="creator-name"><strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{' '} {video.snippet.channelTitle} fans</span></div>
+                                            <div className="creator-name"><strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{' '} {props.formattedFans} fans</span></div>
                                            
                                             </div>
                                             <div className="desc-box">
@@ -275,30 +275,12 @@ const AllVideos = (props) =>{
                                             </div> 
                                             {/* <p className="btn-show-more" onClick={()=>expandDiv(index)}>{showMore && divId === index ? 'Show less' : 'Show more'}</p>  */}
                                             <input className="acd-input" type="checkbox" id={`title${index}`} />
-                                            {/* <div className="desc-box">
-                                                {video.snippet.description}
-                                            </div>  */}
+                                    
                                             <label htmlFor={`title${index}`} className="acd-label">Show </label>
 
                                             <div className="content">
                                             <small>{video.snippet.description}</small>
                                             </div>
-                                            
-{/*                                             
-                                            <Accordion  className="accordion-style">
-                                                <Card>
-                                                    <Card.Header className="card-header-acd">
-                                                    <Accordion.Toggle as={Button}  eventKey={unique + index +1} variant="link" className="btn-acd" >
-                                                        Show more<br />
-
-                                                    </Accordion.Toggle>
-                                                    </Card.Header>
-                                                    <Accordion.Collapse eventKey={unique + index +1} className="accordion-body-custom">
-                                                    <Card.Body className="acccordion-text">
-                                                    <small>{video.snippet.description}</small></Card.Body>
-                                                    </Accordion.Collapse>
-                                                </Card>
-                                            </Accordion> */}
 
                                         </Row>
                                   
@@ -316,8 +298,10 @@ const AllVideos = (props) =>{
                                         <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text">{' '}{video.carData.features.Engine.Torque}</span><br />
                                         <img alt="piston" key={pistonIcon} src={pistonIcon}  className="icon-s" /><span className="spec-text">{' '}{video.carData.features.Engine.Horsepower}</span><br />
                                         </div>
-                                        <div className="ads-container-all">
-                                            ads go here
+                                        <div className="ad-container">
+                                            <p style={{color: 'gray'}}>ads will go here</p>
+                                            <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
+                                            <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p>
                                         </div>
                                     </Col>
                                 </Row>

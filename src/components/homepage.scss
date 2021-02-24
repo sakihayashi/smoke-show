@@ -1,0 +1,43 @@
+@import "../scss/config";
+
+
+.acd-input {
+    display: none;
+}
+.acd-label {
+    display: block;    
+    padding: 8px 0;
+    margin: 0 0 1px 0;
+    cursor: pointer;
+    // background: #6AAB95;
+    // border-radius: 3px;
+    color: $theme-color;
+    transition: ease .5s;
+    text-decoration: underline;
+}
+.acd-label::after {
+    content: ' more';
+}
+.acd-input:checked + .acd-label::after {
+    content: ' less';
+}
+.acd-label:hover {
+    background: transparent;
+}
+.content {
+    padding: 10px 0;
+    margin: 0 0 1px 0;
+}
+.acd-input + .acd-label + .content {
+    display: none;
+}
+.acd-input:checked + .acd-label + .content {
+    display: block;
+    .acd-wrapper:first-child & {
+        background-color: white;
+        margin-top: -5rem;
+    }
+}
+.acd-input:checked + .acd-label + .desc-box{
+    display: none;
+}
