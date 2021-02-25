@@ -7,17 +7,15 @@ import { connect } from 'react-redux'
 import { commentsTempData } from './commentsTempData' 
 // import Comments from './Comments'
 // import Avatar from 'react-avatar'
-import { v4 as uuidv4 } from 'uuid';
-import powerIcon from '../assets/global/Horsepower.png'
-import pistonIcon from '../assets/global/piston.png'
-import priceIcon from '../assets/global/Price-Tag-icon.png'
+// import { v4 as uuidv4 } from 'uuid';
+
 import Layout from './Layout/Layout'
 import '../scss/spinner.css'
 import './homepage.scss'
 import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"
 import moment from 'moment'
-
+import SpecDiv from './SpecDiv'
 
 const Comments = React.lazy(() => import('./Comments'))
 
@@ -103,53 +101,52 @@ const [influencerObj, setInfluencerObj] = useState([])
                     
                     return {data: temp, id: unique}
                 }).then(async obj =>{
-                    let influencerArr = []
+                    // let influencerArr = []
                     const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                     const collectionCars = mongo.db("smoke-show").collection("cars")
                     const collectionManual = mongo.db("smoke-show").collection("cars-manual")
+                    
                     const result = obj.data.map(async video =>{
                         const filterCar = {_id: {"$oid": video.carDataId}}
+                        const filterInflu = {userId: video.userId}
+
                         try {
-                            await collectionCars.findOne(filterCar).then(async data =>{
-                                if(data){
-                                video.carData = data
-                                setLatestVideos(latestVideos =>[...latestVideos, video])
-                                }else{
-                                await collectionManual.findOne(filterCar).then(data =>{
-                                    if(data){
-                                        video.carData = data
-                                        setLatestVideos(latestVideos =>[...latestVideos, video])
-                                    }else{
-                                        console.log('no data')
-                                    }
-                                   
-                                })
-                                }
-                            })
-                        } catch (error) {
-                            console.log(error)
-                        }
-                    })
-                    obj.id.map(async id =>{
-                        let formattedFans
-                        const filter = {userId: id}
-                        try {
-                            await collectionInfluencer.findOne(filter).then(async influencer =>{
+                            await collectionInfluencer.findOne(filterInflu).then(async influencer =>{
+                                let formattedFans;
                                 const collectionFans = mongo.db("smoke-show").collection(`fans-${influencer.username}`)
+                                video.influencer = influencer
                                 try {
-                                    await collectionFans.count().then(num =>{
-                                        
+                                    collectionFans.count().then(async num =>{
                                         if(num > 999){
                                             formattedFans = Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k'
-                                            influencer.fans = formattedFans
-                                            influencerArr.push(influencer)
+                                            video.fans = formattedFans
+                                           
                                         }else{
                                             formattedFans = Math.sign(num)*Math.abs(num)
-                                            influencer.fans = formattedFans
-                                            influencerArr.push(influencer)
+                                            video.fans = formattedFans
+                                        }
+                                        
+                                        try {
+                                            await collectionCars.findOne(filterCar).then(async data =>{
+                                                if(data){
+                                                video.carData = data
+                                                setLatestVideos(latestVideos =>[...latestVideos, video])
+                                                }else{
+                                                await collectionManual.findOne(filterCar).then(data =>{
+                                                    if(data){
+                                                        video.carData = data
+                                                        setLatestVideos(latestVideos =>[...latestVideos, video])
+                                                    }else{
+                                                        console.log('no data')
+                                                    }
+                                                   
+                                                })
+                                                }
+                                            })
+                                        } catch (error) {
+                                            console.log(error)
                                         }
                                     })
-                                    
                                 } catch (error) {
                                     console.log(error)
                                 }
@@ -160,7 +157,37 @@ const [influencerObj, setInfluencerObj] = useState([])
                         }
                         
                     })
-                    setInfluencerObj(influencerArr)
+                    // obj.id.map(async id =>{
+                    //     let formattedFans
+                    //     const filter = {userId: id}
+                    //     try {
+                    //         await collectionInfluencer.findOne(filter).then(async influencer =>{
+                    //             const collectionFans = mongo.db("smoke-show").collection(`fans-${influencer.username}`)
+                    //             try {
+                    //                 await collectionFans.count().then(num =>{
+                                        
+                    //                     if(num > 999){
+                    //                         formattedFans = Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k'
+                    //                         influencer.fans = formattedFans
+                    //                         influencerArr.push(influencer)
+                    //                     }else{
+                    //                         formattedFans = Math.sign(num)*Math.abs(num)
+                    //                         influencer.fans = formattedFans
+                    //                         influencerArr.push(influencer)
+                    //                     }
+                    //                 })
+                                    
+                    //             } catch (error) {
+                    //                 console.log(error)
+                    //             }
+                                
+                    //         })
+                    //     } catch (error) {
+                    //         console.log(error)
+                    //     }
+                        
+                    // })
+                    // setInfluencerObj(influencerArr)
                     
                 })
             })
@@ -211,6 +238,7 @@ const [influencerObj, setInfluencerObj] = useState([])
                 <Row className="bio-main-row">
                 {latestVideos &&
                     latestVideos.map((video, index) =>{
+                        console.log('how manytimes?')
                         const str = video.carData.model
                         const id = video.videoId
                         
@@ -221,16 +249,16 @@ const [influencerObj, setInfluencerObj] = useState([])
                         if(video.carData.price && video.carData.price.baseMSRP){
                             price = numberWithCommas(video.carData.price.baseMSRP)
                         }else{ price = ''}
-                        const uuid = uuidv4()
-                        let theInfluencer;
+                        {/* const uuid = uuidv4() */}
+                        {/* let theInfluencer;
                         if(influencerObj){
                             const result = influencerObj.filter(obj => obj.userId === video.userId)
-                            theInfluencer = result[0]
+                            video.theInfluencer = result[0]
                            
-                        }
+                        } */}
                         const date = moment(video.snippet.publishedAt).fromNow()
                         return(
-                            <Fragment key={uuid}>
+                            <Fragment key={video.videoId}>
                                 <Col sm={6} className="main-col" >
                                     <Row >
                                         <Col sm >
@@ -248,7 +276,7 @@ const [influencerObj, setInfluencerObj] = useState([])
                                            
                                             <Row className="comment-wrapper" >
                                                 <div className="col-1" style={{margin:0,padding:0}} >
-                                                {theInfluencer ? <img src={theInfluencer.profilePic} 
+                                                {video.influencer.profilePic ? <img src={video.influencer.profilePic} 
                                                 
                                                 className="creator-profile-pic" alt={video.snippet.channelTitle}/> :
                                                 <div
@@ -258,7 +286,7 @@ const [influencerObj, setInfluencerObj] = useState([])
                                                     
                                                 </div>
                                                 <div className="col-11" style={{paddingRight:0, margin: 'auto'}} >
-                                                <div className="creator-name"><strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{theInfluencer && theInfluencer.fans} {''} fans</span></div>
+                                                <div className="creator-name"><strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{video.fans && video.fans} {''} fans</span></div>
                                                 </div>
                                                 
                                             </Row>
@@ -278,9 +306,10 @@ const [influencerObj, setInfluencerObj] = useState([])
                                             
                                         </Col>
                                         <Col sm="auto" className="spec-col"  >
-                                        <div className="ad-size">
+                                            <SpecDiv video={video} titleCase={titleCase} price={price} model={model}/>
+                                        {/* <div className="ad-size">
                                         
-                                            <div className="spec-wrapper" key={'spec-wrapper' + uuid}>
+                                            <div className="spec-wrapper" >
                                             <img alt={video.carData.name} src={require(`../assets/maker_logos/${titleCase}_Logo.png`).default} className="icon-s" />{' '}<span className="spec-text" ><strong >{video.carData.year}{' '}{titleCase}{' '}{model}</strong></span><br/>
                                             <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" >{' '}${video.carData.price.baseMSRP}</span><br />
                                             <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text">{' '}{video.carData.features.Engine.Torque}</span><br />
@@ -291,7 +320,7 @@ const [influencerObj, setInfluencerObj] = useState([])
                                                 <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
                                                 <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p>
                                             </div>
-                                        </div>
+                                        </div> */}
                                         </Col>
                                     </Row>
                                 </Col>
@@ -351,5 +380,4 @@ const mapStateToProps = (state) => {
   }
 
 export default connect(mapStateToProps)(HomePage)
-
 

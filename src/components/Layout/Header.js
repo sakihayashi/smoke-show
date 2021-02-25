@@ -77,18 +77,13 @@ const Header = (props) =>{
             <Button className="btn-login" onClick={logIn}>Login</Button>
             }
             { hasAccount ? <LoginModal 
-            // show={show}  
-            // onHide={handleClose}
+ 
             app={app}
-            // handleuser={props.handleuser}
             toggleAuthModal={toggleAuthModal}
-            // getUserId={getUserId}
             />
             : <SignUpModal
-            // show={props.modalShow}  
-            // onHide={handleClose}
+
             app={app}
-            // handleuser={props.handleuser}
             toggleAuthModal={toggleAuthModal}
              />
             }

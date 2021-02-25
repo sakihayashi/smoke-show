@@ -96,7 +96,11 @@ export const checkLogin = () =>{
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
-                    
+                    const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    app.logIn(credentials).then( user =>{
+                        const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                        dispatch({type: 'LOGIN_CHECK', mongo})
+                    })
                 }else{
                     app.logIn(decoded.cre).then( user =>{
                         const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
