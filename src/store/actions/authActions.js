@@ -25,7 +25,7 @@ export const logInUser = (credentials, email) =>{
             sessionStorage.setItem('session_user', tokenCredentials)
             dispatch({type: 'LOGIN_SUCCESS', customData})
         }).catch(err =>{
-            const msg = "Your email and passwrod do not match our records."
+            const msg = "Your email and password do not match our records."
             dispatch({type: 'LOGIN_FAIL', msg})
         })
     }

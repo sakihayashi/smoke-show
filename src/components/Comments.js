@@ -24,7 +24,6 @@ const Comments = (props) =>{
     }
     const handleSubmitComment = async (e) =>{
         e.preventDefault()
-        // console.log('props', props)
         let tokenSessionStorage= sessionStorage.getItem('session_token')
         const tokenUser = sessionStorage.getItem('session_user')
         let newComment ={}
@@ -145,21 +144,34 @@ const Comments = (props) =>{
                 }
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionComments = mongo.db("smoke-show").collection("comments")
-                await collectionComments.find(filter, options).then(resAll =>{
+                const collectionUsers = mongo.db("smoke-show").collection("users")
+                await collectionComments.find(filter, options).then(async resAll =>{
                     if( resAll.length !== 0){
-                        setIsComment(true)
-                        if(resAll.length == 1){
-                            setCommentsDB(resAll)
-                        }else{
-                            for(let i=0;i<2; i++){
-                                setCommentsDB(commentsDB=>[...commentsDB, resAll[i]])
+                        let picAttached = resAll.map(async res =>{
+                            const filterUser = {userId: res.userId}
+                            try {
+                                await collectionUsers.findOne(filterUser).then(user =>{
+                                    res.profilePic = user.profilePic
+                                })
+                            } catch (error) {
+                                console.log(error)
                             }
-                        }
-                        
-                        if(resAll.length >= 3){
-                            const chunked = chunkArray(resAll)
+                            return res
+                        })
+                        setIsComment(true)
+                        const finalResults = await Promise.all(picAttached);
+                        setIsComment(true)
+                         if(finalResults.length == 1){
+                            setCommentsDB(finalResults)
+                         }else if(finalResults.length == 2){
+                            for(let i=0;i<2; i++){
+                                setCommentsDB(commentsDB=>[...commentsDB, finalResults[i]])
+                            }
+                        }else if(finalResults.length >= 3){
+                            const chunked = chunkArray(finalResults)
                             setMoreComments(chunked)
                         }
+                        
                         
                     }else if(resAll.length == 0){
                         setIsComment(false)
@@ -204,7 +216,6 @@ const Comments = (props) =>{
          
             {/* var localtime = moment(comment.date_posted).local().format('MM-DD-YYYY') */}
             let localtime = moment(comment.date_posted).fromNow()
-           
             return(
                 <Row className="comment-wrapper" key={localtime + index}>
 
@@ -212,7 +223,7 @@ const Comments = (props) =>{
                         <Link to={{
                             pathname: `/user/${comment.userId}`
                         }}>
-                            {comment.profile_pic ? <img src={comment.profile_pic} className="profile-pic " alt={comment.username} /> :
+                            {comment.profilePic ? <img src={comment.profilePic} className="profile-pic " alt={comment.username} /> :
                             <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/>
                             }
                         </Link>
