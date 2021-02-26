@@ -74,3 +74,18 @@
     color: $gray;
     margin-left: 3rem;
 }
+.progress-bar-wrapper{
+    width: 100%;
+    border: 1px solid #ccc;
+    height: auto;
+}
+.padding-bar{
+    padding: 20px 20px 0 20px;
+}
+.start{
+    position: relative;
+}
+.end{
+    position: relative;
+    left: 90%;
+}

@@ -12,18 +12,19 @@ import weightIcon from '../assets/global/weight.svg'
 import pistonIcon from '../assets/global/piston.png'
 // import cylinderIcon from '../assets/global/cylinder.svg'
 import transmissionIcon from '../assets/global/transmission.svg'
-import driveIcon from '../assets/global/drive_icon.svg'
 import mileageIcon from '../assets/global/mileage.svg'
 import torqueIcon from '../assets/global/torque.png'
 import frontWheels from '../assets/global/front-wheels.png'
 import rearWheels from '../assets/global/rear-wheels.png'
 import allWheels from '../assets/global/all-wheels.png'
+import { Helmet } from 'react-helmet'
+import Head from '../components/Layout/Head'
 
 const CarStats = (props) =>{
     const statsArr = ['Main Stats', 'Engine', 'Measurements', 'Comfort & Convenience', 'Drive Train', 'Suspension', 'Color', 'Warranty']
     const [carImages, setCarImages] = useState([])
     
-    const [activeTab, setActiveTab] = useState('Main Stats')
+    // const [activeTab, setActiveTab] = useState('Main Stats')
     let searchedCars = []
     if(props.history.location.cars){
         searchedCars = props.history.location.cars.map(item => ({...item, tabs: statsArr, activeTab: 'Main Stats'}))
@@ -254,23 +255,27 @@ const CarStats = (props) =>{
                     </Fragment>
           }
     }
-    const getImgData = async () =>{
-        const selected = props.history.location.selected
-        console.log('selected', selected)
-        const url = `https://api.carsxe.com/images?key=${process.env.REACT_APP_CARXE_API_KEY}&year=${selected.year}&make=${selected.make}&model=${selected.model}&format=json&angle=front`
-        await axios.get(url).then(res =>{
-            console.log('img data', res.data)
-            setCarImages(res.dataimages)
+    // const getImgData = async () =>{
+    //     const selected = props.history.location.selected
+    //     console.log('selected', selected)
+    //     const url = `https://api.carsxe.com/images?key=${process.env.REACT_APP_CARXE_API_KEY}&year=${selected.year}&make=${selected.make}&model=${selected.model}&format=json&angle=front`
+    //     await axios.get(url).then(res =>{
+    //         console.log('img data', res.data)
+    //         setCarImages(res.dataimages)
             
-        })
+    //     })
         
-    }
-    useEffect(() => {
+    // }
+    // useEffect(() => {
         
-        // getImgData()
-    }, [])
+    // }, [])
     return(
         <Layout>
+            <Helmet>
+            
+            <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title>
+                <Head />
+            </Helmet>
             <div className="main-wrapper stats-container">
                 <div className="spacer-4rem"></div>
                 {carData && carData.map((car, index) =>{

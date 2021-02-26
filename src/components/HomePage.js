@@ -244,17 +244,17 @@ const [latestVideos, setLatestVideos] = useState([])
                                                 </div>
                                                 
                                             </Row>
-                                            <div className="desc-box">
-                                                {video.snippet.description}
-                                            </div> 
+                                            
                                             <input className="acd-input" type="checkbox" id={`title${index}`} />
                                     
                                             <label className="show-label" htmlFor={`title${index}`} className="acd-label">Show </label>
-
+                                            <div className="desc-box">
+                                                {video.snippet.description}
+                                            </div> 
                                             <div className="content">
                                             <small className="wrap-text-desc">{video.snippet.description}</small>
                                             </div>
-                                           
+                                           <div className="spacer-4rem"></div>
                                             <Comments videoId={video.videoId} />
                                             
                                         </Col>

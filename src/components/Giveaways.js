@@ -11,13 +11,12 @@ import {
     TwitterShareButton,
   } from "react-share";
 import short from 'short-uuid'
-import {
-FacebookShareCount
-} from "react-share";
+import { FacebookShareCount } from "react-share";
 
 import facebookIcon from '../assets/global/Facebook-icon.svg'
 import twitterIcon from '../assets/global/Twitter-icon.svg'
 import emailIcon from '../assets/global/Messages-icon.svg'
+import GiveawayCount from './GiveawayCount'
 
 const Giveaways = (props) =>{
     const sharePathname = props.location.pathname
@@ -40,6 +39,7 @@ const Giveaways = (props) =>{
             Only VERIFIED and CONFIRMED entries from influencers will be found here.
             </div>
                 <Row>
+                <GiveawayCount data={giveAwaysArr[0]} shareUrl={shareUrl}/>
                 { giveAwaysArr.map(data =>{
                     const unique = short.generate()
                     return(
@@ -97,7 +97,6 @@ const Giveaways = (props) =>{
                                     <p>by {data.influencer} {' '} 
                                     <span className="card-mute-text">| {data.entries.length} {' '} entries</span></p>
                                     
-
                                     </Card.Title>
                                     <Card.Text>
                                     <p>
@@ -127,9 +126,9 @@ const Giveaways = (props) =>{
                                                 <span className="unit-div">seconds</span>
                                             </div>
                                         </div>
-                                    <div className="padding-btn">
-                                        <Button className="login-btn ">Entry now</Button>
-                                    </div>
+                                        <div className="padding-btn">
+                                            <Button className="login-btn ">Entry now</Button>
+                                        </div>
                                     </div>
                                     
                                 </Card.Body>

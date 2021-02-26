@@ -253,16 +253,17 @@ const BioPage = (props) =>{
                                     />
                                 </div>
                                 <h3 style={{marginTop:'10px'}}>{video.snippet.title}</h3>
-                                <div className="desc-box">
-                                    {video.snippet.description}
-                                </div> 
+                                
                                 <input className="acd-input" type="checkbox" id={`title${index}`} />
                                     
                                 <label htmlFor={`title${index}`} className="acd-label">Show </label>
-
+                                <div className="desc-box">
+                                    {video.snippet.description}
+                                </div> 
                                 <div className="content">
                                     <small>{video.snippet.description}</small>
                                 </div>
+                                <div className="spacer-4rem"></div>
                                 <Comments videoId={video.videoId}/>
                             </Col>
                             <Col sm="auto" className="bio-stats">
