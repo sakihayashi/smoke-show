@@ -291,7 +291,8 @@ const CarStats = (props) =>{
                             <Row>
                                 <Col sm={4}>
                                     {/* <img src="https://smoke-show.s3.amazonaws.com/car-photos/Ferrari-F8_Spider-2020-1280-01.jpg" alt="Ferrari F8 spider" style={{width: '100%'}}/> */}
-                                    <img src={carImg} alt={car.name} style={{width: '100%'}}/>
+                                     <img src={typeof(car.imgUrl) === 'undefined' ?carImg : car.imgUrl} alt={car.name} style={{width: '100%'}}/> 
+                                    {/* <img src={carImg} alt={car.name} style={{width: '100%'}}/> */}
                                 </Col>
                                 <Col sm={8} style={{paddingLeft: 0}} >
                                     <div className="box-shadow-white car-stats-wrapper" >

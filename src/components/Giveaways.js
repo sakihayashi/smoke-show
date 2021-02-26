@@ -4,6 +4,7 @@ import Layout from './Layout/Layout'
 import { Row, Col, Card, Button } from 'react-bootstrap'
 import './giveaways.scss'
 import { giveAwaysArr } from './giveAwayData'
+import Head from './Layout/Head'
 import {
     EmailShareButton,
     FacebookShareButton,
@@ -27,7 +28,8 @@ const Giveaways = (props) =>{
             <meta charSet="utf-8" />
             <title>Giveaways | The Smoke Show</title>
             <meta name="description" content="Checkout our giveaways and entry now to win!" />
-            <meta name="robots" content="noindex, nofollow" />
+            
+            <Head />
             {/* <link rel="canonical" href="http://mysite.com/example" /> */}
         </Helmet>
             <div className="spacer-4rem"></div>

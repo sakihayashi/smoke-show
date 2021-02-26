@@ -68,46 +68,31 @@ const [latestVideos, setLatestVideos] = useState([])
         setLatestVideos([])
         const now = new Date()
         const days = 7
-        let dates = []
+        // let dates = []
 
-        const today = moment(now).format('YYYY-MM-DD')
-  
-        dates.push(today)
+        // const today = moment(now).format('YYYY-MM-DD')
+        // dates.push(today)
+        const aWeekAgo = moment(now).add(-7, 'day').format('YYYY-MM-DD')
 
-        for(let i =1; i<days; i++){
-            const result = moment(now).add(-[i], 'day').format('YYYY-MM-DD')
-            dates.push(result)
-        }
+        // for(let i =1; i < days; i++){
+        //     const result = moment(now).add(-[i], 'day').format('YYYY-MM-DD')
+        //     dates.push(result)
+        // }
     
         try {
             await app.logIn(credentials).then(async user =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionVideos = mongo.db("smoke-show").collection("youtube-videos")
                 
-                const filter = null
-                let temp=[]
-                const options = {sort: {"snippet.publishedAt": -1}, limit: 20,  }
+                const filter = {'snippet.publishedAt': {$gt: aWeekAgo}}
+                const options = {sort: {"snippet.publishedAt": -1}  }
                 await collectionVideos.find(filter, options).then(async videos =>{
-                    videos.map(async video =>{
-                        
-                        dates.map(date =>{
-                            if(video.snippet.publishedAt.includes(date)){
-                                temp.push(video)
-                                return 
-                            }
-                        })
-                        
-                    })
-                    // let unique = [...new Set(influencers)]
-                    
-                    return temp
-                }).then(async data =>{
-                    // let influencerArr = []
+                   
                     const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                     const collectionCars = mongo.db("smoke-show").collection("cars")
                     const collectionManual = mongo.db("smoke-show").collection("cars-manual")
                     
-                    const result = data.map(async video =>{
+                    const result = videos.map(async video =>{
                         const filterCar = {_id: {"$oid": video.carDataId}}
                         const filterInflu = {userId: video.userId}
 
@@ -162,7 +147,7 @@ const [latestVideos, setLatestVideos] = useState([])
                 })
             })
         } catch (error) {
-            
+            console.log(error)
         }
     }
     const numberWithCommas = (x) =>{
