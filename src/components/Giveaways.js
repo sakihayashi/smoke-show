@@ -40,7 +40,7 @@ const Giveaways = (props) =>{
             </div>
                 <Row>
                 <GiveawayCount data={giveAwaysArr[0]} shareUrl={shareUrl}/>
-                { giveAwaysArr.map(data =>{
+                {/* { giveAwaysArr.map(data =>{
                     const unique = short.generate()
                     return(
                         <Col sm={6} key={unique}>
@@ -63,9 +63,7 @@ const Giveaways = (props) =>{
                                         </TwitterShareButton>
 
                                         <div className="link-counter">
-                                            {/* <FacebookShareCount url={shareUrl} className="">
-                                            {count => count}
-                                            </FacebookShareCount> */}
+                                     
                                         </div>
                                         <FacebookShareButton
                                             url={shareUrl}
@@ -88,9 +86,7 @@ const Giveaways = (props) =>{
                                             <img src={emailIcon} alt="share via email" className="share-icon"/>
                                         </EmailShareButton>
                                         <div className="link-counter">
-                                            {/* <FacebookShareCount url={shareUrl} className="">
-                                            {count => count}
-                                            </FacebookShareCount> */}
+                                         
                                         </div>
                                     </div>
                                     </div>
@@ -135,7 +131,7 @@ const Giveaways = (props) =>{
                             </Card>
                         </Col>
                         )
-                })}
+                })} */}
                     
                 </Row>
             </div>

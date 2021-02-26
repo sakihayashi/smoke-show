@@ -96,7 +96,7 @@
 .end{
     position: relative;
     left: 90%;
-    top: -2.6rem;
+    top: -2.7rem;
     font-size: $font-xs;
 }
 .car-wrapper{
@@ -132,4 +132,10 @@
 .flag-icon{
     width: 2rem;
     height: auto;
+}
+
+@media (min-width: 1400px){
+    .end{
+        left: 92%;
+    }
 }
