@@ -1,23 +1,27 @@
-import React, { useEffect, useState, Fragment, Suspense } from 'react'
+import React, { useEffect, useState, Fragment } from 'react'
 import {Helmet} from "react-helmet"
 import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
 // import { youtubeAPI } from '../utils/youtubeAPI'
 // import { carTempData } from './carTempData'
-import { commentsTempData } from './commentsTempData' 
-// import Comments from './Comments'
+// import { commentsTempData } from './commentsTempData' 
 // import Avatar from 'react-avatar'
 // import { v4 as uuidv4 } from 'uuid';
-
+import Head from './Layout/Head'
 import Layout from './Layout/Layout'
 import '../scss/spinner.css'
 import './homepage.scss'
 import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"
 import moment from 'moment'
-import SpecDiv from './SpecDiv'
+// import SpecDiv from './SpecDiv'
+import loadable from '@loadable/component'
 
-const Comments = React.lazy(() => import('./Comments'))
+const Comments = loadable(() => import('./Comments'))
+const SpecDiv = loadable(() => import('./SpecDiv'))
+
+
+// const Comments = React.lazy(() => import('./Comments'))
 
 const HomePage = (props) =>{
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
@@ -27,8 +31,8 @@ const [latestVideos, setLatestVideos] = useState([])
 // const [searchKeyword, setSearchKeyword] = useState('')
 // const [titleStr, setTitleStr] = useState('Your search result')
 // const [searchedCarData, setSearchedCarData] = useState([])
-const [currentUser, setCurrentUser] = useState('')
-const [influencerObj, setInfluencerObj] = useState([])
+// const [currentUser, setCurrentUser] = useState('')
+// const [influencerObj, setInfluencerObj] = useState([])
 
     // const handleChangeKeyword = (e) =>{
     //     setSearchKeyword(e.target.value)
@@ -63,17 +67,16 @@ const [influencerObj, setInfluencerObj] = useState([])
     const getVideos = async (credentials) =>{
         setLatestVideos([])
         const now = new Date()
-        const days = 6
+        const days = 7
         let dates = []
-        let str = now.toISOString()
-        let cleaned = str.split("T")
-        dates.push(cleaned[0])
-        for(let i =0; i<days; i++){
-            now.setDate(now.getDate() - 1);
-            now.getDate()
-            let temp = now.toISOString()
-            let res = temp.split("T")
-            dates.push(res[0])
+
+        const today = moment(now).format('YYYY-MM-DD')
+  
+        dates.push(today)
+
+        for(let i =1; i<days; i++){
+            const result = moment(now).add(-[i], 'day').format('YYYY-MM-DD')
+            dates.push(result)
         }
     
         try {
@@ -83,12 +86,10 @@ const [influencerObj, setInfluencerObj] = useState([])
                 
                 const filter = null
                 let temp=[]
-                let influencers = []
                 const options = {sort: {"snippet.publishedAt": -1}, limit: 20,  }
                 await collectionVideos.find(filter, options).then(async videos =>{
                     videos.map(async video =>{
                         
-                        influencers.push(video.userId)
                         dates.map(date =>{
                             if(video.snippet.publishedAt.includes(date)){
                                 temp.push(video)
@@ -97,16 +98,16 @@ const [influencerObj, setInfluencerObj] = useState([])
                         })
                         
                     })
-                    let unique = [...new Set(influencers)]
+                    // let unique = [...new Set(influencers)]
                     
-                    return {data: temp, id: unique}
-                }).then(async obj =>{
+                    return temp
+                }).then(async data =>{
                     // let influencerArr = []
                     const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                     const collectionCars = mongo.db("smoke-show").collection("cars")
                     const collectionManual = mongo.db("smoke-show").collection("cars-manual")
                     
-                    const result = obj.data.map(async video =>{
+                    const result = data.map(async video =>{
                         const filterCar = {_id: {"$oid": video.carDataId}}
                         const filterInflu = {userId: video.userId}
 
@@ -157,37 +158,6 @@ const [influencerObj, setInfluencerObj] = useState([])
                         }
                         
                     })
-                    // obj.id.map(async id =>{
-                    //     let formattedFans
-                    //     const filter = {userId: id}
-                    //     try {
-                    //         await collectionInfluencer.findOne(filter).then(async influencer =>{
-                    //             const collectionFans = mongo.db("smoke-show").collection(`fans-${influencer.username}`)
-                    //             try {
-                    //                 await collectionFans.count().then(num =>{
-                                        
-                    //                     if(num > 999){
-                    //                         formattedFans = Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k'
-                    //                         influencer.fans = formattedFans
-                    //                         influencerArr.push(influencer)
-                    //                     }else{
-                    //                         formattedFans = Math.sign(num)*Math.abs(num)
-                    //                         influencer.fans = formattedFans
-                    //                         influencerArr.push(influencer)
-                    //                     }
-                    //                 })
-                                    
-                    //             } catch (error) {
-                    //                 console.log(error)
-                    //             }
-                                
-                    //         })
-                    //     } catch (error) {
-                    //         console.log(error)
-                    //     }
-                        
-                    // })
-                    // setInfluencerObj(influencerArr)
                     
                 })
             })
@@ -227,14 +197,12 @@ const [influencerObj, setInfluencerObj] = useState([])
                 <title>Home | The Smoke Show</title>
                 <meta name="description" content="Place the meta description text here." />
                 <meta name="robots" content="noindex, nofollow" />
+                <Head />
                 {/* <link rel="canonical" href="http://mysite.com/example" /> */}
             </Helmet>
                 <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem'}}>
                 <div className="spacer-4rem"></div>
                 <h2 className="title">New This Week</h2>
-
-                {/* <Row className="parent-row"> */}
-                
                 <Row className="bio-main-row">
                 {latestVideos &&
                     latestVideos.map((video, index) =>{
@@ -257,7 +225,7 @@ const [influencerObj, setInfluencerObj] = useState([])
                         } */}
                         const date = moment(video.snippet.publishedAt).fromNow()
                         return(
-                            <Fragment key={video.videoId}>
+                            <Fragment key={video.videoId +index}>
                                 <Col sm={6} className="main-col" >
                                     <Row >
                                         <Col sm >
@@ -265,9 +233,10 @@ const [influencerObj, setInfluencerObj] = useState([])
                                                 <iframe src={videoEmbedURL + id}
                                                 frameBorder='0'
                                                 allow='autoplay; encrypted-media'
+                                                // allow='autoplay; encrypted-media'
                                                 allowFullScreen
-                                                title='video'
                                                 srcDoc={`<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href=https://www.youtube.com/embed/${id}?autoplay=1><img src=https://img.youtube.com/vi/${id}/hqdefault.jpg alt=${video.snippet.title}><span>▶</span></a>`}
+                                                title={video.snippet.title}
                                                 />
                                 
                                             </div>
@@ -300,27 +269,12 @@ const [influencerObj, setInfluencerObj] = useState([])
                                             <div className="content">
                                             <small className="wrap-text-desc">{video.snippet.description}</small>
                                             </div>
-                                            <Suspense fallback={<div className="loader">Loading...</div>}>
-                                                <Comments comments={commentsTempData[index]} videoId={video.videoId} currentUser={currentUser} />
-                                            </Suspense>
+                                           
+                                            <Comments videoId={video.videoId} />
                                             
                                         </Col>
                                         <Col sm="auto" className="spec-col"  >
                                             <SpecDiv video={video} titleCase={titleCase} price={price} model={model}/>
-                                        {/* <div className="ad-size">
-                                        
-                                            <div className="spec-wrapper" >
-                                            <img alt={video.carData.name} src={require(`../assets/maker_logos/${titleCase}_Logo.png`).default} className="icon-s" />{' '}<span className="spec-text" ><strong >{video.carData.year}{' '}{titleCase}{' '}{model}</strong></span><br/>
-                                            <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" >{' '}${video.carData.price.baseMSRP}</span><br />
-                                            <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text">{' '}{video.carData.features.Engine.Torque}</span><br />
-                                            <img alt="piston" key={pistonIcon} src={pistonIcon}  className="icon-s" /><span className="spec-text">{' '}{video.carData.features.Engine.Horsepower}</span><br />
-                                            </div>
-                                            <div className="ad-container">
-                                                <p style={{color: 'gray'}}>ads will go here</p>
-                                                <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
-                                                <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p>
-                                            </div>
-                                        </div> */}
                                         </Col>
                                     </Row>
                                 </Col>

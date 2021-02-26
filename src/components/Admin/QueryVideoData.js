@@ -1,12 +1,12 @@
-import React from 'react'
-import { Button } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Button, Form } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import { youtubeAPI } from '../../utils/youtubeAPI'
 import {Helmet} from "react-helmet"
 
 
 const QueryVideoData = () =>{
-
+    const [carObj, setCarObj] = useState({id: '', name: ''})
     //last query data Feb 20 2021 for both Kirk and Eddie
 
     // const [videoData, setVideoData] = useState([])
@@ -53,6 +53,7 @@ const QueryVideoData = () =>{
     }
     const updateLatest =async ()=>{
         const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+        
         try{
             await app.logIn(credentials).then( async user =>{
                 const filter = {userId: KirkUserId}
@@ -225,7 +226,15 @@ const QueryVideoData = () =>{
          console.log(result);
     }
     const addMissing = async () =>{
-        const videoId = 'lv9Jpvi8bYo'
+        const videoId = carObj.id
+        let influencer = {userId: '', channelId: ''}
+        if(carObj.name === 'EddieX'){
+            influencer.userId = EddiXuserId
+            influencer.channelId = EddieXChannelId
+        }else if(carObj.name === 'Kirk'){
+            influencer.userId = KirkUserId
+            influencer.channelId = KirkChannelId
+        }
         await youtubeAPI.get('/videos', {
             params: {
                 id: videoId
@@ -234,8 +243,8 @@ const QueryVideoData = () =>{
             const youtubeData = res.data.items[0]
             const formatted = {
                 videoId: videoId,
-                userId: EddiXuserId,
-                channelId: EddieXChannelId,
+                userId: influencer.userId,
+                channelId: influencer.channelId,
                 snippet: {
                     publishedAt: youtubeData.snippet.publishedAt,
                     title:  youtubeData.snippet.title,
@@ -251,6 +260,13 @@ const QueryVideoData = () =>{
             console.log(result)
         })
     }
+    const handleChange = (e) =>{
+        setCarObj({
+            ...carObj,
+            [e.target.name]: e.target.value
+        })
+        console.log(carObj)
+    }
     // const handleUpdateById = async () =>{
 
     // }
@@ -259,16 +275,35 @@ const QueryVideoData = () =>{
         <Helmet>
             <meta name="robots" content="noindex, nofollow" />
         </Helmet>
-        <h1>query youtube data</h1>
-            <div></div>
-            <center>
+        <div style={{marginTop: '4rem'}}></div>
+        <center><h1>query youtube data</h1></center>
+        <center style={{maxWidth: '600px', margin: '0 auto'}}>
+            <Form>
+                <Form.Group controlId="formBasicEmail">
+                    <Form.Label>Video ID</Form.Label>
+                    <Form.Control type="text" name="id" placeholder="Enter youtube video ID" onChange={handleChange}/>
+                    <Form.Text className="text-muted">
+                    We'll never share your email with anyone else.
+                    </Form.Text>
+                </Form.Group>
+                <br/><br/>
+                <Form.Control as="select" name="name" onChange={handleChange}>
+                    <option>EddieX</option>
+                    <option>Kirk</option>
+                </Form.Control>
+                {/* <Button variant="primary" type="submit">
+                    Submit
+                </Button> */}<br/><br/>
+                <Button onClick={addMissing}>Add data</Button>
+            </Form>
+            
                 {/* <Button onClick={handleVideoSearch}>Query data</Button> */}
                 {/* <Button onClick={handleUpdateDesc}>Click me to update description</Button> */}
                 {/* <Button onClick={updateLatest}>updateLatest</Button> */}
                 {/* <Button onClick={checkYoutubeId}>Check all videoId in youtube</Button> */}
                 {/* <Button onClick={handleCheckVideoId}>Check video ids in DB</Button> */}
                 {/* <Button onClick={checkMissing}>filter arrays</Button> */}
-                <Button onClick={addMissing}>Add data</Button>
+                
             </center>
             
         </div>
