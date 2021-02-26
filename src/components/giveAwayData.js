@@ -1,6 +1,7 @@
 export const giveAwaysArr = [
     {
         influencer: "BLR",
+        userId: '6033f80f38f47a90d9a95dd4',
         item: "Win a 65” 4K TV!",
         details: "Help us grow The Smoke Show! Once we pass 10,000 users on the site, we will be giving away One (1) 65” LED Smart TV with 4K! The perfect way to keep watching your favorite car videos on The Smoke Show.",
         howTo:  "No entry necessary, if you have an account on SmokeShow, you are in!",

@@ -1,22 +1,62 @@
-import React, { useEffect } from 'react'
-import { Col, Button, Card } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Col, Button, Card, ProgressBar } from 'react-bootstrap'
 import {
     EmailShareButton,
     FacebookShareButton,
     TwitterShareButton,
   } from "react-share";
+  import jwt from 'jsonwebtoken'
 import { FacebookShareCount } from "react-share";
 import facebookIcon from '../assets/global/Facebook-icon.svg'
 import twitterIcon from '../assets/global/Twitter-icon.svg'
 import emailIcon from '../assets/global/Messages-icon.svg'
+import carIcon from '../assets/global/car-icon-bar.svg'
+import flagIcon from '../assets/global/chekered-flag.svg'
+import * as Realm from "realm-web"
 
 const GiveawayCount = (props) =>{
-    console.log(props.data)
-    const loginCheck = () =>{
+    // let percentBar = '60%'
+    const [percentBar, setPercentBar] = useState('0%')
+    const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
+    const [numOfUsers, setNumOfUsers] = useState(null)
 
+    const getCount = async (credentials) =>{
+
+        await app.logIn(credentials).then(async user =>{
+            const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+            const collectionUsers = mongo.db("smoke-show").collection("users")
+            try {
+                await collectionUsers.count().then(res =>{
+                    setNumOfUsers(res)
+                    const result = res / 100000 * 100
+                    setPercentBar(result.toFixed(1) + '%')
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        })
     }
+    const loginCheck = () =>{
+        const tokenUser = sessionStorage.getItem('session_user')
+        if(tokenUser){
+           jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+               if(err){
+                   const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                   getCount(credentials)
+               }else{
+                getCount(decoded.cre)
+               }
+           });
+           
+        }else{
+           const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                   getCount(credentials)
+        }
+    }
+
     useEffect(() => {
-        
+        loginCheck()
     }, [])
     return(
         <Col sm={6}>
@@ -26,7 +66,7 @@ const GiveawayCount = (props) =>{
                     <Card.Title className="card-title">
                         <div className="card-title-text">
                             <div className="card-left"></div>
-                            <strong>{props.data.item}</strong>{' '} giveaway
+                            <strong style={{marginRight: '1rem'}}>{props.data.item}</strong>{' '} giveaway
                         
                         <div className="share-btn-wrapper">
                             <TwitterShareButton
@@ -69,8 +109,15 @@ const GiveawayCount = (props) =>{
                             </div>
                         </div>
                         </div>
-                        <p>by {props.data.influencer} {' '} 
-                        <span className="card-mute-text">| {props.data.entries.length} {' '} entries</span></p>
+                        
+
+                        
+                        <p>by {' '}
+                        <Link to={`/user/${props.data.userId}`}>
+                            {props.data.influencer} {' '} 
+                        </Link>
+                        <span className="card-mute-text">
+                        | {numOfUsers && numOfUsers} {' '} entries</span></p>
                         
                     </Card.Title>
                     <Card.Text>
@@ -83,13 +130,22 @@ const GiveawayCount = (props) =>{
                     </Card.Text>
                     <div className="counter-div">
                         <div className="padding-bar">
-                        <div className="start">0%</div>
+                        <div className="start">{percentBar && percentBar}</div>
+                        <div className="car-wrapper">
+                            <img src={carIcon} alt="car" className="car-icon" style={{left: `calc(${percentBar} - 41px)`}}/>
+                            {/* <div className="dot-bar" style={{left: `calc(${percentBar} - 14px)`}}></div> */}
+                            <div className="dot-bar" style={{left: '-13px'}}></div>
+                        </div>
+                        
                         <div className="progress-bar-wrapper">
                             
-                            <div className="progress-bar" style={{width: '20%', heigh: '10px', background: 'gray'}}></div>
+                            <div className="progress-bar-smoke" className="bar-smoke" style={{width: percentBar}}></div>
                             
                         </div>
-                        <div className="end">100%</div>
+                        <div className="flag-wrapper">
+                            <img src={flagIcon} alt="check flag" className="flag-icon"/>
+                        </div>
+                        <div className="end">10,000 <br />users</div>
                             {/* <div className="ends-in">Ends in:</div>
                             <div className="counter-box">
                                 <span className="timer-num">10 </span>
@@ -108,7 +164,7 @@ const GiveawayCount = (props) =>{
                                 <span className="unit-div">seconds</span>
                             </div> */}
                         </div>
-                        <div className="padding-btn">
+                        <div className="padding-btn" style={{marginTop: '-2rem'}}>
                             <Button className="login-btn ">Entry now</Button>
                         </div>
                     </div>
