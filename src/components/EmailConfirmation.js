@@ -36,11 +36,11 @@ const EmailConfirmation = (props) =>{
 
     const handleSubmit = async (e) =>{
         let isUnique = (vipNames.indexOf(userObj.username) > -1)
-
+        console.log(isUnique)
         e.preventDefault()
         if(!clicked){
             setHasError(false)
-            if(isUnique){
+            if(!isUnique){
                 const email = userObj.email.toLowerCase()
                 const credentials = Realm.Credentials.emailPassword(email, userObj.password)
                 try {
@@ -53,6 +53,7 @@ const EmailConfirmation = (props) =>{
                                 console.log('res', res)
                                 if(res){
                                     setMsg('The username is already taken. Please try again.')
+                                    setHasError(true)
                                 }else{
                                     const joined = new Date().getTime()
                                     const userData = {
@@ -89,6 +90,7 @@ const EmailConfirmation = (props) =>{
                    }
             }else{
                 setMsg('The username is already taken. Please try again.')
+                setHasError(true)
                 return
             }
     }
@@ -102,11 +104,13 @@ const EmailConfirmation = (props) =>{
             axios.post(`https://stitch.mongodb.com/api/client/v2.0/app/${process.env.REACT_APP_REALM_APP_ID}/auth/providers/local-userpass/confirm/call`, { email }).then(res => {
                 console.log(res);
                 setMsg('We have sent you a confirmation email. Please check your inbox.')
+                setHasError(true)
             })
          
         }catch(err){
             console.log(err)
             setMsg('The email address you typed is not in our record. Please check your email address.')
+            setHasError(true)
         }
    
     }
@@ -147,6 +151,7 @@ const EmailConfirmation = (props) =>{
             }catch(error){
                 console.log('error', error)
                 setMsg('Oops, the link was expired. Please resend confirmation email.')
+                setHasError(true)
                 setHasRegistered(false)
             }
         }
