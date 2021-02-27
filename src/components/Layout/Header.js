@@ -15,7 +15,7 @@ import { openLoginModal } from '../../store/actions/authActions'
 const Header = (props) =>{
     const location = useLocation()
     const [tooLong, setTooLong] = useState(false)
-    const [currentUser, setCurrentUser] = useState('')
+    // const [currentUser, setCurrentUser] = useState('')
     const id = process.env.REACT_APP_REALM_APP_ID
     const app = new Realm.App({ id: id })
     let linkUrl = ''
@@ -39,26 +39,30 @@ const Header = (props) =>{
         props.logOutUser()
 
     }
-     const getUserId = (id) =>{
-         setCurrentUser(id)
-     }
+    //  const getUserId = (id) =>{
+    //      setCurrentUser(id)
+    //  }
      const toggleAuthModal = () =>{
-         console.log('fired?')
+         console.log('fired?', hasAccount)
          setHasAccount(!hasAccount)
+     }
+     const switchToLogin = () =>{
+         console.log('hasAccont', hasAccount)
+         setHasAccount(true)
      }
 
      const loggedInDiv = 
      <Fragment>
         <div className="nav-top">Hi {props.customData.fname}, <Button className="btn-login"  onClick={logOut}>Logout</Button>
-        {tooLong && <br/>}
+        {tooLong && <div className="line-break-div"><br/></div>}
         <Link to={linkUrl}>
             {/* <img src={settingsIcon} className="setting-icon-nav"  /> */}
             <span className="profile-link">My Smoke Show</span>
         </Link>
         </div>
      </Fragment>
+
     useEffect(() => {
-        console.log()
         if(typeof(props.customData.fname) !== 'undefined'){
             const name = props.customData.fname
             console.log(name.length )
@@ -70,6 +74,15 @@ const Header = (props) =>{
         }
         
     }, [props.customData.fname])
+
+    // useEffect(() => {
+    //     console.log('fired?', props.swapSignup)
+    //     console.log(hasAccount)
+    //     if(props.swapSignup){
+    //         setHasAccount(true)
+    //     }
+        
+    // }, [props.swapSignup])
     return(
         <header>
             <div className="login-wrapper">
@@ -82,7 +95,7 @@ const Header = (props) =>{
             toggleAuthModal={toggleAuthModal}
             />
             : <SignUpModal
-
+            switchToLogin={switchToLogin}
             app={app}
             toggleAuthModal={toggleAuthModal}
              />
@@ -114,11 +127,13 @@ const Header = (props) =>{
 }
 
 const mapStateToProps = (state) =>{
+    console.log('state', state.auth)
     return{
         isLoggedIn: state.auth.isLoggedIn,
         customData: state.auth.customData,
         userId: state.userId,
-        openModal: state.auth.openModal
+        openmodal: state.auth.openmodal,
+        swapSignup: state.auth.swapSignup
     }
 }
 const mapDispatchToProps = (dispatch) =>{

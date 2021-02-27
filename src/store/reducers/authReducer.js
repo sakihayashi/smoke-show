@@ -6,9 +6,10 @@ const initState = {
     hasLoginErr: false,
     mongo: null,
     isPublicView: false,
-    openModal: false,
+    openmodal: false,
     modalMsg: '',
-    errMsg: ''
+    errMsg: '',
+    swapSignup: ''
 }
 
 const authReducer = (state = initState, action) =>{
@@ -67,10 +68,20 @@ const authReducer = (state = initState, action) =>{
         case 'OPEN_LOGIN_MODAL':
             return {
                 ...state,
-                openModal: action.state
+                openmodal: action.state
+            }
+        case 'SWAP_SIGNUP':
+            return{
+                ...state,
+                openmodal: true,
+                swapSignup: 'signup'
+            }
+        case 'SWAP_LOGIN':
+            return{
+                ...state,
+                swapSignup: ''
             }
         case 'ATTACH_MSG':
-            console.log('msg', action.msg)
             return{
                 ...state,
                 modalMsg: action.msg

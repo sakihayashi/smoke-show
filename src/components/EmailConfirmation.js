@@ -5,7 +5,7 @@ import * as Realm from "realm-web"
 import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import Layout from './Layout/Layout'
-import { openLoginModal } from '../store/actions/authActions'
+// import { openLoginModal } from '../store/actions/authActions'
 import axios from 'axios'
 
 const EmailConfirmation = (props) =>{
@@ -21,8 +21,8 @@ const EmailConfirmation = (props) =>{
     const app = new Realm.App(config);
     const [clicked, setClicked] = useState(false)
     const [resendMsg, setResendMsg] = useState('')
-    // const getApp = Realm.App.getApp(id)
-    // const researvedNames = ["EddieX", "Lexurious Fleet", "Stradman", "Burlacher", "SummitLife", "HeavyD", "Hoovies Garage", "Streetspeed717", "RFRacing", "Bertrand850", "InShane Designs", "Savage Garage", "effSpot", "Goonzquad", "Tavarish", "VinWiki", "TJ Hunt", "DDE", "Emelia Hartford", "Doug Demuro", "StraightPipes", "Savage Geese", "SaabKyle04", "ThatDudeInBlue", "JR Garage", "Alex Rebuilds", "vTuned", "Cleetus McFarland", "Chevy Dude", "Seen Through Glass", "Shmee150", "SOL", "Mr JWW", "itsjusta6", "WhistlinDiesel", "Samcrac", "Car Wizard", "The Smoking Tire", "Manny Khoshbin", "Donut Media", "Scotty Kilmer", "Jay Leno's Garage", "WatchJRGo", "Rich Rebuilds", "Speed Phenom", "RDB LA", "Salomondrin", "Buddy Wyrick", "Ken Block", "B is for Build", "SuperSpeeders", "Royalty Exotic Cars", "Adam LZ", "Rob Dahm", "ThrottleHouse", "LegitStreetCars", "Supercar Blondie", "Wrench Everyday", "Lambo Jesus", "Lambo Fan", "Motor Tube", "Redline Reviews"]
+    
+    const vipNames = ["EddieX", "Lexurious Fleet", "Stradman", "Burlacher", "SummitLife", "HeavyD", "Hoovies Garage", "Streetspeed717", "RFRacing", "Bertrand850", "InShane Designs", "Savage Garage", "effSpot", "Goonzquad", "Tavarish", "VinWiki", "TJ Hunt", "DDE", "Emelia Hartford", "Doug Demuro", "StraightPipes", "Savage Geese", "SaabKyle04", "ThatDudeInBlue", "JR Garage", "Alex Rebuilds", "vTuned", "Cleetus McFarland", "Chevy Dude", "Seen Through Glass", "Shmee150", "SOL", "Mr JWW", "itsjusta6", "WhistlinDiesel", "Samcrac", "Car Wizard", "The Smoking Tire", "Manny Khoshbin", "Donut Media", "Scotty Kilmer", "Jay Leno's Garage", "WatchJRGo", "Rich Rebuilds", "Speed Phenom", "RDB LA", "Salomondrin", "Buddy Wyrick", "Ken Block", "B is for Build", "SuperSpeeders", "Royalty Exotic Cars", "Adam LZ", "Rob Dahm", "ThrottleHouse", "LegitStreetCars", "Supercar Blondie", "Wrench Everyday", "Lambo Jesus", "Lambo Fan", "Motor Tube", "Redline Reviews"]
 
     const handleChange =(e) =>{
         setUserObj({
@@ -33,55 +33,69 @@ const EmailConfirmation = (props) =>{
     const createToken = (userData) =>{
         return jwt.sign({ userData: userData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest});
     }
+
     const handleSubmit = async (e) =>{
+        let isUnique = (vipNames.indexOf(userObj.username) > -1)
+
         e.preventDefault()
         if(!clicked){
             setHasError(false)
-            const email = userObj.email.toLowerCase()
-            const credentials = Realm.Credentials.emailPassword(email, userObj.password)
-            await app.logIn(credentials).then(async user =>{
-                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-                const joined = new Date().getTime()
-                const userData = {
-                    userId: user.id,
-                    fname: userObj.fname,
-                    lname: userObj.lname,
-                    username: userObj.username,
-                    joined: joined
-                }
-                // const filterUsername = {username: userObj.username}
-                const mongoCollection = mongo.db("smoke-show").collection("users")
-                // await mongoCollection.findOne(filterUsername).then(res =>{
-                    
-                // }).catch(err){
-
-                // }
-                await mongoCollection.insertOne(userData).then(insertOneResult =>{
-                    // userData.login = {email: email, password: userObj.password}
-                    let token = createToken(userData)
-                    const tokenCredentials = jwt.sign({ cre: credentials }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest})
-                    const oldToken = sessionStorage.getItem('session_token')
-                    if(oldToken){
-                        sessionStorage.removeItem('session_token')
-                        sessionStorage.removeItem('session_user')
-                        sessionStorage.setItem('session_token', token)
-                        sessionStorage.setItem('session_user', tokenCredentials)
-                    }else{
-                        sessionStorage.setItem('session_token', token)
-                        sessionStorage.setItem('session_user', tokenCredentials)
-                    }
-                    setClicked(true)
-         
-                }).then(()=>{props.history.push("/")})
-            })
-        }else{
-            return
-        }
+            if(isUnique){
+                const email = userObj.email.toLowerCase()
+                const credentials = Realm.Credentials.emailPassword(email, userObj.password)
+                try {
+                    await app.logIn(credentials).then(async user =>{
+                        const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+                        const mongoCollection = mongo.db("smoke-show").collection("users")
+                        const filterUsername = {username: userObj.username}
+                        try {
+                            await mongoCollection.findOne(filterUsername).then(async res =>{
+                                console.log('res', res)
+                                if(res){
+                                    setMsg('The username is already taken. Please try again.')
+                                }else{
+                                    const joined = new Date().getTime()
+                                    const userData = {
+                                        userId: user.id,
+                                        fname: userObj.fname,
+                                        lname: userObj.lname,
+                                        username: userObj.username,
+                                        joined: joined
+                                    }
+                                    try {
+                                        await mongoCollection.insertOne(userData).then(insertOneResult =>{
+                                            let token = createToken(userData)
+                                            const tokenCredentials = jwt.sign({ cre: credentials }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest})
+                                            const oldToken = sessionStorage.getItem('session_token')
+                                            if(oldToken){
+                                                sessionStorage.removeItem('session_token')
+                                                sessionStorage.removeItem('session_user')
+                                                sessionStorage.setItem('session_token', token)
+                                                sessionStorage.setItem('session_user', tokenCredentials)
+                                            }else{
+                                                sessionStorage.setItem('session_token', token)
+                                                sessionStorage.setItem('session_user', tokenCredentials)
+                                            }
+                                            setClicked(true)
+                                 
+                                        }).then(()=>{props.history.push("/")})
+                                    } catch (error) { console.log(error)}
+                                }
+                            })
+                        } catch (error) { console.log(error)}
+                    })
+                   } catch (error) {
+            
+                   }
+            }else{
+                setMsg('The username is already taken. Please try again.')
+                return
+            }
     }
+}
 
     const handleResendToken = async (e) =>{
         e.preventDefault()
-        console.log('email', userObj.email)
         const email = userObj.email
         
         try{
@@ -122,6 +136,7 @@ const EmailConfirmation = (props) =>{
             </div>
         )
     }
+
     const confirmUser = async () =>{
         if(token){
             try{
@@ -190,16 +205,14 @@ const EmailConfirmation = (props) =>{
             
             </div>
         </Layout>
-        
     )
-}
+ }
 
-const mapDispatchToProps = (dispatch) =>{
-    return {
-        openLoginModal: (state) => dispatch(openLoginModal(state))
+
+const mapDispatchToProps = (dispatch)=>{
+    return{
+        // openLoginModal: (state) => dispatch(openLoginModal(state)),
     }
 }
 
 export default connect(null, mapDispatchToProps)(EmailConfirmation)
-
-

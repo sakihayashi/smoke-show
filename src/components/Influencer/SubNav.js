@@ -154,7 +154,7 @@ const mapDispatchToProps = (dispatch) =>{
 }
 const mapStateToProps = (state) =>{
     return{
-        openModal: state.auth.openModal,
+        openmodal: state.auth.openmodal,
         customData: state.auth.customData
     }
 }

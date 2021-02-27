@@ -47,7 +47,16 @@ export const openLoginModal = (state) =>{
         dispatch({type: 'OPEN_LOGIN_MODAL', state})
     }
 }
-
+export const swapToSignup = (state) =>{
+    return(dispatch, getState)=>{
+        dispatch({type: 'SWAP_SIGNUP', state})
+    }
+}
+export const clearSinupStr = () =>{
+    return(dispatch, getState)=>{
+        dispatch({type: 'SWAP_LOGIN'})
+    }
+}
 export const attachMsg = (msg) =>{
     return(dispatch, getState)=>{
         dispatch({type: 'ATTACH_MSG', msg})

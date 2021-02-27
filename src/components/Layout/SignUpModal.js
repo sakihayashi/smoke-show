@@ -3,7 +3,7 @@ import { Modal, Button, Form } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import { connect } from 'react-redux'
 import Logo from '../../assets/global/Logo-smoke-show.png'
-import { openLoginModal } from '../../store/actions/authActions'
+import { openLoginModal, clearSinupStr } from '../../store/actions/authActions'
 import axios from 'axios'
 
 const SignUpModal = (props) =>{
@@ -37,7 +37,6 @@ const SignUpModal = (props) =>{
         if(userObj.password === userObj.password2){
             try{
                 await getApp.emailPasswordAuth.registerUser(email, userObj.password).then(async res =>{
-                    console.log('res token?', res)
                   
                     setEmailSent(true)
                     e.target.reset()
@@ -56,11 +55,14 @@ const SignUpModal = (props) =>{
         }
         
     }
+    const switchLogin = () =>{
+        props.clearSinupStr()
+        props.switchToLogin()
+    }
     const resendConfirmationEmail = async (email)=>{
         
         try{
             axios.post(`https://stitch.mongodb.com/api/client/v2.0/app/${process.env.REACT_APP_REALM_APP_ID}/auth/providers/local-userpass/confirm/call`, { email }).then(res => {
-                console.log(res);
                 setMsg('We have sent you a confirmation email. Please check your inbox.')
             })
          
@@ -71,8 +73,8 @@ const SignUpModal = (props) =>{
     }
    
     useEffect(() => {
-        setShow(props.openModal)
-    }, [props.openModal])
+        setShow(props.openmodal)
+    }, [props.openmodal])
     
     return (
         <Modal
@@ -139,7 +141,7 @@ const SignUpModal = (props) =>{
                     <Button className="login-btn" type="submit">
                         Signup
                     </Button><br /><br />
-                    <p className="click-div" onClick={ props.toggleAuthModal}>Or Login here</p>
+                    <p className="click-div" onClick={switchLogin}>Or Login here</p>
                 </div>
                 
             </Form>
@@ -151,13 +153,13 @@ const SignUpModal = (props) =>{
 }
 const mapDispatchToProps = (dispatch) =>{
     return {
-        openLoginModal: (state) => dispatch(openLoginModal(state))
+        openLoginModal: (state) => dispatch(openLoginModal(state)),
+        clearSinupStr: () => dispatch(clearSinupStr())
     }
 }
 const mapStateToProps = (state) =>{
-    console.log('check state', state)
     return{
-        openModal: state.auth.openModal
+        openmodal: state.auth.openmodal
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpModal)

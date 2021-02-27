@@ -4,6 +4,8 @@ import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 import noImg from '../../assets/global/no_image.jpg'
 import * as Realm from "realm-web"
 import ImageUpload from './ImageUpload'
+import { openLoginModal } from '../../store/actions/authActions'
+import { connect } from 'react-redux'
 
 import editIcon from '../../assets/global/edit-icon.svg'
 import trashIcon from '../../assets/global/delete-icon.svg'
@@ -302,4 +304,9 @@ const VehicleCard = (props) =>{
         </div>
     )
 }
-export default VehicleCard
+const mapDispatchToProps = (dispatch)=>{
+    return{
+        openLoginModal: (state) => dispatch(openLoginModal(state))
+    }
+}
+export default connect(null, mapDispatchToProps)(VehicleCard)

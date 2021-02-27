@@ -15,8 +15,8 @@ const Layout = (props) =>{
     
 
     // const handleModal = () =>{
-    //     console.log('modal state', props.openModal)
-    //     setModalShow(props.openModal)
+    //     console.log('modal state', props.openmodal)
+    //     setModalShow(props.openmodal)
     // }
     const changeUserState = (id) =>{
         setUser(false)
@@ -58,7 +58,7 @@ const Layout = (props) =>{
 const mapStateToProps = (state) =>{
     // console.log('redux', state)
     return{
-        // openModal: state.user.openModal
+        // openmodal: state.user.openmodal
     }
 }
 const mapDispatchToProps = (dispatch) =>{

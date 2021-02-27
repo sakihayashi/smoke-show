@@ -1,24 +1,27 @@
 import React from 'react'
 import {Helmet} from "react-helmet"
 import Layout from './Layout/Layout'
-import { Row, Col, Card, Button } from 'react-bootstrap'
+import { Row  } from 'react-bootstrap'
 import './giveaways.scss'
 import { giveAwaysArr } from './giveAwayData'
 import Head from './Layout/Head'
-import {
-    EmailShareButton,
-    FacebookShareButton,
-    TwitterShareButton,
-  } from "react-share";
-import short from 'short-uuid'
-import { FacebookShareCount } from "react-share";
+import { openLoginModal, attachMsg, swapToSignup } from '../store/actions/authActions'
+import { connect } from 'react-redux'
+// import {
+//     EmailShareButton,
+//     FacebookShareButton,
+//     TwitterShareButton,
+//   } from "react-share";
+// import short from 'short-uuid'
+// import { FacebookShareCount } from "react-share";
 
-import facebookIcon from '../assets/global/Facebook-icon.svg'
-import twitterIcon from '../assets/global/Twitter-icon.svg'
-import emailIcon from '../assets/global/Messages-icon.svg'
+// import facebookIcon from '../assets/global/Facebook-icon.svg'
+// import twitterIcon from '../assets/global/Twitter-icon.svg'
+// import emailIcon from '../assets/global/Messages-icon.svg'
 import GiveawayCount from './GiveawayCount'
 
 const Giveaways = (props) =>{
+    const { openLoginModal, attachMsg, swapToSignup, isLoggedIn} = props
     const sharePathname = props.location.pathname
     const shareUrl = `https://master.d2rltwsx300g54.amplifyapp.com${sharePathname}`
     return(
@@ -39,7 +42,7 @@ const Giveaways = (props) =>{
             Only VERIFIED and CONFIRMED entries from influencers will be found here.
             </div>
                 <Row>
-                <GiveawayCount data={giveAwaysArr[0]} shareUrl={shareUrl}/>
+                <GiveawayCount data={giveAwaysArr[0]} shareUrl={shareUrl}  />
                 {/* { giveAwaysArr.map(data =>{
                     const unique = short.generate()
                     return(
@@ -139,5 +142,18 @@ const Giveaways = (props) =>{
         </Layout>
     )
 }
+const mapDispatchToProps = (dispatch)=>{
+    return{
+        openLoginModal: (state) => dispatch(openLoginModal(state)),
+        attachMsg: (msg)=> dispatch(attachMsg(msg)),
+        swapToSignup: (state) => dispatch(swapToSignup(state))
+    }
+}
+const mapStateToProps = (state) => {
+    //syntax is propName: state.key of combineReducer.key
+    return{
+        isLoggedIn: state.auth.isLoggedIn
+    }
+  }
 
-export default Giveaways
+export default connect(mapStateToProps, mapDispatchToProps)(Giveaways)

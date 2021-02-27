@@ -15,7 +15,6 @@ const LoginModal = (props) =>{
     const [hasError, setHasError] = useState(false)
     const [forgotPw, setForgotPw] = useState(false)
     const [resetPwSent, setResetPwSent] = useState(false)
-    // const uid = useUID()
     const [loginMsg, setLoginMsg] = useState('')
     const [errMsg, setErrMsg] = useState('')
     const [msgModal, setMsgModal] = useState('')
@@ -116,7 +115,9 @@ const LoginModal = (props) =>{
      
         
     }
-
+    const handleModalSwap = () =>{
+        props.toggleAuthModal()
+    }
     useEffect(() => {
         if(props.hasLoginErr){
             setHasError(true)
@@ -125,14 +126,25 @@ const LoginModal = (props) =>{
             setHasError(false)
         }
     }, [props.hasLoginErr])
-    useEffect(() => {
-        setShow(props.openModal)
 
-    }, [props.openModal])
     useEffect(() => {
+        setShow(props.openmodal)
 
+    }, [props.openmodal])
+
+    useEffect(() => {
         setMsgModal(props.modalMsg)
     }, [props.modalMsg])
+
+    useEffect(() => {
+        console.log('log', props.swapSignup)
+        if(props.swapSignup === 'signup'){
+            console.log('fired?')
+            props.toggleAuthModal()
+            
+        }
+        
+    }, [props.swapSignup])
     return (
         <Modal
           {...props}
@@ -169,7 +181,7 @@ const LoginModal = (props) =>{
                     <Button className="login-btn" type="submit">
                         Login
                     </Button><br /><br />
-                    <p className="click-div" onClick={props.toggleAuthModal}>Or Signup here</p>
+                    <p className="click-div" onClick={handleModalSwap}>Or Signup here</p>
                 </div>
                 
             </Form>
@@ -184,9 +196,10 @@ const mapStateToProps = (state) => {
     return{
       userData: state.auth.userData,
       hasLoginErr: state.auth.hasLoginErr,
-      openModal: state.auth.openModal,
+      openmodal: state.auth.openmodal,
       modalMsg: state.auth.modalMsg,
-      errMsg: state.auth.errMsg
+      errMsg: state.auth.errMsg,
+      swapSignup: state.auth.swapSignup
     }
   }
 const mapDispatchToProps = (dispatch) =>{

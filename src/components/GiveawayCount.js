@@ -14,8 +14,11 @@ import emailIcon from '../assets/global/Messages-icon.svg'
 import carIcon from '../assets/global/car-icon-bar.svg'
 import flagIcon from '../assets/global/chekered-flag.svg'
 import * as Realm from "realm-web"
+import { connect } from 'react-redux'
+import { openLoginModal, attachMsg, swapToSignup } from '../store/actions/authActions'
 
 const GiveawayCount = (props) =>{
+    // console.log('props', props)
     // let percentBar = '60%'
     const [percentBar, setPercentBar] = useState('0%')
     const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
@@ -37,6 +40,10 @@ const GiveawayCount = (props) =>{
             }
         })
     }
+    const handleSignup = () =>{
+        props.swapToSignup(false)
+    }
+
     const loginCheck = () =>{
         const tokenUser = sessionStorage.getItem('session_user')
         if(tokenUser){
@@ -58,6 +65,7 @@ const GiveawayCount = (props) =>{
     useEffect(() => {
         loginCheck()
     }, [])
+    
     return(
         <Col sm={6}>
             <Card className="givaways-card">
@@ -121,12 +129,12 @@ const GiveawayCount = (props) =>{
                         
                     </Card.Title>
                     <Card.Text>
-                        <p>
+                        <span>
                             <strong>How to enter:</strong><br/> {props.data.howTo}
-                        </p><br/>
-                        <p>
+                        </span><br/><br/>
+                        <span>
                             <strong>Details:</strong> <br/>{props.data.details}
-                        </p>
+                        </span>
                     </Card.Text>
                     <div className="counter-div">
                         <div className="padding-bar">
@@ -146,26 +154,11 @@ const GiveawayCount = (props) =>{
                             <img src={flagIcon} alt="check flag" className="flag-icon"/>
                         </div>
                         <div className="end">10,000 <br />users</div>
-                            {/* <div className="ends-in">Ends in:</div>
-                            <div className="counter-box">
-                                <span className="timer-num">10 </span>
-                                <span className="unit-div">days</span>
-                            </div>
-                            <div className="counter-box">
-                                <span className="timer-num">12</span>
-                                <span className="unit-div">hours</span>
-                            </div>
-                            <div className="counter-box">
-                                <span className="timer-num">21</span>
-                                <span className="unit-div">minutes</span>
-                            </div>
-                            <div className="counter-box">
-                                <span className="timer-num">13</span>
-                                <span className="unit-div">seconds</span>
-                            </div> */}
+                
                         </div>
                         <div className="padding-btn" style={{marginTop: '-2rem'}}>
-                            <Button className="login-btn ">Entry now</Button>
+                        {props.isLoggedIn ? <Button className="login-btn" disabled>You are already in!</Button> : <Button className="login-btn" onClick={handleSignup}>Signup now to win!</Button>}
+                            {/* <Button className="login-btn" onClick={handleSignup}>Signup now to win!</Button> */}
                         </div>
                     </div>
                 </Card.Body>
@@ -174,4 +167,18 @@ const GiveawayCount = (props) =>{
     )
 }
 
-export default GiveawayCount
+const mapDispatchToProps = (dispatch)=>{
+    return{
+        openLoginModal: (state) => dispatch(openLoginModal(state)),
+        attachMsg: (msg)=> dispatch(attachMsg(msg)),
+        swapToSignup: (state) => dispatch(swapToSignup(state))
+    }
+}
+const mapStateToProps = (state) => {
+    //syntax is propName: state.key of combineReducer.key
+    return{
+        isLoggedIn: state.auth.isLoggedIn
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(GiveawayCount)

@@ -179,9 +179,15 @@ nav{
 .modal-dialog {
     height: 100vh !important;
 }
+.line-break-div{
+    display: block;
+}
 @media (min-width: 576px){
     .nav-top{
         margin: 0;
+    }
+    .line-break-div{
+        display: none;
     }
 }
 @media (min-width: 992px){
