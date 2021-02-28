@@ -61,7 +61,6 @@ const AllVideos = (props) =>{
     //     setShowMore(!showMore)
     // }
     const attachCarData = async (chunk, num) =>{
-        console.log('chunk', chunk)
        setVideoArr([])
         // try{
         //     await app.logIn(credentials).then( user =>{
@@ -145,12 +144,10 @@ const AllVideos = (props) =>{
                         const res = Math.floor(videos.length / 12)
                         setPgNum(res)
                         const chunk = chunkArray(videos)
-                        console.log('chunk', chunk)
                         setAllVideoData(chunk)
 
                         return chunk
                     }).then( chunk =>{
-                        console.log('chunk', chunk)
                         attachCarData(chunk, 0)
                     })
                 }catch(err){
