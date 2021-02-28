@@ -65,7 +65,7 @@ const GiveawayCount = (props) =>{
     useEffect(() => {
         loginCheck()
     }, [])
-    
+
     return(
         <Col sm={6}>
             <Card className="givaways-card">
@@ -134,6 +134,12 @@ const GiveawayCount = (props) =>{
                         </span><br/><br/>
                         <span>
                             <strong>Details:</strong> <br/>{props.data.details}
+                        </span><br/><br/>
+                        <span>
+                            <strong>Flight Measurement:</strong> <br/>{props.data.measurement}
+                        </span><br/><br/>
+                        <span>
+                            <strong>Special Rules:</strong> <br/>{props.data.rules}
                         </span>
                     </Card.Text>
                     <div className="counter-div">

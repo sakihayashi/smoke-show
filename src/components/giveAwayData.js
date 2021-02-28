@@ -6,8 +6,8 @@ export const giveAwaysArr = [
         details: "Help us grow The Smoke Show! Once we pass 10,000 users on the site, we will be giving away One (1) 65” LED Smart TV with 4K! The perfect way to keep watching your favorite car videos on The Smoke Show.",
         howTo:  "No entry necessary, if you have an account on SmokeShow, you are in!",
         imgUrl: "https://s3.amazonaws.com/images.test.smokeshow/2021/LG-UHD-TV.jpg",
-        rules: "No specific dates, once the goal is reached",
-        entries: ["userId1", "userId2"],
+        rules: "Must live in the United States.",
+        measurement: "No specific dates, once the goal is reached.",
         start: 12354657,
         end: 2345678
     }
