@@ -24,3 +24,23 @@
     margin-bottom: auto;
     text-align: right;
 }
+.bio-sub-nav{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+    a{
+        margin-right: 1.5rem;
+    }
+    a.active{
+        color: $theme-hover !important;
+        cursor: auto;
+    }
+}
+
+@media (min-width: $md){
+    .bio-sub-nav{
+        margin-top: 0;
+    }
+    
+}

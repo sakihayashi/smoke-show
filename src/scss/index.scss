@@ -70,6 +70,7 @@ header{
   max-width: $main-width-phone;
   margin: 0 auto;
   padding: 0 15px;
+  overflow: hidden;
 }
 .main-col{
   margin-bottom: 30px;
@@ -276,10 +277,16 @@ label{
     margin-bottom: 2rem;
   }
 }
-@media (min-width: 1025px){
+@media (min-width: 768px) {
+  .main-wrapper{
+    padding: 0 15px;
+  }
+}
+@media (min-width: 1024px){
   .main-wrapper{
     // max-width: $main-width-tablet;
     max-width: 90vw;
+    padding: 0;
   }
 
 }

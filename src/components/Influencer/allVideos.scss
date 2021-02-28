@@ -104,7 +104,9 @@
     overflow: hidden;
     height: 100%;
 }
-
+.pagination{
+    flex-flow: wrap;
+}
 // .accordion-body-custom{
 //     position: absolute;
 //     overflow: visible;

@@ -191,14 +191,39 @@ const AllVideos = (props) =>{
     }
     const paginationItems = () =>{
         let items = [];
-        for (let number = 1; number <= pgNum; number++) {
-            items.push(
-                <Pagination.Item key={`page-${number}`} active={number === active} onClick={()=>getselectedPage(number)} >
-                {number}
-                </Pagination.Item>
-            )
+        if(pgNum > 9){
+            const middle = pgNum / 2
+            const middleMinus = middle -1
+            const paginationDiv = 
+                    <Fragment>
+                        {/* <Pagination.First /> */}
+                        <Pagination.Prev />
+                        <Pagination.Item key={`page-${1}`} active={1 === active} onClick={()=>getselectedPage(1)} >{1}</Pagination.Item>
+                        <Pagination.Ellipsis />
+
+                        <Pagination.Item key={`page-${middleMinus}`} active={middleMinus === active} onClick={()=>getselectedPage(middle -1)} >{middle -1}</Pagination.Item>
+                        <Pagination.Item key={`page-${middle}`} active={middle === active} onClick={()=>getselectedPage(middle)} >{middle}</Pagination.Item>
+                        <Pagination.Item key={`page-${middle +1}`} active={middle +1 === active} onClick={()=>getselectedPage(middle +1)} >{middle +1}</Pagination.Item>
+
+                        <Pagination.Ellipsis />
+                        <Pagination.Item key={`page-${pgNum}`} active={pgNum === active} onClick={()=>getselectedPage(pgNum)} >{pgNum}</Pagination.Item>
+                        <Pagination.Next />
+                        {/* <Pagination.Last /> */}
+                    </Fragment>
+            return paginationDiv
+        }else{
+            for (let number = 1; number <= pgNum; number++) {
+                items.push(
+                    <Pagination.Item key={`page-${number}`} active={number === active} onClick={()=>getselectedPage(number)} >
+                    {number}
+                    </Pagination.Item>
+                )
+            }
+            return items
         }
-        return items
+        
+        
+        // return items
     }
 
     useEffect( () => {

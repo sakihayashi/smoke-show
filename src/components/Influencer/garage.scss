@@ -27,17 +27,7 @@
     border-color: $theme-color;
     z-index: 100;
 }
-.bio-sub-nav{
-    display: flex;
-    justify-content: flex-start;
-    a{
-        margin-right: 1.5rem;
-    }
-    a.active{
-        color: $theme-hover !important;
-        cursor: auto;
-    }
-}
+
 
 .garage-setting-btn:hover{
     background-color: $theme-hover;
