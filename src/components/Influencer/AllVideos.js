@@ -61,6 +61,7 @@ const AllVideos = (props) =>{
     //     setShowMore(!showMore)
     // }
     const attachCarData = async (chunk, num) =>{
+        console.log('chunk', chunk)
        setVideoArr([])
         // try{
         //     await app.logIn(credentials).then( user =>{
@@ -94,31 +95,31 @@ const AllVideos = (props) =>{
                     })
                 }else{
                     console.log('chunk not read')
-                    // allVideoData[num].map(async video =>{
-                    //     console.log()
-                    //     const filterCar = {_id: {"$oid": video.carDataId}}
+                    allVideoData[num].map(async video =>{
+                        console.log()
+                        const filterCar = {_id: {"$oid": video.carDataId}}
                         
-                    //     try{
-                    //         await collectionCars.findOne(filterCar).then(async data =>{
+                        try{
+                            await collectionCars.findOne(filterCar).then(async data =>{
                             
-                    //            if(data){
-                    //             video.carData = data
-                    //             setVideoArr(videoArr =>[...videoArr, video])
-                    //            }else{
-                    //             await collectionManual.findOne(filterCar).then(data =>{
-                    //                 video.carData = data
-                    //                 setVideoArr(videoArr =>[...videoArr, video])
-                    //             })
-                    //            }
+                               if(data){
+                                video.carData = data
+                                setVideoArr(videoArr =>[...videoArr, video])
+                               }else{
+                                await collectionManual.findOne(filterCar).then(data =>{
+                                    video.carData = data
+                                    setVideoArr(videoArr =>[...videoArr, video])
+                                })
+                               }
                                 
-                    //         }).then(res =>{
+                            }).then(res =>{
                                 
-                    //         })
-                    //     }catch(err){
-                    //      console.log(err)
-                    //     }
+                            })
+                        }catch(err){
+                         console.log(err)
+                        }
                         
-                    // })
+                    })
                 }
                 
         //     })
@@ -140,14 +141,16 @@ const AllVideos = (props) =>{
                 const options = {sort: {"snippet.publishedAt": -1}}
                 try{
                     await mongoCollection.find(filter, options).then(async videos =>{
-                      console.log('videos', videos)
+                    //   console.log('videos', videos)
                         const res = Math.floor(videos.length / 12)
                         setPgNum(res)
                         const chunk = chunkArray(videos)
+                        console.log('chunk', chunk)
                         setAllVideoData(chunk)
 
                         return chunk
                     }).then( chunk =>{
+                        console.log('chunk', chunk)
                         attachCarData(chunk, 0)
                     })
                 }catch(err){
@@ -228,7 +231,7 @@ const AllVideos = (props) =>{
             <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
             {   videoArr[0] &&
                 videoArr.map((video, index) =>{
-                    console.log('video', video)
+                    {/* console.log('video', video) */}
                     const unique = short.generate()
                     const str = video.carData.model
                     const id = video.videoId

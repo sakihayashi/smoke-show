@@ -77,7 +77,6 @@ const BioPage = (props) =>{
                 const mongoCollection = mongo.db("smoke-show").collection("influencers");
                 const filter = {userId: influencerId} 
                 await mongoCollection.findOne(filter).then( async res =>{
-                    console.log('res', res)
                     setInfluencer(res)
                     const collectionFans = mongo.db("smoke-show").collection(`fans-${res.username}`)
                     try{
@@ -117,7 +116,6 @@ const BioPage = (props) =>{
         let temp=[]
         try {
             await collectionVideos.find(filter, options).then(videos =>{
-                console.log(videos)
                 videos.map(video =>{
                     dates.map(date =>{
                         if(video.snippet.publishedAt.includes(date)){
@@ -134,7 +132,6 @@ const BioPage = (props) =>{
                         await collectionCars.findOne(filterCar).then(async data =>{
                             if(data){
                             video.carData = data
-                            console.log('video', video)
                             setLatestVideos(latestVideos =>[...latestVideos, video])
                             }else{
                             await collectionManual.findOne(filterCar).then(data =>{
@@ -234,7 +231,6 @@ const BioPage = (props) =>{
                         const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
                         let price;
                         const car = video.carData
-                        console.log('price', video.carData.price)
                         if(video.carData.price && video.carData.price.baseMSRP){
                             price = numberWithCommas(video.carData.price.baseMSRP)
                         }else{ price = ''}
@@ -338,7 +334,6 @@ const mapDispatchToProps = (dispatch) =>{
     }
 }
 const mapStateToProps = (state) => {
-    console.log('no state?', state.auth.mongo)
     //syntax is propName: state.key of combineReducer.key
     return{
       username: state.user.username,
