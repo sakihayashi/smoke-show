@@ -28,6 +28,7 @@ const AllVideos = (props) =>{
     // const [videoIds, setVideoIds] = useState([])
     // const [pageNum, setPageNum] = useState(0)
     const [pgNum, setPgNum] = useState(null)
+    const [middleNum, setMiddleNum] = useState(null)
     // const [credentials, setCredentials] = useState(null)
     const [active, setActive] = useState(1)
     // let active = 1;
@@ -143,6 +144,7 @@ const AllVideos = (props) =>{
                     //   console.log('videos', videos)
                         const res = Math.floor(videos.length / 12)
                         setPgNum(res)
+                        setMiddleNum(res / 2)
                         const chunk = chunkArray(videos)
                         setAllVideoData(chunk)
 
@@ -189,25 +191,72 @@ const AllVideos = (props) =>{
         setActive(number)
         attachCarData(null, number)
     }
+    const getPrevPage = () =>{
+        if(active > 1){
+            const num = active -1
+            setActive(num)
+            attachCarData(null, num)
+            if(num < pgNum -1){
+                if(num === 2){
+                    console.log('working?', num)
+                    setMiddleNum(3)
+                }else if(num <= 1){
+                    setMiddleNum(pgNum /2)
+                }else{
+                    setMiddleNum(num)
+                }
+                
+            }else if(num === pgNum -1){
+                setMiddleNum(pgNum -2)
+            }
+            
+        }else{
+            return
+        }
+    }
+    const getNextPage = () =>{
+        if(active < pgNum){
+            const num = active +1
+            console.log(num)
+            setActive(num)
+            attachCarData(null, num)
+            
+            if( num > 2){
+                if(pgNum -2 < num){
+                    setMiddleNum(pgNum -2)
+                }else(
+                    setMiddleNum(num)
+                )
+                
+            }else if(num === 2){
+                setMiddleNum(3)
+            }else if (num === pgNum -1){
+                setMiddleNum(pgNum -2)
+            }
+        }else{
+            return
+        }
+    }
     const paginationItems = () =>{
         let items = [];
         if(pgNum > 9){
-            const middle = pgNum / 2
-            const middleMinus = middle -1
+            // const middle = pgNum / 2
+            const middleMinus = middleNum -1
+            const middlePlus = middleNum +1
             const paginationDiv = 
                     <Fragment>
                         {/* <Pagination.First /> */}
-                        <Pagination.Prev />
-                        <Pagination.Item key={`page-${1}`} active={1 === active} onClick={()=>getselectedPage(1)} >{1}</Pagination.Item>
+                        <Pagination.Prev onClick={()=>getPrevPage()}/>
+                        <Pagination.Item active={1 === active} onClick={()=>getselectedPage(1)} >{1}</Pagination.Item>
                         <Pagination.Ellipsis />
 
-                        <Pagination.Item key={`page-${middleMinus}`} active={middleMinus === active} onClick={()=>getselectedPage(middle -1)} >{middle -1}</Pagination.Item>
-                        <Pagination.Item key={`page-${middle}`} active={middle === active} onClick={()=>getselectedPage(middle)} >{middle}</Pagination.Item>
-                        <Pagination.Item key={`page-${middle +1}`} active={middle +1 === active} onClick={()=>getselectedPage(middle +1)} >{middle +1}</Pagination.Item>
+                        <Pagination.Item  active={middleMinus === active} onClick={()=>getselectedPage(middleNum -1)} >{middleNum -1}</Pagination.Item>
+                        <Pagination.Item  active={middleNum === active} onClick={()=>getselectedPage(middleNum)} >{middleNum}</Pagination.Item>
+                        <Pagination.Item active={middlePlus === active} onClick={()=>getselectedPage(middlePlus)} >{middlePlus}</Pagination.Item>
 
                         <Pagination.Ellipsis />
-                        <Pagination.Item key={`page-${pgNum}`} active={pgNum === active} onClick={()=>getselectedPage(pgNum)} >{pgNum}</Pagination.Item>
-                        <Pagination.Next />
+                        <Pagination.Item  active={pgNum === active} onClick={()=>getselectedPage(pgNum)} >{pgNum}</Pagination.Item>
+                        <Pagination.Next onClick={()=>getNextPage()}/>
                         {/* <Pagination.Last /> */}
                     </Fragment>
             return paginationDiv
