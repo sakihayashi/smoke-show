@@ -72,7 +72,6 @@ useEffect(() => {
             <meta charSet="utf-8" />
             <title>Swagg | The Smoke Show</title>
             <meta name="description" content="Check out our swaggs here!" />
-            <meta name="robots" content="noindex, nofollow" />
             {/* <link rel="canonical" href="http://mysite.com/example" /> */}
         </Helmet>
             <div className="main-wrapper">

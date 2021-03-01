@@ -286,7 +286,6 @@ const Garage = (props) =>{
             <meta charSet="utf-8" />
             <title>Influencer Garage page | The Smoke Show</title>
             <meta name="description" content="Place the meta description text here." />
-            <meta name="robots" content="noindex, nofollow" />
         </Helmet>
         {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal} profileUser={profileUser} updateProfileData={updateProfileData} updateCarData={updateCarData} />}
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} profileUser={profileUser}  updateProfileData={updateProfileData} updateUserDetails={updateUserDetails}/>}

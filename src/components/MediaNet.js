@@ -7,7 +7,9 @@ const MediaNet = ({ divId, size }) => {
           window._mNHandle.queue.push(function () {
             window._mNDetails.loadTag(divId, size, divId)
           })
-        } catch (error) {}
+        } catch (error) {
+          
+        }
       }
     }, [divId, size])
   

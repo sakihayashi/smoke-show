@@ -68,7 +68,7 @@ const Social = (props) =>{
     useEffect(() => {
         setInfluencer(props.influencerObj)
     }, [props.influencerObj])
-    
+
     useEffect(() => {
         loginCheck()
         props.getInfluencer(userIdParam)
@@ -78,7 +78,6 @@ const Social = (props) =>{
             <Helmet>
                 <title>Influencer Social Media Links | The Smoke Show</title>
                 <meta name="description" content="Place the meta description text here." />
-            <meta name="robots" content="noindex, nofollow" />
             </Helmet>
             <Layout>
                 <div className="main-wrapper">

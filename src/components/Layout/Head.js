@@ -8,7 +8,7 @@ const Head = () =>{
         <Helmet>
             <link rel="preload" href={xHeight} as="font" />
             <link rel="preload" href={bestInClass} as="font" />
-            <meta name="robots" content="noindex, nofollow" />
+   
             {/* <script type="text/javascript">
                 window._mNHandle = window._mNHandle || {};
                 window._mNHandle.queue = window._mNHandle.queue || [];

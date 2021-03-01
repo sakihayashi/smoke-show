@@ -27,7 +27,7 @@ const VideoDiv = loadable(()=> import('./VideoDiv'))
 
 const HomePage = (props) =>{
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
-const videoEmbedURL = 'https://www.youtube.com/embed/'
+// const videoEmbedURL = 'https://www.youtube.com/embed/'
 const [latestVideos, setLatestVideos] = useState([])
 const [isLoading, setIsloading] = useState(false)
 // const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
@@ -188,7 +188,6 @@ const [isLoading, setIsloading] = useState(false)
                 <meta charSet="utf-8" />
                 <title>Home | The Smoke Show</title>
                 <meta name="description" content="Place the meta description text here." />
-                <meta name="robots" content="noindex, nofollow" />
                 <Head />
                 {/* <link rel="canonical" href="http://mysite.com/example" /> */}
             </Helmet>
@@ -216,18 +215,8 @@ const [isLoading, setIsloading] = useState(false)
                                 <Col sm={6} className="main-col" >
                                     <Row >
                                         <Col sm >
-                                        <VideoDiv video={video} videoId={id} />
-                                            {/* <div className="videoWrapper">
-                                                <iframe src={videoEmbedURL + id}
-                                                frameBorder='0'
-                                                allow='autoplay; encrypted-media'
-                                                // allow='autoplay; encrypted-media'
-                                                allowFullScreen
-                                                srcDoc={`<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href=https://www.youtube.com/embed/${id}?autoplay=1><img src=https://img.youtube.com/vi/${id}/hqdefault.jpg alt=${video.snippet.title}><span>▶</span></a>`}
-                                                title={video.snippet.title}
-                                                />
-                                
-                                            </div> */}
+                                            <VideoDiv video={video} videoId={id} />
+                                         
                                             <h3 style={{marginTop:'10px'}} className="video-title">{video.snippet.title}</h3>
                                             <small>{date}</small>
                                            
@@ -255,7 +244,7 @@ const [isLoading, setIsloading] = useState(false)
                                                 {video.snippet.description}
                                             </div> 
                                             <div className="content">
-                                            <small className="wrap-text-desc">{video.snippet.description}</small>
+                                                <small className="wrap-text-desc">{video.snippet.description}</small>
                                             </div>
                                            <div className="spacer-4rem"></div>
                                             <Comments videoId={video.videoId} />

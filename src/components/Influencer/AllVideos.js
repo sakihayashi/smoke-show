@@ -284,7 +284,6 @@ const AllVideos = (props) =>{
                 <meta charSet="utf-8" />
                 <title>All Videos from  | The Smoke Show</title>
                 <meta name="description" content="Place the meta description text here." />
-                <meta name="robots" content="noindex, nofollow" />
                 {/* <link rel="canonical" href="http://mysite.com/example" /> */}
             </Helmet>
             

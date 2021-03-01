@@ -75,7 +75,6 @@ const InfluencerIndexPage = () =>{
           <meta charSet="utf-8" />
           <title>All influencers | The Smoke Show</title>
           <meta name="description" content="Check out our influencers / authors" />
-          <meta name="robots" content="noindex, nofollow" />
           <Head />
           {/* <link rel="canonical" href="http://mysite.com/example" /> */}
         </Helmet>
