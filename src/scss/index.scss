@@ -34,15 +34,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 h1, h2{
-  font-family: 'Best in Class';
+  font-family: 'Best in Class', sans-serif;
 }
 h3{
-  font-family: 'MerriweatherSans' !important;
+  font-family: 'MerriweatherSans', sans-serif !important;
   font-size: $font-m !important;
   line-height: 23px;
 }
 h4{
-  font-family: 'MerriweatherSans' !important;
+  font-family: 'MerriweatherSans', sans-serif !important;
   font-size: xx-large !important;
   font-weight: 600 !important;
 }

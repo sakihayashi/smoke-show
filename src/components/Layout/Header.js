@@ -43,11 +43,9 @@ const Header = (props) =>{
     //      setCurrentUser(id)
     //  }
      const toggleAuthModal = () =>{
-         console.log('fired?', hasAccount)
          setHasAccount(!hasAccount)
      }
      const switchToLogin = () =>{
-         console.log('hasAccont', hasAccount)
          setHasAccount(true)
      }
 
@@ -65,7 +63,6 @@ const Header = (props) =>{
     useEffect(() => {
         if(typeof(props.customData.fname) !== 'undefined'){
             const name = props.customData.fname
-            console.log(name.length )
             if(name.length > 6){
                 setTooLong(true)
             }else{
@@ -127,7 +124,6 @@ const Header = (props) =>{
 }
 
 const mapStateToProps = (state) =>{
-    console.log('state', state.auth)
     return{
         isLoggedIn: state.auth.isLoggedIn,
         customData: state.auth.customData,

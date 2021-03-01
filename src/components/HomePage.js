@@ -1,7 +1,8 @@
 import React, { useEffect, useState, Fragment } from 'react'
 import {Helmet} from "react-helmet"
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Spinner } from 'react-bootstrap'
 import { connect } from 'react-redux'
+import wheelImg from '../assets/global/smoke-wheel.png'
 // import { youtubeAPI } from '../utils/youtubeAPI'
 // import { carTempData } from './carTempData'
 // import { commentsTempData } from './commentsTempData' 
@@ -20,7 +21,7 @@ import MediaNet from './MediaNet'
 
 const Comments = loadable(() => import('./Comments'))
 const SpecDiv = loadable(() => import('./SpecDiv'))
-
+const VideoDiv = loadable(()=> import('./VideoDiv'))
 
 // const Comments = React.lazy(() => import('./Comments'))
 
@@ -28,6 +29,7 @@ const HomePage = (props) =>{
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
 const videoEmbedURL = 'https://www.youtube.com/embed/'
 const [latestVideos, setLatestVideos] = useState([])
+const [isLoading, setIsloading] = useState(false)
 // const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
 // const [searchKeyword, setSearchKeyword] = useState('')
 // const [titleStr, setTitleStr] = useState('Your search result')
@@ -170,18 +172,14 @@ const [latestVideos, setLatestVideos] = useState([])
             getVideos(credentials)
         }
     }
-    const adInsert = async () =>{
-        try {
-            window._mNHandle.queue.push(function (){
-                window._mNDetails.loadTag("554833626", "300x250", "554833626");
-            });
-        }
-        catch (error) {}
-    }
 
     useEffect( () => {
-        loginCheck()
-
+        setIsloading(false)
+        const res = loginCheck()
+        if(res){
+            setIsloading(true)
+        }
+        
       }, [])
 
     return(
@@ -198,6 +196,7 @@ const [latestVideos, setLatestVideos] = useState([])
                 <div className="spacer-4rem"></div>
                 <h2 className="title">New This Week</h2>
                 <Row className="bio-main-row">
+                {!isLoading && <Spinner />}
                 {latestVideos &&
                     latestVideos.map((video, index) =>{
                         const str = video.carData.model
@@ -210,20 +209,15 @@ const [latestVideos, setLatestVideos] = useState([])
                         if(video.carData.price && video.carData.price.baseMSRP){
                             price = numberWithCommas(video.carData.price.baseMSRP)
                         }else{ price = ''}
-                        {/* const uuid = uuidv4() */}
-                        {/* let theInfluencer;
-                        if(influencerObj){
-                            const result = influencerObj.filter(obj => obj.userId === video.userId)
-                            video.theInfluencer = result[0]
-                           
-                        } */}
+                     
                         const date = moment(video.snippet.publishedAt).fromNow()
                         return(
                             <Fragment key={video.videoId +index}>
                                 <Col sm={6} className="main-col" >
                                     <Row >
                                         <Col sm >
-                                            <div className="videoWrapper">
+                                        <VideoDiv video={video} videoId={id} />
+                                            {/* <div className="videoWrapper">
                                                 <iframe src={videoEmbedURL + id}
                                                 frameBorder='0'
                                                 allow='autoplay; encrypted-media'
@@ -233,7 +227,7 @@ const [latestVideos, setLatestVideos] = useState([])
                                                 title={video.snippet.title}
                                                 />
                                 
-                                            </div>
+                                            </div> */}
                                             <h3 style={{marginTop:'10px'}} className="video-title">{video.snippet.title}</h3>
                                             <small>{date}</small>
                                            
@@ -287,7 +281,9 @@ const [latestVideos, setLatestVideos] = useState([])
                             </Fragment>
                         )
                     })
+                
                 }
+                
             </Row>
            
             {/* <div className="spacer-4rem"></div> */}
@@ -328,6 +324,7 @@ const [latestVideos, setLatestVideos] = useState([])
                 })
                 }
                 </Row> */}
+                
             </div>
         </Layout>
     )
