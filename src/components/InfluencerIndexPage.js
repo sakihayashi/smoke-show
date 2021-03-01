@@ -10,6 +10,7 @@ import jwt from 'jsonwebtoken'
 import noImg from '../assets/global/no_image.jpg'
 import short from 'short-uuid'
 import Logo from '../assets/global/Logo-smoke-show.png'
+import Head from '../components/Layout/Head'
 
 const InfluencerIndexPage = () =>{
 
@@ -34,7 +35,6 @@ const InfluencerIndexPage = () =>{
             
                     const filter = {isActive: true} 
                     await mongoCollection.find(filter).then(resAll =>{
-                        console.log('find all', resAll);
                         setInfluencers(resAll)
                     })
                    
@@ -76,6 +76,7 @@ const InfluencerIndexPage = () =>{
           <title>All influencers | The Smoke Show</title>
           <meta name="description" content="Check out our influencers / authors" />
           <meta name="robots" content="noindex, nofollow" />
+          <Head />
           {/* <link rel="canonical" href="http://mysite.com/example" /> */}
         </Helmet>
             <div className="main-wrapper footer-pos">

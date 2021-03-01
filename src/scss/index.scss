@@ -247,12 +247,20 @@ label{
   align-items: center;
   flex-direction: column;
 }
+.ad-160{
+  display: none;
+}
+.ad-300{
+  display: block;
+}
 .parent-row{
   padding-left: -7px;
   padding-right: -7px;
   overflow: hidden;
 }
-
+.main-height{
+  min-height: calc(100vh - 21rem);
+}
 @media (min-width: 576px) { 
   .main-wrapper{
     padding: 0;
@@ -269,6 +277,12 @@ label{
   }
   .ad-container{
     height: 600px;
+  }
+  .ad-160{
+    display: block;
+  }
+  .ad-300{
+    display: none;
   }
   // .spec-wrapper{
   //   width: 300px;
@@ -304,5 +318,11 @@ label{
   }
   .ad-container{
     height: 250px;
+  }
+  .ad-160{
+    display: none;
+  }
+  .ad-300{
+    display: block;
   }
 }

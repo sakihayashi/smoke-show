@@ -9,6 +9,12 @@ const Head = () =>{
             <link rel="preload" href={xHeight} as="font" />
             <link rel="preload" href={bestInClass} as="font" />
             <meta name="robots" content="noindex, nofollow" />
+            <script type="text/javascript">
+                window._mNHandle = window._mNHandle || {};
+                window._mNHandle.queue = window._mNHandle.queue || [];
+                medianet_versionId = "3121199";
+            </script>
+            <script src="https://contextual.media.net/dmedianet.js?cid=8CU1IBHU4" async="async"></script>
         </Helmet>
     )
 }

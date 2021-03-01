@@ -16,6 +16,7 @@ import * as Realm from "realm-web"
 import moment from 'moment'
 // import SpecDiv from './SpecDiv'
 import loadable from '@loadable/component'
+import MediaNet from './MediaNet'
 
 const Comments = loadable(() => import('./Comments'))
 const SpecDiv = loadable(() => import('./SpecDiv'))
@@ -67,7 +68,7 @@ const [latestVideos, setLatestVideos] = useState([])
     const getVideos = async (credentials) =>{
         setLatestVideos([])
         const now = new Date()
-        const days = 7
+        // const days = 7
         // let dates = []
 
         // const today = moment(now).format('YYYY-MM-DD')
@@ -169,6 +170,14 @@ const [latestVideos, setLatestVideos] = useState([])
             getVideos(credentials)
         }
     }
+    const adInsert = async () =>{
+        try {
+            window._mNHandle.queue.push(function (){
+                window._mNDetails.loadTag("554833626", "300x250", "554833626");
+            });
+        }
+        catch (error) {}
+    }
 
     useEffect( () => {
         loginCheck()
@@ -260,6 +269,18 @@ const [latestVideos, setLatestVideos] = useState([])
                                         </Col>
                                         <Col sm="auto" className="spec-col"  >
                                             <SpecDiv video={video} titleCase={titleCase} price={price} model={model}/>
+                                            <div className="ad-container">
+                                                <div className="ad-160">
+                                                    <MediaNet divId='554833626' size="160x600" />
+                                                </div>
+                                                <div className="ad-300">
+                                                    <MediaNet divId='554833626' size="300x250" />
+                                                </div>
+                                            
+                                                {/* <p style={{color: 'gray'}}>ads will go here</p>
+                                                <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
+                                                <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p> */}
+                                            </div>
                                         </Col>
                                     </Row>
                                 </Col>

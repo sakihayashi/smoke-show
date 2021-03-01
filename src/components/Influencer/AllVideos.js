@@ -94,9 +94,7 @@ const AllVideos = (props) =>{
                         
                     })
                 }else{
-                    console.log('chunk not read')
                     allVideoData[num].map(async video =>{
-                        console.log()
                         const filterCar = {_id: {"$oid": video.carDataId}}
                         
                         try{

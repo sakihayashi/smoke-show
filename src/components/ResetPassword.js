@@ -5,6 +5,8 @@ import * as Realm from "realm-web"
 import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import Layout from './Layout/Layout'
+import Head from '../components/Layout/Head'
+import { Helmet } from 'react-helmet'
 
 const ResetPassword = (props) =>{
 
@@ -76,6 +78,11 @@ const ResetPassword = (props) =>{
 
     return (
         <Layout>
+        <Helmet>
+            <title>Reset your password | The Smoke Show</title>
+            <Head />
+        </Helmet>
+        
             <div className="custom-modal-body theme-text-p height-adj-main">
                 <div style={{marginTop:'4rem'}}></div>
                 {hasReset ? 

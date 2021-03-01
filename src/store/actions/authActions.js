@@ -32,7 +32,6 @@ export const logInUser = (credentials, email) =>{
 }
 
 export const logOutUser = () =>{
-    console.log('fired?')
     return (dispatch, getState)=>{
         sessionStorage.removeItem('session_token')
         sessionStorage.removeItem('session_user')

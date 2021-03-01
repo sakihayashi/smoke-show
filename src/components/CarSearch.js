@@ -6,6 +6,7 @@ import { carsAllYear } from './carTempData'
 import './carStats.scss'
 import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'
+import MediaNet from '../components/MediaNet'
 
 const CarSearch = (props) =>{
     const [modelName, setModelName] = useState([])
@@ -191,7 +192,7 @@ const CarSearch = (props) =>{
     return(
         <Layout>
             <div className="spacer-4rem"></div>
-            <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem)'}}>
+            <div className="main-wrapper main-height" style={{minHeight: 'calc(100vh - 21rem)'}}>
             
                 <div className="search-wrapper" >
                     <div className="center-box">
@@ -259,9 +260,11 @@ const CarSearch = (props) =>{
                     
                 </div>
 
-                
+                <div className="ad-on-search">
+                    <MediaNet divId="554833626" size="728x90" />
+                </div>
             </div>
-        
+            
         </Layout>
     )
 }

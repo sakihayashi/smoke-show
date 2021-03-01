@@ -21,7 +21,6 @@ import { connect } from 'react-redux'
 import GiveawayCount from './GiveawayCount'
 
 const Giveaways = (props) =>{
-    const { openLoginModal, attachMsg, swapToSignup, isLoggedIn} = props
     const sharePathname = props.location.pathname
     const shareUrl = `https://master.d2rltwsx300g54.amplifyapp.com${sharePathname}`
     return(

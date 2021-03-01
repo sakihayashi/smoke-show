@@ -4,6 +4,14 @@ import pistonIcon from '../assets/global/piston.png'
 import priceIcon from '../assets/global/Price-Tag-icon.png'
 
 const SpecDiv = (props) =>{
+    const adInsert = async () =>{
+        try {
+            window._mNHandle.queue.push(function (){
+                window._mNDetails.loadTag("554833626", "300x250", "554833626");
+            });
+        }
+        catch (error) {}
+    }
     return(
         <div className="ad-size">
                                         
@@ -16,11 +24,7 @@ const SpecDiv = (props) =>{
                 <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text">{' '}{props.video.carData.features.Engine.Torque}</span><br />
                 <img alt="piston" key={pistonIcon} src={pistonIcon}  className="icon-s" /><span className="spec-text">{' '}{props.video.carData.features.Engine.Horsepower}</span><br />
             </div>
-            <div className="ad-container">
-                <p style={{color: 'gray'}}>ads will go here</p>
-                <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
-                <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p>
-            </div>
+            
         </div>
     )
 }

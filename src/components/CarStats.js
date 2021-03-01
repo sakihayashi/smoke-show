@@ -272,8 +272,7 @@ const CarStats = (props) =>{
     return(
         <Layout>
             <Helmet>
-            
-            <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title>
+                <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title>
                 <Head />
             </Helmet>
             <div className="main-wrapper stats-container">
