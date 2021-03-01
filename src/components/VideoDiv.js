@@ -6,6 +6,7 @@ const VideoDiv = (props) =>{
     return(
         <div className="videoWrapper">
             <iframe src={videoEmbedURL + videoId}
+            loading="lazy"
             frameBorder='0'
             allow='autoplay; encrypted-media'
             // allow='autoplay; encrypted-media'

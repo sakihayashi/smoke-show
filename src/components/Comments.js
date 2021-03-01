@@ -9,16 +9,22 @@ import moment from 'moment'
 import jwt from 'jsonwebtoken'
 import { openLoginModal, attachMsg } from '../store/actions/authActions'
 import './comments.scss'
+import VisibilitySensor from 'react-visibility-sensor'
 
 const Comments = (props) =>{
     const [commentsDB, setCommentsDB] = useState([])
     const [moreComments, setMoreComments] = useState([])
     const [isComment, setIsComment] = useState(false)
-
+    const [visibleOn, setVisibleOn] = useState(false)
     const [userComment, setUserComment] = useState("")
     const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
     // const getApp = Realm.App.getApp(process.env.REACT_APP_REALM_APP_ID);
-
+    const onChange = (isVisible)=>{
+        if(isVisible){
+            setVisibleOn(true)
+        }
+        console.log('Element is now %s', isVisible ? 'visible' : 'hidden');
+    }
     const handleChange = (e) =>{
         setUserComment(e.target.value)
     }
@@ -218,17 +224,26 @@ const Comments = (props) =>{
             let localtime = moment(comment.date_posted).fromNow()
             return(
                 <Row className="comment-wrapper" key={localtime + index}>
-
+                    <VisibilitySensor onChange={onChange}>
                     <div style={{margin:0,padding:0}} className="col-1">
                         <Link to={{
                             pathname: `/user/${comment.userId}`
                         }}>
-                            {comment.profilePic ? <img src={comment.profilePic} className="profile-pic " alt={comment.username} /> :
-                            <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/>
+                            
+                            
+                            {comment.profilePic ? 
+                                [(visibleOn ? <img src={comment.profilePic} className="profile-pic " alt={comment.username} loading="lazy" /> : ''
+                                 )
+                                 ]
+                                                          
+                             :
+                                <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/> 
                             }
+                            
+                            
                         </Link>
                     </div>
-                    
+                    </VisibilitySensor>
                     <div  style={{margin: 0, paddingRight:0}} className="col-11">
                     <div className="comment-username ">
                         <Link to={{
@@ -266,7 +281,7 @@ const Comments = (props) =>{
                                 <Link to={{
                                     pathname: `/user/${comment.userId}`
                                 }}>
-                                    {comment.profile_pic ? <img src={comment.profile_pic} className="profile-pic " alt={comment.username} /> :
+                                    {comment.profile_pic ? <img src={comment.profile_pic} className="profile-pic " alt={comment.username} loading="lazy" /> :
                                     <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/>
                                     }
                                 </Link>

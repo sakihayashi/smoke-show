@@ -24,7 +24,7 @@ const BioPage = (props) =>{
     const [influencer, setInfluencer] = useState({userId: '', fname: '', lname: '', username: '', fans: null, desc: '', channelId: '', banner_img: '', profile_pic: '', featuredVideo: {id: '', title: ''}})
     // const { banner_img, username, profile_pic, fans } = props.location.state.influencer
     const [formattedFans, setFormattedFans] = useState('')
-    
+    const [visibleOn, setVisibleOn] = useState(false)
     // const { params: { id } } = props.match
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     // const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
@@ -240,6 +240,7 @@ const BioPage = (props) =>{
                         <Row>
                             <Col sm >
                                 <div className="videoWrapper">
+                                    
                                     <iframe src={videoEmbedURL + video.videoId}
                                             frameBorder='0'
                                             allow='autoplay; encrypted-media'

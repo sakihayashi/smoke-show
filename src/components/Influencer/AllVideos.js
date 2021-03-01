@@ -18,20 +18,19 @@ import { getInfluencer }from '../../store/actions/influencerActions'
 import SubNav from './SubNav'
 import './allVideos.scss'
 import short from 'short-uuid'
+import VisibilitySensor from 'react-visibility-sensor'
 
 const AllVideos = (props) =>{
     const influencerId = props.match.params.id
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     const [videoArr, setVideoArr] = useState([])
     const [allVideoData, setAllVideoData] = useState([])
-    // const [showMore, setShowMore] = useState(false)
-    // const [videoIds, setVideoIds] = useState([])
-    // const [pageNum, setPageNum] = useState(0)
+    const [visibleOn, setVisibleOn] = useState(false)
+
     const [pgNum, setPgNum] = useState(null)
     const [middleNum, setMiddleNum] = useState(null)
     // const [credentials, setCredentials] = useState(null)
     const [active, setActive] = useState(1)
-    // let active = 1;
   
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -272,7 +271,12 @@ const AllVideos = (props) =>{
         
         // return items
     }
-
+    const onChange = (isVisible)=>{
+        if(isVisible){
+            setVisibleOn(true)
+        }
+        console.log('Element is now %s', isVisible ? 'visible' : 'hidden');
+    }
     useEffect( () => {
         loginCheck()
         props.getInfluencer(influencerId)
@@ -314,9 +318,12 @@ const AllVideos = (props) =>{
                     return(
                         <Fragment key={unique} >
                             <Col sm={6} className="main-col" >
+                                
                                 <Row className="video-row">
                                     <Col sm={8} >
+                                    <VisibilitySensor onChange={onChange}>
                                         <div className="videoWrapper">
+                                        {visibleOn ? 
                                             <iframe src={videoEmbedURL + id}
                                                     frameBorder='0'
                                                     allow='autoplay; encrypted-media'
@@ -324,8 +331,11 @@ const AllVideos = (props) =>{
                                                     title='video'
                                                     srcDoc={`<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href=https://www.youtube.com/embed/${id}?autoplay=1><img src=https://img.youtube.com/vi/${id}/hqdefault.jpg alt=${video.snippet.title}><span>▶</span></a>`}
                                             />
-                            
+                                            : ''
+                                        }
+                                            
                                         </div>
+                                        </VisibilitySensor>
                                         {/* <h3 style={{marginTop:'10px'}} aria-hidden={true} >{video.snippet.title}</h3> */}
                                         <div className="video-title-div" dangerouslySetInnerHTML={{__html: video.snippet.title}} />
                                         <Row className="comment-wrapper" >
@@ -355,6 +365,7 @@ const AllVideos = (props) =>{
                                             </div>
 
                                         </Row>
+                                        
                                         <div className="spacer-4rem"></div>
                                          {/* <Suspense fallback={<div class="loader">Loading...</div>}> */}
                                             <Comments videoId={id} />
@@ -377,6 +388,7 @@ const AllVideos = (props) =>{
                                         </div>
                                     </Col>
                                 </Row>
+                                
                             </Col>
                         </Fragment>
                     )
