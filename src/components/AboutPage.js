@@ -3,38 +3,10 @@ import {Helmet} from "react-helmet"
 import { Row, Col, Button } from 'react-bootstrap'
 import Layout from './Layout/Layout'
 import './about.scss'
-import * as Realm from "realm-web"
-
 
 const AboutPage = () =>{
-    // const id = process.env.REACT_APP_REALM_APP_ID
-    // const config = { id };
-    // const app = new Realm.App(config);
-    // const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-    // const checkRes = async () =>{
-    //     try {
 
-    //         await app.logIn(credentials).then( async user =>{
-    //             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-    //             const collectionUsers = mongo.db("smoke-show").collection("users")
-    //             const filter = {username: 'smokySaki'}
-    //             try {
-    //                 await collectionUsers.findOne(filter).then(res =>{
-    //                     console.log(res)
-    //                     if(res){
-    //                         console.log('null read?')
-    //                     }else{
-    //                         console.log('null is false')
-    //                     }
-    //                 })
-    //             } catch (error) {
-                    
-    //             }
-    //         })
-    //     } catch (error) {
-            
-    //     }
-    // }
+
  return(
      <Layout>
      <Helmet>
