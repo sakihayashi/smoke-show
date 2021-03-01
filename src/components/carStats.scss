@@ -163,15 +163,30 @@
 }
 
 .ad-on-search{
-    width: 728px;
-    height: 90px;
+    width: 300px;
+    height: 250px;
     background: #eee;
     margin: 10% auto;
 }
-
+.ad-pc{
+    display: none;
+}
+.ad-mobile{
+    display: block;
+}
 @media (min-width: $md){
     .stats-container{
         padding: 0 1rem;
+    }
+    .ad-pc{
+        display: block;
+    }
+    .ad-mobile{
+        display: none;
+    }
+    .ad-on-search{
+        width: 728px;
+        height: 90px;
     }
 }
 
