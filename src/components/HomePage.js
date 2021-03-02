@@ -2,7 +2,8 @@ import React, { useEffect, useState, Fragment } from 'react'
 import {Helmet} from "react-helmet"
 import { Row, Col, Spinner } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import wheelImg from '../assets/global/smoke-wheel.png'
+import { Link } from 'react-router-dom'
+// import wheelImg from '../assets/global/smoke-wheel.png'
 // import { youtubeAPI } from '../utils/youtubeAPI'
 // import { carTempData } from './carTempData'
 // import { commentsTempData } from './commentsTempData' 
@@ -221,18 +222,24 @@ const [isLoading, setIsloading] = useState(false)
                                             <small>{date}</small>
                                            
                                             <Row className="comment-wrapper" >
-                                                <div className="col-1" style={{margin:0,padding:0}} >
-                                                {video.influencer.profilePic ? <img src={video.influencer.profilePic} 
                                                 
+                                                <div className="col-1" style={{margin:0,padding:0}} >
+                                                <Link to={`/influencer/${video.userId}`}>
+                                                {video.influencer.profilePic ? <img src={video.influencer.profilePic} 
                                                 className="creator-profile-pic" alt={video.snippet.channelTitle}/> :
                                                 <div
                                                 style={{width:'46px', height: '46px', backgroundColor: 'teal'}}
                                                 className="creator-profile-pic" name={video.snippet.channelTitle}></div>
                                                 }
-                                                    
+                                                </Link> 
                                                 </div>
+                                                
                                                 <div className="col-11" style={{paddingRight:0, margin: 'auto'}} >
-                                                <div className="creator-name"><strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{video.fans && video.fans} {''} fans</span></div>
+                                                    <Link to={`/influencer/${video.userId}`}>
+                                                        <div className="creator-name">
+                                                        <strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{video.fans && video.fans} {''} fans</span>
+                                                        </div>
+                                                    </Link>
                                                 </div>
                                                 
                                             </Row>
