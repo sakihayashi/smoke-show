@@ -129,7 +129,7 @@ const SettingModal = (props) =>{
         }else{
         const token = sessionStorage.getItem('session_token')
         const tokenUser = sessionStorage.getItem('session_user')
-        const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
+        // const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
         const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
         try{
             await app.logIn(credentials.cre).then(async user =>{

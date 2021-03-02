@@ -17,7 +17,7 @@ import * as Realm from "realm-web"
 import moment from 'moment'
 // import SpecDiv from './SpecDiv'
 import loadable from '@loadable/component'
-import MediaNet from './MediaNet'
+// import MediaNet from './MediaNet'
 
 const Comments = loadable(() => import('./Comments'))
 const SpecDiv = loadable(() => import('./SpecDiv'))
@@ -255,16 +255,16 @@ const [isLoading, setIsloading] = useState(false)
                                         
                                             <SpecDiv video={video} titleCase={titleCase} price={price} model={model}/>
                                             <div className="ad-container">
-                                                <div className="ad-160">
+                                                {/* <div className="ad-160">
                                                     <MediaNet divId='554833626' size="160x600" />
                                                 </div>
                                                 <div className="ad-300">
                                                     <MediaNet divId='554833626' size="300x250" />
-                                                </div>
+                                                </div> */}
                                             
-                                                {/* <p style={{color: 'gray'}}>ads will go here</p>
+                                                <p style={{color: 'gray'}}>ads will go here</p>
                                                 <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
-                                                <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p> */}
+                                                <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p>
                                             </div>
                                             </div>
                                         </Col>
