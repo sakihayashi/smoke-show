@@ -24,7 +24,7 @@ import BioPageInfluencer from './components/Influencer/BioPage'
 import Garage from './components/Influencer/Garage'
 import Social from './components/Influencer/Social'
 import SwaggInfluencer from './components/Influencer/Swagg'
-// import QueryVideoData from './components/Admin/QueryVideoData'
+import QueryVideoData from './components/Admin/QueryVideoData'
 import EditVideoData from './components/Admin/EditVideoData'
 import AddCarData from './components/Admin/AddCarData'
 import CheckCarData from './components/Admin/CheckCarData'
@@ -60,7 +60,7 @@ function App() {
           <Route path="/terms" component={Terms} />
           <Route path="/check-data" component={CheckCarData} />
 
-          {/* <Route path="/update-video" component={QueryVideoData} /> */}
+          <Route path="/update-video" component={QueryVideoData} />
 
           <Route component={NotFoundPage} />
         </Switch>

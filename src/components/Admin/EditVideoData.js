@@ -30,12 +30,13 @@ const EditVideoData = () =>{
     );
     }
     
-    const handleChange = (e) =>[
+    const handleChange = (e) =>{
         setUserObj({
             ...userObj,
             [e.target.name]: e.target.value
         })
-    ]
+    }
+
     const videoEmbedURL = 'https://www.youtube.com/embed/'
 
     const chunkArray = (allVideos) =>{
