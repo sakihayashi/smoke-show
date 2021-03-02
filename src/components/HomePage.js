@@ -187,7 +187,7 @@ const [isLoading, setIsloading] = useState(false)
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Home | The Smoke Show</title>
-                <meta name="description" content="Place the meta description text here." />
+                <meta name="description" content="The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!" />
                 <Head />
                 {/* <link rel="canonical" href="http://mysite.com/example" /> */}
             </Helmet>
@@ -207,7 +207,6 @@ const [isLoading, setIsloading] = useState(false)
                         let price;
                         if(video.carData.price && video.carData.price.baseMSRP){
                             price = numberWithCommas(video.carData.price.baseMSRP)
-                            console.log('price', price)
                         }else{ price = ''}
                      
                         const date = moment(video.snippet.publishedAt).fromNow()
