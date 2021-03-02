@@ -24,7 +24,8 @@ export const getInfluencer = (influencerId) =>{
                     return formattedFans = Math.sign(num)*Math.abs(num)
                 }
             }).then(formattedFans =>{
-                dispatch({type: 'GET_INFLUENCER', influencer, formattedFans})
+                const data = {user: influencer, numOfFans: formattedFans}
+                dispatch({type: 'GET_INFLUENCER', data})
             })
             // console.log('fans', fansCount)
             // if(fansCount > 999){

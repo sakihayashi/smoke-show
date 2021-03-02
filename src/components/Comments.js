@@ -23,7 +23,7 @@ const Comments = (props) =>{
         if(isVisible){
             setVisibleOn(true)
         }
-        console.log('Element is now %s', isVisible ? 'visible' : 'hidden');
+        // console.log('Element is now %s', isVisible ? 'visible' : 'hidden');
     }
     const handleChange = (e) =>{
         setUserComment(e.target.value)

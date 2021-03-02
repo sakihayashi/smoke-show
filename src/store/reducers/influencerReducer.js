@@ -9,8 +9,8 @@ const influencerReducer = (state = initState, action) =>{
             console.log('user from reducer', action.state)
             return {
                 ...state,
-                influencerObj: action.influencer,
-                formattedFans: action.formattedFans
+                influencerObj: action.data.user,
+                formattedFans: action.data.numOfFans
             }
         
         // case 'BECOME_FAN': 

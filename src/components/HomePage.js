@@ -207,6 +207,7 @@ const [isLoading, setIsloading] = useState(false)
                         let price;
                         if(video.carData.price && video.carData.price.baseMSRP){
                             price = numberWithCommas(video.carData.price.baseMSRP)
+                            console.log('price', price)
                         }else{ price = ''}
                      
                         const date = moment(video.snippet.publishedAt).fromNow()
@@ -251,6 +252,8 @@ const [isLoading, setIsloading] = useState(false)
                                             
                                         </Col>
                                         <Col sm="auto" className="spec-col"  >
+                                        <div style={{minWidth: '160px'}}>
+                                        
                                             <SpecDiv video={video} titleCase={titleCase} price={price} model={model}/>
                                             <div className="ad-container">
                                                 <div className="ad-160">
@@ -263,6 +266,7 @@ const [isLoading, setIsloading] = useState(false)
                                                 {/* <p style={{color: 'gray'}}>ads will go here</p>
                                                 <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
                                                 <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p> */}
+                                            </div>
                                             </div>
                                         </Col>
                                     </Row>

@@ -21,6 +21,7 @@ import short from 'short-uuid'
 import VisibilitySensor from 'react-visibility-sensor'
 
 const AllVideos = (props) =>{
+   
     const influencerId = props.match.params.id
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     const [videoArr, setVideoArr] = useState([])
@@ -31,6 +32,7 @@ const AllVideos = (props) =>{
     const [middleNum, setMiddleNum] = useState(null)
     // const [credentials, setCredentials] = useState(null)
     const [active, setActive] = useState(1)
+    const [influencerName, setInfluencerName] = useState('')
   
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -61,6 +63,7 @@ const AllVideos = (props) =>{
     //     setShowMore(!showMore)
     // }
     const attachCarData = async (chunk, num) =>{
+        
        setVideoArr([])
         // try{
         //     await app.logIn(credentials).then( user =>{
@@ -275,8 +278,15 @@ const AllVideos = (props) =>{
         if(isVisible){
             setVisibleOn(true)
         }
-        console.log('Element is now %s', isVisible ? 'visible' : 'hidden');
+        // console.log('Element is now %s', isVisible ? 'visible' : 'hidden');
     }
+    useEffect(() => {
+        console.log('state', props.influecerObj)
+        if(typeof(props.influencerObj.username) !== 'undefined'){
+            console.log('name?', props.influencerObj.username)
+            setInfluencerName(props.influencerObj.username)
+        }
+    }, [props.influecerObj])
     useEffect( () => {
         loginCheck()
         props.getInfluencer(influencerId)
@@ -286,7 +296,7 @@ const AllVideos = (props) =>{
         <Layout >
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>All Videos from  | The Smoke Show</title>
+                <title>All Videos from {`${influencerName}`} | The Smoke Show</title>
                 <meta name="description" content="Place the meta description text here." />
                 {/* <link rel="canonical" href="http://mysite.com/example" /> */}
             </Helmet>
@@ -409,6 +419,7 @@ const AllVideos = (props) =>{
         }
     }
     const mapStateToProps = (state)=>{
+        
         return{
             influencerObj: state.influ.influencerObj,
             formattedFans: state.influ.formattedFans
