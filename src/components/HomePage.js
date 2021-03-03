@@ -91,12 +91,12 @@ const [isLoading, setIsloading] = useState(false)
                 const filter = {'snippet.publishedAt': {$gt: aWeekAgo}}
                 const options = {sort: {"snippet.publishedAt": -1}  }
                 await collectionVideos.find(filter, options).then(async videos =>{
-                   
                     const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                     const collectionCars = mongo.db("smoke-show").collection("cars")
                     const collectionManual = mongo.db("smoke-show").collection("cars-manual")
                     
                     const result = videos.map(async video =>{
+                     
                         const filterCar = {_id: {"$oid": video.carDataId}}
                         const filterInflu = {userId: video.userId}
 
@@ -122,19 +122,34 @@ const [isLoading, setIsloading] = useState(false)
                                                 video.carData = data
                                                 setLatestVideos(latestVideos =>[...latestVideos, video])
                                                 }else{
+                                                    console.log('ever called?')
                                                 await collectionManual.findOne(filterCar).then(data =>{
                                                     if(data){
                                                         video.carData = data
                                                         setLatestVideos(latestVideos =>[...latestVideos, video])
                                                     }else{
                                                         console.log('no data')
+                                                        video.carData = {make: '', year: null, price: {baseMSRP: ''}}
+                                                        setLatestVideos(latestVideos =>[...latestVideos, video])
                                                     }
                                                    
                                                 })
                                                 }
                                             })
                                         } catch (error) {
-                                            console.log(error)
+                                            await collectionManual.findOne(filterCar).then(data =>{
+                                                // console.log('data', data)
+                                                if(data){
+                                                    video.carData = data
+                                                    setLatestVideos(latestVideos =>[...latestVideos, video])
+                                                }else{
+                                                    console.log('no data')
+                                                    video.carData = {make: '', year: null, price: {baseMSRP: ''}}
+                                                    setLatestVideos(latestVideos =>[...latestVideos, video])
+                                                }
+                                               
+                                            })
+                                            console.log('no data?', error)
                                         }
                                     })
                                 } catch (error) {
@@ -147,7 +162,7 @@ const [isLoading, setIsloading] = useState(false)
                         }
                         
                     })
-                    
+        
                 })
             })
         } catch (error) {

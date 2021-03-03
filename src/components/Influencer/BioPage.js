@@ -267,7 +267,7 @@ const BioPage = (props) =>{
                                 <div className="ad-size">
                                 <div className="spec-wrapper">
                                 <img alt={car.name}  src={require(`../../assets/maker_logos/${titleCase}_Logo.png`).default} className="icon-s" />{' '}<span className="spec-text"><strong>{car.year} {titleCase} {model}</strong></span><br/>
-                                <img alt="price" key={priceIcon} src={priceIcon} className="icon-s" /><span className="spec-text">{' '}${price.baseMSRP}</span><br />
+                                <img alt="price" key={priceIcon} src={priceIcon} className="icon-s" /><span className="spec-text">{' '}${price}</span><br />
                                 <img alt="power " key={powerIcon} src={powerIcon} className="icon-s" /><span className="spec-text">{' '}{car.features.Engine.Torque}</span><br />
                                 <img alt="piston" key={pistonIcon} src={pistonIcon} className="icon-s" /><span className="spec-text">{' '}{car.features.Engine.Horsepower}</span><br />
                                 </div>
