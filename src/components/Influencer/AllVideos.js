@@ -18,7 +18,7 @@ import { getInfluencer }from '../../store/actions/influencerActions'
 import SubNav from './SubNav'
 import './allVideos.scss'
 import short from 'short-uuid'
-import VisibilitySensor from 'react-visibility-sensor'
+// import VisibilitySensor from 'react-visibility-sensor'
 
 const AllVideos = (props) =>{
    
@@ -26,11 +26,10 @@ const AllVideos = (props) =>{
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     const [videoArr, setVideoArr] = useState([])
     const [allVideoData, setAllVideoData] = useState([])
-    const [visibleOn, setVisibleOn] = useState([])
+    // const [visibleOn, setVisibleOn] = useState([])
 
     const [pgNum, setPgNum] = useState(null)
     const [middleNum, setMiddleNum] = useState(null)
-    // const [credentials, setCredentials] = useState(null)
     const [active, setActive] = useState(1)
     const [influencerName, setInfluencerName] = useState('')
   
@@ -100,7 +99,6 @@ const AllVideos = (props) =>{
                         
                     })
                     Promise.all(mapResults).then(video =>{
-                        console.log('video', video)
                         setVideoArr(video)
                     })
                 }else{
@@ -286,9 +284,9 @@ const AllVideos = (props) =>{
         
         // return items
     }
-    const onChange = (isVisible)=>{
-        console.log('visible?', isVisible)
-    }
+    // const onChange = (isVisible, index)=>{
+   
+    // }
     useEffect(() => {
         console.log('state', props.influecerObj)
         if(typeof(props.influencerObj.username) !== 'undefined'){
@@ -340,7 +338,7 @@ const AllVideos = (props) =>{
                                 
                                 <Row className="video-row">
                                     <Col sm={8} >
-                                    <VisibilitySensor onChange={(isVisible)=>onChange(isVisible)}>
+                                    {/* <VisibilitySensor onChange={(isVisible)=>onChange(isVisible, index)}> */}
                                         <div className="videoWrapper">
                                             <iframe src={videoEmbedURL + id}
                                                     frameBorder='0'
@@ -352,7 +350,7 @@ const AllVideos = (props) =>{
                                   
                                             
                                         </div>
-                                        </VisibilitySensor>
+                                        {/* </VisibilitySensor> */}
                                         {/* <h3 style={{marginTop:'10px'}} aria-hidden={true} >{video.snippet.title}</h3> */}
                                         <div className="video-title-div" dangerouslySetInnerHTML={{__html: video.snippet.title}} />
                                         <Row className="comment-wrapper" >

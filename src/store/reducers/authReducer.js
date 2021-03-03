@@ -27,7 +27,7 @@ const authReducer = (state = initState, action) =>{
                 ...state,
                 customData: action.customData,
                 isLoggedIn: true,
-                openModal: false
+                openmodal: false
             }
         case 'LOGIN_FAIL':
             return{

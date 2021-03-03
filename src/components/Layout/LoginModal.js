@@ -109,10 +109,9 @@ const LoginModal = (props) =>{
     const handleSubmit =(e)=>{
         setErrMsg('')
         e.preventDefault()
-            const emailLowerCase = userObj.email.toLowerCase()
-            const credentials = Realm.Credentials.emailPassword(emailLowerCase, userObj.password)
-            props.logInUser(credentials, emailLowerCase)
-     
+        const emailLowerCase = userObj.email.toLowerCase()
+        const credentials = Realm.Credentials.emailPassword(emailLowerCase, userObj.password)
+        props.logInUser(credentials, emailLowerCase)
         
     }
     const handleModalSwap = () =>{

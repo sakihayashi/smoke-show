@@ -96,7 +96,7 @@ const [isLoading, setIsloading] = useState(false)
                             let formattedFans;
                             const collectionFans = mongo.db("smoke-show").collection(`fans-${influencer.username}`)
                             collectionFans.count().then(num =>{
-                                console.log('num', num)
+                                
                                 if(num > 999){
                                     formattedFans = Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k'
                                     video.fans = formattedFans

@@ -194,7 +194,6 @@ const Comments = (props) =>{
 
     useEffect( () => {
         
-        // const token = sessionStorage.getItem('session_token')
         const tokenUser = sessionStorage.getItem('session_user')
          if(tokenUser){
             jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
@@ -203,8 +202,7 @@ const Comments = (props) =>{
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
                     getComments(credentials)
                 }else{
-                    // setIsLoggedIn(true)
-                    
+
                     getComments(decoded.cre)
                 }
             });
@@ -235,7 +233,6 @@ const Comments = (props) =>{
                                 [(visibleOn ? <img src={comment.profilePic} className="profile-pic " alt={comment.username} loading="lazy" /> : ''
                                  )
                                  ]
-                                                          
                              :
                                 <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/> 
                             }
