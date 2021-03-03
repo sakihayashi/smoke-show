@@ -136,11 +136,8 @@ const LoginModal = (props) =>{
     }, [props.modalMsg])
 
     useEffect(() => {
-        console.log('log', props.swapSignup)
         if(props.swapSignup === 'signup'){
-            console.log('fired?')
             props.toggleAuthModal()
-            
         }
         
     }, [props.swapSignup])

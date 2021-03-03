@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useHistory } from 'react-router-dom'
 import { Navbar, Nav, Button} from 'react-bootstrap'
 import Logo from '../../assets/global/Logo-smoke-show.png'
 import './header.scss'
@@ -9,10 +9,11 @@ import SignUpModal from './SignUpModal'
 import { connect } from 'react-redux'
 import { logOutUser } from '../../store/actions/authActions'
 import { logInUser } from '../../store/actions/authActions'
-// import settingsIcon from '../../assets/global/Settings-icon-white.svg'
 import { openLoginModal } from '../../store/actions/authActions'
+import { updateProfilePage } from '../../store/actions/userActions'
 
 const Header = (props) =>{
+    let history = useHistory();
     const location = useLocation()
     const [tooLong, setTooLong] = useState(false)
     // const [currentUser, setCurrentUser] = useState('')
@@ -48,15 +49,19 @@ const Header = (props) =>{
      const switchToLogin = () =>{
          setHasAccount(true)
      }
+     const goProfilePage = ()=>{
+        props.updateProfilePage(props.customData.userId)
+        history.push(linkUrl)
+     }
 
      const loggedInDiv = 
      <Fragment>
         <div className="nav-top">Hi {props.customData.fname}, <Button className="btn-login"  onClick={logOut}>Logout</Button>
         {tooLong && <div className="line-break-div"><br/></div>}
-        <Link to={linkUrl}>
+        <div onClick={goProfilePage} style={{display: 'inline'}}>
             {/* <img src={settingsIcon} className="setting-icon-nav"  /> */}
             <span className="profile-link">My Smoke Show</span>
-        </Link>
+        </div>
         </div>
      </Fragment>
 
@@ -136,7 +141,8 @@ const mapDispatchToProps = (dispatch) =>{
     return {
         logOutUser: () => dispatch(logOutUser()),
         logInUser: (credentials, email) => dispatch(logInUser(credentials, email)),
-        openLoginModal: (state) => dispatch(openLoginModal(state))
+        openLoginModal: (state) => dispatch(openLoginModal(state)),
+        updateProfilePage: (userId) =>dispatch(updateProfilePage(userId))
     }
 }
 

@@ -1,18 +1,16 @@
 const initState = {
-    fname: '', 
-    lname: '', 
-    email: 'test@mail.com', 
-    password: '', 
-    password2: '',
+  profilepageid: '',
 }
 
 const userReducer = (state = initState, action) =>{
     switch(action.type){
-    
-        
-        // case 'BECOME_FAN': 
-        //     console.log('from reducer', action.userObj)
-        //     return action.userObj
+
+        case 'UPDATE_PROFILEPAGE': 
+        console.log('reducer', action.userId)
+            return {
+                ...state,
+                profilepageid: action.userId
+            }
         // default:
         //     console.log('error', action)
     }

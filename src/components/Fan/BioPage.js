@@ -19,8 +19,8 @@ import moment from 'moment'
 
 const BioPage = (props) =>{
 
-    let userIdParam = props.match.params.id
-
+    // let userIdParam = props.match.params.id
+    const [userIdParam, setUserIdParam] = useState(props.match.params.id)
     const [profileUser, setProfileUser] = useState({fname: '', lname: '', profilePic: '', profileCover: '', username: '', profileDesc: '', favSong: '', favArtist: ''})
     const [allowEdit, setAllowEdit] = useState(false)
     const [editMode, setEditMode] = useState({about: false, song: false, artist: false})
@@ -184,6 +184,7 @@ const BioPage = (props) =>{
             await app.logIn(credentials).then(async logInUser =>{
                 const mongo = logInUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const mongoCollectionUser = mongo.db("smoke-show").collection("users")
+                console.log('id', userIdParam)
                 const filter = {userId: userIdParam}
                 try{
                     await mongoCollectionUser.findOne(filter).then(user =>{
@@ -214,7 +215,7 @@ const BioPage = (props) =>{
             console.log(err)
         }
     }
-
+    
     const getTotalComments = async (mongo) =>{
         
         const mongoCollectionComments = mongo.db("smoke-show").collection("comments")
@@ -233,9 +234,32 @@ const BioPage = (props) =>{
             setUserCars(cars)
         })
     }
+    const loginCheck = () =>{
+        const tokenUser = sessionStorage.getItem('session_user')
+        let cre;
+        if(tokenUser){
+            jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
+                if (err) {
+                    // timeout
+                    // childRef.current.handleLoginModal(true)
+                    const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
+                    cre = credentials
+                }else{
+                    // const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+                    cre = decoded.cre
+                }
+              });
+            
+        }else{
+            const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
+            cre = credentials
+        }
+        return cre
+    }
     useEffect(() => {
         if(props.isLoggedIn){
-            if(props.customData.userId === profileUser.userId){
+       
+            if(props.customData.userId === props.match.params.id){
                 setAllowEdit(true)
             }else{
                 setAllowEdit(false)
@@ -245,28 +269,21 @@ const BioPage = (props) =>{
 
         }
     }, [props.isLoggedIn])
+
     useEffect(() => {
-        // setUserIdParam(props.match.params.id)
-        // const token = sessionStorage.getItem('session_token')
-        const tokenUser = sessionStorage.getItem('session_user')
-        if(tokenUser){
-            jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
-                if (err) {
-                    // timeout
-                    // childRef.current.handleLoginModal(true)
-                    const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
-                    getData(credentials)
-                }else{
-                    // const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
-                    getData(decoded.cre)
-                }
-              });
-            
-        }else{
-            const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
+        const id = props.profilepageid
+        setUserIdParam(id)
+        
+    }, [props.profilepageid])
+    useEffect(() => {
+        if(props.profilepageid){
+            const credentials = loginCheck()
             getData(credentials)
         }
-   
+    }, [userIdParam])
+    useEffect(() => {
+        const credentials = loginCheck()
+        getData(credentials)
     }, [])
 
     return(
@@ -292,7 +309,7 @@ const BioPage = (props) =>{
                     // ${bioImgL} 1280w,
                     // ${bioImgXL} 1500w
                     // `}
-                    src={ typeof(profileUser.profileCover) == 'undefined' || !profileUser.hasOwnProperty("profileCover") ?  noImg : profileUser.profileCover }
+                    src={ typeof(profileUser.profileCover) == 'undefined' || typeof(profileUser.profileCover) === 'null' ?  noImg : profileUser.profileCover }
                     alt="user selected profile image"
                      />
                 </div>
@@ -446,7 +463,8 @@ const BioPage = (props) =>{
 const mapStateToProps = (state) =>{
     return{
         isLoggedIn: state.auth.isLoggedIn,
-        customData: state.auth.customData
+        customData: state.auth.customData,
+        profilepageid: state.user.profilepageid
     }
 }
 export default connect(mapStateToProps)(BioPage)

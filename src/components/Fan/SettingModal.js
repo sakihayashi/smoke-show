@@ -5,7 +5,7 @@ import noImg from '../../assets/global/no_image.jpg'
 import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"
 import short from 'short-uuid'
-
+import Compressor from 'compressorjs'
 const appConfig = {
     id: process.env.REACT_APP_REALM_APP_ID,
     timeout: 10000, // timeout in number of milliseconds
@@ -31,7 +31,7 @@ const SettingModal = (props) =>{
     const [currentCover, setCurrentCover] = useState()
     const [disableBtnStates, setDisableBtnStates] = useState({profilePic: true, coverPic: true, userDetails: true, password: true})
     const baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
-
+    const [profileThumb, setProfileThumb] = useState()
     const handleClose = props.handleCloseSetting
     // const handleShow = props.handleShowSetting
 
@@ -63,24 +63,42 @@ const SettingModal = (props) =>{
             setUploadMsg({...uploadMsg, profile: 'The file size is too big. Please choose different file.'})
             return
         }else{
+            const file = e.target.files[0] 
+            let compressed;
+            new Compressor(file, {
+                quality: 0.6,
+                maxWidth: 300,
+                success(result) {
+                    compressed = result
+                    // setProfilePic(result)
+                }
+
+              });
+              new Compressor(file, {
+                quality: 0.6,
+                maxWidth: 100,
+                success(result) {
+                    setProfileThumb(result)
+                }
+
+              });
         setProfilePic(e.target.files[0])
         setImgThumb(URL.createObjectURL(e.target.files[0]))
         setDisableBtnStates({
             ...disableBtnStates,
             profilePic: false
         })
-        const file = e.target.files[0] 
+        
         const reader = new FileReader()
         reader.onload = (event) => {
         const base64 = event.target.result.split(",").pop()
           setImgData64Profile(base64)
         };
-        reader.readAsDataURL(file)
+        reader.readAsDataURL(compressed)
         }
     }
     const saveProfilePic = async () =>{
-        const imgId = short.generate()
-        const filekey = props.profileUser.userId + '/profile/' + imgId
+        const filekey = props.profileUser.userId + '/profile/300'
         const imgUrlWithKey = baseImgUrl + filekey
         const oldProfilePic = props.profileUser.profilePic
 
@@ -125,7 +143,6 @@ const SettingModal = (props) =>{
             console.log(err)
             }
         }else{
-        // const token = sessionStorage.getItem('session_token')
         const tokenUser = sessionStorage.getItem('session_user')
         // const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
         const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
