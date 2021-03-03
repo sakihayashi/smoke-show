@@ -66,7 +66,10 @@ const Social = (props) =>{
         }
     }
     useEffect(() => {
-        setInfluencer(props.influencerObj)
+        if(props.influencerObj.username){
+            setInfluencer(props.influencerObj)
+        }
+        
     }, [props.influencerObj])
 
     useEffect(() => {
@@ -89,7 +92,7 @@ const Social = (props) =>{
                     <Row>
                         <Col sm={6}>
                             <ul style={{listStyle: 'none'}}>
-                            {influencer.social.instagram && 
+                            {influencer.social.instagram  && 
                                 <li className="social-media-container">
                                     <Link to={influencer.social.instagram}>
                                         <img className="social-img" src={instaIcon} alt="Instagram" />
