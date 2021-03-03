@@ -36,7 +36,6 @@ const SettingModal = (props) =>{
     // const handleShow = props.handleShowSetting
 
     const handleChange = (e) =>{
-        
         setUserObj({...userObj,
             [e.target.name]: e.target.value
         })
@@ -46,7 +45,6 @@ const SettingModal = (props) =>{
                 userDetails: false
             })
         }
-
     }
     const handleChangePw = (e) =>{
         setUserPw({
@@ -127,7 +125,7 @@ const SettingModal = (props) =>{
             console.log(err)
             }
         }else{
-        const token = sessionStorage.getItem('session_token')
+        // const token = sessionStorage.getItem('session_token')
         const tokenUser = sessionStorage.getItem('session_user')
         // const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
         const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
@@ -538,9 +536,6 @@ const deleteImgObj = async (key) =>{
                 <Button variant="primary" onClick={handleClose} className="save-changes-btn btn-close-settings">
                         Close
                 </Button>
-                {/* <Button variant="primary" onClick={testDelete} className="save-changes-btn btn-close-settings">
-                        test delete
-                </Button> */}
             </Modal.Footer>
         </Modal>
     </Fragment>

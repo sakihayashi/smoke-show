@@ -71,17 +71,7 @@ const [isLoading, setIsloading] = useState(false)
     const getVideos = async (credentials) =>{
         setLatestVideos([])
         const now = new Date()
-        // const days = 7
-        // let dates = []
-
-        // const today = moment(now).format('YYYY-MM-DD')
-        // dates.push(today)
         const aWeekAgo = moment(now).add(-7, 'day').format('YYYY-MM-DD')
-
-        // for(let i =1; i < days; i++){
-        //     const result = moment(now).add(-[i], 'day').format('YYYY-MM-DD')
-        //     dates.push(result)
-        // }
     
         try {
             await app.logIn(credentials).then(async user =>{
@@ -95,76 +85,60 @@ const [isLoading, setIsloading] = useState(false)
                     const collectionCars = mongo.db("smoke-show").collection("cars")
                     const collectionManual = mongo.db("smoke-show").collection("cars-manual")
                     
-                    const result = videos.map(async video =>{
+                    const results = videos.map(async video =>{
                      
                         const filterCar = {_id: {"$oid": video.carDataId}}
                         const filterInflu = {userId: video.userId}
 
-                        try {
-                            await collectionInfluencer.findOne(filterInflu).then(async influencer =>{
-                                let formattedFans;
-                                const collectionFans = mongo.db("smoke-show").collection(`fans-${influencer.username}`)
-                                video.influencer = influencer
-                                try {
-                                    collectionFans.count().then(async num =>{
-                                        if(num > 999){
-                                            formattedFans = Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k'
-                                            video.fans = formattedFans
-                                           
-                                        }else{
-                                            formattedFans = Math.sign(num)*Math.abs(num)
-                                            video.fans = formattedFans
-                                        }
-                                        
-                                        try {
-                                            await collectionCars.findOne(filterCar).then(async data =>{
-                                                if(data){
-                                                video.carData = data
-                                                setLatestVideos(latestVideos =>[...latestVideos, video])
-                                                }else{
-                                                    console.log('ever called?')
-                                                await collectionManual.findOne(filterCar).then(data =>{
-                                                    if(data){
-                                                        video.carData = data
-                                                        setLatestVideos(latestVideos =>[...latestVideos, video])
-                                                    }else{
-                                                        console.log('no data')
-                                                        video.carData = {make: '', year: null, price: {baseMSRP: ''}}
-                                                        setLatestVideos(latestVideos =>[...latestVideos, video])
-                                                    }
-                                                   
-                                                })
-                                                }
-                                            })
-                                        } catch (error) {
-                                            await collectionManual.findOne(filterCar).then(data =>{
-                                                // console.log('data', data)
-                                                if(data){
-                                                    video.carData = data
-                                                    setLatestVideos(latestVideos =>[...latestVideos, video])
-                                                }else{
-                                                    console.log('no data')
-                                                    video.carData = {make: '', year: null, price: {baseMSRP: ''}}
-                                                    setLatestVideos(latestVideos =>[...latestVideos, video])
-                                                }
-                                               
-                                            })
-                                            console.log('no data?', error)
-                                        }
-                                    })
-                                } catch (error) {
-                                    console.log(error)
+                           const influencer = await collectionInfluencer.findOne(filterInflu)
+                           if(influencer){
+                            video.influencer = influencer
+                            let formattedFans;
+                            const collectionFans = mongo.db("smoke-show").collection(`fans-${influencer.username}`)
+                            collectionFans.count().then(num =>{
+                                console.log('num', num)
+                                if(num > 999){
+                                    formattedFans = Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k'
+                                    video.fans = formattedFans
+                                    
+                                }else{
+                                    formattedFans = Math.sign(num)*Math.abs(num)
+                                    video.fans = formattedFans
                                 }
-                                
                             })
-                        } catch (error) {
-                            console.log(error)
-                        }
+                            
+                            const data = await collectionCars.findOne(filterCar)
+                                if(data){
+                                video.carData = data
+                                return video
+
+                                }else{
+                                    console.log('ever called?')
+                                const data = await collectionManual.findOne(filterCar)
+                                    if(data){
+                                        video.carData = data
+                                        return video
+
+                                    }else{
+                                        console.log('no data')
+                                        video.carData = {make: '', year: null, price: {baseMSRP: ''}}
+                                        return video
+                                    }
+                                }
+                           }else{
+                               console.log('need data fix')
+                           }
+
+                    })
+                    Promise.all(results).then(videos =>{
+                     
+                        setLatestVideos(videos)
+                    })
                         
                     })
-        
+
                 })
-            })
+
         } catch (error) {
             console.log(error)
         }

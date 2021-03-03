@@ -26,7 +26,7 @@ const AllVideos = (props) =>{
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     const [videoArr, setVideoArr] = useState([])
     const [allVideoData, setAllVideoData] = useState([])
-    const [visibleOn, setVisibleOn] = useState(false)
+    const [visibleOn, setVisibleOn] = useState([])
 
     const [pgNum, setPgNum] = useState(null)
     const [middleNum, setMiddleNum] = useState(null)
@@ -71,54 +71,66 @@ const AllVideos = (props) =>{
                 const collectionCars = mongo.db("smoke-show").collection("cars")
                 const collectionManual = mongo.db("smoke-show").collection("cars-manual")
                 if(chunk){
-                    chunk[num].map(async video =>{
+                    const mapResults = chunk[num].map(async video =>{
                         const filterCar = {_id: {"$oid": video.carDataId}}
-                        
-                        try{
-                            await collectionCars.findOne(filterCar).then(async data =>{
+
+                            const data = await collectionCars.findOne(filterCar)
                             
                                if(data){
                                 video.carData = data
-                                setVideoArr(videoArr =>[...videoArr, video])
+                                return video
+                                // setVideoArr(videoArr =>[...videoArr, video])
                                }else{
-                                await collectionManual.findOne(filterCar).then(data =>{
+
+                                const data = await collectionManual.findOne(filterCar)
+                                if(data){
                                     video.carData = data
-                                    setVideoArr(videoArr =>[...videoArr, video])
-                                })
+                                    return video
+                                    // setVideoArr(videoArr =>[...videoArr, video])
+                                }else{
+                                    console.log('no data')
+                                }
+                                    
                                }
                                 
-                            }).then(res =>{
-                                
-                            })
-                        }catch(err){
-                         console.log(err)
-                        }
+              
+                        // }catch(err){
+                        //  console.log(err)
+                        // }
                         
                     })
+                    Promise.all(mapResults).then(video =>{
+                        console.log('video', video)
+                        setVideoArr(video)
+                    })
                 }else{
-                    allVideoData[num].map(async video =>{
+                    console.log('this fired?')
+                    const results = allVideoData[num].map(async video =>{
                         const filterCar = {_id: {"$oid": video.carDataId}}
                         
-                        try{
-                            await collectionCars.findOne(filterCar).then(async data =>{
+                        // try{
+                            const data = await collectionCars.findOne(filterCar)
                             
                                if(data){
                                 video.carData = data
-                                setVideoArr(videoArr =>[...videoArr, video])
+                                return video
+                                // setVideoArr(videoArr =>[...videoArr, video])
                                }else{
-                                await collectionManual.findOne(filterCar).then(data =>{
+                                const data = await collectionManual.findOne(filterCar)
                                     video.carData = data
-                                    setVideoArr(videoArr =>[...videoArr, video])
-                                })
+                                    return video
+                                    // setVideoArr(videoArr =>[...videoArr, video])
                                }
                                 
-                            }).then(res =>{
-                                
-                            })
-                        }catch(err){
-                         console.log(err)
-                        }
+                            
+                        // }catch(err){
+                        //  console.log(err)
+                        // }
                         
+                    })
+                    Promise.all(results).then(res =>{
+                        console.log(res)
+                        setVideoArr(res)
                     })
                 }
                 
@@ -275,10 +287,7 @@ const AllVideos = (props) =>{
         // return items
     }
     const onChange = (isVisible)=>{
-        if(isVisible){
-            setVisibleOn(true)
-        }
-        // console.log('Element is now %s', isVisible ? 'visible' : 'hidden');
+        console.log('visible?', isVisible)
     }
     useEffect(() => {
         console.log('state', props.influecerObj)
@@ -331,9 +340,8 @@ const AllVideos = (props) =>{
                                 
                                 <Row className="video-row">
                                     <Col sm={8} >
-                                    <VisibilitySensor onChange={onChange}>
+                                    <VisibilitySensor onChange={(isVisible)=>onChange(isVisible)}>
                                         <div className="videoWrapper">
-                                        {visibleOn ? 
                                             <iframe src={videoEmbedURL + id}
                                                     frameBorder='0'
                                                     allow='autoplay; encrypted-media'
@@ -341,8 +349,7 @@ const AllVideos = (props) =>{
                                                     title='video'
                                                     srcDoc={`<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href=https://www.youtube.com/embed/${id}?autoplay=1><img src=https://img.youtube.com/vi/${id}/hqdefault.jpg alt=${video.snippet.title}><span>▶</span></a>`}
                                             />
-                                            : ''
-                                        }
+                                  
                                             
                                         </div>
                                         </VisibilitySensor>

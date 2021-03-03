@@ -10,6 +10,7 @@ import jwt from 'jsonwebtoken'
 import { openLoginModal, attachMsg } from '../store/actions/authActions'
 import './comments.scss'
 import VisibilitySensor from 'react-visibility-sensor'
+import short from 'short-uuid'
 
 const Comments = (props) =>{
     const [commentsDB, setCommentsDB] = useState([])
@@ -164,7 +165,7 @@ const Comments = (props) =>{
                             }
                             return res
                         })
-                        setIsComment(true)
+                        
                         const finalResults = await Promise.all(picAttached);
                         setIsComment(true)
                          if(finalResults.length == 1){
@@ -219,18 +220,17 @@ const Comments = (props) =>{
     
         {props.isLoggedIn ? writeComment() : loginToComment() }
         { isComment === true && commentsDB.length !== 0 ? commentsDB.map((comment, index) =>{
-         
+            const unique = short.generate()
             {/* var localtime = moment(comment.date_posted).local().format('MM-DD-YYYY') */}
             let localtime = moment(comment.date_posted).fromNow()
             return(
-                <Row className="comment-wrapper" key={localtime + index}>
+                <Row className="comment-wrapper" key={unique}>
                     <VisibilitySensor onChange={onChange}>
                     <div style={{margin:0,padding:0}} className="col-1">
                         <Link to={{
                             pathname: `/user/${comment.userId}`
                         }}>
-                            
-                            
+
                             {comment.profilePic ? 
                                 [(visibleOn ? <img src={comment.profilePic} className="profile-pic " alt={comment.username} loading="lazy" /> : ''
                                  )
@@ -273,9 +273,10 @@ const Comments = (props) =>{
                 <Card.Body className="collapsed-body">
                 { moreComments[0] == null && <p>No more comment</p>}
                 {moreComments[0] && moreComments[0].map((comment, index) =>{
+                    const unique = short.generate()
                     let localtime = moment(comment.date_posted).fromNow()
                     return(
-                        <Row className="comment-wrapper" key={localtime + index}>
+                        <Row className="comment-wrapper" key={unique}>
 
                             <div style={{margin:0,padding:0}} className="col-1">
                                 <Link to={{

@@ -247,18 +247,18 @@ const BioPage = (props) =>{
     }, [props.isLoggedIn])
     useEffect(() => {
         // setUserIdParam(props.match.params.id)
-        const token = sessionStorage.getItem('session_token')
+        // const token = sessionStorage.getItem('session_token')
         const tokenUser = sessionStorage.getItem('session_user')
-        if(token){
-            jwt.verify(token, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
+        if(tokenUser){
+            jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     // timeout
                     // childRef.current.handleLoginModal(true)
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
                     getData(credentials)
                 }else{
-                    const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
-                    getData(credentials.cre)
+                    // const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+                    getData(decoded.cre)
                 }
               });
             
