@@ -68,9 +68,6 @@ const BioPage = (props) =>{
         setShowSetting(false)
     }
     const userLoggedIn = (id) =>{
-        console.log('working?', id)
-        console.log('profileuser', profileUser.userId)
-        console.log('param', userIdParam)
         
         if(id === profileUser.userId){
             console.log('working?', id)
@@ -241,11 +238,10 @@ const BioPage = (props) =>{
             jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     // timeout
-                    // childRef.current.handleLoginModal(true)
+
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
                     cre = credentials
                 }else{
-                    // const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
                     cre = decoded.cre
                 }
               });

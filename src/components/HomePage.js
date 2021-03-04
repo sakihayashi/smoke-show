@@ -131,7 +131,6 @@ const [isLoading, setIsloading] = useState(false)
 
                     })
                     Promise.all(results).then(videos =>{
-                     
                         setLatestVideos(videos)
                     })
                         
