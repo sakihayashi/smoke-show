@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import * as Realm from "realm-web"
-
+import Helmet from 'react-helmet'
 import { Container, Row, Col, Form, Pagination, Button } from 'react-bootstrap'
 import jwt from 'jsonwebtoken'
 
@@ -178,6 +178,9 @@ const EditVideoDataKirk = () =>{
     }, [])
     return(
         <Fragment>
+            <Helmet>
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
             {isLoggedIn ? 
             <Container>
                 <h1>Edit video data</h1>

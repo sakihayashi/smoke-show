@@ -225,11 +225,17 @@ const BioPage = (props) =>{
     }
     const getMyCars = async (mongo) =>{
         const mongoCollection = mongo.db("smoke-show").collection("my-cars")
+        // console.log('param', userIdParam)
+        const filter = {userId: props.match.params.id}
+        try {
+            await mongoCollection.find(filter).then( cars =>{
+                    setUserCars(cars)
+            
+            })
+        } catch (error) {
+            console.log(error)
+        }
         
-        const filter = {userId: userIdParam}
-        await mongoCollection.find(filter).then( cars =>{
-            setUserCars(cars)
-        })
     }
     const loginCheck = () =>{
         const tokenUser = sessionStorage.getItem('session_user')
@@ -290,7 +296,7 @@ const BioPage = (props) =>{
             <meta name="description" content="Place the meta description text here." />
             {/* <link rel="canonical" href="http://mysite.com/example" /> */}
         </Helmet>
-        {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal} profileUser={profileUser} updateProfileData={updateProfileData} updateCarData={updateCarData} />}
+        {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal} profileUser={profileUser} updateProfileData={updateProfileData} updateCarData={updateCarData} getMyCars={getMyCars} />}
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} profileUser={profileUser}  updateProfileData={updateProfileData} updateUserDetails={updateUserDetails}/>}
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
@@ -305,7 +311,7 @@ const BioPage = (props) =>{
                     // ${bioImgL} 1280w,
                     // ${bioImgXL} 1500w
                     // `}
-                    src={ typeof(profileUser.profileCover) == 'undefined' || typeof(profileUser.profileCover) === 'null' ?  noImg : profileUser.profileCover }
+                    src={ typeof(profileUser.profileCover) == 'undefined' || profileUser.profileCover == null ?  noImg : profileUser.profileCover }
                     alt="user selected profile image"
                      />
                 </div>
@@ -403,7 +409,7 @@ const BioPage = (props) =>{
                                 </Row>
                                 <Row className="pt-pb-15 bio-row-adj"> 
                                     <Col sm={4}>
-                                        <p className="no-m-b">Favorite Musician:</p>
+                                        <p className="no-m-b">Favorite Artist:</p>
                                     </Col>
                                     <Col sm={8}>
                                     {editMode.artist ? editArtist()

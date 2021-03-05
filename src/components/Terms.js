@@ -1,6 +1,5 @@
 import React from 'react'
 import {Helmet} from "react-helmet"
-import { Row, Col, Button } from 'react-bootstrap'
 import Layout from './Layout/Layout'
 
 const Terms = () =>{
@@ -13,7 +12,9 @@ const Terms = () =>{
             <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem)'}}>
                 <center>
                     <h4 className="theme-text-color">Terms and conditions</h4>
+                    <img src="https://s3.amazonaws.com/smokeshow.users/6033f80f38f47a90d9a95dd4/profile/pic300" />
                 </center>
+                
                 <div className="terms-wrapper">
                     <p>
 

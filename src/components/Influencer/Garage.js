@@ -281,7 +281,7 @@ const Garage = (props) =>{
     }, [])
 
     return(
-        <Layout  userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut} >
+        <Layout   >
         <Helmet>
             <meta charSet="utf-8" />
             <title>Influencer Garage page | The Smoke Show</title>
@@ -387,7 +387,7 @@ const Garage = (props) =>{
                                 </Row>
                                 <Row className="pt-pb-15 bio-row-adj"> 
                                     <Col sm={4}>
-                                        <p className="no-m-b">Favorite Musician:</p>
+                                        <p className="no-m-b">Favorite Artist:</p>
                                     </Col>
                                     <Col sm={8}>
                                     {editMode.artist ? editArtist()

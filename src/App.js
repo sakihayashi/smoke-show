@@ -57,7 +57,7 @@ function App() {
           <Route path="/add-car-data" component={AddCarData} />
           <Route path="/edit-video-data" component={EditVideoData} />
           <Route path="/edit-video-data-kirk" component={EditVideoDataKirk} />
-          <Route path="/terms" component={Terms} />
+          {/* <Route path="/terms" component={Terms} /> */}
           <Route path="/check-data" component={CheckCarData} />
 
           <Route path="/update-video" component={QueryVideoData} />

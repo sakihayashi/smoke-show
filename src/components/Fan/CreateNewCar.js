@@ -48,14 +48,16 @@ const CreateNewCar = (props) =>{
 
     const handleSubmit = async (e) =>{
         e.preventDefault()
-        const baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
-        const imgId = short.generate()
-        const filekey = props.profileUser.userId + '/my-cars/' + imgId
-        const imgUrlWithKey = baseImgUrl + filekey
-        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-        const collectionUsers = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
-        const collectionMyCars = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("my-cars")
-
+        let baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
+        let imgId = short.generate()
+        let filekey = props.profileUser.userId + '/my-cars/' + imgId
+        let imgUrlWithKey;
+        if(imgData64){
+            filekey = props.profileUser.userId + '/my-cars/' + imgId
+            imgUrlWithKey = baseImgUrl + filekey
+        }else{
+            imgUrlWithKey = ""
+        }
         const newCarData = {
             name: newCarObj.name,
             upgrades: newCarObj.upgrades,
@@ -67,9 +69,15 @@ const CreateNewCar = (props) =>{
             performance: newCarObj.performance
         }
         if(app.currentUser.id === props.profileUser.userId){
-            
-            try{
-                await app.currentUser.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then( async res =>{
+            const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+            const collectionUsers = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
+            const collectionMyCars = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("my-cars")
+            if(imgData64){
+                const result = await app.currentUser.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type)
+                console.log('res', result)
+            }
+            // try{
+                // await app.currentUser.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then( async res =>{
                     
                     try{
                         await collectionMyCars.insertOne(newCarData).then(async res =>{
@@ -81,14 +89,15 @@ const CreateNewCar = (props) =>{
                                 { upsert: true }
                                 ).then(res =>{
                                     console.log('res', res)
-                                    let oldArr = []
-                                    if(props.profileUser.myCars){
-                                        oldArr.push(props.profileUser.myCars)
-                                    }
+                                    props.getMyCars(mongo)
+                                    // let oldArr = []
+                                    // if(props.profileUser.myCars){
+                                    //     oldArr.push(props.profileUser.myCars)
+                                    // }
                                     
-                                    const cars = {myCars: oldArr.push(newCarData)}
-                                    props.updateProfileData(cars, 'myCars')
-                                    props.updateCarData(newCarData)
+                                    // const cars = {myCars: oldArr.push(newCarData)}
+                                    // props.updateProfileData(cars, 'myCars')
+                                    // props.updateCarData(newCarData)
                                     closeModal()
                                 })
                         })
@@ -107,21 +116,32 @@ const CreateNewCar = (props) =>{
                     }catch(err){
                         console.log(err)
                     }
-                })
-            }catch(err){
-                console.log(err)
-            }
+                // })
+            // }catch(err){
+            //     console.log(err)
+            // }
         }else{
             console.log('warning current user and the login user do not match')
-            const token = sessionStorage.getItem('session_token')
+            // const token = sessionStorage.getItem('session_token')
             const tokenUser = sessionStorage.getItem('session_user')
-            const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
+            // const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
             const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
             
             try{
-                await app.logIn(credentials.cre).then(user =>{
-                    user.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then( async res =>{
-             
+                await app.logIn(credentials.cre).then(async user =>{
+                    const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
+                    const collectionUsers = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
+                    const collectionMyCars = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("my-cars")
+                    if(user.id === app.currentUser.id){
+                        console.log('user updated')
+                    }else{
+                        console.log('user not updated')
+                    }
+                    if(imgData64){
+                        const result = await user.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type)
+                        console.log('res', result)
+                    }
+               
                         try{
                             await collectionMyCars.insertOne(newCarData).then(async res =>{
                                 console.log('res', res)
@@ -131,25 +151,25 @@ const CreateNewCar = (props) =>{
                                     { upsert: true }
                                     ).then(res =>{
                                         console.log('res', res)
-                                        const oldArr = props.profileUser.myCars
-                                        const cars = {myCars: oldArr.push(newCarData)}
-                                        props.updateProfileData(cars, 'myCars')
+                                        props.getMyCars(mongo)
+                                        // const oldArr = props.profileUser.myCars
+                                        // const cars = {myCars: oldArr.push(newCarData)}
+                                        // props.updateProfileData(cars, 'myCars')
                                         closeModal()
                                     })
                             })
                         }catch(err){
                             console.log(err)
                         }
-                    })
+                //     })
                     
                 })
             }catch(err){
                 console.log(err)
             }
-        }
     }
         
-
+}
 
     return(
     <Fragment>
@@ -195,7 +215,7 @@ const CreateNewCar = (props) =>{
                         <br/>
                         <Form.Group >
                             <Form.Label>Car name</Form.Label>
-                            <Form.Control type="text" placeholder="Enter car name e.g. maker, model, year" onChange={handleChange} name="name"/>
+                            <Form.Control type="text" placeholder="Enter car name e.g. maker, model, year" onChange={handleChange} name="name" required/>
                         </Form.Group>
                         <br/>
                         <Form.Group >
@@ -213,17 +233,17 @@ const CreateNewCar = (props) =>{
                         <br/>
                         <Form.Group >
                             <Form.Label>Wheels</Form.Label>
-                            <Form.Control type="text" placeholder="Enter your wheel" onChange={handleChange} name="wheels"/>
+                            <Form.Control type="text" placeholder="Enter your wheel" onChange={handleChange} name="wheels" required/>
                         </Form.Group>
                         <br/>
                         <Form.Group >
                             <Form.Label>Performance</Form.Label>
-                            <Form.Control type="text" placeholder="Enter your performance" onChange={handleChange} name="performance" />
+                            <Form.Control type="text" placeholder="Enter your performance" onChange={handleChange} name="performance" required/>
                         </Form.Group>
                         <br/>
                         <Form.Group >
                             <Form.Label>Upgrades</Form.Label>
-                            <Form.Control type="text" placeholder="Enter your update" onChange={handleChange} name="upgrades" />
+                            <Form.Control type="text" placeholder="Enter your update" onChange={handleChange} name="upgrades" required />
                         </Form.Group>
                         <br/><br/>
                         <Row>

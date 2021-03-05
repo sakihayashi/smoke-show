@@ -88,7 +88,6 @@ const SettingModal = (props) =>{
                     reader.readAsDataURL(result); 
                     reader.onloadend = function() {
                         const base64 = reader.result.split(",").pop();                
-                        console.log(base64);
                         setThumb64(base64)
                     }
                     
@@ -104,7 +103,7 @@ const SettingModal = (props) =>{
     }
     }
     const saveProfilePic = async () =>{
-        const filekey = props.profileUser.userId + '/profile/300'
+        const filekey = props.profileUser.userId + '/profile/pic300'
         const keyThumb = props.profileUser.userId + '/profile/thumbnail'
         const imgUrlWithKey = baseImgUrl + filekey
         const imgUrlWithKeyThumb = baseImgUrl + keyThumb

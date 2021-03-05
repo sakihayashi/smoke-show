@@ -4,7 +4,7 @@ import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 import noImg from '../../assets/global/no_image.jpg'
 import * as Realm from "realm-web"
 import ImageUpload from './ImageUpload'
-import { openLoginModal } from '../../store/actions/authActions'
+import { openLoginModal, attachMsg } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 
 import editIcon from '../../assets/global/edit-icon.svg'
@@ -82,6 +82,7 @@ const VehicleCard = (props) =>{
                         await app.logIn(decoded.cre).then(async user =>{
                             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                             const collectionMyCars = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("my-cars")
+                            console.log('obj', props.car)
                             const oid = props.car._id.toString()
                             const currentUrl = props.car.imgUrl
                             const splitted = currentUrl.split('/');
@@ -94,7 +95,7 @@ const VehicleCard = (props) =>{
                                         await user.functions.deleteImageObjToS3(bucketName, key).then(res =>{
                                             console.log('img deleted', res)
                                             props.getMyCars(mongo)
-                                            
+                                            handleCloseAlert()
                                         })
                                     } catch (error) {
                                         console.log(error)
@@ -288,7 +289,7 @@ const VehicleCard = (props) =>{
             </div>
             <Row>
                 <Col sm={5} >
-                    <img src={props.car.imgUrl !== undefined ? props.car.imgUrl : noImg} className="bio-my-car" alt="my daily driver" />
+                    <img src={typeof(props.car.imgUrl) === 'undefined' || props.car.imgUrl === '' ? noImg : props.car.imgUrl} className="bio-my-car" alt="my daily driver" />
                 </Col>
                 <Col sm={7} >
                     <div className="bio-car-contents">
@@ -306,7 +307,8 @@ const VehicleCard = (props) =>{
 }
 const mapDispatchToProps = (dispatch)=>{
     return{
-        openLoginModal: (state) => dispatch(openLoginModal(state))
+        openLoginModal: (state) => dispatch(openLoginModal(state)),
+        attachMsg: (msg) => dispatch(attachMsg(msg))
     }
 }
 export default connect(null, mapDispatchToProps)(VehicleCard)

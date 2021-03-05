@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import './footer.scss'
 
 const Footer = () =>{
@@ -28,7 +29,14 @@ const Footer = () =>{
     return(
         <footer className="footer-wrapper">
             <div className="footer-main">
-            ©{getYear()} The Hoon Group. All Rights reserved
+            <Link to="/about" style={{margin: '0 1rem'}}>
+            Contact Us 
+            </Link>
+             | 
+             <Link to="/terms" style={{margin: '0 1rem'}}>
+             Privacy Policy
+             </Link>
+              | ©{getYear()} The Hoon Group. All Rights reserved
             </div>
         </footer>
     )
