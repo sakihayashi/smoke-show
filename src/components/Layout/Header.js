@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { Link, useLocation, useHistory } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import { Navbar, Nav, Button} from 'react-bootstrap'
 import Logo from '../../assets/global/Logo-smoke-show.png'
 import './header.scss'

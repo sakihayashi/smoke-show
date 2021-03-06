@@ -9,6 +9,32 @@
     text-align: center;
 }
 .footer-main{
+    margin-right: auto;
+    margin-left: auto;
+    max-width: $main-width-phone;
     height: 50px;
+    display: flex;
+    justify-content: space-between;
 }
-
+.footer-left{
+    flex-direction: column;
+    text-align: left;
+}
+.footer-right{
+    height: initial;
+    display: flex;
+    align-items: flex-end;
+}
+.footer-logo{
+    margin-bottom: 0.5rem;
+}
+.bottom-space-footer{
+    height: 1rem;
+    background-color: $theme-color;
+    width: 100vw;
+}
+@media (min-width: 576px){
+    .footer-main{
+        max-width: 90vw;
+    }
+}

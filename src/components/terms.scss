@@ -1,0 +1,32 @@
+@import "../scss/config";
+
+.terms-wrapper{
+    width: 100%;
+
+}
+.terms-wrapper > p{
+    font-size: 1.2rem;
+}
+.terms-wrapper > h2{
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+.terms-wrapper > h3{
+    font-size: 1.2rem;
+}
+.terms-col > h3{
+    font-size: 1.2rem;
+}
+.terms-col{
+    margin: 4rem auto;
+}
+.font-12{
+    font-size: 1.2rem;
+}
+// .terms-list{
+//     font-size: 1.2rem;
+// }
+.term-list-style{
+    padding: revert;
+    font-size: 1.2rem;
+}

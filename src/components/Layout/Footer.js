@@ -1,15 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import './footer.scss'
+import Logo from '../../assets/global/Logo-smoke-show.png'
 
 const Footer = () =>{
     const getYear = () =>{
         return new Date().getFullYear();
     }
-    const infolinks = ()=>{
 
-    }
-    // <script type="text/javascript"> var infolinks_pid = 3313988; var infolinks_wsid = 0; </script> <script type="text/javascript" src="//resources.infolinks.com/js/infolinks_main.js"></script>
     useEffect(() => {
         const script = document.createElement('script');
         const script1 = document.createElement('script');
@@ -27,18 +25,29 @@ const Footer = () =>{
         // }
       }, []);
     return(
-        <footer className="footer-wrapper">
-            <div className="footer-main">
-            <Link to="/about" style={{margin: '0 1rem'}}>
-            Contact Us 
-            </Link>
-             | 
-             <Link to="/terms" style={{margin: '0 1rem'}}>
-             Privacy Policy
-             </Link>
-              | ©{getYear()} The Hoon Group. All Rights reserved
-            </div>
-        </footer>
+        <Fragment>
+            <footer className="footer-wrapper">
+                <div className="footer-main">
+                    <div className="footer-left">
+                    <img src={Logo} alt="The Smoke Show logo" width="100" className="footer-logo"/>
+                    <p>©{getYear()} The Hoon Group. All Rights reserved</p>
+                    </div>
+                    <div className="footer-right">
+                    <Link to="/about" style={{margin: '0 1rem'}}>
+                    Contact Us 
+                    </Link>
+                    | 
+                    <Link to="/privacy-policy" style={{marginLeft: '1rem'}}>
+                    Privacy Policy
+                    </Link>
+                    </div>
+                
+                </div>
+                
+            </footer>
+            <div className="bottom-space-footer"></div>
+        </Fragment>
+        
     )
 }
 

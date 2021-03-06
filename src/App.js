@@ -31,6 +31,7 @@ import CheckCarData from './components/Admin/CheckCarData'
 import EditVideoDataKirk from './components/Admin/EditVideoDataKirk'
 import AllVideos from './components/Influencer/AllVideos'
 import Terms from './components/Terms'
+import Privacy from './components/Privacy'
 
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
           <Route path="/add-car-data" component={AddCarData} />
           <Route path="/edit-video-data" component={EditVideoData} />
           <Route path="/edit-video-data-kirk" component={EditVideoDataKirk} />
+          <Route path="/privacy-policy" component={Privacy} />
           {/* <Route path="/terms" component={Terms} /> */}
           <Route path="/check-data" component={CheckCarData} />
 
