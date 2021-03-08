@@ -310,6 +310,7 @@ const Privacy = () =>{
                 FormSwift and its subsidiaries are in no way responsible for determining whether or not your company is in fact compliant with COPPA and takes no responsibility for the use you make of this Privacy Policy or for any potential liability your company may face in relation to any COPPA compliance issues.
                 </p>
                 </div>
+              
             </div>
         </Layout>
     )

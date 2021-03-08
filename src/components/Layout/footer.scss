@@ -16,15 +16,21 @@
     display: flex;
     justify-content: space-between;
 }
-.footer-left{
-    flex-direction: column;
-    text-align: left;
-}
-.footer-right{
-    height: initial;
+.footer-center{
     display: flex;
-    align-items: flex-end;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
+// .footer-left{
+//     flex-direction: column;
+//     text-align: left;
+// }
+// .footer-right{
+//     height: initial;
+//     display: flex;
+//     align-items: flex-end;
+// }
 .footer-logo{
     margin-bottom: 0.5rem;
 }

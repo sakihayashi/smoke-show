@@ -1,7 +1,7 @@
 import React, { useEffect, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import './footer.scss'
-import Logo from '../../assets/global/Logo-smoke-show.png'
+import Logo from '../../assets/global/smokeshow-logo-black.png'
 
 const Footer = () =>{
     const getYear = () =>{
@@ -28,11 +28,41 @@ const Footer = () =>{
         <Fragment>
             <footer className="footer-wrapper">
                 <div className="footer-main">
-                    <div className="footer-left">
+                <div className="flex-column footer-center">
                     <img src={Logo} alt="The Smoke Show logo" width="100" className="footer-logo"/>
-                    <p>©{getYear()} The Hoon Group. All Rights reserved</p>
-                    </div>
-                    <div className="footer-right">
+                    <p>
+                    ©{getYear()} The Hoon Group. All Rights Reserved. |
+                    <Link to="/about" style={{margin: '0 1rem'}}>
+                        Contact Us 
+                    </Link>
+                    |
+                    <Link to="/privacy-policy" style={{margin: '0 1rem'}}>
+                        Privacy Policy
+                    </Link>
+                    |
+                    <Link to="/terms" style={{margin: '0 1rem'}}>
+                        Terms of Use
+                    </Link>
+                    </p>
+                </div>
+                {/* <div className="footer-left">
+                    <img src={Logo} alt="The Smoke Show logo" width="100" className="footer-logo"/>
+                    <p>
+                    ©{getYear()} The Hoon Group. All Rights Reserved. |
+                    <Link to="/about" style={{margin: '0 1rem'}}>
+                        Contact Us 
+                    </Link>
+                    |
+                    <Link to="/privacy-policy" style={{margin: '0 1rem'}}>
+                        Privacy Policy
+                    </Link>
+                    |
+                    <Link to="/terms" style={{margin: '0 1rem'}}>
+                        Terms of Use
+                    </Link>
+                    </p>
+                </div> */}
+                    {/* <div className="footer-right">
                     <Link to="/about" style={{margin: '0 1rem'}}>
                     Contact Us 
                     </Link>
@@ -40,12 +70,11 @@ const Footer = () =>{
                     <Link to="/privacy-policy" style={{marginLeft: '1rem'}}>
                     Privacy Policy
                     </Link>
-                    </div>
-                
+                    </div> */}
                 </div>
                 
             </footer>
-            <div className="bottom-space-footer"></div>
+            {/* <div className="bottom-space-footer"></div> */}
         </Fragment>
         
     )
