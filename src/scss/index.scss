@@ -90,6 +90,9 @@ header{
 .spacer-1rem{
   margin-top: 1rem;
 }
+.show-mobile{
+  display: inline;
+}
 .title{
   color: #2D1468;
   border-bottom: 3px solid #2D1468;
@@ -295,6 +298,9 @@ label{
 @media (min-width: 768px) {
   .main-wrapper{
     padding: 0 15px;
+  }
+  .show-mobile{
+    display: none;
   }
 }
 @media (min-width: 1024px){
