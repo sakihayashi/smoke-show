@@ -6,11 +6,8 @@ import * as Realm from "realm-web"
 // import Avatar from 'react-avatar'
 import './bioPage.scss'
 // import * as Papa from 'papaparse'
-import { youtubeAPI } from '../../utils/youtubeAPI'
-import { carTempData } from '../carTempData'
-import { commentsTempData } from '../commentsTempData' 
+
 import Comments from '../Comments'
-import { uid } from 'react-uid'
 import Layout from '../Layout/Layout'
 import SubNav from './SubNav'
 import jwt from 'jsonwebtoken'
@@ -23,10 +20,9 @@ const BioPage = (props) =>{
     const influencerId = props.match.params.id
     const [featured, setFeatured] = useState()
     const [influencer, setInfluencer] = useState({userId: '', fname: '', lname: '', username: '', fans: null, desc: '', channelId: '', banner_img: '', profile_pic: '', featuredVideo: {id: '', title: ''}})
-    // const { banner_img, username, profile_pic, fans } = props.location.state.influencer
+
     const [formattedFans, setFormattedFans] = useState('')
-    // const [visibleOn, setVisibleOn] = useState(false)
-    // const { params: { id } } = props.match
+
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     // const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
     // const [searchKeyword, setSearchKeyword] = useState('')
@@ -39,36 +35,7 @@ const BioPage = (props) =>{
         // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
-    // const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-    // const handleChangeKeyword = (e) =>{
-    //     setSearchKeyword(e.target.value)
-    // }
-    // const handleVideoSearch = async e =>{
-    //     e.preventDefault()
-    //     await youtubeAPI.get('/search', {
-    //         params: {
-    //             q: searchKeyword,
-    //             channelId: influencer.channelId
-    //         }
-    //     }).then(res =>{
-    //         console.log('res from youtube', res)
-    //         setTitleStr("EddieX " + searchKeyword)
-    //         const searchResult = res.data.items
-    //         console.log('is this array?', res.data.items)
-    //         const datayoutube =[]
-    //         searchResult.map(data =>{
-    //             datayoutube.push({
-    //                 videoId: data.id.videoId,
-    //                 youtube:{
-    //                     snippet: {title: data.snippet.title}
-    //                 }
-    //             })
-    //         })
-    //         setSearchedCarData(datayoutube)
-    //         console.log('use state check: ', searchedCarData)
-            
-    //     })
-    // }
+
     const numberWithCommas = (x) =>{
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
@@ -99,19 +66,7 @@ const BioPage = (props) =>{
         const collectionVideos = mongo.db("smoke-show").collection("youtube-videos")
         const collectionCars = mongo.db("smoke-show").collection("cars")
         const collectionManual = mongo.db("smoke-show").collection("cars-manual")
-        // const now = new Date()
-        // const days = 6
-        // let dates = []
-        // let str = now.toISOString()
-        // let cleaned = str.split("T")
-        // dates.push(cleaned[0])
-        // for(let i =0; i<days; i++){
-        //     now.setDate(now.getDate() - 1);
-        //     now.getDate()
-        //     let temp = now.toISOString()
-        //     let res = temp.split("T")
-        //     dates.push(res[0])
-        // }
+ 
         const filter = {userId: influencerId}
         const options = {sort: {"snippet.publishedAt": -1}, limit: 7 }
         const videos = await collectionVideos.find(filter, options)
@@ -123,13 +78,12 @@ const BioPage = (props) =>{
                 if(data){
                 video.carData = data
                 return video
-                // setLatestVideos(latestVideos =>[...latestVideos, video])
                 }else{
                     const anotherData = await collectionManual.findOne(filterCar)
                     if(anotherData){
                         video.carData = anotherData
                         return video
-                        // setLatestVideos(latestVideos =>[...latestVideos, video])
+                  
                     }else{
                         console.log('no data')
                         video.carData = {}
