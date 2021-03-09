@@ -9,15 +9,14 @@ const Footer = () =>{
     }
 
     useEffect(() => {
-        const script = document.createElement('script');
-        const script1 = document.createElement('script');
-        script.src = "//resources.infolinks.com/js/infolinks_main.js";
-        // script.async = true;
-        script.type = "text/javascript"
-        script1.type = "text/javascript"
-        script1.text = `var infolinks_pid = 3313988; var infolinks_wsid = 0;`
-        document.body.appendChild(script);
-        document.body.appendChild(script1);
+        // const script = document.createElement('script');
+        // const script1 = document.createElement('script');
+        // script.src = "//resources.infolinks.com/js/infolinks_main.js";
+        // script.type = "text/javascript"
+        // script1.type = "text/javascript"
+        // script1.text = `var infolinks_pid = 3313988; var infolinks_wsid = 0;`
+        // document.body.appendChild(script);
+        // document.body.appendChild(script1);
       
         // return () => {
         //   document.body.removeChild(script);

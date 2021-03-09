@@ -95,7 +95,7 @@ const [isLoading, setIsloading] = useState(false)
                             video.influencer = influencer
                             let formattedFans;
                             const collectionFans = mongo.db("smoke-show").collection(`fans-${influencer.username}`)
-                            
+
                             collectionFans.count().then(num =>{
                                 console.log('num', num)
                                 if(num > 999){
@@ -177,6 +177,7 @@ const [isLoading, setIsloading] = useState(false)
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Home | The Smoke Show</title>
+                <meta name="propeller" content="4facb18899f9dd3cbbd123fc1dd39a2d" />
                 <meta name="description" content="The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!" />
                 <Head />
                 {/* <link rel="canonical" href="http://mysite.com/example" /> */}

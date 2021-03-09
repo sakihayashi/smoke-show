@@ -133,7 +133,7 @@ const InfluencerIndexPage = () =>{
                                 </div>
                                 <Card.Body>
                                     <Card.Title>More Coming Soon!</Card.Title>
-                                    <Card.Text className="influencer-desc">Check back here as we grow Influnecers on The Smoke Show!<br/><br/>
+                                    <Card.Text className="influencer-desc">Check back here as we grow Influencers on The Smoke Show!<br/><br/>
                                     <Link to="/about"><span>Want your content featured too? </span></Link>
                                     </Card.Text>
                                     {/* <NavLink 

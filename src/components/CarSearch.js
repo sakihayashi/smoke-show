@@ -24,61 +24,24 @@ const CarSearch = (props) =>{
     // const [carMakers, setCarMakers] = useState([])
     const searchId = uuidv4()
 
-    // const getMaker = async () =>{
-    //     try {
-    //         await app.logIn(credentials).then( async user =>{
-    //           const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-    //           let carMakerArr = []
-    //           const mongoCollection = mongo.db("smoke-show").collection("cars");
-    //         //   const filter = {make: 'aston-martin'} 
-    //           await mongoCollection.find().then(cars =>{
-    //               cars.map(car =>{
-    //                   if (carMakerArr.includes(car.make) === false) carMakerArr.push(car.make);
-    //                   return
-    //               })
-    //               setCarMakers(carMakerArr)
-                  
-    //               console.log('checkarr',carMakerArr)
-    //           })
-             
-    //         })
-            
-    //        }catch(error){console.log(error)}
-    // }
+
     const getModel = async (e) =>{
         setSelectedCar({...selectedCar, make: e})
         let carModelArr = []
         const mongoCollection = mongo.db("smoke-show").collection("cars")
         const makeLowerCase = e.toLowerCase()
+        console.log('lower', makeLowerCase)
         const filter = {make: makeLowerCase} 
         try{
             await mongoCollection.find(filter).then(cars =>{
                           cars.map(car =>{
                               if (carModelArr.includes(car.model) === false) carModelArr.push(car.model);
-                              return car
+                              return 
                           })
-                          setModelName(carModelArr.sort())
+                  setModelName(carModelArr.sort())
                   setCars(cars)
               })
         }catch(err){console.log(err)}
-        // try {
-        //     await app.logIn(credentials).then( async user =>{
-        //       const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
-        //       const mongoCollection = mongo.db("smoke-show").collection("cars");
-        //       const makeLowerCase = e.toLowerCase()
-        //       const filter = {make: makeLowerCase} 
-        //       await mongoCollection.find(filter).then(cars =>{
-        //           cars.map(car =>{
-        //               if (carModelArr.includes(car.model) === false) carModelArr.push(car.model);
-        //           })
-                  
-        //           setModelName(carModelArr.sort())
-        //           setCars(cars)
-        //       })
-             
-        //     })
-            
-        //    }catch(error){console.log(error)}
         
     }
     const getCarYear = (data) =>{
@@ -91,13 +54,13 @@ const CarSearch = (props) =>{
         setCarYearArr(yearArr.sort())
     }
     const filterByModel = (e) =>{
+        
         setSelectedCar({...selectedCar, model: e})
         let filteredByModel = cars.filter(function (car) {
             if(car.model === e){
                 return car
             }
         });
-
         setCars(filteredByModel)
         getCarYear(filteredByModel)
         
@@ -145,10 +108,10 @@ const CarSearch = (props) =>{
       })
    }
    const checkToken = async () =>{
-    let token = sessionStorage.getItem('session_token')
+    // let token = sessionStorage.getItem('session_token')
     const tokenUser = sessionStorage.getItem('session_user')
-    if(token){
-        jwt.verify(token, process.env.REACT_APP_JWT_SECRET, async (err, decoded)=>{
+    if(tokenUser){
+        jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, async (err, decoded)=>{
             if(err){
                 console.log(err)
                 const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
@@ -161,10 +124,10 @@ const CarSearch = (props) =>{
                     console.log(err)
                 }
             }else{
-                const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+                // const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
              
                 try{
-                    await app.logIn(credentials.cre).then( user =>{
+                    await app.logIn(decoded.cre).then( user =>{
                         const mongoClient = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                         setMongo(mongoClient)
                     })
@@ -208,8 +171,6 @@ const CarSearch = (props) =>{
                                     </Dropdown.Item>
                                 </Fragment>
                             )
-                            
-                            
                         })}
                     </DropdownButton>
                     </div>
