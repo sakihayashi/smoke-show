@@ -8,13 +8,14 @@ const Footer = () =>{
         return new Date().getFullYear();
     }
 
+
     useEffect(() => {
         // const script = document.createElement('script');
         // const script1 = document.createElement('script');
-        // script.src = "//resources.infolinks.com/js/infolinks_main.js";
         // script.type = "text/javascript"
+        // script.src='//whugesto.net/afu.php?zoneid=4034619'
         // script1.type = "text/javascript"
-        // script1.text = `var infolinks_pid = 3313988; var infolinks_wsid = 0;`
+        // script.text = `(function(s,u,z,p){s.src=u,s.setAttribute('data-zone',z),p.appendChild(s);})(document.createElement('script'),'//whugesto.net/afu.php?zoneid=4034619',4034420,document.body || Cdocument.documentElement)`
         // document.body.appendChild(script);
         // document.body.appendChild(script1);
       

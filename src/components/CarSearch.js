@@ -15,6 +15,9 @@ const CarSearch = (props) =>{
     const [carYearArr, setCarYearArr] = useState([])
     const [mongo, setMongo] = useState()
     const [cars, setCars] = useState([])
+    const [carsByModel, setCarsByModel] = useState([])
+    const [carsByYear, setCarsByYear] = useState([])
+    const [carResults, setCarResults] = useState([])
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
@@ -61,7 +64,9 @@ const CarSearch = (props) =>{
                 return car
             }
         });
-        setCars(filteredByModel)
+        // setCars(filteredByModel)
+        setCarsByModel(filteredByModel)
+        setCarResults(filteredByModel)
         getCarYear(filteredByModel)
         
     }
@@ -82,28 +87,28 @@ const CarSearch = (props) =>{
     }
     const filterByYear = (e) =>{
         setSelectedCar({...selectedCar, year: e})
-        let filteredByYear = cars.filter((car) =>{
+        let filteredByYear = carsByModel.filter((car) =>{
             if(car.year == e){
                 return car
             }
         })
-        setCars(filteredByYear)
+        setCarsByYear(filteredByYear)
+        setCarResults(filteredByYear)
         getModelNames(filteredByYear)
     }
 
     const filterByType = (e) =>{
        
         setSelectedCar({...selectedCar, type: e})
-     
-        let filtered =  cars.filter(car => car.name.includes(e))
+        let filtered =  carsByYear.filter(car => car.name.includes(e))
         console.log('filtered', filtered)
-        setCars(filtered)
+        setCarResults(filtered)
     }
    const goStatsPage = () =>{
        sessionStorage.setItem(searchId, cars)
        props.history.push({
         pathname: `/car-stats/${searchId}`,
-        cars: cars,
+        cars: carResults,
         selected: selectedCar
       })
    }
@@ -164,7 +169,7 @@ const CarSearch = (props) =>{
                         { carsAllYear && carsAllYear.map((maker, index) =>{
                             const titleCase = maker.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
                             return(
-                                <Fragment key={maker}>
+                                <Fragment key={maker +index}>
                                     <Dropdown.Item  eventKey={titleCase} >
                                     <img src={require(`../assets/maker_logos/${titleCase}_Logo.png`).default} alt={titleCase} className="maker-img"/>
                                     {titleCase}
@@ -178,10 +183,10 @@ const CarSearch = (props) =>{
                     <div className="center-box">
                     {/* model */}
                         <DropdownButton id="dropdown-year" title={selectedCar.model} onSelect={filterByModel} className="dropdown-middle">
-                            {modelName.map(model =>{
+                            {modelName.map((model, index) =>{
                                 const titleCase = model.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})
                                 return(
-                                    <Fragment key={model}>
+                                    <Fragment key={model +index}>
                                         <Dropdown.Item eventKey={model} >{titleCase}</Dropdown.Item>
                                     </Fragment>
                                 )
