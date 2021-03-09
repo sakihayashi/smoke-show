@@ -29,7 +29,7 @@ const CarSearch = (props) =>{
 
 
     const getModel = async (e) =>{
-        setSelectedCar({...selectedCar, make: e})
+        setSelectedCar({ make: e, model: "Select a model", type: "Select a type", year: "Select a year"})
         let carModelArr = []
         const mongoCollection = mongo.db("smoke-show").collection("cars")
         const makeLowerCase = e.toLowerCase()
@@ -58,7 +58,7 @@ const CarSearch = (props) =>{
     }
     const filterByModel = (e) =>{
         
-        setSelectedCar({...selectedCar, model: e})
+        setSelectedCar({...selectedCar, model: e, type: "Select a type", year: "Select a year"})
         let filteredByModel = cars.filter(function (car) {
             if(car.model === e){
                 return car
@@ -86,7 +86,7 @@ const CarSearch = (props) =>{
 
     }
     const filterByYear = (e) =>{
-        setSelectedCar({...selectedCar, year: e})
+        setSelectedCar({...selectedCar, year: e, type: "Select a type"})
         let filteredByYear = carsByModel.filter((car) =>{
             if(car.year == e){
                 return car
@@ -105,7 +105,8 @@ const CarSearch = (props) =>{
         setCarResults(filtered)
     }
    const goStatsPage = () =>{
-       sessionStorage.setItem(searchId, cars)
+      
+       sessionStorage.setItem(searchId, carResults)
        props.history.push({
         pathname: `/car-stats/${searchId}`,
         cars: carResults,
@@ -208,9 +209,9 @@ const CarSearch = (props) =>{
                     </div>
                     <div className="center-box">
                         <DropdownButton id="dropdown-type" title={selectedCar.type} onSelect={filterByType} >
-                            { carTypeArr && carTypeArr.map(type =>{
+                            { carTypeArr && carTypeArr.map((type, index) =>{
                                 return(
-                                    <Fragment key={type}>
+                                    <Fragment key={type +index}>
                                         <Dropdown.Item eventKey={type} >{type}</Dropdown.Item>
                                     </Fragment>
                                 )

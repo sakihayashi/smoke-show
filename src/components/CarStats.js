@@ -23,14 +23,12 @@ import Head from '../components/Layout/Head'
 const CarStats = (props) =>{
     const statsArr = ['Main Stats', 'Engine', 'Measurements', 'Comfort & Convenience', 'Drive Train', 'Suspension', 'Color', 'Warranty']
     const [carImages, setCarImages] = useState([])
-    
+    const [carData, setCarData] = useState()
+    console.log(props.history.location.cars)
     // const [activeTab, setActiveTab] = useState('Main Stats')
     let searchedCars = []
-    if(props.history.location.cars){
-        searchedCars = props.history.location.cars.map(item => ({...item, tabs: statsArr, activeTab: 'Main Stats'}))
-    }else{props.history.push('/car-search')}
     
-    const [carData, setCarData] = useState(searchedCars)
+    
     
     const handleTabClick = (tab, index) =>{
         let tempCarArr = [...carData]
@@ -266,13 +264,18 @@ const CarStats = (props) =>{
     //     })
         
     // }
-    // useEffect(() => {
-        
-    // }, [])
+    useEffect(() => {
+        if(props.history.location.cars){
+            searchedCars = props.history.location.cars.map(item => ({...item, tabs: statsArr, activeTab: 'Main Stats'}))
+            setCarData(searchedCars)
+        }else{props.history.push('/car-search')}
+    }, [])
     return(
         <Layout>
             <Helmet>
-                <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title>
+            {console.log(carData)}
+                {/* <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title> */}
+                <title>{typeof(carData) !== 'undefined' && carData[0].make}</title>
                 <Head />
             </Helmet>
             <div className="main-wrapper stats-container">
