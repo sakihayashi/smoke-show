@@ -168,8 +168,8 @@ const VehicleCard = (props) =>{
             <Modal.Header closeButton>
             </Modal.Header>
             <Modal.Body className="text-center">
-                <p>Delete this car data including the image?</p>
-                <p>You cannot retrive the data.</p>
+                <p>Delete this car including the image?</p>
+                <p>It will be permanently deleted.</p>
                 <Button onClick={handleDeleteCar} className="mini-btn">Confirm Delete</Button>
                 or
                 <Button className="mini-btn" onClick={handleCloseAlert}>Cancel</Button>

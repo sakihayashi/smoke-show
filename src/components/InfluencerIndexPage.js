@@ -132,9 +132,9 @@ const InfluencerIndexPage = () =>{
                                         /> */}
                                 </div>
                                 <Card.Body>
-                                    <Card.Title>More coming soon</Card.Title>
-                                    <Card.Text className="influencer-desc">We are accepting applications<br/><br/>
-                                    <Link to="/about"><span>Please visit here for the details</span></Link>
+                                    <Card.Title>More Coming Soon!</Card.Title>
+                                    <Card.Text className="influencer-desc">Check back here as we grow Influnecers on The Smoke Show!<br/><br/>
+                                    <Link to="/about"><span>Want your content featured too? </span></Link>
                                     </Card.Text>
                                     {/* <NavLink 
                                     to={{
@@ -146,7 +146,10 @@ const InfluencerIndexPage = () =>{
                                         color: "gray"
                                     }}
                                     > */}
-                                        <Button className="login-btn" disabled>No bio available</Button>
+                                    <Link to="/about">
+                                    <Button className="login-btn" >More details here</Button>
+                                    </Link>
+                                        
                                     {/* </NavLink> */}
                                     
                                 </Card.Body>

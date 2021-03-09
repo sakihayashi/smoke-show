@@ -37,8 +37,8 @@ const Giveaways = (props) =>{
             <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem)'}}>
             <h2 className="title">Giveaways</h2>
             <div className="notice-div">
-            All active giveaways in the Car Community. <br/>
-            Only VERIFIED and CONFIRMED entries from influencers will be found here.
+            All active giveaways in the Car Community.<br/>
+            Only VERIFIED and CONFIRMED events from influencers will be found here.
             </div>
                 <Row>
                 <GiveawayCount data={giveAwaysArr[0]} shareUrl={shareUrl}  />

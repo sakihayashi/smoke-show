@@ -183,7 +183,7 @@ const EmailConfirmation = (props) =>{
                         </Form.Group>
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Username</Form.Label>
-                            <Form.Control type="text" placeholder="e.g. Smoke Show love" name="username" onChange={handleChange} required/>
+                            <Form.Control type="text" placeholder="Ex: SmokeShowFan" name="username" onChange={handleChange} required/>
                         </Form.Group>
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Email address</Form.Label>

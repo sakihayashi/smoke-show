@@ -21,16 +21,17 @@ import priceIcon from '../../assets/global/Price-Tag-icon.png'
 
 const BioPage = (props) =>{
     const influencerId = props.match.params.id
+    const [featured, setFeatured] = useState()
     const [influencer, setInfluencer] = useState({userId: '', fname: '', lname: '', username: '', fans: null, desc: '', channelId: '', banner_img: '', profile_pic: '', featuredVideo: {id: '', title: ''}})
     // const { banner_img, username, profile_pic, fans } = props.location.state.influencer
     const [formattedFans, setFormattedFans] = useState('')
-    const [visibleOn, setVisibleOn] = useState(false)
+    // const [visibleOn, setVisibleOn] = useState(false)
     // const { params: { id } } = props.match
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     // const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
-    const [searchKeyword, setSearchKeyword] = useState('')
-    const [titleStr, setTitleStr] = useState('Your search result')
-    const [searchedCarData, setSearchedCarData] = useState([])
+    // const [searchKeyword, setSearchKeyword] = useState('')
+    // const [titleStr, setTitleStr] = useState('Your search result')
+    // const [searchedCarData, setSearchedCarData] = useState([])
     const [latestVideos, setLatestVideos] = useState([])
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -98,60 +99,50 @@ const BioPage = (props) =>{
         const collectionVideos = mongo.db("smoke-show").collection("youtube-videos")
         const collectionCars = mongo.db("smoke-show").collection("cars")
         const collectionManual = mongo.db("smoke-show").collection("cars-manual")
-        const now = new Date()
-        const days = 6
-        let dates = []
-        let str = now.toISOString()
-        let cleaned = str.split("T")
-        dates.push(cleaned[0])
-        for(let i =0; i<days; i++){
-            now.setDate(now.getDate() - 1);
-            now.getDate()
-            let temp = now.toISOString()
-            let res = temp.split("T")
-            dates.push(res[0])
-        }
+        // const now = new Date()
+        // const days = 6
+        // let dates = []
+        // let str = now.toISOString()
+        // let cleaned = str.split("T")
+        // dates.push(cleaned[0])
+        // for(let i =0; i<days; i++){
+        //     now.setDate(now.getDate() - 1);
+        //     now.getDate()
+        //     let temp = now.toISOString()
+        //     let res = temp.split("T")
+        //     dates.push(res[0])
+        // }
         const filter = {userId: influencerId}
-        const options = {sort: {"snippet.publishedAt": -1}, limit: 5 }
-        let temp=[]
-        try {
-            await collectionVideos.find(filter, options).then(videos =>{
-                videos.map(video =>{
-                    dates.map(date =>{
-                        if(video.snippet.publishedAt.includes(date)){
-                            temp.push(video)
-                            return
-                        }
-                    })
-                })
-                return temp
-            }).then(async filtered =>{
-                filtered.map(async video =>{
-                    const filterCar = {_id: {"$oid": video.carDataId}}
-                    try {
-                        await collectionCars.findOne(filterCar).then(async data =>{
-                            if(data){
-                            video.carData = data
-                            setLatestVideos(latestVideos =>[...latestVideos, video])
-                            }else{
-                            await collectionManual.findOne(filterCar).then(data =>{
-                                if(data){
-                                    video.carData = data
-                                    setLatestVideos(latestVideos =>[...latestVideos, video])
-                                }else{
-                                    console.log('no data')
-                                }
-                               
-                            })
-                            }
-                        })
-                    } catch (error) {
-                        console.log(error)
+        const options = {sort: {"snippet.publishedAt": -1}, limit: 7 }
+        const videos = await collectionVideos.find(filter, options)
+        
+        if(videos){
+            const results = videos.map(async video =>{
+                const filterCar = {_id: {"$oid": video.carDataId}}
+                const data =  await collectionCars.findOne(filterCar)
+                if(data){
+                video.carData = data
+                return video
+                // setLatestVideos(latestVideos =>[...latestVideos, video])
+                }else{
+                    const anotherData = await collectionManual.findOne(filterCar)
+                    if(anotherData){
+                        video.carData = anotherData
+                        return video
+                        // setLatestVideos(latestVideos =>[...latestVideos, video])
+                    }else{
+                        console.log('no data')
+                        video.carData = {}
+                        return video
                     }
-                })
+                    
+                }
             })
-        } catch (error) {
-            
+            Promise.all(results).then(res =>{
+                const removed = res.shift()
+                setFeatured(removed)
+                setLatestVideos(res)
+            })
         }
     }
 
@@ -203,15 +194,15 @@ const BioPage = (props) =>{
                 <Row className="bio-main-row">
                     <Col sm={6}>
                         <div className="videoWrapper">
-                            <iframe src={ typeof(influencer.featuredVideo.id) == 'undefined' ? '' : videoEmbedURL + influencer.featuredVideo.id}
-                                    frameBorder='0'
-                                    allow='autoplay; encrypted-media'
-                                    allowFullScreen
-                                    title='video'
+                            <iframe src={ featured ? videoEmbedURL + featured.videoId : ''}
+                            frameBorder='0'
+                            allow='autoplay; encrypted-media'
+                            allowFullScreen
+                            title='video'
                             />
                             
                         </div>
-                        <h3 style={{marginTop:'10px'}}>{influencer.featuredVideo.title}</h3>
+                        <h3 style={{marginTop:'10px'}}>{featured && featured.snippet.title}</h3>
                     </Col>
                     <Col sm={6}>
                         <div className="bio-desc-wrapper">
@@ -246,7 +237,6 @@ const BioPage = (props) =>{
                                             allow='autoplay; encrypted-media'
                                             allowFullScreen
                                             title='video'
-                                    
                                     />
                                 </div>
                                 <h3 style={{marginTop:'10px'}}>{video.snippet.title}</h3>

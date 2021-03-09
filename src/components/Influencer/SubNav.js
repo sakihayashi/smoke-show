@@ -22,7 +22,7 @@ const SubNav = (props) =>{
 
     const renderTooltip = (props) => (
         <Tooltip  id="button-tooltip" {...props} key="button-tooltip">
-          <p style={{marginBottom: 0}}>You will receive newsletters when the influencer publishes a new video.</p>
+          <p style={{marginBottom: 0}}>You will receive notifications when the influencer publishes a video or updates their bio.</p>
         </Tooltip>
       );
 
