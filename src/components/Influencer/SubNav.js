@@ -21,7 +21,7 @@ const SubNav = (props) =>{
     const influencer = props.influencer
 
     const renderTooltip = (props) => (
-        <Tooltip  id="button-tooltip" {...props} key="button-tooltip">
+        <Tooltip  id="button-tooltip" {...props} key="button-tooltip-key">
           <p style={{marginBottom: 0}}>You will receive notifications when the influencer publishes a video or updates their bio.</p>
         </Tooltip>
       );
@@ -75,7 +75,6 @@ const SubNav = (props) =>{
     const checkFanOf = () =>{
         if(props.customData.fansOf){
             props.customData.fansOf.map(fan =>{
-                console.log('fan', props.influencer)
                 if(fan.id === influencer.userId){
                     setIsFanOf(true)
                     return
@@ -134,7 +133,7 @@ const SubNav = (props) =>{
                             delay={{ show: 250, hide: 200 }}
                             overlay={renderTooltip}
                         >
-                            <small>What this means?</small>
+                            <small className="tooltip-btn">What this means?</small>
                         </OverlayTrigger>
                         
                     </Fragment>

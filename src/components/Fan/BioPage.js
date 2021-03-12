@@ -181,7 +181,6 @@ const BioPage = (props) =>{
             await app.logIn(credentials).then(async logInUser =>{
                 const mongo = logInUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const mongoCollectionUser = mongo.db("smoke-show").collection("users")
-                console.log('id', userIdParam)
                 const filter = {userId: userIdParam}
                 try{
                     await mongoCollectionUser.findOne(filter).then(user =>{

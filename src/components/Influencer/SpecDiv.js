@@ -1,10 +1,10 @@
 import React from 'react'
-import powerIcon from '../assets/global/Horsepower.png'
-import pistonIcon from '../assets/global/piston.png'
-import priceIcon from '../assets/global/Price-Tag-icon.png'
-import weightIcon from '../assets/global/weight.svg'
-import transmissionIcon from '../assets/global/transmission.svg'
-import mileageIcon from '../assets/global/mileage.svg'
+import powerIcon from '../../assets/global/Horsepower.png'
+import pistonIcon from '../../assets/global/piston.png'
+import priceIcon from '../../assets/global/Price-Tag-icon.png'
+import weightIcon from '../../assets/global/weight.svg'
+import transmissionIcon from '../../assets/global/transmission.svg'
+import mileageIcon from '../../assets/global/mileage.svg'
 import { Link } from 'react-router-dom'
 
 const SpecDiv = (props) =>{
@@ -17,7 +17,7 @@ const SpecDiv = (props) =>{
         <div className="ad-size">
                                         
             <div className="spec-wrapper" >
-                <img alt={video.carData.name} src={require(`../assets/maker_logos/${props.titleCase}_Logo.png`).default} className="icon-s" loading="lazy" />{' '}
+                <img alt={video.carData.name} src={require(`../../assets/maker_logos/${props.titleCase}_Logo.png`).default} className="icon-s" loading="lazy" />{' '}
                 <span className="spec-text" >
                     <strong >{video.carData.year}{' '}{props.titleCase}{' '}{props.model}</strong>
                 </span><br/>
@@ -26,10 +26,11 @@ const SpecDiv = (props) =>{
                 <img alt="piston" src={pistonIcon}  className="icon-s" loading="lazy" /><span className="spec-text">{' '}{video.carData.features.Engine.Horsepower}</span><br />
                 <img alt="weight" src={weightIcon} style={{padding: '2px'}}   className="icon-s" loading="lazy" /><span className="spec-text">{' '}{video.carData.features.Measurements["Curb weight"]}</span><br />
                 <img alt="transmission" src={transmissionIcon} style={{padding: '2px'}}  className="icon-s" loading="lazy" /><span className="spec-text">{' '}{video.carData.features["Drive Train"].Transmission}</span><br />
-                {/* <img alt="mileage" src={mileageIcon} style={{padding: '2px'}}  className="icon-s" loading="lazy" /><span className="spec-text">{' '}{video.carData.features["Fuel"]["EPA mileage est"][' (cty/hwy)']}</span><br /> */}
+                {/* <img alt="mileage" src={mileageIcon} style={{padding: '2px'}}  className="icon-s" loading="lazy" /><span className="spec-text">{' '}
+                {video.carData.features["Fuel"]["EPA mileage est"][' (cty/hwy)'] !== undefined && video.carData.features["Fuel"]["EPA mileage est"][' (cty/hwy)']}</span><br /> */}
                 <Link 
                 to={{
-                    pathname: `car-stats/${props.titleCase.toLowerCase()}/${video.carData.year}/${props.model.toLowerCase()}`,
+                    pathname: `/car-stats/${props.titleCase.toLowerCase()}/${video.carData.year}/${props.model.toLowerCase()}`,
                     state: {id: props.dataid}
                 }}
        

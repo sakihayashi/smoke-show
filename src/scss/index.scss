@@ -119,6 +119,16 @@ header{
     cursor: pointer;
   }
 }
+.goback-btn{
+  &:hover{
+    cursor: pointer;
+  }
+}
+.tooltip-btn{
+  &:hover{
+    cursor: pointer;
+  }
+}
 .min-height-all{
   min-height: calc(100vh - 21rem);
 }

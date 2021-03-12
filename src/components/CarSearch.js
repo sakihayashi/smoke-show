@@ -228,14 +228,9 @@ const CarSearch = (props) =>{
                     
                 </div>
 
-                <div className="ad-on-search">
-                    {/* <div className="ad-pc">
-                        <MediaNet divId="554833626" size="728x90" />
-                    </div>
-                    <div className="ad-mobile">
-                        <MediaNet divId="554833626" size="300x250" />
-                    </div> */}
-                </div>
+                {/* <div className="ad-on-search">
+            
+                </div> */}
             </div>
             
         </Layout>

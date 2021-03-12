@@ -18,7 +18,8 @@ import { getInfluencer }from '../../store/actions/influencerActions'
 import SubNav from './SubNav'
 import './allVideos.scss'
 import short from 'short-uuid'
-// import VisibilitySensor from 'react-visibility-sensor'
+import loadable from '@loadable/component'
+const SpecDiv = loadable(() => import('./SpecDiv'))
 
 const AllVideos = (props) =>{
    
@@ -337,7 +338,7 @@ const AllVideos = (props) =>{
                             <Col sm={6} className="main-col" >
                                 
                                 <Row className="video-row">
-                                    <Col sm={8} >
+                                    <Col sm >
                                     {/* <VisibilitySensor onChange={(isVisible)=>onChange(isVisible, index)}> */}
                                         <div className="videoWrapper">
                                             <iframe src={videoEmbedURL + id}
@@ -387,20 +388,24 @@ const AllVideos = (props) =>{
                                         {/* </Suspense>  */}
                                         
                                     </Col>
-                                    <Col sm={4} className="spec-col"  >
-                                        <div className="spec-wrapper">
+                                    <Col sm="auto"  className="spec-col"  >
+                                    <div style={{minWidth: '160px'}}>
+                                    <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId}/>
+                                    </div>
+                                        {/* <div className="spec-wrapper">
                                         <img alt={video.snippet.channelTitle} src={require(`../../assets/maker_logos/${titleCase}_Logo.png`).default} className="icon-s" />
                                         {' '}
                                         <span className="spec-text" ><strong >{video.carData.year}{' '}{titleCase}{' '}{model}</strong></span><br/>
                                         <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" >{' '}${price && price}</span><br />
                                         <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text">{' '}{video.carData.features.Engine.Torque}</span><br />
                                         <img alt="piston" key={pistonIcon} src={pistonIcon}  className="icon-s" /><span className="spec-text">{' '}{video.carData.features.Engine.Horsepower}</span><br />
-                                        </div>
-                                        <div className="ad-container">
+                                        </div> */}
+                                        
+                                        {/* <div className="ad-container">
                                             <p style={{color: 'gray'}}>ads will go here</p>
                                             <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
                                             <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p>
-                                        </div>
+                                        </div> */}
                                     </Col>
                                 </Row>
                                 

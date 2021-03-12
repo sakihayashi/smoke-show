@@ -5,8 +5,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 // import wheelImg from '../assets/global/smoke-wheel.png'
 // import { youtubeAPI } from '../utils/youtubeAPI'
-// import { carTempData } from './carTempData'
-// import { commentsTempData } from './commentsTempData' 
+
 // import Avatar from 'react-avatar'
 // import { v4 as uuidv4 } from 'uuid';
 import Head from './Layout/Head'
@@ -16,15 +15,11 @@ import './homepage.scss'
 import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"
 import moment from 'moment'
-// import SpecDiv from './SpecDiv'
 import loadable from '@loadable/component'
-// import MediaNet from './MediaNet'
 
 const Comments = loadable(() => import('./Comments'))
 const SpecDiv = loadable(() => import('./SpecDiv'))
 const VideoDiv = loadable(()=> import('./VideoDiv'))
-
-// const Comments = React.lazy(() => import('./Comments'))
 
 const HomePage = (props) =>{
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
@@ -95,19 +90,20 @@ const [isLoading, setIsloading] = useState(false)
                             video.influencer = influencer
                             let formattedFans;
                             const collectionFans = mongo.db("smoke-show").collection(`fans-${influencer.username}`)
-
-                            collectionFans.count().then(num =>{
-                                console.log('num', num)
-                                if(num > 999){
-                                    formattedFans = Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k'
-                                    video.fans = formattedFans
-                                    
-                                }else{
-                                    formattedFans = Math.sign(num)*Math.abs(num)
-                                    video.fans = formattedFans
-                                }
-                            })
-                            
+                            try {
+                                await collectionFans.count().then(num =>{
+                                    if(num > 999){
+                                        formattedFans = Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k'
+                                        video.fans = formattedFans
+                                        
+                                    }else{
+                                        formattedFans = Math.sign(num)*Math.abs(num)
+                                        video.fans = formattedFans
+                                    }
+                                })
+                            } catch (error) {
+                                
+                            }
                             const data = await collectionCars.findOne(filterCar)
                                 if(data){
                                 video.carData = data

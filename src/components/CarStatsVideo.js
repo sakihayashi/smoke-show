@@ -17,13 +17,19 @@ import torqueIcon from '../assets/global/torque.png'
 import frontWheels from '../assets/global/front-wheels.png'
 import rearWheels from '../assets/global/rear-wheels.png'
 import allWheels from '../assets/global/all-wheels.png'
+import loadable from '@loadable/component'
+import beforeIcon from '../assets/global/before.svg'
+
 import { Helmet } from 'react-helmet'
 import Head from '../components/Layout/Head'
+
+const CarStatsCard = loadable(() => import('./CarStatsCard'))
 
 const CarStatsVideo = (props) =>{
     const statsArr = ['Main Stats', 'Engine', 'Measurements', 'Comfort & Convenience', 'Drive Train', 'Suspension', 'Color', 'Warranty']
     const [carImages, setCarImages] = useState([])
     const [carData, setCarData] = useState()
+    const [original, setOriginal] = useState(null)
     
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -32,7 +38,7 @@ const CarStatsVideo = (props) =>{
       };
     const app = new Realm.App(appConfig);
     let searchedCars = []
-    const carDataId = props.match.params.id
+    const carDataId = props.location.state.id
     const carMake = props.match.params.make
     const carModel = props.match.params.model
     const carYear = props.match.params.year
@@ -278,69 +284,59 @@ const CarStatsVideo = (props) =>{
     }
     const getCarData = async (cre) =>{
         const filter = {_id: {"$oid": carDataId}}
-        console.log(carDataId)
         const filterMany = {make: carMake, year: Number(carYear), model: carModel}
         
         try {
             await app.logIn(cre).then(async user =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionCars = mongo.db("smoke-show").collection("cars")
-                // try {
-                //     await collectionCars.findOne(filter).then(res =>{
-                //         console.log(res)
-                //     })
-                // } catch (error) {
-                //     console.log(error)
-                // }
-                const result = await collectionCars.findOne(filter)
-                result.tabs = statsArr
-                result.activeTab = 'Main Stats'
-                console.log(result)
+        
                 let tempArr = []
-                tempArr.push(result)
-                if(result){
+      
                     const relatedCars = await collectionCars.find(filterMany)
-                    console.log(relatedCars)
                     relatedCars.map(car =>{
                         car.tabs= statsArr 
                         car.activeTab = 'Main Stats'
-                        tempArr.push(car)
+                        if(car._id.toString() === carDataId){
+                            setOriginal(car)
+                        }else{
+                            tempArr.push(car)
+                        }
                     })
-                    // const tempCars = tempArr.map(car =>{
-                    //     car.tabs= statsArr 
-                    //     car.activeTab = 'Main Stats'
-                    //     return car
-                    // })
-                    console.log(tempArr)
-                    setCarData(tempArr)
-                    // Promise.all(tempCars).then(cars =>{
-                    //     setCarData(cars)
-                    // })
                     
-                }
+                    setCarData(tempArr)
 
             })
         } catch (error) {
             console.log(error)
         }
     }
+
     useEffect(() => {
         const credentials = loginCheck()
-        console.log(credentials)
         getCarData(credentials)
-        // if(props.history.location.cars){
-        //     searchedCars = props.history.location.cars.map(item => ({...item, tabs: statsArr, activeTab: 'Main Stats'}))
-        //     setCarData(searchedCars)
-        // }else{props.history.push('/car-search')}
+
     }, [])
     return(
         <Layout>
             <Helmet>
                 {/* <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title> */}
-                <title>{typeof(carData) !== 'undefined' && `${carData[0].make}, ${carData[0].year}, ${carData[0].model},`}</title>
+                <title>{typeof(carMake) !== 'undefined' && `${carMake.toUpperCase()}, ${carYear}, ${carModel.toUpperCase()} all types car statictics`}</title>
+                <meta name="description" content={`${carMake.toUpperCase()} ${carYear} ${carModel.toUpperCase()} | engines, price, warranty, color, and more information | The Smoke Show`} />
                 <Head />
             </Helmet>
-            <div className="main-wrapper stats-container">
+            <div className="main-wrapper stats-container" style={{minHeight: 'calc(100vh - 21rem'}}>
+                <div className="spacer-4rem"></div>
+                <div onClick={()=>props.history.goBack()} className="goback-btn">
+                    <img src={beforeIcon} alt="go back" width="24"/>Go Back
+                </div>
+                <div className="spacer-2rem"></div>
+                {original && <CarStatsCard car={original} index="0" handleTabClick={handleTabClick} switchTabs={switchTabs} />}
+                
+                <div className="spacer-4rem"></div>
+                
+                <h2 className="theme-text-p"><b>Related car data</b></h2>
+                <hr />
                 <div className="spacer-4rem"></div>
                 {carData && carData.map((car, index) =>{
                     car.tabs = statsArr
@@ -392,7 +388,7 @@ const CarStatsVideo = (props) =>{
                 }
                 <div className="spacer-4rem"></div>
                 <Link to="/car-search">
-                    <Button className="login-btn">Start New Search</Button>
+                    <Button className="login-btn">Search other cars</Button>
                 </Link>
                 
             </div>

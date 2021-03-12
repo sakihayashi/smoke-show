@@ -247,17 +247,7 @@ const CarStats = (props) =>{
                     </Fragment>
           }
     }
-    // const getImgData = async () =>{
-    //     const selected = props.history.location.selected
-    //     console.log('selected', selected)
-    //     const url = `https://api.carsxe.com/images?key=${process.env.REACT_APP_CARXE_API_KEY}&year=${selected.year}&make=${selected.make}&model=${selected.model}&format=json&angle=front`
-    //     await axios.get(url).then(res =>{
-    //         console.log('img data', res.data)
-    //         setCarImages(res.dataimages)
-            
-    //     })
-        
-    // }
+
     useEffect(() => {
         if(props.history.location.cars){
             searchedCars = props.history.location.cars.map(item => ({...item, tabs: statsArr, activeTab: 'Main Stats'}))
@@ -269,7 +259,7 @@ const CarStats = (props) =>{
             <Helmet>
             {console.log(carData)}
                 {/* <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title> */}
-                <title>{typeof(carData) !== 'undefined' && `${carData[0].make}, ${carData[0].year}, ${carData[0].model},`}</title>
+                <title>{typeof(carData) !== 'undefined' && `${carData[0].make}, ${carData[0].year}, ${carData[0].model}, Statistics, Specs`}</title>
                 <Head />
             </Helmet>
             <div className="main-wrapper stats-container">

@@ -11,10 +11,10 @@ import Comments from '../Comments'
 import Layout from '../Layout/Layout'
 import SubNav from './SubNav'
 import jwt from 'jsonwebtoken'
+import loadable from '@loadable/component'
 
-import powerIcon from '../../assets/global/Horsepower.png'
-import pistonIcon from '../../assets/global/piston.png'
-import priceIcon from '../../assets/global/Price-Tag-icon.png'
+
+const SpecDiv = loadable(() => import('./SpecDiv'))
 
 const BioPage = (props) =>{
     const influencerId = props.match.params.id
@@ -209,17 +209,13 @@ const BioPage = (props) =>{
                             </Col>
                             <Col sm="auto" className="bio-stats">
                                 <div className="ad-size">
-                                <div className="spec-wrapper">
-                                <img alt={car.name}  src={require(`../../assets/maker_logos/${titleCase}_Logo.png`).default} className="icon-s" />{' '}<span className="spec-text"><strong>{car.year} {titleCase} {model}</strong></span><br/>
-                                <img alt="price" key={priceIcon} src={priceIcon} className="icon-s" /><span className="spec-text">{' '}${price}</span><br />
-                                <img alt="power " key={powerIcon} src={powerIcon} className="icon-s" /><span className="spec-text">{' '}{car.features.Engine.Torque}</span><br />
-                                <img alt="piston" key={pistonIcon} src={pistonIcon} className="icon-s" /><span className="spec-text">{' '}{car.features.Engine.Horsepower}</span><br />
-                                </div>
-                                <div className="ad-container">
+                      
+                                <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId}/>
+                                {/* <div className="ad-container">
                                     <p style={{color: 'gray'}}>ads will go here</p>
                                     <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
                                     <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p>
-                                </div>
+                                </div> */}
                                 </div>
                             </Col>
                         </Row>
