@@ -57,6 +57,7 @@ function App() {
           <Route path="/user/:id" component={BioPage} />
           <Route path="/social/:id" component={Social} />
           <Route path="/swagg-influencer/:id" component={SwaggInfluencer} />
+          <Route path="/influencer/:username/all-videos" component={AllVideos} />
           <Route path="/all-videos/:id" component={AllVideos} />
           <Route path="/add-car-data" component={AddCarData} />
           <Route path="/edit-video-data" component={EditVideoData} />

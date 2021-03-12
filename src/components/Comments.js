@@ -16,16 +16,15 @@ const Comments = (props) =>{
     const [commentsDB, setCommentsDB] = useState([])
     const [moreComments, setMoreComments] = useState([])
     const [isComment, setIsComment] = useState(false)
-    const [visibleOn, setVisibleOn] = useState(false)
+    // const [visibleOn, setVisibleOn] = useState(false)
     const [userComment, setUserComment] = useState("")
     const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
     // const getApp = Realm.App.getApp(process.env.REACT_APP_REALM_APP_ID);
-    const onChange = (isVisible)=>{
-        if(isVisible){
-            setVisibleOn(true)
-        }
-        // console.log('Element is now %s', isVisible ? 'visible' : 'hidden');
-    }
+    // const onChange = (isVisible)=>{
+    //     if(isVisible){
+    //         setVisibleOn(true)
+    //     }
+    // }
     const handleChange = (e) =>{
         setUserComment(e.target.value)
     }
@@ -35,17 +34,26 @@ const Comments = (props) =>{
         const tokenUser = sessionStorage.getItem('session_user')
         let newComment ={}
         let credentials = null
+        
+        
         if(tokenSessionStorage){
             jwt.verify(tokenSessionStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
                     console.log('please log in. session time out')
                 }else{
+                    let profileThumb;
+                    if(typeof(decoded.userData.profileThumb) !== 'undefined'){
+                        profileThumb = decoded.userData.profileThumb
+                    }else{
+                        profileThumb = null
+                    }
                     newComment={
                         userId: decoded.userData.userId,
                         comment: userComment,
                         date_posted: new Date().getTime(),
                         videoId: props.videoId,
-                        username: decoded.userData.fname
+                        username: decoded.userData.fname,
+                        profileThumb: profileThumb
                     }
                     credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
                 }
@@ -151,35 +159,34 @@ const Comments = (props) =>{
                 }
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionComments = mongo.db("smoke-show").collection("comments")
-                const collectionUsers = mongo.db("smoke-show").collection("users")
+                // const collectionUsers = mongo.db("smoke-show").collection("users")
                 await collectionComments.find(filter, options).then(async resAll =>{
+                    console.log(resAll)
                     if( resAll.length !== 0){
-                        let picAttached = resAll.map(async res =>{
-                            const filterUser = {userId: res.userId}
-                            try {
-                                await collectionUsers.findOne(filterUser).then(user =>{
-                                    res.profilePic = user.profilePic
-                                })
-                            } catch (error) {
-                                console.log(error)
-                            }
-                            return res
-                        })
+                        // let picAttached = resAll.map(async res =>{
+                        //     const filterUser = {userId: res.userId}
+                        //     try {
+                        //         await collectionUsers.findOne(filterUser).then(user =>{
+                        //             res.profilePic = user.profilePic
+                        //         })
+                        //     } catch (error) {
+                        //         console.log(error)
+                        //     }
+                        //     return res
+                        // })
                         
-                        const finalResults = await Promise.all(picAttached);
+                        // const finalResults = await Promise.all(picAttached);
                         setIsComment(true)
-                         if(finalResults.length == 1){
-                            setCommentsDB(finalResults)
-                         }else if(finalResults.length == 2){
+                         if(resAll.length == 1){
+                            setCommentsDB(resAll)
+                         }else if(resAll.length == 2){
                             for(let i=0;i<2; i++){
-                                setCommentsDB(commentsDB=>[...commentsDB, finalResults[i]])
+                                setCommentsDB(commentsDB=>[...commentsDB, resAll[i]])
                             }
-                        }else if(finalResults.length >= 3){
-                            const chunked = chunkArray(finalResults)
+                        }else if(resAll.length >= 3){
+                            const chunked = chunkArray(resAll)
                             setMoreComments(chunked)
                         }
-                        
-                        
                     }else if(resAll.length == 0){
                         setIsComment(false)
                         setCommentsDB([])
@@ -223,16 +230,15 @@ const Comments = (props) =>{
             let localtime = moment(comment.date_posted).fromNow()
             return(
                 <Row className="comment-wrapper" key={unique}>
-                    <VisibilitySensor onChange={onChange}>
+                    {/* <VisibilitySensor onChange={onChange}> */}
                     <div style={{margin:0,padding:0}} className="col-1">
                         <Link to={{
                             pathname: `/user/${comment.userId}`
                         }}>
 
-                            {comment.profilePic ? 
-                                [(visibleOn ? <img src={comment.profilePic} className="profile-pic " alt={comment.username} loading="lazy" /> : ''
-                                 )
-                                 ]
+                            {comment.profileThumb ? 
+                                 <img src={comment.profileThumb} className="profile-pic " alt={comment.username} loading="lazy" /> 
+                               
                              :
                                 <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/> 
                             }
@@ -240,7 +246,7 @@ const Comments = (props) =>{
                             
                         </Link>
                     </div>
-                    </VisibilitySensor>
+                    {/* </VisibilitySensor> */}
                     <div  style={{margin: 0, paddingRight:0}} className="col-11">
                     <div className="comment-username ">
                         <Link to={{

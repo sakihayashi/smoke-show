@@ -6,9 +6,9 @@ import Pagination from 'react-bootstrap/Pagination'
 
 import Comments from '../Comments'
 import Avatar from 'react-avatar'
-import powerIcon from '../../assets/global/Horsepower.png'
-import pistonIcon from '../../assets/global/piston.png'
-import priceIcon from '../../assets/global/Price-Tag-icon.png'
+// import powerIcon from '../../assets/global/Horsepower.png'
+// import pistonIcon from '../../assets/global/piston.png'
+// import priceIcon from '../../assets/global/Price-Tag-icon.png'
 import Layout from '../Layout/Layout'
 import { logInAsPublic, updateLogin } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
@@ -27,7 +27,6 @@ const AllVideos = (props) =>{
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     const [videoArr, setVideoArr] = useState([])
     const [allVideoData, setAllVideoData] = useState([])
-    // const [visibleOn, setVisibleOn] = useState([])
 
     const [pgNum, setPgNum] = useState(null)
     const [middleNum, setMiddleNum] = useState(null)
@@ -40,7 +39,6 @@ const AllVideos = (props) =>{
         // timeout in number of milliseconds
         };
     const app = new Realm.App(appConfig);
-    // const [divId, setDivId] = useState(null)
     
     const chunkArray = (allVideos) =>{
         let chunk_size = 12
@@ -281,13 +279,9 @@ const AllVideos = (props) =>{
             }
             return items
         }
-        
-        
-        // return items
+
     }
-    // const onChange = (isVisible, index)=>{
-   
-    // }
+
     useEffect(() => {
         console.log('state', props.influecerObj)
         if(typeof(props.influencerObj.username) !== 'undefined'){
