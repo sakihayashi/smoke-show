@@ -90,6 +90,10 @@ header{
 .spacer-1rem{
   margin-top: 1rem;
 }
+.p-lr-4{
+  padding-right: 4px;
+  padding-left: 4px;
+}
 .show-mobile{
   display: inline;
 }
@@ -100,6 +104,20 @@ header{
 }
 .btn-search{
   background-color: #2D1468;
+}
+.btn-spec{
+  border: 1px solid $theme-color;
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 2px 5px;
+  margin: 5px 0;
+  background-color: $theme-ultlalight;
+  color: $theme-color;
+  text-align: center;
+  &:hover{
+    background: rgba(255,255,255,0.66);
+    cursor: pointer;
+  }
 }
 .min-height-all{
   min-height: calc(100vh - 21rem);

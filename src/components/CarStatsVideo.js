@@ -4,7 +4,8 @@ import Layout from './Layout/Layout'
 import { Row, Col, Button} from 'react-bootstrap'
 import './carStats.scss'
 import { v4 as uuidv4 } from 'uuid'
-
+import * as Realm from "realm-web"
+import jwt from 'jsonwebtoken'
 import priceIcon from '../assets/global/Price-Tag-icon.svg'
 import powerIcon from '../assets/global/Horsepower.svg'
 import weightIcon from '../assets/global/weight.svg'
@@ -19,11 +20,22 @@ import allWheels from '../assets/global/all-wheels.png'
 import { Helmet } from 'react-helmet'
 import Head from '../components/Layout/Head'
 
-const CarStats = (props) =>{
+const CarStatsVideo = (props) =>{
     const statsArr = ['Main Stats', 'Engine', 'Measurements', 'Comfort & Convenience', 'Drive Train', 'Suspension', 'Color', 'Warranty']
     const [carImages, setCarImages] = useState([])
     const [carData, setCarData] = useState()
+    
+    const appConfig = {
+        id: process.env.REACT_APP_REALM_APP_ID,
+        // timeout: 10000, 
+        // timeout in number of milliseconds
+      };
+    const app = new Realm.App(appConfig);
     let searchedCars = []
+    const carDataId = props.match.params.id
+    const carMake = props.match.params.make
+    const carModel = props.match.params.model
+    const carYear = props.match.params.year
 
     const handleTabClick = (tab, index) =>{
         let tempCarArr = [...carData]
@@ -247,27 +259,83 @@ const CarStats = (props) =>{
                     </Fragment>
           }
     }
-    // const getImgData = async () =>{
-    //     const selected = props.history.location.selected
-    //     console.log('selected', selected)
-    //     const url = `https://api.carsxe.com/images?key=${process.env.REACT_APP_CARXE_API_KEY}&year=${selected.year}&make=${selected.make}&model=${selected.model}&format=json&angle=front`
-    //     await axios.get(url).then(res =>{
-    //         console.log('img data', res.data)
-    //         setCarImages(res.dataimages)
-            
-    //     })
+    const loginCheck = () =>{
+        const tokenUser = sessionStorage.getItem('session_user')
+        if(tokenUser){
+            jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+                if(err){
+                    const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    return credentials
+                }else{
+                    return decoded.cre
+                }
+            })
+        }else{
+            const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
+            return credentials
+        }
+
+    }
+    const getCarData = async (cre) =>{
+        const filter = {_id: {"$oid": carDataId}}
+        console.log(carDataId)
+        const filterMany = {make: carMake, year: Number(carYear), model: carModel}
         
-    // }
+        try {
+            await app.logIn(cre).then(async user =>{
+                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                const collectionCars = mongo.db("smoke-show").collection("cars")
+                // try {
+                //     await collectionCars.findOne(filter).then(res =>{
+                //         console.log(res)
+                //     })
+                // } catch (error) {
+                //     console.log(error)
+                // }
+                const result = await collectionCars.findOne(filter)
+                result.tabs = statsArr
+                result.activeTab = 'Main Stats'
+                console.log(result)
+                let tempArr = []
+                tempArr.push(result)
+                if(result){
+                    const relatedCars = await collectionCars.find(filterMany)
+                    console.log(relatedCars)
+                    relatedCars.map(car =>{
+                        car.tabs= statsArr 
+                        car.activeTab = 'Main Stats'
+                        tempArr.push(car)
+                    })
+                    // const tempCars = tempArr.map(car =>{
+                    //     car.tabs= statsArr 
+                    //     car.activeTab = 'Main Stats'
+                    //     return car
+                    // })
+                    console.log(tempArr)
+                    setCarData(tempArr)
+                    // Promise.all(tempCars).then(cars =>{
+                    //     setCarData(cars)
+                    // })
+                    
+                }
+
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
     useEffect(() => {
-        if(props.history.location.cars){
-            searchedCars = props.history.location.cars.map(item => ({...item, tabs: statsArr, activeTab: 'Main Stats'}))
-            setCarData(searchedCars)
-        }else{props.history.push('/car-search')}
+        const credentials = loginCheck()
+        console.log(credentials)
+        getCarData(credentials)
+        // if(props.history.location.cars){
+        //     searchedCars = props.history.location.cars.map(item => ({...item, tabs: statsArr, activeTab: 'Main Stats'}))
+        //     setCarData(searchedCars)
+        // }else{props.history.push('/car-search')}
     }, [])
     return(
         <Layout>
             <Helmet>
-            {console.log(carData)}
                 {/* <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title> */}
                 <title>{typeof(carData) !== 'undefined' && `${carData[0].make}, ${carData[0].year}, ${carData[0].model},`}</title>
                 <Head />
@@ -291,7 +359,7 @@ const CarStats = (props) =>{
                             <p className="theme-text-p">{car.name}</p>
                             <Row style={{paddingRight: '3px'}}>
                                 <Col sm={4}>
-                                    {/* <img src="https://smoke-show.s3.amazonaws.com/car-photos/Ferrari-F8_Spider-2020-1280-01.jpg" alt="Ferrari F8 spider" style={{width: '100%'}}/> */}
+                                  
                                      <img src={typeof(car.imgUrl) === 'undefined' ?carImg : car.imgUrl} alt={car.name} style={{width: '100%'}}/> 
                                     {/* <img src={carImg} alt={car.name} style={{width: '100%'}}/> */}
                                 </Col>
@@ -333,4 +401,4 @@ const CarStats = (props) =>{
     )
 }
 
-export default CarStats
+export default CarStatsVideo

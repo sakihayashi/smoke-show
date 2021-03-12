@@ -250,19 +250,14 @@ const [isLoading, setIsloading] = useState(false)
                                         <Col sm="auto" className="spec-col"  >
                                         <div style={{minWidth: '160px'}}>
                                         
-                                            <SpecDiv video={video} titleCase={titleCase} price={price} model={model}/>
-                                            <div className="ad-container">
-                                                {/* <div className="ad-160">
-                                                    <MediaNet divId='554833626' size="160x600" />
-                                                </div>
-                                                <div className="ad-300">
-                                                    <MediaNet divId='554833626' size="300x250" />
-                                                </div> */}
+                                            <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId}/>
+                                            {/* <div className="ad-container">
+                                            
                                             
                                                 <p style={{color: 'gray'}}>ads will go here</p>
                                                 <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
                                                 <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p>
-                                            </div>
+                                            </div> */}
                                             </div>
                                         </Col>
                                     </Row>

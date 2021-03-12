@@ -29,20 +29,22 @@ const CarSearch = (props) =>{
 
 
     const getModel = async (e) =>{
+        setModelName([])
         setSelectedCar({ make: e, model: "Select a model", type: "Select a type", year: "Select a year"})
-        let carModelArr = []
+        // let carModelArr = []
         const mongoCollection = mongo.db("smoke-show").collection("cars")
         const makeLowerCase = e.toLowerCase()
-        console.log('lower', makeLowerCase)
         const filter = {make: makeLowerCase} 
         try{
             await mongoCollection.find(filter).then(cars =>{
-                          cars.map(car =>{
-                              if (carModelArr.includes(car.model) === false) carModelArr.push(car.model);
-                              return 
+                // const carModelArr = [...new Set(availableTypes)]
+                let carModelArr = cars.map(car =>{
+                             return car.model
                           })
-                  setModelName(carModelArr.sort())
+                const unique = [...new Set(carModelArr)]
+                  setModelName(unique.sort())
                   setCars(cars)
+                  setCarResults(cars)
               })
         }catch(err){console.log(err)}
         
@@ -101,7 +103,6 @@ const CarSearch = (props) =>{
        
         setSelectedCar({...selectedCar, type: e})
         let filtered =  carsByYear.filter(car => car.name.includes(e))
-        console.log('filtered', filtered)
         setCarResults(filtered)
     }
    const goStatsPage = () =>{

@@ -56,7 +56,7 @@ const Header = (props) =>{
 
      const loggedInDiv = 
      <Fragment>
-        <div className="nav-top">Hi {props.customData.fname}, <Button className="btn-login"  onClick={logOut}>Logout</Button>
+        <div className="nav-top ">Hi {props.customData.fname}, <Button className="btn-login"  onClick={logOut}>Logout</Button>
         {tooLong && <div className="line-break-div"><br/></div>}
         <div onClick={goProfilePage} style={{display: 'inline'}}>
             {/* <img src={settingsIcon} className="setting-icon-nav"  /> */}
@@ -86,7 +86,7 @@ const Header = (props) =>{
         
     // }, [props.swapSignup])
     return(
-        <header>
+        <header >
             <div className="login-wrapper">
             {props.isLoggedIn ? loggedInDiv : 
             <Button className="btn-login" onClick={logIn}>Login</Button>
@@ -104,7 +104,7 @@ const Header = (props) =>{
             }
                 
             </div>
-            <Navbar expand="lg" className="header-wrapper">
+            <Navbar expand="lg" className="header-wrapper" >
                 <Navbar.Brand href="/">
                         <img className="logo-header" src={Logo} alt="The Smoke Show logo"/>                    
                 </Navbar.Brand>

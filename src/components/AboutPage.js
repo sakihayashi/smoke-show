@@ -29,7 +29,7 @@ const AboutPage = () =>{
                 </p>
             </div>
             <div className="spacer-4rem"></div>
-            <Row>
+            <Row className="p-lr-4">
                 <Col sm={6} className="mb-2rem">
                 <div className="contact-div">
                     <h3 className="theme-text-color">Become an influencer</h3>
