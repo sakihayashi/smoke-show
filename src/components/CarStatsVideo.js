@@ -49,6 +49,10 @@ const CarStatsVideo = (props) =>{
        tempCarArr[index].activeTab = tab
        setCarData(tempCarArr)
     }
+    const handleTabClickOriginal = (tab, index) =>{
+        
+        setOriginal({...original, activeTab: tab})
+    }
     
     const switchTabs = (car, tab) =>{
         let engine, warranty, measurements, comfort, drivetrain, suspension, mileage, weight, totalSeating, colors, baseMSRP, rearseats, driveIcon, driveType
@@ -331,7 +335,7 @@ const CarStatsVideo = (props) =>{
                     <img src={beforeIcon} alt="go back" width="24"/>Go Back
                 </div>
                 <div className="spacer-2rem"></div>
-                {original && <CarStatsCard car={original} index="0" handleTabClick={handleTabClick} switchTabs={switchTabs} />}
+                {original && <CarStatsCard car={original} index="0" handleTabClick={handleTabClickOriginal} switchTabs={switchTabs} />}
                 
                 <div className="spacer-4rem"></div>
                 

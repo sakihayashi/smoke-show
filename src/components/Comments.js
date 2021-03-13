@@ -9,7 +9,7 @@ import moment from 'moment'
 import jwt from 'jsonwebtoken'
 import { openLoginModal, attachMsg } from '../store/actions/authActions'
 import './comments.scss'
-import VisibilitySensor from 'react-visibility-sensor'
+// import VisibilitySensor from 'react-visibility-sensor'
 import short from 'short-uuid'
 
 const Comments = (props) =>{

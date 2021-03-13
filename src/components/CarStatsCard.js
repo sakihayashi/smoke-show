@@ -3,7 +3,6 @@ import { Row, Col } from 'react-bootstrap'
 import short from 'short-uuid'
 
 const CarStatsCard = (props) =>{
-    console.log('props', props)
     const { car, index, handleTabClick, switchTabs } = props
     const maker = car.make.toUpperCase()
     const model = car.model.toUpperCase()
