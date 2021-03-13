@@ -68,7 +68,6 @@ const Comments = (props) =>{
 
                     await mongoCollection.insertOne(newComment).then(res =>{
                             e.target.reset();
-                            console.log('new comment', res)
                             getComments(credentials.cre)
                     })
                 });
@@ -161,7 +160,6 @@ const Comments = (props) =>{
                 const collectionComments = mongo.db("smoke-show").collection("comments")
                 // const collectionUsers = mongo.db("smoke-show").collection("users")
                 await collectionComments.find(filter, options).then(async resAll =>{
-                    console.log(resAll)
                     if( resAll.length !== 0){
                         // let picAttached = resAll.map(async res =>{
                         //     const filterUser = {userId: res.userId}
@@ -228,6 +226,12 @@ const Comments = (props) =>{
             const unique = short.generate()
             {/* var localtime = moment(comment.date_posted).local().format('MM-DD-YYYY') */}
             let localtime = moment(comment.date_posted).fromNow()
+            let isPicSet;
+            if(comment.profileThumb === 'https://s3.amazonaws.com/smokeshow.users/default/avator-thumb.jpg'){
+                isPicSet = false
+            }else{
+                isPicSet = true
+            }
             return(
                 <Row className="comment-wrapper" key={unique}>
                     {/* <VisibilitySensor onChange={onChange}> */}
@@ -236,8 +240,8 @@ const Comments = (props) =>{
                             pathname: `/user/${comment.userId}`
                         }}>
 
-                            {comment.profileThumb ? 
-                                 <img src={comment.profileThumb} className="profile-pic " alt={comment.username} loading="lazy" /> 
+                            {isPicSet ? 
+                                 <img src={`https://s3.amazonaws.com/smokeshow.users/${comment.userId}/profile/thumbnail`} className="profile-pic " alt={comment.username} loading="lazy" /> 
                                
                              :
                                 <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/> 

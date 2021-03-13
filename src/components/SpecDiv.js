@@ -28,8 +28,7 @@ const SpecDiv = (props) =>{
                 {/* <img alt="mileage" src={mileageIcon} style={{padding: '2px'}}  className="icon-s" loading="lazy" /><span className="spec-text">{' '}{video.carData.features["Fuel"]["EPA mileage est"][' (cty/hwy)']}</span><br /> */}
                 <Link 
                 to={{
-                    pathname: `car-stats/${props.titleCase.toLowerCase()}/${video.carData.year}/${props.model.toLowerCase()}`,
-                    state: {id: props.dataid}
+                    pathname: `car-stats/${props.titleCase.toLowerCase()}/${video.carData.year}/${props.model.toLowerCase()}/${props.dataid}`
                 }}
        
 

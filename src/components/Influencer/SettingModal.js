@@ -30,7 +30,7 @@ const SettingModal = (props) =>{
     const [currentBioPic, setCurrentBioPic] = useState()
     const [currentCover, setCurrentCover] = useState()
     const [disableBtnStates, setDisableBtnStates] = useState({profilePic: true, coverPic: true, userDetails: true, password: true})
-    const baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
+    const baseImgUrl = `https://s3.amazonaws.com/${process.env.REACT_APP_AWS_BUCKET_NAME}/`
 
     const handleClose = props.handleCloseSetting
     // const handleShow = props.handleShowSetting

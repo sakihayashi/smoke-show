@@ -48,7 +48,7 @@ const CreateNewCar = (props) =>{
 
     const handleSubmit = async (e) =>{
         e.preventDefault()
-        let baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
+        let baseImgUrl = `https://s3.amazonaws.com/${process.env.REACT_APP_AWS_BUCKET_NAME}/`
         let imgId = short.generate()
         let filekey = props.profileUser.userId + '/my-cars/' + imgId
         let imgUrlWithKey;

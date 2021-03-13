@@ -14,6 +14,7 @@ const app = new Realm.App(appConfig);
 
 const SettingModal = (props) =>{
     const bucketName = process.env.REACT_APP_AWS_BUCKET_NAME
+    console.log(bucketName)
     const [imgData64Profile, setImgData64Profile] = useState('')
     const [imgData64Cover, setImgData64Cover] = useState('')
     const [userObj, setUserObj] = useState({fname: props.profileUser.fname, lname: props.profileUser.lname, email: props.profileUser.email, username: props.profileUser.username})
@@ -30,7 +31,7 @@ const SettingModal = (props) =>{
     const [currentBioPic, setCurrentBioPic] = useState()
     const [currentCover, setCurrentCover] = useState()
     const [disableBtnStates, setDisableBtnStates] = useState({profilePic: true, coverPic: true, userDetails: true, password: true})
-    const baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
+    const baseImgUrl = 'https://s3.amazonaws.com/smokeshow.users/'
     const [thumb64, setThumb64] = useState()
     const handleClose = props.handleCloseSetting
     // const handleShow = props.handleShowSetting

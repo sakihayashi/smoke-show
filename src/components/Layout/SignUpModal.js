@@ -40,7 +40,6 @@ const SignUpModal = (props) =>{
                   
                     setEmailSent(true)
                     e.target.reset()
-
                 })
        
                 

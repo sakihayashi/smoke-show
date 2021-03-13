@@ -64,7 +64,7 @@ function App() {
           <Route path="/edit-video-data-kirk" component={EditVideoDataKirk} />
           <Route path="/privacy-policy" component={Privacy} />
           <Route path="/terms" component={Terms} />
-          <Route path="/car-stats/:make/:year/:model" component={CarStatsVideo} />
+          <Route path="/car-stats/:make/:year/:model/:id" component={CarStatsVideo} />
           <Route path="/check-data" component={CheckCarData} />
           <Route path="/update-db" component={UpdateDB} />
 

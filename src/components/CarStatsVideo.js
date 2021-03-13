@@ -37,8 +37,8 @@ const CarStatsVideo = (props) =>{
         // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
-    let searchedCars = []
-    const carDataId = props.location.state.id
+    // const carDataId = props.location.state.id
+    const carDataId = props.match.params.id
     const carMake = props.match.params.make
     const carModel = props.match.params.model
     const carYear = props.match.params.year
@@ -91,7 +91,6 @@ const CarStatsVideo = (props) =>{
         }else{
             baseMSRP = car.price.baseMSRP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
-
         
         switch(tab) {
             case 'Main Stats':
@@ -287,7 +286,6 @@ const CarStatsVideo = (props) =>{
 
     }
     const getCarData = async (cre) =>{
-        const filter = {_id: {"$oid": carDataId}}
         const filterMany = {make: carMake, year: Number(carYear), model: carModel}
         
         try {
@@ -309,7 +307,6 @@ const CarStatsVideo = (props) =>{
                     })
                     
                     setCarData(tempArr)
-
             })
         } catch (error) {
             console.log(error)
@@ -342,7 +339,7 @@ const CarStatsVideo = (props) =>{
                 <h2 className="theme-text-p"><b>Related car data</b></h2>
                 <hr />
                 <div className="spacer-4rem"></div>
-                {carData && carData.map((car, index) =>{
+                {carData ? carData.map((car, index) =>{
                     car.tabs = statsArr
                     const maker = car.make.toUpperCase()
                     const model = car.model.toUpperCase()
@@ -388,7 +385,7 @@ const CarStatsVideo = (props) =>{
                             <div className="spacer-4rem"></div>
                         </Fragment>
                     )
-                })
+                }) : <p>No related cars</p>
                 }
                 <div className="spacer-4rem"></div>
                 <Link to="/car-search">

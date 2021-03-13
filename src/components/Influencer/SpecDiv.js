@@ -29,8 +29,7 @@ const SpecDiv = (props) =>{
                 {video.carData.features["Fuel"]["EPA mileage est"][' (cty/hwy)'] !== undefined && video.carData.features["Fuel"]["EPA mileage est"][' (cty/hwy)']}</span><br /> */}
                 <Link 
                 to={{
-                    pathname: `/car-stats/${props.titleCase.toLowerCase()}/${video.carData.year}/${props.model.toLowerCase()}`,
-                    state: {id: props.dataid}
+                    pathname: `/car-stats/${props.titleCase.toLowerCase()}/${video.carData.year}/${props.model.toLowerCase()}/${props.dataid}`
                 }}
        
 

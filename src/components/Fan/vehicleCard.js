@@ -116,8 +116,8 @@ const VehicleCard = (props) =>{
         }
     }
     const handleSubmit = async (e) =>{
-        console.log('checking')
-        const baseImgUrl = 'https://s3.amazonaws.com/images.test.smokeshow/'
+        const baseImgUrl = `https://s3.amazonaws.com/${process.env.REACT_APP_AWS_BUCKET_NAME}/`
+        
         const imgId = short.generate()
         const filekey = props.profileUser.userId + '/my-cars/' + imgId
         const imgUrlWithKey = baseImgUrl + filekey
