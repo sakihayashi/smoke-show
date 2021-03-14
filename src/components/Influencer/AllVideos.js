@@ -116,13 +116,7 @@ const AllVideos = (props) =>{
                                 const data = await collectionManual.findOne(filterCar)
                                     video.carData = data
                                     return video
-                                    // setVideoArr(videoArr =>[...videoArr, video])
                                }
-                                
-                            
-                        // }catch(err){
-                        //  console.log(err)
-                        // }
                         
                     })
                     Promise.all(results).then(res =>{
@@ -131,10 +125,6 @@ const AllVideos = (props) =>{
                     })
                 }
                 
-        //     })
-        // }catch(err){
-        //     console.log(err)
-        // }
         
     }
     const getVideos = async (cre) =>{
@@ -153,7 +143,13 @@ const AllVideos = (props) =>{
                     //   console.log('videos', videos)
                         const res = Math.floor(videos.length / 12)
                         setPgNum(res)
-                        setMiddleNum(res / 2)
+                        if(res % 2 === 0){
+                            setMiddleNum(res / 2)
+                        }else{
+                            const half = res/2
+                            setMiddleNum(Math.ceil(half))
+                        }
+                        
                         const chunk = chunkArray(videos)
                         setAllVideoData(chunk)
 
@@ -207,10 +203,15 @@ const AllVideos = (props) =>{
             attachCarData(null, num)
             if(num < pgNum -1){
                 if(num === 2){
-                    console.log('working?', num)
                     setMiddleNum(3)
                 }else if(num <= 1){
+                 if(pgNum %2 === 0){
                     setMiddleNum(pgNum /2)
+                 }else{
+                     const temp = pgNum /2
+                     setMiddleNum(Math.ceil(temp))
+                 }
+                    
                 }else{
                     setMiddleNum(num)
                 }
@@ -283,9 +284,8 @@ const AllVideos = (props) =>{
     }
 
     useEffect(() => {
-        console.log('state', props.influecerObj)
         if(typeof(props.influencerObj.username) !== 'undefined'){
-            console.log('name?', props.influencerObj.username)
+            // console.log('name?', props.influencerObj.username)
             setInfluencerName(props.influencerObj.username)
         }
     }, [props.influecerObj])
@@ -315,7 +315,6 @@ const AllVideos = (props) =>{
             <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
             {   videoArr[0] &&
                 videoArr.map((video, index) =>{
-                    {/* console.log('video', video) */}
                     const unique = short.generate()
                     const str = video.carData.model
                     const id = video.videoId
@@ -339,10 +338,9 @@ const AllVideos = (props) =>{
                                                     frameBorder='0'
                                                     allow='autoplay; encrypted-media'
                                                     allowFullScreen
-                                                    title='video'
+                                                    title={video.snippet.title}
                                                     // srcDoc={`<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href=https://www.youtube.com/embed/${id}?autoplay=1><img src=https://img.youtube.com/vi/${id}/hqdefault.jpg alt=${video.snippet.title}><span>▶</span></a>`}
                                             />
-                                  
                                             
                                         </div>
                                         {/* </VisibilitySensor> */}
@@ -363,7 +361,6 @@ const AllVideos = (props) =>{
                                            
                                             </div>
                                             
-                                            {/* <p className="btn-show-more" onClick={()=>expandDiv(index)}>{showMore && divId === index ? 'Show less' : 'Show more'}</p>  */}
                                             <input className="acd-input" type="checkbox" id={`title${index}`} />
                                     
                                             <label htmlFor={`title${index}`} className="acd-label">Show </label>

@@ -76,7 +76,6 @@ const BioPage = (props) =>{
         }
     }
     const userLoggedOut = (id) =>{
-        console.log('working?', id)
         if(id === userIdParam){
             setAllowEdit(false)
         }
@@ -318,6 +317,7 @@ const BioPage = (props) =>{
                     <div className="bio-main-wrapper">
                         <div className="bio-pic">
                             <img src={profileUser.profilePic ? profileUser.profilePic : bioPic} alt="the user profile picture" />
+                          
                         </div>
                         
                         <div className="bio-title-text">
@@ -451,6 +451,7 @@ const BioPage = (props) =>{
                                 </div>
                             }
                             <div className="spacer-2rem"></div>
+                       
                         </Col>
                         
                     </Row>

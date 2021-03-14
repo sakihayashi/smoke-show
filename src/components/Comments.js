@@ -35,7 +35,6 @@ const Comments = (props) =>{
         let newComment ={}
         let credentials = null
         
-        
         if(tokenSessionStorage){
             jwt.verify(tokenSessionStorage, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
@@ -246,8 +245,7 @@ const Comments = (props) =>{
                              :
                                 <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/> 
                             }
-                            
-                            
+                        
                         </Link>
                     </div>
                     {/* </VisibilitySensor> */}

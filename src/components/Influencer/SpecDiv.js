@@ -22,9 +22,9 @@ const SpecDiv = (props) =>{
                     <strong >{video.carData.year}{' '}{props.titleCase}{' '}{props.model}</strong>
                 </span><br/>
                 <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" loading="lazy" >{' '}${props.price}</span><br />
-                <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text" loading="lazy">{' '}{video.carData.features.Engine.Torque}</span><br />
-                <img alt="piston" src={pistonIcon}  className="icon-s" loading="lazy" /><span className="spec-text">{' '}{video.carData.features.Engine.Horsepower}</span><br />
-                <img alt="weight" src={weightIcon} style={{padding: '2px'}}   className="icon-s" loading="lazy" /><span className="spec-text">{' '}{video.carData.features.Measurements["Curb weight"]}</span><br />
+                <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text" loading="lazy">{' '}{video.carData.features.Engine.Torque && video.carData.features.Engine.Torque}</span><br />
+                <img alt="piston" src={pistonIcon}  className="icon-s" loading="lazy" /><span className="spec-text">{' '}{video.carData.features.Engine.Horsepower && video.carData.features.Engine.Horsepower}</span><br />
+                <img alt="weight" src={weightIcon} style={{padding: '2px'}}   className="icon-s" loading="lazy" /><span className="spec-text">{' '}{video.carData.features.Measurements["Curb weight"] && video.carData.features.Measurements["Curb weight"] }</span><br />
                 {/* <img alt="mileage" src={mileageIcon} style={{padding: '2px'}}  className="icon-s" loading="lazy" /><span className="spec-text">{' '}
                 {video.carData.features["Fuel"]["EPA mileage est"][' (cty/hwy)'] !== undefined && video.carData.features["Fuel"]["EPA mileage est"][' (cty/hwy)']}</span><br /> */}
                 <Link 

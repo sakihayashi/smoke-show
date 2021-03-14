@@ -61,8 +61,7 @@ const EmailConfirmation = (props) =>{
                                         fname: userObj.fname,
                                         lname: userObj.lname,
                                         username: userObj.username,
-                                        joined: joined,
-                                        profileThumb: 'https://s3.amazonaws.com/smokeshow.users/default/avator-thumb.jpg'
+                                        joined: joined
                                     }
                                     try {
                                         await mongoCollection.insertOne(userData).then(insertOneResult =>{
