@@ -330,8 +330,8 @@ const CarStatsVideo = (props) =>{
     }, [])
     return(
         <Layout>
-            <Helmet>
-                {/* <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title> */}
+            <Helmet encodeSpecialCharacters={true} >
+ 
                 <title>{typeof(carMake) !== 'undefined' && `${carMake.toUpperCase()}, ${carYear}, ${carModel.toUpperCase()} all types car statictics | The Smoke Show`}</title>
                 <meta name="description" content={`${carMake.toUpperCase()} ${carYear} ${carModel.toUpperCase()} | engines, price, warranty, color, and more information`} />
 

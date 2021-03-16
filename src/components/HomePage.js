@@ -25,7 +25,6 @@ let today = new Date()
 const timeISO = today.toISOString()
 let published = new Date('2021-03-01')
 const publishedISO = published.toISOString()
-const baseUrl = ''
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
 // const videoEmbedURL = 'https://www.youtube.com/embed/'

@@ -35,6 +35,7 @@ import Privacy from './components/Privacy'
 import CarImgUpload from './components/Admin/CarImgUpload'
 import UpdateDB from './components/Admin/UpdateDB'
 import CarStatsVideo from './components/CarStatsVideo'
+import CarStatsListsMake from './components/CarStatsListsMake'
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
           <Route path="/reset-password" component={ResetPassword}/>
           <Route exact path="/about" component={AboutPage} />
           <Route exact path="/car-stats/:id" component={CarStats} />
+          <Route path="/car-stats" component={CarStatsListsMake} />
           <Route exact path="/car-search" component={CarSearch} />
           {/* <Route exact path="/get-data" component={CreateDta} /> */}
           <Route exact path="/giveaways" component={Giveaways} />
@@ -58,6 +60,7 @@ function App() {
           <Route path="/social/:id" component={Social} />
           <Route path="/swagg-influencer/:id" component={SwaggInfluencer} />
           <Route path="/influencer/:username/all-videos" component={AllVideos} />
+          
           <Route path="/all-videos/:id" component={AllVideos} />
           <Route path="/add-car-data" component={AddCarData} />
           <Route path="/edit-video-data" component={EditVideoData} />

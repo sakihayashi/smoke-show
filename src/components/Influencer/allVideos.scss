@@ -10,6 +10,16 @@
     overflow-wrap: anywhere;
     word-break: break-all;
 }
+.desc-box-featured{
+    margin-top: -2rem;
+    width: 100%;
+    max-height: 2.6rem;
+    overflow: hidden;
+    display: block;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+}
 .desc-box-expanded{
     width: 100%;
     margin-top: 1rem;
@@ -58,31 +68,6 @@
 .card-header{
     padding: 0;
 }
-// .accordion-style{
-//     width: 100%;
-//     margin-top: 1rem;
-//     text-align: left;
-//     background-color: transparent;
-//     border: 0;
-//     .card{
-//         border: 0;
-//         background-color: transparent;
-//         .card-header{
-//             background-color: transparent;
-//             border-bottom: 0;
-//         }
-//     }
-// }
-// .acccordion-text{
-//     text-align: left;
-//     padding: 0;
-// }
-// .accordion>.card{
-//     overflow: visible !important;
-// }
-// .accordion-body-custom{
-//     padding: 0;
-// }
 .btn-acd{
     text-align: left;
     padding-left: 0 !important;
@@ -127,8 +112,7 @@
     padding: 8px 0;
     margin: 0 0 1px 0;
     cursor: pointer;
-    // background: #6AAB95;
-    // border-radius: 3px;
+
     color: $theme-color;
     transition: ease .5s;
     text-decoration: underline;
@@ -139,6 +123,9 @@
 //     content: ' more';
 // }
 .desc-box::after{
+    content: ' more';
+}
+.desc-box-featured::after{
     content: ' more';
 }
 .acd-input:checked + .acd-label{
@@ -158,6 +145,9 @@
 .acd-input + .acd-label + .desc-box + .content {
     display: none;
 }
+.acd-input + .acd-label + .desc-box-featured + .content {
+    display: none;
+}
 .acd-input:checked + .acd-label + .desc-box + .content {
     display: block;
     overflow-wrap: anywhere;
@@ -166,6 +156,18 @@
         margin-top: -5rem;
     }
 }
+.acd-input:checked + .acd-label + .desc-box-featured + .content {
+    display: block;
+    overflow-wrap: anywhere;
+    .acd-wrapper:first-child & {
+        background-color: white;
+        margin-top: -5rem;
+    }
+}
 .acd-input:checked + .acd-label + .desc-box{
+    display: none;
+}
+
+.acd-input:checked + .acd-label + .desc-box-featured{
     display: none;
 }

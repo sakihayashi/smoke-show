@@ -41,6 +41,9 @@
 .acd-input:checked + .acd-label + .desc-box{
     display: none;
 }
+.acd-input:checked + .acd-label + .desc-box-featured{
+    display: none;
+}
 .rotate {
     animation: rotation 1s infinite linear;
   }

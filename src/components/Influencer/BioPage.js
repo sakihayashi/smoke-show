@@ -7,14 +7,15 @@ import * as Realm from "realm-web"
 import './bioPage.scss'
 // import * as Papa from 'papaparse'
 
-import Comments from '../Comments'
+// import Comments from '../Comments'
 import Layout from '../Layout/Layout'
 import SubNav from './SubNav'
 import jwt from 'jsonwebtoken'
 import loadable from '@loadable/component'
-
+import moment from 'moment'
 
 const SpecDiv = loadable(() => import('./SpecDiv'))
+const Comments = loadable(() => import('../Comments'))
 
 const BioPage = (props) =>{
     const influencerId = props.match.params.id
@@ -138,7 +139,7 @@ const BioPage = (props) =>{
     return(
         <Layout>
             <Helmet>
-                <title>Influencer {`${influencer.username}`} Bio | The Smoke Show</title>
+                <title>Influencer {`${influencer.username}`} Featured Page | The Smoke Show</title>
             </Helmet>
             <div className="main-wrapper">
    
@@ -157,10 +158,22 @@ const BioPage = (props) =>{
                             
                         </div>
                         <h3 style={{marginTop:'10px'}}>{featured && featured.snippet.title}</h3>
+                        <small>{featured && moment(featured.snippet.publishedAt).fromNow()}</small>
                     </Col>
                     <Col sm={6}>
                         <div className="bio-desc-wrapper">
                             <p>{influencer.desc}</p>
+                            <input className="acd-input" type="checkbox" id={`title-featured`} />
+                                    
+                            <label className="show-label" htmlFor={`title-featured`} className="acd-label">Show </label>
+                            <div className="desc-box-featured">
+                                { featured && featured.snippet.description}
+                            </div> 
+                            <div className="content">
+                                <small className="wrap-text-desc">{featured && featured.snippet.description}</small>
+                            </div>
+                            <div className="spacer-4rem"></div>
+                            <Comments videoId={featured && featured.videoId} />
                         </div>
                         
                     </Col>
@@ -174,6 +187,7 @@ const BioPage = (props) =>{
                         const model = str.charAt(0).toUpperCase() +str.slice(1)
                         const name = video.carData.make
                         const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
+                        const date = moment(video.snippet.publishedAt).fromNow()
                         let price;
                         const car = video.carData
                         if(video.carData.price && video.carData.price.baseMSRP){
@@ -194,7 +208,7 @@ const BioPage = (props) =>{
                                     />
                                 </div>
                                 <h3 style={{marginTop:'10px'}}>{video.snippet.title}</h3>
-                                
+                                <small>{date}</small>
                                 <input className="acd-input" type="checkbox" id={`title${index}`} />
                                     
                                 <label htmlFor={`title${index}`} className="acd-label">Show </label>

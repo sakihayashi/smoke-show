@@ -91,27 +91,20 @@ const AllVideos = (props) =>{
                                     
                                }
                                 
-              
-                        // }catch(err){
-                        //  console.log(err)
-                        // }
-                        
                     })
                     Promise.all(mapResults).then(video =>{
                         setVideoArr(video)
                     })
                 }else{
-                    console.log('this fired?')
                     const results = allVideoData[num].map(async video =>{
                         const filterCar = {_id: {"$oid": video.carDataId}}
                         
-                        // try{
                             const data = await collectionCars.findOne(filterCar)
                             
                                if(data){
                                 video.carData = data
                                 return video
-                                // setVideoArr(videoArr =>[...videoArr, video])
+
                                }else{
                                 const data = await collectionManual.findOne(filterCar)
                                     video.carData = data
@@ -120,7 +113,6 @@ const AllVideos = (props) =>{
                         
                     })
                     Promise.all(results).then(res =>{
-                        console.log(res)
                         setVideoArr(res)
                     })
                 }
