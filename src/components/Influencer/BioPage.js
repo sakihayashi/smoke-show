@@ -173,7 +173,7 @@ const BioPage = (props) =>{
                                 <small className="wrap-text-desc">{featured && featured.snippet.description}</small>
                             </div>
                             <div className="spacer-4rem"></div>
-                            <Comments videoId={featured && featured.videoId} />
+                            <Comments videoId={featured.videoId} />
                         </div>
                         
                     </Col>

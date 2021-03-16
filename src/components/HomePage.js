@@ -25,6 +25,7 @@ let today = new Date()
 const timeISO = today.toISOString()
 let published = new Date('2021-03-01')
 const publishedISO = published.toISOString()
+const s3BaseUrl = 'https://s3.amazonaws.com/smokeshow.users/'
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
 // const videoEmbedURL = 'https://www.youtube.com/embed/'
@@ -76,59 +77,58 @@ const [isLoading, setIsloading] = useState(false)
             await app.logIn(credentials).then(async user =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionVideos = mongo.db("smoke-show").collection("youtube-videos")
-                
+                const collectionKirk = mongo.db("smoke-show").collection(`fans-Lexurious Fleet`)
+                const collectionEddie = mongo.db("smoke-show").collection(`fans-EddieX`)
+                let kirkFans = await collectionKirk.count()
+                if(kirkFans > 999){
+                    kirkFans = Math.sign(kirkFans)*((Math.abs(kirkFans)/1000).toFixed(1)) + 'k'
+                    
+                }else{
+                    kirkFans = Math.sign(kirkFans)*Math.abs(kirkFans)
+                }
+                let eddieFans = await collectionEddie.count()
+                if(eddieFans > 999){
+                    eddieFans = Math.sign(eddieFans)*((Math.abs(eddieFans)/1000).toFixed(1)) + 'k'
+                    
+                }else{
+                    eddieFans = Math.sign(eddieFans)*Math.abs(eddieFans)
+                }
                 const filter = {'snippet.publishedAt': {$gt: aWeekAgo}}
                 const options = {sort: {"snippet.publishedAt": -1}  }
                 await collectionVideos.find(filter, options).then(async videos =>{
-                    const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
+                    // const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
                     const collectionCars = mongo.db("smoke-show").collection("cars")
                     const collectionManual = mongo.db("smoke-show").collection("cars-manual")
                     
                     const results = videos.map(async video =>{
-                     
-                        const filterCar = {_id: {"$oid": video.carDataId}}
-                        const filterInflu = {userId: video.userId}
 
-                           const influencer = await collectionInfluencer.findOne(filterInflu)
-                           if(influencer){
-                            video.influencer = influencer
-                            let formattedFans;
-                            const collectionFans = mongo.db("smoke-show").collection(`fans-${influencer.username}`)
-                            try {
-                                await collectionFans.count().then(num =>{
-                                    if(num > 999){
-                                        formattedFans = Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k'
-                                        video.fans = formattedFans
-                                        
-                                    }else{
-                                        formattedFans = Math.sign(num)*Math.abs(num)
-                                        video.fans = formattedFans
-                                    }
-                                })
-                            } catch (error) {
-                                
-                            }
-                            const data = await collectionCars.findOne(filterCar)
-                                if(data){
+                        if(video.userId === '60230361f63ff517d4fdad14'){
+                            video.fans = eddieFans
+                            
+                        }else if(video.userId === '602303890ff2832f7d19a2af'){
+                            video.fans = kirkFans
+                        }else{
+                            video.fans = 0
+                        }
+
+                        const filterCar = {_id: {"$oid": video.carDataId}}
+                        const data = await collectionCars.findOne(filterCar)
+                        if(data){
+                        video.carData = data
+                        return video
+
+                        }else{
+                        const data = await collectionManual.findOne(filterCar)
+                            if(data){
                                 video.carData = data
                                 return video
 
-                                }else{
-                                    console.log('ever called?')
-                                const data = await collectionManual.findOne(filterCar)
-                                    if(data){
-                                        video.carData = data
-                                        return video
-
-                                    }else{
-                                        console.log('no data')
-                                        video.carData = {make: '', year: null, price: {baseMSRP: ''}}
-                                        return video
-                                    }
-                                }
-                           }else{
-                               console.log('need data fix')
-                           }
+                            }else{
+                                console.log('no data')
+                                video.carData = {make: '', year: null, price: {baseMSRP: ''}}
+                                return video
+                            }
+                        }
                     })
                     Promise.all(results).then(videos =>{
                         setLatestVideos(videos)
@@ -225,12 +225,12 @@ const [isLoading, setIsloading] = useState(false)
                                                 
                                                 <div className="col-1" style={{margin:0,padding:0}} >
                                                 <Link to={`/influencer/${video.userId}`}>
-                                                {video.influencer.profilePic ? <img src={video.influencer.profilePic} 
-                                                className="creator-profile-pic" alt={`A car vlogger ${video.snippet.channelTitle} | The Smoke Show`}/> :
-                                                <div
+                                                <img src={`${s3BaseUrl}${video.userId}/profile/thumbnail`} 
+                                                className="creator-profile-pic" alt={`A car vlogger ${video.snippet.channelTitle} | The Smoke Show`}/> 
+                                                {/* <div
                                                 style={{width:'46px', height: '46px', backgroundColor: 'teal'}}
-                                                className="creator-profile-pic" name={video.snippet.channelTitle}></div>
-                                                }
+                                                className="creator-profile-pic" name={video.snippet.channelTitle}></div> */}
+                                            
                                                 </Link> 
                                                 </div>
                                                 

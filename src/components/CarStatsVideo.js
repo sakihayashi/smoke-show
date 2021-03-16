@@ -410,7 +410,7 @@ const CarStatsVideo = (props) =>{
                                 <Row>
                                     <div className="col-12">
                                         <Link to={`/influencer/${video.userId}`}>
-                                            <img src={`${s3BaseUrl}${video.userId}/profile/thumbnail`} className="creator-profile-pic" alt={video.snippet.channelTitle}  />
+                                            <img src={`${s3BaseUrl}${video.userId}/profile/thumbnail`} className="creator-profile-pic" alt={`Vlogger ${video.snippet.channelTitle}`}  />
                                             
                                         </Link>
                                     
