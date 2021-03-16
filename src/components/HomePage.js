@@ -25,6 +25,7 @@ let today = new Date()
 const timeISO = today.toISOString()
 let published = new Date('2021-03-01')
 const publishedISO = published.toISOString()
+const baseUrl = ''
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
 // const videoEmbedURL = 'https://www.youtube.com/embed/'
@@ -183,13 +184,16 @@ const [isLoading, setIsloading] = useState(false)
                 <script type="application/ld+json">{`
                     {
                         "@context": "http://schema.org",
-                        "@graph": [{"@type": ["WebPage","CollectionPage"],
-                        "@id": "https://thesmokeshow.com/#website", "url": "https://thesmokeshow.com/", "name": "The Smoke Show - a home for auto fans, built by auto fans.", "datePublished": ${publishedISO}, "dateModified": ${timeISO}, "description": "The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!"
-                        }]
+                        "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website","url":"https://thesmokeshow.com/","name":"The Smoke Show","description":"","potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/?s={search_term_string}","query-input":"required name=search_term_string"}],"inLanguage":"en"},{"@type": ["WebPage","CollectionPage"],
+                        "@id": "https://thesmokeshow.com/#webpage", "url": "https://thesmokeshow.com/", "name": "The Home For Auto Fans, Built By Auto Fans | The Smoke Show","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!", "breadcrumb":{"@id":"https://thesmokeshow.com/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/"]}]},
+                        {"@type":"BreadcrumbList","@id":"https://thesmokeshow.com/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"WebPage","@id":"https://thesmokeshow.com/","url":"https://thesmokeshow.com/","name":"Home"}}]}
+                        ]
                     }
                 `}</script>
+                
             </Helmet>
                 <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem'}}>
+                <h1 className="h1-seo">The Home For Auto Fans, Built By Auto Fans</h1>
                 <div className="spacer-4rem"></div>
                 <h2 className="title">New This Week</h2>
                 <Row className="bio-main-row">
@@ -223,7 +227,7 @@ const [isLoading, setIsloading] = useState(false)
                                                 <div className="col-1" style={{margin:0,padding:0}} >
                                                 <Link to={`/influencer/${video.userId}`}>
                                                 {video.influencer.profilePic ? <img src={video.influencer.profilePic} 
-                                                className="creator-profile-pic" alt={video.snippet.channelTitle}/> :
+                                                className="creator-profile-pic" alt={`A car vlogger ${video.snippet.channelTitle} | The Smoke Show`}/> :
                                                 <div
                                                 style={{width:'46px', height: '46px', backgroundColor: 'teal'}}
                                                 className="creator-profile-pic" name={video.snippet.channelTitle}></div>

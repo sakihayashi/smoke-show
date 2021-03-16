@@ -6,8 +6,10 @@ import './terms.scss'
 const Privacy = () =>{
     return(
         <Layout>
-            <Helmet>
+            <Helmet encodeSpecialCharacters={true}>
                 <title>Privacy Policy | The Smoke Show</title>
+                <meta name="description" content="Privacy policy for The Smoke Show " />
+                <link rel="canonical" href="https://thesmokeshow.com/privacy-policy" />
             </Helmet>
             <div className="spacer-4rem"></div>
             <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem)'}}>
