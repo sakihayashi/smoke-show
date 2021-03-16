@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom'
 // import { youtubeAPI } from '../utils/youtubeAPI'
 
 // import Avatar from 'react-avatar'
-// import { v4 as uuidv4 } from 'uuid';
 import Head from './Layout/Head'
 import Layout from './Layout/Layout'
 import '../scss/spinner.css'
@@ -22,6 +21,11 @@ const SpecDiv = loadable(() => import('./SpecDiv'))
 const VideoDiv = loadable(()=> import('./VideoDiv'))
 
 const HomePage = (props) =>{
+let today = new Date()
+const timeISO = today.toISOString()
+let published = new Date('2021-03-01')
+const publishedISO = published.toISOString()
+
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
 // const videoEmbedURL = 'https://www.youtube.com/embed/'
 const [latestVideos, setLatestVideos] = useState([])
@@ -125,14 +129,12 @@ const [isLoading, setIsloading] = useState(false)
                            }else{
                                console.log('need data fix')
                            }
-
                     })
                     Promise.all(results).then(videos =>{
                         setLatestVideos(videos)
                     })
                         
                     })
-
                 })
 
         } catch (error) {
@@ -170,13 +172,22 @@ const [isLoading, setIsloading] = useState(false)
 
     return(
         <Layout >
-            <Helmet>
-                <meta charSet="utf-8" />
+            <Helmet encodeSpecialCharacters={true} >
+                
                 <title>Home | The Smoke Show</title>
                 
                 <meta name="description" content="The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!" />
                 <Head />
-                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+                {/* <base target="_blank" href="https://thesmokeshow/" /> */}
+                <link rel="canonical" href="https://thesmokeshow.com" />
+                <script type="application/ld+json">{`
+                    {
+                        "@context": "http://schema.org",
+                        "@graph": [{"@type": ["WebPage","CollectionPage"],
+                        "@id": "https://thesmokeshow.com/#website", "url": "https://thesmokeshow.com/", "name": "The Smoke Show - a home for auto fans, built by auto fans.", "datePublished": ${publishedISO}, "dateModified": ${timeISO}, "description": "The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!"
+                        }]
+                    }
+                `}</script>
             </Helmet>
                 <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem'}}>
                 <div className="spacer-4rem"></div>
