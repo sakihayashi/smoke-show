@@ -147,7 +147,7 @@ const BioPage = (props) =>{
     return(
         <Layout>
             <Helmet>
-                <title>Influencer {influencer ? influencer.username : ''} Featured Page | The Smoke Show</title>
+                <title>Influencer {name.replaceAll("-", " ")} Featured Page | The Smoke Show</title>
                 <link rel="canonical" href={`https:/influencer/thesmokeshow.com//${name}`} />
             </Helmet>
             <div className="main-wrapper">
