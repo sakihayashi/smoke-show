@@ -118,7 +118,7 @@ const InfluencerIndexPage = () =>{
                 <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
                 {influencers && influencers.map(influencer =>{
                     const unique = short.generate()
-                    let username = influencer.username.toLowerCase()
+                    let username = influencer.username
                     const replaced = username.replaceAll(' ', '-')
                     return(
                         <Col sm={6} md={4} key={unique} className="bottom-space">
@@ -136,7 +136,7 @@ const InfluencerIndexPage = () =>{
                                     <Card.Text className="influencer-desc">{influencer.desc}</Card.Text>
                                     <Link 
                                     to={{
-                                        pathname: `/influencer/${replaced}/${influencer.userId}`,
+                                        pathname: `/influencer/${replaced}`,
                                         state: { influencer: influencer }
                                         // influencer: influencer
                                     }}

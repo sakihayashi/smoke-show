@@ -46,7 +46,7 @@ function App() {
           <Route exact path="/" component={HomePage} />
           <Route path="/influencers" component={InfluencerIndexPage} />
           {/* <Route path="/influencer/:id" component={BioPageInfluencer} /> */}
-          <Route path="/influencer/:username/:id" component={BioPageInfluencer} />
+          <Route path="/influencer/:username" component={BioPageInfluencer} />
           <Route path="/email-confirmation" component={EmailConfirmation}/>
           <Route path="/reset-password" component={ResetPassword}/>
           <Route exact path="/about" component={AboutPage} />

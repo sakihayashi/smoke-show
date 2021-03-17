@@ -18,10 +18,14 @@ const SpecDiv = loadable(() => import('./SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
 
 const BioPage = (props) =>{
-    const influencerId = props.match.params.id
+    let influencerId;
     const name = props.match.params.username
-    console.log(influencerId)
-    console.log(name)
+    if(name === 'EddieX'){
+        influencerId = '60230361f63ff517d4fdad14'
+    }else if(name === 'Lexurious-Fleet'){
+        influencerId = '602303890ff2832f7d19a2af'
+    }
+
     const [featured, setFeatured] = useState()
     const [influencer, setInfluencer] = useState({userId: '', fname: '', lname: '', username: '', fans: null, desc: '', channelId: '', banner_img: '', profile_pic: '', featuredVideo: {id: '', title: ''}})
 
@@ -47,7 +51,8 @@ const BioPage = (props) =>{
 
             try {
                 const mongoCollection = mongo.db("smoke-show").collection("influencers");
-                const filter = {userId: influencerId} 
+                const replaced = name.replaceAll('-', ' ')
+                const filter = {username: replaced} 
                 await mongoCollection.findOne(filter).then( async res =>{
                     setInfluencer(res)
                     const collectionFans = mongo.db("smoke-show").collection(`fans-${res.username}`)
@@ -143,7 +148,7 @@ const BioPage = (props) =>{
         <Layout>
             <Helmet>
                 <title>Influencer {influencer ? influencer.username : ''} Featured Page | The Smoke Show</title>
-
+                <link rel="canonical" href={`https:/influencer/thesmokeshow.com//${name}`} />
             </Helmet>
             <div className="main-wrapper">
    
