@@ -6,7 +6,7 @@ import { carsAllYear } from './carTempData'
 import './carStats.scss'
 import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'
-// import MediaNet from '../components/MediaNet'
+import { Helmet } from 'react-helmet'
 
 const CarSearch = (props) =>{
     const [modelName, setModelName] = useState([])
@@ -161,6 +161,11 @@ const CarSearch = (props) =>{
    }, [])
     return(
         <Layout>
+        <Helmet>
+            <title></title>
+            <meta name="description" content="Look at all information about any car and have the results displayed in a way that's actually readable by a human. We didn't invent car search, we perfected it!" />
+            <link rel="canonical" href="https://thesmokeshow.com/influencers" />
+        </Helmet>
             <div className="spacer-4rem"></div>
             <div className="main-wrapper main-height" style={{minHeight: 'calc(100vh - 21rem)'}}>
             

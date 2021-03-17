@@ -19,6 +19,9 @@ const Comments = loadable(() => import('../Comments'))
 
 const BioPage = (props) =>{
     const influencerId = props.match.params.id
+    const name = props.match.params.username
+    console.log(influencerId)
+    console.log(name)
     const [featured, setFeatured] = useState()
     const [influencer, setInfluencer] = useState({userId: '', fname: '', lname: '', username: '', fans: null, desc: '', channelId: '', banner_img: '', profile_pic: '', featuredVideo: {id: '', title: ''}})
 
@@ -139,7 +142,8 @@ const BioPage = (props) =>{
     return(
         <Layout>
             <Helmet>
-                <title>Influencer {`${influencer.username}`} Featured Page | The Smoke Show</title>
+                <title>Influencer {influencer ? influencer.username : ''} Featured Page | The Smoke Show</title>
+
             </Helmet>
             <div className="main-wrapper">
    
@@ -162,7 +166,7 @@ const BioPage = (props) =>{
                     </Col>
                     <Col sm={6}>
                         <div className="bio-desc-wrapper">
-                            <p>{influencer.desc}</p>
+                            <p>{influencer && influencer.desc}</p>
                             <input className="acd-input" type="checkbox" id={`title-featured`} />
                                     
                             <label className="show-label" htmlFor={`title-featured`} className="acd-label">Show </label>
@@ -173,7 +177,9 @@ const BioPage = (props) =>{
                                 <small className="wrap-text-desc">{featured && featured.snippet.description}</small>
                             </div>
                             <div className="spacer-4rem"></div>
-                            <Comments videoId={featured.videoId} />
+                            {featured && <Comments videoId={featured.videoId} />
+                            }
+                            
                         </div>
                         
                     </Col>

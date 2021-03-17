@@ -22,7 +22,12 @@ import GiveawayCount from './GiveawayCount'
 
 const Giveaways = (props) =>{
     const sharePathname = props.location.pathname
-    const shareUrl = `https://master.d2rltwsx300g54.amplifyapp.com${sharePathname}`
+    const shareUrl = `https://thesmokeshow.com/${sharePathname}`
+    let today = new Date()
+    const timeISO = today.toISOString()
+    let published = new Date('2021-03-01')
+    const publishedISO = published.toISOString()
+    const slug = 'giveaways'
     return(
         <Layout>
         <Helmet>
@@ -30,8 +35,33 @@ const Giveaways = (props) =>{
             <title>Giveaways | The Smoke Show</title>
             <meta name="description" content="Checkout our giveaways and entry now to win!" />
             
-            <Head />
-            {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            <link rel="canonical" href="https://thesmokeshow.com/giveaways" />
+            <script type="application/ld+json">{`
+                    {
+                        "@context": "http://schema.org",
+                        "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website",
+                        "url":"https://thesmokeshow.com/",
+                        "name":"The Smoke Show",
+                        "description":"",
+                        "potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],
+                        "inLanguage":"en"},
+                        {"@type": "WebPage",
+                        "@id": "https://thesmokeshow.com/giveaways/#webpage", "url": "https://thesmokeshow.com/giveaways/", "name": "Giveaways | The Smoke Show","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!", "breadcrumb":{"@id":"https://thesmokeshow.com/giveaways/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/giveaways/"]}]},
+                        {"@type":"BreadcrumbList","@id":"https://thesmokeshow.com/#breadcrumb",
+                        "itemListElement":[{
+                            "@type":"ListItem","position":1,
+                            "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/","url":"https://thesmokeshow.com/","name":"Home"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":2,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/giveaways/","url":"https://thesmokeshow.com/giveaways/","name":"Giveaways"}
+                            }
+                            ]}
+                        ]
+                    }
+                `}
+        </script>
         </Helmet>
             <div className="spacer-4rem"></div>
             <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem)'}}>

@@ -3,8 +3,8 @@ import powerIcon from '../assets/global/Horsepower.png'
 import pistonIcon from '../assets/global/piston.png'
 import priceIcon from '../assets/global/Price-Tag-icon.png'
 import weightIcon from '../assets/global/weight.svg'
-import transmissionIcon from '../assets/global/transmission.svg'
-import mileageIcon from '../assets/global/mileage.svg'
+// import transmissionIcon from '../assets/global/transmission.svg'
+// import mileageIcon from '../assets/global/mileage.svg'
 import { Link } from 'react-router-dom'
 
 const SpecDiv = (props) =>{

@@ -32,7 +32,7 @@ import EditVideoDataKirk from './components/Admin/EditVideoDataKirk'
 import AllVideos from './components/Influencer/AllVideos'
 import Terms from './components/Terms'
 import Privacy from './components/Privacy'
-import CarImgUpload from './components/Admin/CarImgUpload'
+// import CarImgUpload from './components/Admin/CarImgUpload'
 import UpdateDB from './components/Admin/UpdateDB'
 import CarStatsVideo from './components/CarStatsVideo'
 import CarStatsListsMake from './components/CarStatsListsMake'
@@ -45,7 +45,8 @@ function App() {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/influencers" component={InfluencerIndexPage} />
-          <Route path="/influencer/:id" component={BioPageInfluencer} />
+          {/* <Route path="/influencer/:id" component={BioPageInfluencer} /> */}
+          <Route path="/influencer/:username/:id" component={BioPageInfluencer} />
           <Route path="/email-confirmation" component={EmailConfirmation}/>
           <Route path="/reset-password" component={ResetPassword}/>
           <Route exact path="/about" component={AboutPage} />

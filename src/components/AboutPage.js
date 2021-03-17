@@ -1,25 +1,61 @@
 import React from 'react'
 import {Helmet} from "react-helmet"
-import { Row, Col, Button } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
 import Layout from './Layout/Layout'
 import './about.scss'
 
 const AboutPage = () =>{
 
+ let today = new Date()
+ const timeISO = today.toISOString()
+ let published = new Date('2021-03-01')
+ const publishedISO = published.toISOString()
+ const slug = 'about'
+ const pageName = 'About Us'
 
  return(
      <Layout>
-     <Helmet>
+     <Helmet encodeSpecialCharacters={true}>
         <meta charSet="utf-8" />
         <title>About Us | The Smoke Show</title>
         <meta name="description" content="Who we are and how we started The Smoke Show. Stay in touch." />
 
-        {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+        <link rel="canonical" href="https://thesmokeshow.com/about" />
+
+        <script type="application/ld+json">
+        {`
+            {
+                "@context": "http://schema.org",
+                "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website",
+                "url":"https://thesmokeshow.com/",
+                "name":"The Smoke Show",
+                "description":"",
+                "potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],
+                "inLanguage":"en"},
+                {"@type": "WebPage",
+                "@id": "https://thesmokeshow.com/${slug}/#webpage", "url": "https://thesmokeshow.com/${slug}/", "name": "${pageName} | The Smoke Show","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!", "breadcrumb":{"@id":"https://thesmokeshow.com/${slug}/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/${slug}/"]}]},
+                {"@type":"BreadcrumbList","@id":"https://thesmokeshow.com/#breadcrumb",
+                "itemListElement":[{
+                    "@type":"ListItem","position":1,
+                    "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/","url":"https://thesmokeshow.com/","name":"Home"}
+                    },
+                    {
+                        "@type":"ListItem",
+                        "position":2,
+                        "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/${slug}/","url":"https://thesmokeshow.com/${slug}/","name":"${pageName}"}
+                    }
+                    ]}
+                ]
+            }
+        `}
+        </script>
+        
+
     </Helmet>
         <div className="spacer-4rem"></div>
         <div className="main-wrapper">
             <div className="mission-wrapper">
-                <h4 className="theme-text-color">The Smoke Show Mission Statement</h4>
+                <h1 className="theme-text-color theme-text-p">The Smoke Show Mission Statement</h1>
                 <div className="spacer-2rem"></div>
                 <p className="about-p">
                 Tired of BigTech and Old School Auto Magazines?<br />

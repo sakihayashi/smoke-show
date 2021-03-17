@@ -71,8 +71,8 @@ useEffect(() => {
         <Helmet>
             <meta charSet="utf-8" />
             <title>Swagg | The Smoke Show</title>
-            <meta name="description" content="Check out our swaggs here!" />
-            {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            <meta name="description" content="Check out The Smoke Show swaggs here!" />
+            <link rel="canonical" href="https://thesmokeshow.com/swagg" />
         </Helmet>
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>

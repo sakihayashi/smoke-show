@@ -13,6 +13,12 @@ import Logo from '../assets/global/Logo-smoke-show.png'
 import Head from '../components/Layout/Head'
 
 const InfluencerIndexPage = () =>{
+    let today = new Date()
+    const timeISO = today.toISOString()
+    let published = new Date('2021-03-01')
+    const publishedISO = published.toISOString()
+    const slug = 'influencers'
+    const pageName = 'All Influencers and Vloggers'
 
     const videoEmbedURL = 'https://www.youtube.com/embed/'
 
@@ -71,12 +77,38 @@ const InfluencerIndexPage = () =>{
 
     return(
         <Layout>
-        <Helmet>
+        <Helmet encodeSpecialCharacters={true}>
           <meta charSet="utf-8" />
           <title>All influencers | The Smoke Show</title>
-          <meta name="description" content="Check out our influencers / authors" />
-          <Head />
-          {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+          <meta name="description" content="The best place to stay up to date with Automotive Influencers. Watch the newest videos, see what's in their garage, and even pick up some new swag!" />
+          <link rel="canonical" href="https://thesmokeshow.com/influencers" />
+          <script type="application/ld+json">
+            {`
+                {
+                    "@context": "http://schema.org",
+                    "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website",
+                    "url":"https://thesmokeshow.com/",
+                    "name":"The Smoke Show",
+                    "description":"",
+                    "potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],
+                    "inLanguage":"en"},
+                    {"@type": "WebPage",
+                    "@id": "https://thesmokeshow.com/${slug}/#webpage", "url": "https://thesmokeshow.com/${slug}/", "name": "${pageName} | The Smoke Show","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!", "breadcrumb":{"@id":"https://thesmokeshow.com/${slug}/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/${slug}/"]}]},
+                    {"@type":"BreadcrumbList","@id":"https://thesmokeshow.com/#breadcrumb",
+                    "itemListElement":[{
+                        "@type":"ListItem","position":1,
+                        "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/","url":"https://thesmokeshow.com/","name":"Home"}
+                        },
+                        {
+                            "@type":"ListItem",
+                            "position":2,
+                            "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/${slug}/","url":"https://thesmokeshow.com/${slug}/","name":"${pageName}"}
+                        }
+                        ]}
+                    ]
+                }
+            `}
+            </script>
         </Helmet>
             <div className="main-wrapper footer-pos">
                 <div className="spacer-4rem"></div>
@@ -86,6 +118,8 @@ const InfluencerIndexPage = () =>{
                 <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
                 {influencers && influencers.map(influencer =>{
                     const unique = short.generate()
+                    let username = influencer.username.toLowerCase()
+                    const replaced = username.replaceAll(' ', '-')
                     return(
                         <Col sm={6} md={4} key={unique} className="bottom-space">
                             <Card className="card-influencer" >
@@ -102,7 +136,7 @@ const InfluencerIndexPage = () =>{
                                     <Card.Text className="influencer-desc">{influencer.desc}</Card.Text>
                                     <Link 
                                     to={{
-                                        pathname: `/influencer/${influencer.userId}`,
+                                        pathname: `/influencer/${replaced}/${influencer.userId}`,
                                         state: { influencer: influencer }
                                         // influencer: influencer
                                     }}
