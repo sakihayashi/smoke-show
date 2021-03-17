@@ -13,7 +13,7 @@ const CarStatsCard = (props) =>{
 
     return(
         <Fragment key={car.name +index}>
-            <h2 className="title">{car.year} {' '} {maker} {' '} {model}</h2>
+            <h1 className="title">{maker} {' '} {model} {' '} {car.year}</h1>
             <p className="theme-text-p">{car.name}</p>
             <Row style={{paddingRight: '3px'}}>
                 <Col sm={4}>

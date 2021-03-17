@@ -369,7 +369,7 @@ const CarStatsVideo = (props) =>{
                             {
                                 "@type":"ListItem",
                                 "position":4,
-                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/car-stats/${carMake}/${carYear}","url":"https://thesmokeshow.com/car-stats/${carMake}/${carYear}","name":"Search statistics for ${carMake} cars released in ${carYear}"}
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/car-stats/${carMake}/${carYear}","url":"https://thesmokeshow.com/car-stats/${carMake.toUpperCase()}/${carYear}","name":"Search statistics for ${carMake.toUpperCase()} cars released in ${carYear}"}
                             },
                             {
                                 "@type":"ListItem",
@@ -407,7 +407,7 @@ const CarStatsVideo = (props) =>{
                         }
                     return(
                         <Fragment key={car.name +index}>
-                            <h2 className="title">{car.year} {' '} {maker} {' '} {model}</h2>
+                            <h2 className="title"> {maker} {' '} {model} {' '} {car.year} </h2>
                             <p className="theme-text-p">{car.name}</p>
                             <Row style={{paddingRight: '3px'}}>
                                 <Col sm={4}>
