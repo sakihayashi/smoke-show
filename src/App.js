@@ -35,7 +35,9 @@ import Privacy from './components/Privacy'
 // import CarImgUpload from './components/Admin/CarImgUpload'
 import UpdateDB from './components/Admin/UpdateDB'
 import CarStatsVideo from './components/CarStatsVideo'
-import CarStatsListsMake from './components/CarStatsListsMake'
+import CarStatsListsYear from './components/CarStatsListsYear'
+import CarStatsListsModel from './components/CarStatsListsModel'
+import CarStatsListsResults from './components/CaStatsListsResults'
 
 
 function App() {
@@ -50,13 +52,14 @@ function App() {
           <Route path="/email-confirmation" component={EmailConfirmation}/>
           <Route path="/reset-password" component={ResetPassword}/>
           <Route exact path="/about" component={AboutPage} />
-          <Route exact path="/car-stats/:id" component={CarStats} />
-          <Route path="/car-stats" component={CarStatsListsMake} />
+          <Route exact path="/car-stats/search/:id" component={CarStats} />
           <Route exact path="/car-search" component={CarSearch} />
+          <Route exact path="/car-stats/:make" component={CarStatsListsYear} />
+          <Route exact path="/car-stats/:make/:year" component={CarStatsListsModel} />
+          <Route exact path="/car-stats/:make/:year/:model" component={CarStatsListsResults} />
           {/* <Route exact path="/get-data" component={CreateDta} /> */}
           <Route exact path="/giveaways" component={Giveaways} />
           <Route exact path="/swagg" component={Swagg} />
-          <Route path="/garage/:id" component={Garage} />
           <Route path="/user/:id" component={BioPage} />
           <Route path="/social/:id" component={Social} />
           <Route path="/swagg-influencer/:id" component={SwaggInfluencer} />

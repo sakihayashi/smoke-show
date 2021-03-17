@@ -145,6 +145,19 @@
     width: 22px;
     height: 22px;
 }
+.list-container{
+    float: left;
+    left: 50%;
+    transform: translateX(-50%);
+    position: relative;
+}
+.list-pd{
+    padding: 0 5rem;
+}
+.stats-list{
+    list-style: none;
+    width: max-content;
+}
 .xs-txt{
     display: flex;
     flex-direction: column;

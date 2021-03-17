@@ -36,7 +36,8 @@ const Giveaways = (props) =>{
             <meta name="description" content="Checkout our giveaways and entry now to win!" />
             
             <link rel="canonical" href="https://thesmokeshow.com/giveaways" />
-            <script type="application/ld+json">{`
+            <script type="application/ld+json">
+            {`
                     {
                         "@context": "http://schema.org",
                         "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website",

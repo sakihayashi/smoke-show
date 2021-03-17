@@ -45,16 +45,19 @@ const CarStatsVideo = (props) =>{
     const carMake = props.match.params.make
     const carModel = props.match.params.model
     const carYear = props.match.params.year
+    let today = new Date()
+    const timeISO = today.toISOString()
+    let published = new Date('2021-03-01')
+    const publishedISO = published.toISOString()
     const s3BaseUrl = 'https://s3.amazonaws.com/smokeshow.users/'
 
     const handleTabClick = (tab, index) =>{
-        let tempCarArr = [...carData]
+       let tempCarArr = [...carData]
        
        tempCarArr[index].activeTab = tab
        setCarData(tempCarArr)
     }
     const handleTabClickOriginal = (tab, index) =>{
-        
         setOriginal({...original, activeTab: tab})
     }
     
@@ -333,9 +336,51 @@ const CarStatsVideo = (props) =>{
             <Helmet encodeSpecialCharacters={true} >
  
                 <title>{typeof(carMake) !== 'undefined' && `${carMake.toUpperCase()}, ${carYear}, ${carModel.toUpperCase()} all types car statictics | The Smoke Show`}</title>
-                <meta name="description" content={`${carMake.toUpperCase()} ${carYear} ${carModel.toUpperCase()} | engines, price, warranty, color, and more information`} />
+                <meta name="description" content={`${carMake.toUpperCase()} ${carYear} ${carModel.toUpperCase()} car statistics | engines, price, warranty, color, and more information`} />
+                <link rel="canonical" href={`https://thesmokeshow.com/car-stats/${carMake}/${carYear}/${carModel}/${carDataId}`} />
 
-                <Head />
+                 <script type="application/ld+json">
+            {`
+                    {
+                        "@context": "http://schema.org",
+                        "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website",
+                        "url":"https://thesmokeshow.com/",
+                        "name":"The Smoke Show",
+                        "description":"",
+                        "potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],
+                        "inLanguage":"en"},
+                        {"@type": "WebPage",
+                        "@id": "https://thesmokeshow.com/giveaways/#webpage", "url": "https://thesmokeshow.com/giveaways/", "name": "Giveaways | The Smoke Show","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "${carMake.toUpperCase()} ${carYear} ${carModel.toUpperCase()} car statistics | engines, price, warranty, colors, and more information.", "breadcrumb":{"@id":"https://thesmokeshow.com/car-stats/${carMake}/${carYear}/${carModel}/${carDataId}/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/car-stats/${carMake}/${carYear}/${carModel}/${carDataId}/"]}]},
+                        {"@type":"BreadcrumbList","@id":"https://thesmokeshow.com/#breadcrumb",
+                        "itemListElement":[{
+                            "@type":"ListItem","position":1,
+                            "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/","url":"https://thesmokeshow.com/","name":"Home"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":2,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/car-search/","url":"https://thesmokeshow.com/car-search/","name":"Car statistics search"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":3,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/car-stats/${carMake}","url":"https://thesmokeshow.com/car-stats/${carMake}","name":"Search statistics for ${carMake} cars"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":4,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/car-stats/${carMake}/${carYear}","url":"https://thesmokeshow.com/car-stats/${carMake}/${carYear}","name":"Search statistics for ${carMake} cars released in ${carYear}"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":5,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/car-stats/${carMake}/${carYear}","url":"https://thesmokeshow.com/car-stats/${carMake}/${carYear}/${carModel}","name":"See all statistics for ${carMake} ${carModel}cars released in ${carYear}"}
+                            }
+                            ]}
+                        ]
+                    }
+                `}
+        </script>
             </Helmet>
             <div className="main-wrapper stats-container" style={{minHeight: 'calc(100vh - 21rem'}}>
                 <div className="spacer-4rem"></div>

@@ -6,8 +6,9 @@ import * as Realm from "realm-web"
 import jwt from 'jsonwebtoken'
 
 
-const CarStatsListsYear = (props) =>{
+const CarStatsListsModel = (props) =>{
     const makeName = props.match.params.make
+    const carYear = props.match.params.year
     let title;
     if(makeName.includes("-")){
         let splitted = makeName.split("-")
@@ -15,7 +16,6 @@ const CarStatsListsYear = (props) =>{
         for(let i=0; i < splitted.length; i++){
             temp.push(splitted[i].charAt(0).toUpperCase() + splitted[i].slice(1))
         }
-        
         title = temp.join(" ")
     }else{
         let str = makeName
@@ -52,13 +52,12 @@ const CarStatsListsYear = (props) =>{
             await app.logIn(cre).then(async user =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionCars = mongo.db("smoke-show").collection("cars")
-                const filter = {make: makeName}
+                const filter = {make: makeName, year: Number(carYear)}
                 const results = await collectionCars.find(filter)
                 const tempArr = results.map(car =>{
-                    return car.year
+                    return car.model
                 })
                 const unique = [...new Set(tempArr)]
-                console.log(unique)
                 unique.sort()
                 const len = unique.length
                 const third = Math.ceil(len/3)
@@ -80,38 +79,38 @@ const CarStatsListsYear = (props) =>{
         <Layout>
             <div className="spacer-4rem"></div>
             <div className="main-wrapper" style={{minHeight: 'calc(100vh - 22rem)'}}>
-            <h1 className="title">{title} car data year list</h1>
-            <div className="spacer-1rem"></div>
+            <h1 className="title">{title} {carYear} car data model list</h1>
+            <div className="spacer-2rem"></div>
             <Container>
             <Row className="list-container">
                     <Col sm={4} className="list-pd">
-                        <ul className="stats-list">
-                        {chunk1 && chunk1.map(year =>{
+                        <ul style={{listStyle: 'none'}}>
+                        {chunk1 && chunk1.map(model =>{
                             return(
-                                <Link to={`/car-stats/${makeName}/${year}`} key={year}>
-                                    <li>{title} {year}</li>
+                                <Link to={`/car-stats/${makeName}/${carYear}/${model}`} key={model}>
+                                    <li>{model.toUpperCase()}</li>
                                 </Link>
                             )                            
                          })}
                         </ul>
                     </Col>
                     <Col sm={4} className="list-pd">
-                        <ul className="stats-list">
-                        {chunk2 && chunk2.map(year =>{
+                        <ul style={{listStyle: 'none'}}>
+                        {chunk2 && chunk2.map(model =>{
                             return(
-                                <Link to={`/car-stats/${makeName}/${year}`} key={year}>
-                                    <li>{title} {year}</li>
+                                <Link to={`/car-stats/${makeName}/${carYear}/${model}`} key={model}>
+                                    <li>{model.toUpperCase()}</li>
                                 </Link>
                             )                            
                          })}
                         </ul>
                     </Col>
                     <Col sm={4} className="list-pd">
-                        <ul className="stats-list">
-                        {chunk3 && chunk3.map(year =>{
+                        <ul style={{listStyle: 'none'}}>
+                        {chunk3 && chunk3.map(model =>{
                             return(
-                                <Link to={`/car-stats/${makeName}/${year}`} key={year}>
-                                    <li >{title} {year}</li>
+                                <Link to={`/car-stats/${makeName}/${carYear}/${model}`} key={model}>
+                                    <li >{model.toUpperCase()}</li>
                                 </Link>
                             )                            
                          })}
@@ -125,7 +124,7 @@ const CarStatsListsYear = (props) =>{
     )
 }
 
-export default CarStatsListsYear
+export default CarStatsListsModel
 
 
 

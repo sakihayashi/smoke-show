@@ -1,28 +1,50 @@
-import React, { useState, Fragment, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState, Fragment } from 'react'
 import Layout from './Layout/Layout'
-import { Row, Col, Button} from 'react-bootstrap'
-import './carStats.scss'
-import { v4 as uuidv4 } from 'uuid'
-
-import priceIcon from '../assets/global/Price-Tag-icon.svg'
-import powerIcon from '../assets/global/Horsepower.svg'
-import weightIcon from '../assets/global/weight.svg'
-import pistonIcon from '../assets/global/piston.png'
+import { Row, Col, Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
+import * as Realm from "realm-web"
+import jwt from 'jsonwebtoken'
 import transmissionIcon from '../assets/global/transmission.svg'
 import mileageIcon from '../assets/global/mileage.svg'
 import torqueIcon from '../assets/global/torque.png'
 import frontWheels from '../assets/global/front-wheels.png'
 import rearWheels from '../assets/global/rear-wheels.png'
 import allWheels from '../assets/global/all-wheels.png'
-import { Helmet } from 'react-helmet'
-import Head from '../components/Layout/Head'
+import priceIcon from '../assets/global/Price-Tag-icon.svg'
+import powerIcon from '../assets/global/Horsepower.svg'
+import weightIcon from '../assets/global/weight.svg'
+import pistonIcon from '../assets/global/piston.png'
 
-const CarStats = (props) =>{
-    const statsArr = ['Main Stats', 'Engine', 'Measurements', 'Comfort & Convenience', 'Drive Train', 'Suspension', 'Color', 'Warranty']
-    const [carImages, setCarImages] = useState([])
+import short from 'short-uuid'
+
+const CarStatsListsResults = (props) =>{
+    const makeName = props.match.params.make
+    const carYear = props.match.params.year
+    const carModel = props.match.params.model
+
+    let title;
+    if(makeName.includes("-")){
+        let splitted = makeName.split("-")
+        let temp =[]
+        for(let i=0; i < splitted.length; i++){
+            temp.push(splitted[i].charAt(0).toUpperCase() + splitted[i].slice(1))
+        }
+        title = temp.join(" ")
+    }else{
+        let str = makeName
+        title = str.charAt(0).toUpperCase() + str.slice(1)
+    }
+
+    const appConfig = {
+        id: process.env.REACT_APP_REALM_APP_ID,
+        // timeout: 10000, 
+        // timeout in number of milliseconds
+        };
+    const app = new Realm.App(appConfig)
     const [carData, setCarData] = useState()
-    let searchedCars = []
+    const [carImages, setCarImages] = useState([])
+    const statsArr = ['Main Stats', 'Engine', 'Measurements', 'Comfort & Convenience', 'Drive Train', 'Suspension', 'Color', 'Warranty']
 
     const handleTabClick = (tab, index) =>{
         let tempCarArr = [...carData]
@@ -30,7 +52,7 @@ const CarStats = (props) =>{
        tempCarArr[index].activeTab = tab
        setCarData(tempCarArr)
     }
-    
+
     const switchTabs = (car, tab) =>{
         let engine, warranty, measurements, comfort, drivetrain, suspension, mileage, weight, totalSeating, colors, baseMSRP, rearseats, driveIcon, driveType
 
@@ -223,7 +245,7 @@ const CarStats = (props) =>{
                 return <Fragment>
                         <p><strong>Exterior</strong></p>
                         { colors && colors['EXTERIOR'].map((color, index)=>{
-                            const uuid = uuidv4()
+                            const uuid = short.generate()
                             return <Fragment key={uuid}>
                                     <div className="stats-box-outline" >
                                     <div className="color-thumbnail" style={{backgroundColor: `rgb(${color.rgb})`}}></div>
@@ -246,19 +268,48 @@ const CarStats = (props) =>{
                     </Fragment>
           }
     }
+    const loginCheck = () =>{
+        const tokenUser = sessionStorage.getItem('session_user')
+        if(tokenUser){
+            jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+                if(err){
+                    const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    return credentials
+                }else{
+                    return decoded.cre
+                }
+            })
+        }else{
+            const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+            return credentials
+        }
+    }
+    const getData = async (cre) =>{
+        try {
+            await app.logIn(cre).then(async user =>{
+                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                const collectionCars = mongo.db("smoke-show").collection("cars")
+                const filter = {make: makeName, year: Number(carYear), model: carModel}
+                const results = await collectionCars.find(filter)
+                const temp = results.map(item => ({...item, tabs: statsArr, activeTab: 'Main Stats'}))
+                setCarData(temp)
+            })
+        } catch (error) {
+            
+        }
+    }
 
     useEffect(() => {
-        if(props.history.location.cars){
-            searchedCars = props.history.location.cars.map(item => ({...item, tabs: statsArr, activeTab: 'Main Stats'}))
-            setCarData(searchedCars)
-        }else{props.history.push('/car-search')}
+  
+        const cre = loginCheck()
+        getData(cre)
     }, [])
     return(
         <Layout>
             <Helmet encodeSpecialCharacters={true}>
-                {/* <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title> */}
-                <title>{typeof(carData) !== 'undefined' && `${carData[0].make}, ${carData[0].year}, ${carData[0].model}, Statistics, Specs`}</title>
-                <Head />
+                <title>Car Statistics {title} {carYear} {carModel} | The Smoke Show</title>
+                <meta name="description" content="Place the meta description text here." />
+
             </Helmet>
             <div className="main-wrapper stats-container">
                 <div className="spacer-4rem"></div>
@@ -279,7 +330,6 @@ const CarStats = (props) =>{
                             <p className="theme-text-p">{car.name}</p>
                             <Row style={{paddingRight: '3px'}}>
                                 <Col sm={4}>
-                                    {/* <img src="https://smoke-show.s3.amazonaws.com/car-photos/Ferrari-F8_Spider-2020-1280-01.jpg" alt="Ferrari F8 spider" style={{width: '100%'}}/> */}
                                      <img src={typeof(car.imgUrl) === 'undefined' ?carImg : car.imgUrl} alt={car.name} style={{width: '100%'}}/> 
                                     {/* <img src={carImg} alt={car.name} style={{width: '100%'}}/> */}
                                 </Col>
@@ -289,7 +339,7 @@ const CarStats = (props) =>{
                                         <tbody>
                                             <tr>
                                             {car.tabs.map(tab =>{
-                                                const uuid = uuidv4()
+                                                const uuid = short.generate()
                                                 return(
                                                         <td key={uuid} id={uuid} name={tab} custom={tab} onClick={()=>handleTabClick(tab, index)} className={ tab === car.activeTab ? 'tab-link tab-active' : 'tab-link' }>{tab}</td>                                       
                                                 )
@@ -316,9 +366,11 @@ const CarStats = (props) =>{
                 </Link>
                 
             </div>
-            
         </Layout>
     )
 }
 
-export default CarStats
+export default CarStatsListsResults
+
+
+

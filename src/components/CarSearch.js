@@ -7,8 +7,17 @@ import './carStats.scss'
 import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'
 import { Helmet } from 'react-helmet'
+import CarStatsListsMake from './CarStatsListsMake'
 
 const CarSearch = (props) =>{
+
+    let today = new Date()
+    const timeISO = today.toISOString()
+    let published = new Date('2021-03-01')
+    const publishedISO = published.toISOString()
+    const slug = 'car-search'
+    const pageName = 'Search Car Statistics'
+
     const [modelName, setModelName] = useState([])
     const [selectedCar, setSelectedCar] = useState({make: "Select a maker", model: "Select a model", type: "Select a type", year: "Select a year"})
     const [carTypeArr, setCarTypeArr] = useState([])
@@ -23,8 +32,7 @@ const CarSearch = (props) =>{
         // timeout: 10000, 
       };
     const app = new Realm.App(appConfig)
-    // const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-    // const [carMakers, setCarMakers] = useState([])
+  
     const searchId = uuidv4()
 
 
@@ -109,7 +117,7 @@ const CarSearch = (props) =>{
       
        sessionStorage.setItem(searchId, carResults)
        props.history.push({
-        pathname: `/car-stats/${searchId}`,
+        pathname: `/car-stats/search/${searchId}`,
         cars: carResults,
         selected: selectedCar
       })
@@ -131,7 +139,6 @@ const CarSearch = (props) =>{
                     console.log(err)
                 }
             }else{
-                // const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
              
                 try{
                     await app.logIn(decoded.cre).then( user =>{
@@ -161,14 +168,41 @@ const CarSearch = (props) =>{
    }, [])
     return(
         <Layout>
-        <Helmet>
-            <title></title>
+        <Helmet encodeSpecialCharacters={true}>
+            <title>Car Statistics Search | The Smoke Show</title>
             <meta name="description" content="Look at all information about any car and have the results displayed in a way that's actually readable by a human. We didn't invent car search, we perfected it!" />
-            <link rel="canonical" href="https://thesmokeshow.com/influencers" />
+            <link rel="canonical" href="https://thesmokeshow.com/car-search" />
+            <script type="application/ld+json">
+        {`
+            {
+                "@context": "http://schema.org",
+                "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website",
+                "url":"https://thesmokeshow.com/",
+                "name":"The Smoke Show",
+                "description":"",
+                "potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],
+                "inLanguage":"en"},
+                {"@type": "WebPage",
+                "@id": "https://thesmokeshow.com/${slug}/#webpage", "url": "https://thesmokeshow.com/${slug}/", "name": "${pageName} | The Smoke Show","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "Look at all information about any car and have the results displayed in a way that's actually readable by a human. We didn't invent car search, we perfected it!", "breadcrumb":{"@id":"https://thesmokeshow.com/${slug}/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/${slug}/"]}]},
+                {"@type":"BreadcrumbList","@id":"https://thesmokeshow.com/#breadcrumb",
+                "itemListElement":[{
+                    "@type":"ListItem","position":1,
+                    "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/","url":"https://thesmokeshow.com/","name":"Home"}
+                    },
+                    {
+                        "@type":"ListItem",
+                        "position":2,
+                        "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/${slug}/","url":"https://thesmokeshow.com/${slug}/","name":"${pageName}"}
+                    }
+                    ]}
+                ]
+            }
+        `}
+        </script>
         </Helmet>
             <div className="spacer-4rem"></div>
             <div className="main-wrapper main-height" style={{minHeight: 'calc(100vh - 21rem)'}}>
-            
+                <h1 className="h1-seo">Search car data</h1>
                 <div className="search-wrapper" >
                     <div className="center-box">
                     {/* maker */}
@@ -232,7 +266,8 @@ const CarSearch = (props) =>{
                     </div>
                     
                 </div>
-
+                <div className="spacer-4rem"></div>
+                <CarStatsListsMake />
                 {/* <div className="ad-on-search">
             
                 </div> */}

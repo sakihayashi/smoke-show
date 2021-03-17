@@ -9,25 +9,6 @@ const CarStatsListsMake = () =>{
     const [chunk1, setChunk1] = useState(null)
     const [chunk2, setChunk2] = useState(null)
     const [chunk3, setChunk3] = useState(null)
-    // const loginCheck = () =>{
-    //     const tokenUser = sessionStorage.getItem('session_user')
-    //     if(tokenUser){
-    //         jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
-    //             if(err){
-    //                 const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-    //                 return credentials
-    //             }else{
-    //                 return decoded.cre
-    //             }
-    //         })
-    //     }else{
-    //         const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-    //         return credentials
-    //     }
-    // }
-    // const getData = async () =>{
-        
-    // }
 
     useEffect(() => {
         const len = carBrands.length
@@ -39,41 +20,42 @@ const CarStatsListsMake = () =>{
         // getData(cre)
     }, [])
     return(
-        <Layout>
-            <div className="spacer-4rem"></div>
-            <div className="main-wrapper" style={{minHeight: 'calc(100vh - 22rem)'}}>
-            <h1 className="title">Car maker list</h1>
-            <div className="spacer-1rem"></div>
+ 
             <Container>
-                <Row>
-                    <Col sm={4}>
+            <h2 className=" theme-text-p" style={{color: 'gray', textAlign: 'center', fontSize: '1rem'}}>Search car data by maker index</h2>
+            <div className="spacer-2rem"></div>
+                <Row className="list-container">
+                    <Col sm={4} className="list-pd">
                         <ul style={{listStyle: 'none'}}>
                         {chunk1 && chunk1.map(make =>{
+                            const replaced = make.replaceAll(" ", "-")
                             return(
-                                <Link to={`${make.toLocaleLowerCase()}`}>
+                                <Link to={`/car-stats/${replaced.toLocaleLowerCase()}`} key={make}>
                                     <li>{make}</li>
                                 </Link>
                             )                            
                          })}
                         </ul>
                     </Col>
-                    <Col sm={4}>
+                    <Col sm={4} className="list-pd">
                         <ul style={{listStyle: 'none'}}>
                         {chunk2 && chunk2.map(make =>{
+                            const replaced = make.replaceAll(" ", "-")
                             return(
-                                <Link to={`${make.toLocaleLowerCase()}`}>
+                                <Link to={`/car-stats/${replaced.toLocaleLowerCase()}`} key={make}>
                                     <li>{make}</li>
                                 </Link>
                             )                            
                          })}
                         </ul>
                     </Col>
-                    <Col sm={4}>
+                    <Col sm={4} className="list-pd">
                         <ul style={{listStyle: 'none'}}>
                         {chunk3 && chunk3.map(make =>{
+                            const replaced = make.replaceAll(" ", "-")
                             return(
-                                <Link to={`${make.toLocaleLowerCase()}`}>
-                                    <li>{make}</li>
+                                <Link to={`/car-stats/${replaced.toLocaleLowerCase()}`} key={make}>
+                                    <li >{make}</li>
                                 </Link>
                             )                            
                          })}
@@ -81,9 +63,7 @@ const CarStatsListsMake = () =>{
                     </Col>
                 </Row>
             </Container>
-            </div>
-            
-        </Layout>
+
     )
 }
 
