@@ -38,7 +38,7 @@ import CarStatsVideo from './components/CarStatsVideo'
 import CarStatsListsYear from './components/CarStatsListsYear'
 import CarStatsListsModel from './components/CarStatsListsModel'
 import CarStatsListsResults from './components/CaStatsListsResults'
-import CreateSiteMap from './components/Admin/CreateSiteMap'
+// import CreateSiteMap from './components/Admin/CreateSiteMap'
 
 
 function App() {
@@ -75,7 +75,7 @@ function App() {
           <Route path="/car-stats/:make/:year/:model/:id" component={CarStatsVideo} />
           <Route path="/check-data" component={CheckCarData} />
           <Route path="/update-db" component={UpdateDB} />
-          <Route exact path="/create-sitemap" component={CreateSiteMap} />
+          {/* <Route exact path="/create-sitemap" component={CreateSiteMap} /> */}
 
           <Route path="/update-video" component={QueryVideoData} />
           {/* <Route path="/img-upload" component={CarImgUpload} /> */}

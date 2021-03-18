@@ -18,13 +18,13 @@ const Comments = (props) =>{
     const [isComment, setIsComment] = useState(false)
     // const [visibleOn, setVisibleOn] = useState(false)
     const [userComment, setUserComment] = useState("")
+    
     const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
     // const getApp = Realm.App.getApp(process.env.REACT_APP_REALM_APP_ID);
-    // const onChange = (isVisible)=>{
-    //     if(isVisible){
-    //         setVisibleOn(true)
-    //     }
-    // }
+
+    const [isPicSet, setIsPicSet] = useState([])
+    const [morePics, setMorePics] = useState([])
+
     const handleChange = (e) =>{
         setUserComment(e.target.value)
     }
@@ -82,7 +82,7 @@ const Comments = (props) =>{
         <Row className="comment-wrapper">
             <div className="col-1" style={{margin:0,padding:0}}>
 
-                <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="profile-pic" name="saki" />
+                <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="profile-pic" name="" />
             </div>
             <div className="col-11" style={{margin: 0, paddingRight:0}}>
                 <Form onSubmit={handleSubmitComment} >
@@ -159,20 +159,11 @@ const Comments = (props) =>{
                 const collectionComments = mongo.db("smoke-show").collection("comments")
                 // const collectionUsers = mongo.db("smoke-show").collection("users")
                 await collectionComments.find(filter, options).then(async resAll =>{
+                    resAll.map(res =>{
+                        setIsPicSet(oldArr =>[...oldArr, true])
+                    })
                     if( resAll.length !== 0){
-                        // let picAttached = resAll.map(async res =>{
-                        //     const filterUser = {userId: res.userId}
-                        //     try {
-                        //         await collectionUsers.findOne(filterUser).then(user =>{
-                        //             res.profilePic = user.profilePic
-                        //         })
-                        //     } catch (error) {
-                        //         console.log(error)
-                        //     }
-                        //     return res
-                        // })
-                        
-                        // const finalResults = await Promise.all(picAttached);
+                        // let picAttached = resAll.map(async 
                         setIsComment(true)
                          if(resAll.length == 1){
                             setCommentsDB(resAll)
@@ -183,6 +174,9 @@ const Comments = (props) =>{
                         }else if(resAll.length >= 3){
                             const chunked = chunkArray(resAll)
                             setMoreComments(chunked)
+                            chunked.map(res =>{
+                                setMorePics(oldArr =>[oldArr, true])
+                            })
                         }
                     }else if(resAll.length == 0){
                         setIsComment(false)
@@ -194,8 +188,16 @@ const Comments = (props) =>{
                 
             }catch(err){console.log(err)}
     }
-
-
+    const swapImg = (index) =>{
+       let newArr = [...isPicSet]
+       newArr[index] = false
+       setIsPicSet(newArr)
+    }
+    const swapMoreImg = (index) =>{
+       let newArr = [...morePics]
+       newArr[index] = false
+       setMorePics(newArr)
+    }
     useEffect( () => {
         
         const tokenUser = sessionStorage.getItem('session_user')
@@ -225,12 +227,11 @@ const Comments = (props) =>{
             const unique = short.generate()
             {/* var localtime = moment(comment.date_posted).local().format('MM-DD-YYYY') */}
             let localtime = moment(comment.date_posted).fromNow()
-            let isPicSet;
-            if(comment.profileThumb === 'https://s3.amazonaws.com/smokeshow.users/default/avator-thumb.jpg'){
+            {/* if(comment.profileThumb === 'https://s3.amazonaws.com/smokeshow.users/default/avator-thumb.jpg'){
                 isPicSet = false
             }else{
                 isPicSet = true
-            }
+            } */}
             return(
                 <Row className="comment-wrapper" key={unique}>
                     {/* <VisibilitySensor onChange={onChange}> */}
@@ -238,9 +239,8 @@ const Comments = (props) =>{
                         <Link to={{
                             pathname: `/user/${comment.userId}`
                         }}>
-
-                            {isPicSet ? 
-                                 <img src={`https://s3.amazonaws.com/smokeshow.users/${comment.userId}/profile/thumbnail`} className="profile-pic " alt={comment.username} loading="lazy" /> 
+                            {isPicSet[index] ? 
+                                 <img src={`https://s3.amazonaws.com/smokeshow.users/${comment.userId}/profile/thumbnail`} className="profile-pic " alt={comment.username} loading="lazy" onError={()=>swapImg(index)} /> 
                                
                              :
                                 <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/> 
@@ -287,7 +287,7 @@ const Comments = (props) =>{
                                 <Link to={{
                                     pathname: `/user/${comment.userId}`
                                 }}>
-                                    {comment.profile_pic ? <img src={comment.profile_pic} className="profile-pic " alt={comment.username} loading="lazy" /> :
+                                    {morePics[index] ? <img src={comment.profile_pic} className="profile-pic " alt={comment.username} loading="lazy" onError={()=>swapMoreImg(index)} /> :
                                     <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/>
                                     }
                                 </Link>

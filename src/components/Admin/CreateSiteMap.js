@@ -46,7 +46,6 @@ const CreateSiteMap = (props) =>{
                     })
                     const combined = unique.concat(dataArr)
                     const uniqueFinal = [...new Set(combined)]
-                    console.log(uniqueFinal)
                     // setUniqArr(uniqueFinal)
                     const fulldata = uniqueFinal.map(async id =>{
                         const filter = {_id: {$oid: id}}
