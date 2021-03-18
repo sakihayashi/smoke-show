@@ -11,8 +11,17 @@ import editIcon from '../../assets/global/edit-icon.svg'
 import trashIcon from '../../assets/global/delete-icon.svg'
 import short from 'short-uuid'
 import jwt from 'jsonwebtoken'
+// https://s3.amazonaws.com/smokeshow.users/6025ba6cf198fcd93ef955a0/my-cars/86FyEqdgdKnjxjQaLQvpda
 
 const VehicleCard = (props) =>{
+    let carImgUrl = noImg
+    if(props.car.imgUrl){
+        if(props.car.imgUrl.includes('s3.amazonaws.com/smokeshow.users')){
+            carImgUrl = props.car.imgUrl.replace('s3.amazonaws.com/smokeshow.users', 'dwdlqiq3zg6k6.cloudfront.net')
+        }else{
+            carImgUrl = props.car.imgUrl
+        }
+    }
     const [imgFile, setImgFile] = useState('')
     const [imgData64, setImgData64] = useState('')
     const [newImg, setNewImg] = useState(false)
@@ -52,7 +61,7 @@ const VehicleCard = (props) =>{
                 { $set: carData }
             ).then(res =>{
                 console.log('res', res)
-                props.getMyCars(props.car.userId, mongo)
+                props.getMyCars(mongo)
                 handleClose()
             })
             
@@ -189,22 +198,6 @@ const VehicleCard = (props) =>{
                 <Row className="bio-modal-inner-wrapper">
                     <Col sm={6} className="">
                     <ImageUpload fileObj={setImgData} imgChange={imgChange} />
-                    {/* <div {...getRootProps()} className="dropzone-wrapper">
-                        <input {...getInputProps()} />
-                        {
-                            isDragActive ?
-                            <p>Drop the files here ...</p> :
-                            <div className="drag-dropzone">
-                                <div className="bio-modal-container">
-                                    <img src={uploadIcon} alt="upload files here" />
-                                    <p>Drag and drop or click to upload an image</p>
-                                    <p>*3MB max image file size<br/>
-                                    *accepted file formats: jpg, png, gif</p>
-                                </div>
-
-                            </div>
-                        }
-                    </div> */}
                     </Col>
                     <Col sm={6}>
                     <h3>Category: {props.car.category}</h3>
@@ -217,7 +210,7 @@ const VehicleCard = (props) =>{
                         <br/>
                         <Form.Group >
                             <Form.Label>Color</Form.Label>
-                            {/* <Form.Control type="text" placeholder="Select your color" onChange={handleChange} name="color" /> */}
+                      
                             <Form.Control as="select" onChange={handleChange}>
                             {carColors.map((color, index) =>{
                                 return(
@@ -289,7 +282,7 @@ const VehicleCard = (props) =>{
             </div>
             <Row>
                 <Col sm={5} >
-                    <img src={typeof(props.car.imgUrl) === 'undefined' || props.car.imgUrl === '' ? noImg : props.car.imgUrl} className="bio-my-car" alt="my daily driver" />
+                    <img src={carImgUrl} className="bio-my-car" alt="my daily driver" />
                 </Col>
                 <Col sm={7} >
                     <div className="bio-car-contents">

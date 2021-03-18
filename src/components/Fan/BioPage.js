@@ -19,9 +19,10 @@ import moment from 'moment'
 
 const BioPage = (props) =>{
 
-    // let userIdParam = props.match.params.id
     const [userIdParam, setUserIdParam] = useState(props.match.params.id)
     const [profileUser, setProfileUser] = useState({fname: '', lname: '', profilePic: '', profileCover: '', username: '', profileDesc: '', favSong: '', favArtist: ''})
+    const [profilePic, setProfilePic] = useState(bioPic)
+    const [profileCover, setProfileCover] = useState(noImg)
     const [allowEdit, setAllowEdit] = useState(false)
     const [editMode, setEditMode] = useState({about: false, song: false, artist: false})
     const [showSetting, setShowSetting] = useState(false);
@@ -70,9 +71,7 @@ const BioPage = (props) =>{
     const userLoggedIn = (id) =>{
         
         if(id === profileUser.userId){
-            console.log('working?', id)
             setAllowEdit(true)
-            // regainData()
         }
     }
     const userLoggedOut = (id) =>{
@@ -179,17 +178,30 @@ const BioPage = (props) =>{
         try{
             await app.logIn(credentials).then(async logInUser =>{
                 const mongo = logInUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                const mongoCollectionUser = mongo.db("smoke-show").collection("users")
+                const collectionUser = mongo.db("smoke-show").collection("users")
                 const filter = {userId: userIdParam}
                 try{
-                    await mongoCollectionUser.findOne(filter).then(user =>{
+                    await collectionUser.findOne(filter).then(user =>{
                             setProfileUser(user)
-                            console.log(profileUser.joined)
                             if(user.joined){
                                 const formatted = moment(user.joined).local().format('MMMM Do YYYY')
                                 setFormattedTime(formatted)
                             }else{
                                 setFormattedTime('No data')
+                            }
+                            if(user.profilePic){
+                                if(user.profilePic.includes('s3.amazonaws.com/smokeshow.users')){
+                                    setProfilePic(user.profilePic.replace('s3.amazonaws.com/smokeshow.users', 'dwdlqiq3zg6k6.cloudfront.net'))
+                                }
+                            }else{
+                                setProfilePic(bioPic)
+                            }
+                            if(user.profileCover){
+                                if(user.profileCover.includes('s3.amazonaws.com/smokeshow.users')){
+                                    setProfileCover(user.profileCover.replace('s3.amazonaws.com/smokeshow.users', 'dwdlqiq3zg6k6.cloudfront.net'))
+                                }
+                            }else{
+                                setProfileCover(noImg)
                             }
                             
                             getTotalComments(mongo)
@@ -309,14 +321,14 @@ const BioPage = (props) =>{
                     // ${bioImgL} 1280w,
                     // ${bioImgXL} 1500w
                     // `}
-                    src={ typeof(profileUser.profileCover) == 'undefined' || profileUser.profileCover == null ?  noImg : profileUser.profileCover }
-                    alt="user selected profile image"
+                    src={profileCover}
+                    alt={`User ${profileUser.fname}'s cover image on The Smoke Show`}
                      />
                 </div>
                 <div className="bio-content-wrapper">
                     <div className="bio-main-wrapper">
                         <div className="bio-pic">
-                            <img src={profileUser.profilePic ? profileUser.profilePic : bioPic} alt="the user profile picture" />
+                            <img src={profilePic} alt={`User ${profileUser.fname}'s profile image on The Smoke Show`} />
                           
                         </div>
                         
@@ -431,6 +443,7 @@ const BioPage = (props) =>{
                         <Col sm={8} className="pl-0-pc">
                         { userCars !== undefined ?
                             userCars.map( car =>{
+                                console.log('car', car)
                                return (
                                 <React.Fragment>
                                     <VehicleCard car={car} allowEdit={allowEdit} profileUser={profileUser} getMyCars={getMyCars} />

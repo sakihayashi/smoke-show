@@ -10,7 +10,6 @@ import jwt from 'jsonwebtoken'
 import noImg from '../assets/global/no_image.jpg'
 import short from 'short-uuid'
 import Logo from '../assets/global/Logo-smoke-show.png'
-import Head from '../components/Layout/Head'
 
 const InfluencerIndexPage = () =>{
     let today = new Date()

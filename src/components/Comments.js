@@ -4,7 +4,6 @@ import Avatar from 'react-avatar'
 import { connect } from 'react-redux'
 import * as Realm from "realm-web"
 import { Link } from 'react-router-dom'
-// import { authUser } from '../store/actions/authActions'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
 import { openLoginModal, attachMsg } from '../store/actions/authActions'
@@ -16,11 +15,9 @@ const Comments = (props) =>{
     const [commentsDB, setCommentsDB] = useState([])
     const [moreComments, setMoreComments] = useState([])
     const [isComment, setIsComment] = useState(false)
-    // const [visibleOn, setVisibleOn] = useState(false)
     const [userComment, setUserComment] = useState("")
     
     const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
-    // const getApp = Realm.App.getApp(process.env.REACT_APP_REALM_APP_ID);
 
     const [isPicSet, setIsPicSet] = useState([])
     const [morePics, setMorePics] = useState([])
@@ -244,7 +241,7 @@ const Comments = (props) =>{
                             pathname: `/user/${comment.userId}`
                         }}>
                             {isPicSet[index] ? 
-                                 <img src={`https://s3.amazonaws.com/smokeshow.users/${comment.userId}/profile/thumbnail`} className="profile-pic " alt={comment.username} loading="lazy" onError={()=>swapImg(index)} /> 
+                                 <img src={`https://dwdlqiq3zg6k6.cloudfront.net/${comment.userId}/profile/thumbnail`} className="profile-pic " alt={comment.username} loading="lazy" onError={()=>swapImg(index)} /> 
                                
                              :
                                 <Avatar className="profile-pic" name={comment.username} color="#6E4DD5"/> 

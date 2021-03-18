@@ -344,8 +344,7 @@ const AllVideos = (props) =>{
                                             {props.influencerObj.profilePic ? <img src={props.influencerObj.profilePic} 
                                             
                                             className="creator-profile-pic" alt={props.influencerObj.username}/> :
-                                            <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="creator-profile-pic" name={video.snippet.channelTitle
-} />
+                                            <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="creator-profile-pic" name={video.snippet.channelTitle} />
                                             }
                                             
                                             </div>
@@ -367,29 +366,14 @@ const AllVideos = (props) =>{
                                         </Row>
                                         
                                         <div className="spacer-4rem"></div>
-                                         {/* <Suspense fallback={<div class="loader">Loading...</div>}> */}
                                             <Comments videoId={id} />
-                                        {/* </Suspense>  */}
                                         
                                     </Col>
                                     <Col sm="auto"  className="spec-col"  >
                                     <div style={{minWidth: '160px'}}>
                                     <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId}/>
                                     </div>
-                                        {/* <div className="spec-wrapper">
-                                        <img alt={video.snippet.channelTitle} src={require(`../../assets/maker_logos/${titleCase}_Logo.png`).default} className="icon-s" />
-                                        {' '}
-                                        <span className="spec-text" ><strong >{video.carData.year}{' '}{titleCase}{' '}{model}</strong></span><br/>
-                                        <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" >{' '}${price && price}</span><br />
-                                        <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text">{' '}{video.carData.features.Engine.Torque}</span><br />
-                                        <img alt="piston" key={pistonIcon} src={pistonIcon}  className="icon-s" /><span className="spec-text">{' '}{video.carData.features.Engine.Horsepower}</span><br />
-                                        </div> */}
-                                        
-                                        {/* <div className="ad-container">
-                                            <p style={{color: 'gray'}}>ads will go here</p>
-                                            <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
-                                            <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p>
-                                        </div> */}
+                              
                                     </Col>
                                 </Row>
                                 

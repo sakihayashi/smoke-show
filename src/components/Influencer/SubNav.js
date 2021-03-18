@@ -18,6 +18,7 @@ const SubNav = (props) =>{
         // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
+    console.log('influ', props.influencer)
     const influencer = props.influencer
 
     const renderTooltip = (props) => (

@@ -25,7 +25,7 @@ let today = new Date()
 const timeISO = today.toISOString()
 let published = new Date('2021-03-01')
 const publishedISO = published.toISOString()
-const s3BaseUrl = 'https://s3.amazonaws.com/smokeshow.users/'
+const s3BaseUrl = 'https://dwdlqiq3zg6k6.cloudfront.net/'
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
 // const videoEmbedURL = 'https://www.youtube.com/embed/'
@@ -96,7 +96,7 @@ const [isLoading, setIsloading] = useState(false)
                 const filter = {'snippet.publishedAt': {$gt: aWeekAgo}}
                 const options = {sort: {"snippet.publishedAt": -1}  }
                 await collectionVideos.find(filter, options).then(async videos =>{
-                    // const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
+             
                     const collectionCars = mongo.db("smoke-show").collection("cars")
                     const collectionManual = mongo.db("smoke-show").collection("cars-manual")
                     
@@ -200,7 +200,14 @@ const [isLoading, setIsloading] = useState(false)
                     latestVideos.map((video, index) =>{
                         const str = video.carData.model
                         const id = video.videoId
-                        
+                        let linkUsername = ''
+                        if(video.userId === '602303890ff2832f7d19a2af'){
+                            linkUsername = 'Lexurious-Fleet'
+                        }else if(video.userId === '60230361f63ff517d4fdad14'){
+                            linkUsername = 'EddieX'
+                        }else{
+                            console.log('you have to add new user')
+                        }
                         const model = str.charAt(0).toUpperCase() +str.slice(1)
                         const name = video.carData.make
                         const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
@@ -223,7 +230,7 @@ const [isLoading, setIsloading] = useState(false)
                                             <Row className="comment-wrapper" >
                                                 
                                                 <div className="col-1" style={{margin:0,padding:0}} >
-                                                <Link to={`/influencer/${video.userId}`}>
+                                                <Link to={`/influencer/${linkUsername}`}>
                                                 <img src={`${s3BaseUrl}${video.userId}/profile/thumbnail`} 
                                                 className="creator-profile-pic" alt={`A car vlogger ${video.snippet.channelTitle} | The Smoke Show`}/> 
                                                 {/* <div
