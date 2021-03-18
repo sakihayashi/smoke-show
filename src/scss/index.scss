@@ -104,6 +104,7 @@ header{
   color: #2D1468;
   border-bottom: 3px solid #2D1468;
   width: 100%;
+  font-size: 2rem;
 }
 .btn-search{
   background-color: #2D1468;
@@ -156,6 +157,7 @@ header{
 }
 .video-title{
   min-height: 38px;
+  font-weight: 600;
 }
 .spec-wrapper{
   width: 100%;
@@ -196,7 +198,7 @@ header{
 }
 .comment-wrapper{
   width: 100%;
-  margin: 22px 0 !important;
+  margin: 1rem 0 !important;
   color: $black;
 }
 .comment-login-wrapper{

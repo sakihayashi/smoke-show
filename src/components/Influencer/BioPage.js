@@ -18,6 +18,13 @@ const SpecDiv = loadable(() => import('./SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
 
 const BioPage = (props) =>{
+    let today = new Date()
+    const timeISO = today.toISOString()
+    let published = new Date('2021-03-01')
+    const publishedISO = published.toISOString()
+    const slug = props.match.params.username
+    let pageName = `Influencer + Vlogger ${slug.replaceAll("-", " ")} on The Smoke Show`
+
     let influencerId;
     const name = props.match.params.username
     if(name === 'EddieX'){
@@ -32,10 +39,7 @@ const BioPage = (props) =>{
     const [formattedFans, setFormattedFans] = useState('')
 
     const videoEmbedURL = 'https://www.youtube.com/embed/'
-    // const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
-    // const [searchKeyword, setSearchKeyword] = useState('')
-    // const [titleStr, setTitleStr] = useState('Your search result')
-    // const [searchedCarData, setSearchedCarData] = useState([])
+ 
     const [latestVideos, setLatestVideos] = useState([])
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -148,7 +152,54 @@ const BioPage = (props) =>{
         <Layout>
             <Helmet>
                 <title>Influencer {name.replaceAll("-", " ")} Featured Page | The Smoke Show</title>
-                <link rel="canonical" href={`https:/influencer/thesmokeshow.com//${name}`} />
+                <meta name="description" content={influencer && influencer.desc} />
+                <link rel="canonical" href={`https://thesmokeshow.com/influencer/${name}`} />
+                <script type="application/ld+json">
+        {`
+            {
+                "@context": "http://schema.org",
+                "@graph": [
+                    {"@type":"WebSite",
+                    "@id":"https://thesmokeshow.com/#website",
+                "url":"https://thesmokeshow.com/",
+                "name":"The Smoke Show",
+                "description":"",
+                "potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],
+                "inLanguage":"en"},
+                {"@type": ["WebPage","CollectionPage"],
+                "@id": "https://thesmokeshow.com/influencer/${slug}/#webpage", 
+                "url": "https://thesmokeshow.com/influencer/${slug}/", 
+                "name": "${pageName}","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, 
+                "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "${influencer && influencer.desc}", 
+                "breadcrumb":{"@id":"https://thesmokeshow.com/influencer/${slug}/#breadcrumb"},
+                "inLanguage":"en",
+                "potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/influencer/${slug}/"]}]},
+                {"@type":"BreadcrumbList","@id":"https://thesmokeshow.com/influencer/${slug}/#breadcrumb",
+                "itemListElement":[{
+                    "@type":"ListItem","position":1,
+                    "item":{"@type":"WebPage",
+                    "@id":"https://thesmokeshow.com/",
+                    "url":"https://thesmokeshow.com/",
+                    "name":"Home"}
+                    },
+                    {
+                        "@type":"ListItem",
+                        "position":2,
+                        "item":{"@type":"WebPage",
+                        "@id":"https://thesmokeshow.com/influencers/","url":"https://thesmokeshow.com/influencers/","name":"List of Influencers and Vloggers"}
+                    },
+                    {
+                        "@type":"ListItem",
+                        "position": 3,
+                        "item":{"@type":"WebPage",
+                        "@id":"https://thesmokeshow.com/influencer/${slug}/","url":"https://thesmokeshow.com/influencer/${slug}/","name":"${pageName}"}
+                    }
+                    ]}
+                ]
+            }
+        `}
+        </script>
+
             </Helmet>
             <div className="main-wrapper">
    
@@ -216,6 +267,7 @@ const BioPage = (props) =>{
                                             allow='autoplay; encrypted-media'
                                             allowFullScreen
                                             title='video'
+                                            loading='lazy'
                                     />
                                 </div>
                                 <h3 style={{marginTop:'10px'}}>{video.snippet.title}</h3>
