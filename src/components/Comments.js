@@ -159,9 +159,11 @@ const Comments = (props) =>{
                 const collectionComments = mongo.db("smoke-show").collection("comments")
                 // const collectionUsers = mongo.db("smoke-show").collection("users")
                 await collectionComments.find(filter, options).then(async resAll =>{
+                    let arr = []
                     resAll.map(res =>{
-                        setIsPicSet(oldArr =>[...oldArr, true])
+                        arr.push(true)
                     })
+                    setIsPicSet(arr)
                     if( resAll.length !== 0){
                         // let picAttached = resAll.map(async 
                         setIsComment(true)
@@ -174,9 +176,11 @@ const Comments = (props) =>{
                         }else if(resAll.length >= 3){
                             const chunked = chunkArray(resAll)
                             setMoreComments(chunked)
+                            let arr = []
                             chunked.map(res =>{
-                                setMorePics(oldArr =>[oldArr, true])
+                                arr.push(true)
                             })
+                            setMorePics(arr)
                         }
                     }else if(resAll.length == 0){
                         setIsComment(false)
