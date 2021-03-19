@@ -13,7 +13,6 @@ import short from 'short-uuid'
 import jwt from 'jsonwebtoken'
 
 const VehicleCard = (props) =>{
-    console.log('car', props.car.imgUrl)
     const [imgFile, setImgFile] = useState('')
     const [imgData64, setImgData64] = useState('')
     const [newImg, setNewImg] = useState(false)
@@ -116,7 +115,6 @@ const VehicleCard = (props) =>{
         }
     }
     const handleSubmit = async (e) =>{
-        console.log('checking')
         const baseImgUrl = `https://s3.amazonaws.com/${process.env.REACT_APP_AWS_BUCKET_NAME}/`
         const imgId = short.generate()
         const filekey = props.profileUser.userId + '/my-cars/' + imgId
@@ -158,7 +156,6 @@ const VehicleCard = (props) =>{
     reader.onload = (event) => {
     const base64 = event.target.result.split(",").pop()
         setImgData64(base64)
-    //   console.log(base64);
     };
     reader.readAsDataURL(file);
     }

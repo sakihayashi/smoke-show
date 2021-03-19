@@ -19,7 +19,6 @@ import loadable from '@loadable/component'
 const Comments = loadable(() => import('./Comments'))
 const SpecDiv = loadable(() => import('./SpecDiv'))
 const VideoDiv = loadable(()=> import('./VideoDiv'))
-// const VideoDiv = React.lazy(()=> import('./VideoDiv'))
 
 const HomePage = (props) =>{
 let today = new Date()
@@ -32,43 +31,7 @@ const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
 // const videoEmbedURL = 'https://www.youtube.com/embed/'
 const [latestVideos, setLatestVideos] = useState([])
 const [isLoading, setIsloading] = useState(false)
-// const EddieXChannelId = 'UCdOXRB936PKSwx0J7SgF6SQ'
-// const [searchKeyword, setSearchKeyword] = useState('')
-// const [titleStr, setTitleStr] = useState('Your search result')
-// const [searchedCarData, setSearchedCarData] = useState([])
-// const [currentUser, setCurrentUser] = useState('')
-// const [influencerObj, setInfluencerObj] = useState([])
 
-    // const handleChangeKeyword = (e) =>{
-    //     setSearchKeyword(e.target.value)
-    // }
-    // const handleVideoSearch = async e =>{
-    //     e.preventDefault()
-    //     await youtubeAPI.get('/search', {
-    //         params: {
-    //             q: searchKeyword,
-    //             channelId: EddieXChannelId
-    //         }
-    //     }).then(res =>{
-    //         console.log('res from youtube', res)
-    //         setTitleStr("EddieX " + searchKeyword)
-    //         const searchResult = res.data.items
-    //         console.log('is this array?', res.data.items)
-    //         const datayoutube =[]
-    //         searchResult.map(data =>{
-    //             datayoutube.push({
-    //                 videoId: data.id.videoId,
-    //                 youtube:{
-    //                     snippet: {title: data.snippet.title}
-    //                 }
-    //             })
-    //             return
-    //         })
-    //         setSearchedCarData(datayoutube)
-    //         console.log('use state check: ', searchedCarData)
-
-    //     })
-    // }
     const getVideos = async (credentials) =>{
         setLatestVideos([])
         const now = new Date()
@@ -192,7 +155,7 @@ const [isLoading, setIsloading] = useState(false)
                 <title>The Smoke Show -The Home For Auto Fans, Built By Auto Fans</title>
                 
                 <meta name="description" content="The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!" />
-                {/* <base target="_blank" href="https://thesmokeshow/" /> */}
+
                 <link rel="canonical" href="https://thesmokeshow.com" />
                 <script type="application/ld+json">{`
                     {

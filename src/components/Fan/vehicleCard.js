@@ -1,6 +1,5 @@
 import React, { useState, Fragment } from 'react'
 import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
-// import {useDropzone} from 'react-dropzone'
 import noImg from '../../assets/global/no_image.jpg'
 import * as Realm from "realm-web"
 import ImageUpload from './ImageUpload'

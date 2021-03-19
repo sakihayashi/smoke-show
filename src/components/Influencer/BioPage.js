@@ -7,15 +7,15 @@ import * as Realm from "realm-web"
 import './bioPage.scss'
 // import * as Papa from 'papaparse'
 
-// import Comments from '../Comments'
 import Layout from '../Layout/Layout'
-import SubNav from './SubNav'
+// import SubNav from './SubNav'
 import jwt from 'jsonwebtoken'
 import loadable from '@loadable/component'
 import moment from 'moment'
 
 const SpecDiv = loadable(() => import('./SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
+const SubNav = loadable(() => import('./SubNav'))
 
 const BioPage = (props) =>{
     let today = new Date()

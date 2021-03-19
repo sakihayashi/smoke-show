@@ -16,29 +16,26 @@ import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 
 const Social = (props) =>{
+    let today = new Date()
+    const timeISO = today.toISOString()
+    let published = new Date('2021-03-01')
+    const publishedISO = published.toISOString()
+    const slug = 'social'
+    let userIdParam;
+    const name = props.match.params.username
+    if(name === 'EddieX'){
+        userIdParam = '60230361f63ff517d4fdad14'
+    }else if(name === 'Lexurious-Fleet'){
+        userIdParam = '602303890ff2832f7d19a2af'
+    }
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
         // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
-    const userIdParam = props.match.params.id
     const [influencer, setInfluencer] = useState({profileCover: '', profilePic: '', username: '', userId: '', social: {instagram: '', facebook: '', twitter: ''}})
-    // const generateCode = () =>{
-    //     const shortID = short.generate()
-    //     console.log('id', shortID)
-    // }
-    // const getData = async () =>{
-    //     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-    //     const collectionInfluencer = mongo.db("smoke-show").collection("influencers")
-    //     const filter = {userId: userIdParam}
-    //     try{
-    //         await collectionInfluencer.findOne(filter).then(user =>{
-    //             setInfluencer(user)
 
-    //         })
-    //     }catch(err){ console.log(err) }
-    // }
     const userLogin =async (cre) =>{
          try{
              await app.logIn(cre).then(user =>{
@@ -80,7 +77,45 @@ const Social = (props) =>{
         <Fragment>
             <Helmet>
                 <title>Influencer Social Media Links | The Smoke Show</title>
-                <meta name="description" content="Place the meta description text here." />
+                <meta name="description" content={`Check out ${name}'s social media links here. Stay in touch and come back to The Smoke Show`} />
+                <link rel="canonical" href={`https://thesmokeshow.com/influencer/${name}/${slug}/`} />
+                <script type="application/ld+json">
+            {`
+                    {
+                        "@context": "http://schema.org",
+                        "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website",
+                        "url":"https://thesmokeshow.com/",
+                        "name":"The Smoke Show",
+                        "description":"The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!",
+                        "potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],
+                        "inLanguage":"en"},
+                        {"@type": ["WebPage","CollectionPage"],
+                        "@id": "https://thesmokeshow.com/influencer/${name}/${slug}/#webpage", "url": "https://thesmokeshow.com/influencer/influencer/${name}/${slug}/", "name": "Giveaways | The Smoke Show","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "Check out ${name}'s social media links here. Stay in touch and come back to The Smoke Show", "breadcrumb":{"@id":"https://thesmokeshow.com/influencer/${name}/${slug}/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/influencer/${name}/${slug}/"]}]},
+                        {"@type":"BreadcrumbList","@id":"https://thesmokeshow.com/#breadcrumb",
+                        "itemListElement":[{
+                            "@type":"ListItem","position":1,
+                            "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/","url":"https://thesmokeshow.com/","name":"Home"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":2,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/influencers/","url":"https://thesmokeshow.com/giveaways/","name":"Influencers and Vloggers"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":3,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/influencers/${name}/","url":"https://thesmokeshow.com/influencers/${name}/","name":"Influencer ${name} featured page"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":4,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/influencers/${name}/${slug}","url":"https://thesmokeshow.com/influencers/${name}//${slug}","name":"Swagg links from Influencer ${name}"}
+                            }
+                            ]}
+                        ]
+                    }
+                `}
+        </script>
             </Helmet>
             <Layout>
                 <div className="main-wrapper">

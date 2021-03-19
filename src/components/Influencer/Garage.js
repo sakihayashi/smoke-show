@@ -2,24 +2,36 @@ import React, { useState, useEffect } from 'react'
 import { Helmet } from "react-helmet"
 import * as Realm from "realm-web"
 import Layout from '../Layout/Layout'
-import SubNav from './SubNav'
 import { connect } from 'react-redux'
 import noImg from '../../assets/global/no_image.jpg'
-// import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 import editIcon from '../../assets/global/edit-icon.svg'
-import SettingModal from './SettingModal'
 import { Button, Row, Col, Form } from 'react-bootstrap'
 import { attachMsg, logOutUser, openLoginModal } from '../../store/actions/authActions'
 import './garage.scss'
-import VehicleCard from './vehicleCard'
-import CreateNewCar from './CreateNewCar'
+
 import jwt from 'jsonwebtoken'
 import moment from 'moment'
 import { getInfluencer }from '../../store/actions/influencerActions'
+import loadable from '@loadable/component'
+
+const SettingModal = loadable(() => import('./SettingModal'))
+const SubNav = loadable(() => import('./SubNav'))
+const VehicleCard = loadable(() => import('./vehicleCard'))
+const CreateNewCar = loadable(() => import('./CreateNewCar'))
 
 const Garage = (props) =>{
-  
-    const userIdParam = props.match.params.id
+    let today = new Date()
+    const timeISO = today.toISOString()
+    let published = new Date('2021-03-01')
+    const publishedISO = published.toISOString()
+    const slug = 'garage'
+    let userIdParam;
+    const name = props.match.params.username
+    if(name === 'EddieX'){
+        userIdParam = '60230361f63ff517d4fdad14'
+    }else if(name === 'Lexurious-Fleet'){
+        userIdParam = '602303890ff2832f7d19a2af'
+    }
     const [profileUser, setProfileUser] = useState({fname: '', lname: '', profilePic: '', profileCover: '', username: '', profileDesc: '', favSong: '', favArtist: ''})
     const [allowEdit, setAllowEdit] = useState(false)
     const [editMode, setEditMode] = useState({about: false, song: false, artist: false})
@@ -67,22 +79,7 @@ const Garage = (props) =>{
     const handleCloseSetting = () =>{
         setShowSetting(false)
     }
-    const userLoggedIn = (id) =>{
-        
-        if(id === profileUser.userId){
-            console.log('loggedin?', id)
-            setAllowEdit(true)
-            
-        }else{
-            getInfluencerData()
-        }
-    }
-    const userLoggedOut = (id) =>{
-        console.log('logged out?', id)
-        if(id === userIdParam){
-            setAllowEdit(false)
-        }
-    }
+
     const updateProfileData = (data, key)=>{
 
         setProfileUser({
@@ -185,7 +182,6 @@ const Garage = (props) =>{
                     console.log('param matched')
                     setAllowEdit(true)
                 }else{
-                    console.log('param not matched', user.id)
                     setAllowEdit(false)
                 }
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
@@ -200,12 +196,6 @@ const Garage = (props) =>{
                             const formatted = moment(user.joined).local().format('MMMM Do YYYY')
                             setFormattedTime(formatted)
                         }
-                        
-                        // if(user.fans > 999){
-                        //     setFormattedFans(Math.sign(user.fans)*((Math.abs(user.fans)/1000).toFixed(1)) + 'k')
-                        // }else{
-                        //     setFormattedFans(Math.sign(user.fans)*Math.abs(user.fans))
-                        // }
                         getTotalComments(mongo)
                         getMyCars(mongo)
                         return user
@@ -285,7 +275,45 @@ const Garage = (props) =>{
         <Helmet>
             <meta charSet="utf-8" />
             <title>Influencer Garage page | The Smoke Show</title>
-            <meta name="description" content="Place the meta description text here." />
+            <meta name="description" content={`An Influencer + car Vlogger ${name} profile page on The Smoke Show. Check out ${name}'s garage, dream cars and more information here`} />
+            <link rel="canonical" href={`https://thesmokeshow.com/${name}/${slug}`} />
+            <script type="application/ld+json">
+            {`
+                    {
+                        "@context": "http://schema.org",
+                        "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website",
+                        "url":"https://thesmokeshow.com/",
+                        "name":"The Smoke Show",
+                        "description":"The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!",
+                        "potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],
+                        "inLanguage":"en"},
+                        {"@type": "WebPage",
+                        "@id": "https://thesmokeshow.com/influencer/${name}/${slug}/#webpage", "url": "https://thesmokeshow.com/influencer/influencer/${name}/${slug}/", "name": "Influencer + Vlogger ${name}'s Garage page","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "An Influencer + Vlogger ${name} profile page on The Smoke Show. Check out ${name}'s garage, dream cars and more information here.", "breadcrumb":{"@id":"https://thesmokeshow.com/influencer/${name}/${slug}/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/influencer/${name}/${slug}/"]}]},
+                        {"@type":"BreadcrumbList","@id":"https://thesmokeshow.com/#breadcrumb",
+                        "itemListElement":[{
+                            "@type":"ListItem","position":1,
+                            "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/","url":"https://thesmokeshow.com/","name":"Home"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":2,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/influencers/","url":"https://thesmokeshow.com/influencers/","name":"Car Influencers and Vloggers"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":3,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/influencers/${name}/","url":"https://thesmokeshow.com/influencers/${name}/","name":"Car Influencer ${name}'s featured page"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":4,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/influencers/${name}/${slug}","url":"https://thesmokeshow.com/influencers/${name}//${slug}","name":"All videos from car Influencer + Vlogger ${name}"}
+                            }
+                            ]}
+                        ]
+                    }
+                `}
+        </script>
         </Helmet>
         {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal} profileUser={profileUser} updateProfileData={updateProfileData} updateCarData={updateCarData} />}
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} profileUser={profileUser}  updateProfileData={updateProfileData} updateUserDetails={updateUserDetails}/>}
@@ -449,7 +477,6 @@ const mapDispatchToProps = (dispatch) =>{
     }
 }
 const mapStateToProps = (state) =>{
-    console.log('props state from garage', state)
     return{
         customData: state.auth.customData,
         influencerObj: state.influ.influencerObj,

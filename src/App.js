@@ -47,9 +47,7 @@ function App() {
     <Router>
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/influencers" component={InfluencerIndexPage} />
-          {/* <Route path="/influencer/:id" component={BioPageInfluencer} /> */}
-          <Route path="/influencer/:username" component={BioPageInfluencer} />
+          
           <Route path="/email-confirmation" component={EmailConfirmation}/>
           <Route path="/reset-password" component={ResetPassword}/>
           <Route exact path="/about" component={AboutPage} />
@@ -58,15 +56,19 @@ function App() {
           <Route exact path="/car-stats/:make" component={CarStatsListsYear} />
           <Route exact path="/car-stats/:make/:year" component={CarStatsListsModel} />
           <Route exact path="/car-stats/:make/:year/:model" component={CarStatsListsResults} />
-          {/* <Route exact path="/get-data" component={CreateDta} /> */}
+
           <Route exact path="/giveaways" component={Giveaways} />
           <Route exact path="/swagg" component={Swagg} />
           <Route path="/user/:id" component={BioPage} />
-          <Route path="/social/:id" component={Social} />
-          <Route path="/swagg-influencer/:id" component={SwaggInfluencer} />
-          <Route path="/influencer/:username/all-videos" component={AllVideos} />
+
+          <Route exact path="/influencers" component={InfluencerIndexPage} />
+          <Route exact path="/influencer/:username" component={BioPageInfluencer} />
+          <Route exact path="/influencer/:username/social" component={Social} />
+          <Route exact path="/influencer/:username/swagg" component={SwaggInfluencer} />
+          <Route exact path="/influencer/:username/all-videos" component={AllVideos} />
+          <Route exact path="/influencer/:username/garage" component={Garage} />
           
-          <Route path="/all-videos/:id" component={AllVideos} />
+          {/* <Route path="/all-videos/:id" component={AllVideos} /> */}
           <Route path="/add-car-data" component={AddCarData} />
           <Route path="/edit-video-data" component={EditVideoData} />
           <Route path="/edit-video-data-kirk" component={EditVideoDataKirk} />

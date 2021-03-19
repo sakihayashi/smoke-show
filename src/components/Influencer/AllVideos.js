@@ -1,25 +1,37 @@
 import React, { useEffect, useState, Fragment } from 'react'
-import {Helmet} from "react-helmet"
+import { Helmet } from "react-helmet"
 import { Row, Col } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import Pagination from 'react-bootstrap/Pagination'
 
-import Comments from '../Comments'
 import Avatar from 'react-avatar'
 import Layout from '../Layout/Layout'
 import { logInAsPublic, updateLogin } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import { getInfluencer }from '../../store/actions/influencerActions'
-import SubNav from './SubNav'
 import './allVideos.scss'
 import short from 'short-uuid'
 import loadable from '@loadable/component'
+
 const SpecDiv = loadable(() => import('./SpecDiv'))
+const Comments = loadable(() => import('../Comments'))
+const SubNav = loadable(() => import('./SubNav'))
+
 
 const AllVideos = (props) =>{
-   
-    const influencerId = props.match.params.id
+    let today = new Date()
+    const timeISO = today.toISOString()
+    let published = new Date('2021-03-01')
+    const publishedISO = published.toISOString()
+    const slug = 'all-videos'
+    let influencerId;
+    const name = props.match.params.username
+    if(name === 'EddieX'){
+        influencerId = '60230361f63ff517d4fdad14'
+    }else if(name === 'Lexurious-Fleet'){
+        influencerId = '602303890ff2832f7d19a2af'
+    }
     const videoEmbedURL = 'https://www.youtube.com/embed/'
     const [videoArr, setVideoArr] = useState([])
     const [allVideoData, setAllVideoData] = useState([])
@@ -170,7 +182,6 @@ const AllVideos = (props) =>{
             
         }else{
             const cre = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-            // setCredentials(cre)
             getVideos(cre)
             
         }
@@ -210,7 +221,7 @@ const AllVideos = (props) =>{
     const getNextPage = () =>{
         if(active < pgNum){
             const num = active +1
-            console.log(num)
+            
             setActive(num)
             attachCarData(null, num)
             
@@ -268,7 +279,6 @@ const AllVideos = (props) =>{
 
     useEffect(() => {
         if(typeof(props.influencerObj.username) !== 'undefined'){
-            // console.log('name?', props.influencerObj.username)
             setInfluencerName(props.influencerObj.username)
         }
     }, [props.influecerObj])
@@ -282,8 +292,45 @@ const AllVideos = (props) =>{
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>All Videos from {`${influencerName}`} | The Smoke Show</title>
-                <meta name="description" content="Place the meta description text here." />
-                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+                <meta name="description" content={`Enjoy all videos from the influencer + Vlogger ${influencerName}. Check out the related car statistics and more information.`} />
+                <link rel="canonical" href={`https://thesmokeshow.com/${name}/all-videos`} />
+                <script type="application/ld+json">
+            {`
+                    {
+                        "@context": "http://schema.org",
+                        "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website",
+                        "url":"https://thesmokeshow.com/",
+                        "name":"The Smoke Show",
+                        "description":"The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!",
+                        "potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],
+                        "inLanguage":"en"},
+                        {"@type": ["WebPage","CollectionPage"],
+                        "@id": "https://thesmokeshow.com/influencer/${name}/${slug}/#webpage", "url": "https://thesmokeshow.com/influencer/influencer/${name}/${slug}/", "name": "Giveaways | The Smoke Show","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "Enjoy all videos from the influencer + Vlogger ${influencerName}. Check out the related car statistics and more information.", "breadcrumb":{"@id":"https://thesmokeshow.com/influencer/${name}/${slug}/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/influencer/${name}/${slug}/"]}]},
+                        {"@type":"BreadcrumbList","@id":"https://thesmokeshow.com/#breadcrumb",
+                        "itemListElement":[{
+                            "@type":"ListItem","position":1,
+                            "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/","url":"https://thesmokeshow.com/","name":"Home"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":2,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/influencers/","url":"https://thesmokeshow.com/giveaways/","name":"Influencers and Vloggers"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":3,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/influencers/${name}/","url":"https://thesmokeshow.com/influencers/${name}/","name":"Influencer ${name} featured page"}
+                            },
+                            {
+                                "@type":"ListItem",
+                                "position":4,
+                                "item":{"@type":"WebPage","@id":"https://thesmokeshow.com/influencers/${name}/${slug}","url":"https://thesmokeshow.com/influencers/${name}//${slug}","name":"All videos from Influencer ${name}"}
+                            }
+                            ]}
+                        ]
+                    }
+                `}
+        </script>
             </Helmet>
             
             <div className="main-wrapper">
@@ -315,7 +362,6 @@ const AllVideos = (props) =>{
                                 
                                 <Row className="video-row">
                                     <Col sm >
-                                    {/* <VisibilitySensor onChange={(isVisible)=>onChange(isVisible, index)}> */}
                                         <div className="videoWrapper">
                                             <iframe src={videoEmbedURL + id}
                                                     frameBorder='0'
@@ -323,12 +369,9 @@ const AllVideos = (props) =>{
                                                     allowFullScreen
                                                     loading='lazy'
                                                     title={video.snippet.title}
-                                                    // srcDoc={`<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href=https://www.youtube.com/embed/${id}?autoplay=1><img src=https://img.youtube.com/vi/${id}/hqdefault.jpg alt=${video.snippet.title}><span>▶</span></a>`}
                                             />
                                             
                                         </div>
-                                        {/* </VisibilitySensor> */}
-                                        {/* <h3 style={{marginTop:'10px'}} aria-hidden={true} >{video.snippet.title}</h3> */}
                                         <div className="video-title-div" dangerouslySetInnerHTML={{__html: video.snippet.title}} />
                                         <Row className="comment-wrapper" >
                                             <div className="col-1" style={{margin:0,padding:0}} >

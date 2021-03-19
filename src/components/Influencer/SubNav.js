@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { Row, Col,  Button, Tooltip, OverlayTrigger } from 'react-bootstrap'
+import { Row, Col,  Button, Tooltip, OverlayTrigger, Nav } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
 import settingsIcon from '../../assets/global/Settings-icon-white.svg'
 import './subnav.scss'
@@ -19,7 +19,7 @@ const SubNav = (props) =>{
       };
     const app = new Realm.App(appConfig);
     const influencer = props.influencer
-
+    const replaced = props.influencer.username.replace(" ", "-")
     const renderTooltip = (props) => (
         <Tooltip  id="button-tooltip" {...props} key="button-tooltip-key">
           <p style={{marginBottom: 0}}>You will receive notifications when the influencer publishes a video or updates their bio.</p>
@@ -108,13 +108,13 @@ const SubNav = (props) =>{
                     <div className="bio-creator-data">{props.formattedFans} Fans</div>
                 </Col>
                 <Col sm={7} className="bio-sub-menu">
-                    <nav className="bio-sub-nav">
-                    <NavLink key={`${influencer.userId}-nav-1`} to={`/influencer/${influencer.userId}`}>Featured</NavLink>
-                    <NavLink key={`${influencer.userId}-nav-2`} to={`/all-videos/${influencer.userId}`}>All Videos</NavLink>
-                    <NavLink key={`${influencer.userId}-nav-3`} to={`/garage/${influencer.userId}`}>Garage</NavLink>
-                    <NavLink key={`${influencer.userId}-nav-4`} to={`/social/${influencer.userId}`}>Social</NavLink>
-                    <NavLink key={`${influencer.userId}-nav-5`} to={`/swagg-influencer/${influencer.userId}`}>swagg</NavLink>
-                    </nav>
+                    <Nav className="bio-sub-nav">
+                    <NavLink exact to={`/influencer/${replaced}`} >Featured</NavLink>
+                    <NavLink  to={`/influencer/${replaced}/all-videos`}>All Videos</NavLink>
+                    <NavLink to={`/influencer/${replaced}/garage`}>Garage</NavLink>
+                    <NavLink to={`/influencer/${replaced}/social`}>Social</NavLink>
+                    <NavLink to={`/influencer/${replaced}/swagg`}>swagg</NavLink>
+                    </Nav>
                 </Col>
                 <Col className="center-btn" sm={2}>
                 

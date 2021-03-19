@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {Helmet} from "react-helmet"
+import { Helmet } from "react-helmet"
 import * as Realm from "realm-web"
 import Layout from '../Layout/Layout'
 
@@ -7,15 +7,19 @@ import noImg from '../../assets/global/no_image.jpg'
 import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 import editIcon from '../../assets/global/edit-icon.svg'
 import settingsIcon from '../../assets/global/Settings-icon-white.svg'
-import SettingModal from './SettingModal'
+// import SettingModal from './SettingModal'
 import { Button, Row, Col, Form } from 'react-bootstrap'
 import './biopage.scss'
 import { connect } from 'react-redux'
-import VehicleCard from './vehicleCard'
-import CreateNewCar from './CreateNewCar'
+// import VehicleCard from './vehicleCard'
+// import CreateNewCar from './CreateNewCar'
 import jwt from 'jsonwebtoken'
 import moment from 'moment'
-// import axios from 'axios'
+import loadable from '@loadable/component'
+
+const VehicleCard = loadable(() => import('./vehicleCard'))
+const CreateNewCar = loadable(() => import('./CreateNewCar'))
+const SettingModal = loadable(() => import('./SettingModal'))
 
 const BioPage = (props) =>{
 
@@ -80,7 +84,6 @@ const BioPage = (props) =>{
         }
     }
     const updateProfileData = (data, key)=>{
-        console.log('checkng', data)
         setProfileUser({
             ...profileUser,
             [key]: data

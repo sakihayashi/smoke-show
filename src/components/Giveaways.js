@@ -42,7 +42,7 @@ const Giveaways = (props) =>{
                         "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website",
                         "url":"https://thesmokeshow.com/",
                         "name":"The Smoke Show",
-                        "description":"",
+                        "description":"The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!",
                         "potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],
                         "inLanguage":"en"},
                         {"@type": "WebPage",
