@@ -80,11 +80,37 @@ const BioPage = (props) =>{
         }
     }
     const updateProfileData = (data, key)=>{
-
+        console.log('checkng', data)
         setProfileUser({
             ...profileUser,
             [key]: data
         })
+    }
+    const updatedata = async (mongo) =>{
+        const collectionUser = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
+        const filter = {userId: profileUser.userId}
+        const res = await collectionUser.findOne(filter)
+        if(res){
+            console.log(res)
+            if(res.profileCover){
+                if(res.profileCover.includes('s3.amazonaws.com/smokeshow.users')){
+                    setProfileCover(res.profileCover.replace('s3.amazonaws.com/smokeshow.users', 'dwdlqiq3zg6k6.cloudfront.net'))
+                }else{
+                    setProfileCover(res.profileCover)
+                }
+            }else{
+                setProfileCover(noImg)
+            }
+            if(res.profilePic){
+                if(res.profilePic.includes('s3.amazonaws.com/smokeshow.users')){
+                    setProfilePic(res.profilePic.replace('s3.amazonaws.com/smokeshow.users', 'dwdlqiq3zg6k6.cloudfront.net'))
+                }else{
+                    setProfilePic(res.profilePic)
+                }
+            }else{
+                setProfilePic(bioPic)
+            }
+        }
     }
     const updateUserDetails = (fname, lname, username) =>{
         setProfileUser({
@@ -192,6 +218,8 @@ const BioPage = (props) =>{
                             if(user.profilePic){
                                 if(user.profilePic.includes('s3.amazonaws.com/smokeshow.users')){
                                     setProfilePic(user.profilePic.replace('s3.amazonaws.com/smokeshow.users', 'dwdlqiq3zg6k6.cloudfront.net'))
+                                }else{
+                                    setProfilePic(user.profilePic)
                                 }
                             }else{
                                 setProfilePic(bioPic)
@@ -199,6 +227,8 @@ const BioPage = (props) =>{
                             if(user.profileCover){
                                 if(user.profileCover.includes('s3.amazonaws.com/smokeshow.users')){
                                     setProfileCover(user.profileCover.replace('s3.amazonaws.com/smokeshow.users', 'dwdlqiq3zg6k6.cloudfront.net'))
+                                }else{
+                                    setProfileCover(user.profileCover)
                                 }
                             }else{
                                 setProfileCover(noImg)
@@ -302,15 +332,15 @@ const BioPage = (props) =>{
         <Layout userLoggedIn={userLoggedIn} userLoggedOut={userLoggedOut} >
         <Helmet>
             <meta charSet="utf-8" />
-            <title>User profile page | The Smoke Show</title>
+            <title>{profileUser && profileUser.fname} profile page | The Smoke Show</title>
             <meta name="description" content="Place the meta description text here." />
-            {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            <link rel="canonical" href={`https://thesmokeshow.com/user/${profileUser.userId}`} />
         </Helmet>
         {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal} profileUser={profileUser} updateProfileData={updateProfileData} updateCarData={updateCarData} getMyCars={getMyCars} />}
-            {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} profileUser={profileUser}  updateProfileData={updateProfileData} updateUserDetails={updateUserDetails}/>}
+            {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} profileUser={profileUser}  updateProfileData={updateProfileData} updateUserDetails={updateUserDetails} updatedata={updatedata}/>}
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
-                <h2 className="title">User Profile</h2>
+                <h2 className="title">{profileUser && profileUser.username} Profile</h2>
                 <div className="bio-fleet-img">
                     <img
                     // sizes="(max-width: 1500px) 100vw, 1500px"
@@ -443,7 +473,6 @@ const BioPage = (props) =>{
                         <Col sm={8} className="pl-0-pc">
                         { userCars !== undefined ?
                             userCars.map( car =>{
-                                console.log('car', car)
                                return (
                                 <React.Fragment>
                                     <VehicleCard car={car} allowEdit={allowEdit} profileUser={profileUser} getMyCars={getMyCars} />

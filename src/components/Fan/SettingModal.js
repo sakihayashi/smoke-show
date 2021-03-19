@@ -14,7 +14,6 @@ const app = new Realm.App(appConfig);
 
 const SettingModal = (props) =>{
     const bucketName = process.env.REACT_APP_AWS_BUCKET_NAME
-    console.log(bucketName)
     const [imgData64Profile, setImgData64Profile] = useState('')
     const [imgData64Cover, setImgData64Cover] = useState('')
     const [userObj, setUserObj] = useState({fname: props.profileUser.fname, lname: props.profileUser.lname, email: props.profileUser.email, username: props.profileUser.username})
@@ -31,7 +30,8 @@ const SettingModal = (props) =>{
     const [currentBioPic, setCurrentBioPic] = useState()
     const [currentCover, setCurrentCover] = useState()
     const [disableBtnStates, setDisableBtnStates] = useState({profilePic: true, coverPic: true, userDetails: true, password: true})
-    const baseImgUrl = 'https://s3.amazonaws.com/smokeshow.users/'
+    // const baseImgUrl = 'https://s3.amazonaws.com/smokeshow.users/'
+    const cloudFrontUrl = 'https://dwdlqiq3zg6k6.cloudfront.net/'
     const [thumb64, setThumb64] = useState()
     const handleClose = props.handleCloseSetting
     // const handleShow = props.handleShowSetting
@@ -65,7 +65,6 @@ const SettingModal = (props) =>{
             return
         }else{
             const file = e.target.files[0] 
-            console.log('file', file)
             new Compressor(file, {
                 // quality: 0.6,
                 minWidth: 300,
@@ -104,102 +103,101 @@ const SettingModal = (props) =>{
     }
     }
     const saveProfilePic = async () =>{
-        const filekey = props.profileUser.userId + '/profile/pic300'
+        const imgId = short.generate()
+        const filekey = props.profileUser.userId + '/profile/pic300-' + imgId
         const keyThumb = props.profileUser.userId + '/profile/thumbnail'
-        const imgUrlWithKey = baseImgUrl + filekey
-        const imgUrlWithKeyThumb = baseImgUrl + keyThumb
-        // const oldProfilePic = props.profileUser.profilePic
+        const imgUrlWithKey = cloudFrontUrl + filekey
+        const imgUrlWithKeyThumb = cloudFrontUrl + keyThumb
+        const oldProfilePic = props.profileUser.profilePic
 
-        if( currentUserId === props.profileUser.userId){
+        // if( currentUserId === props.profileUser.userId){
             
-            try{
-                await app.currentUser.functions.putImageObjToS3(imgData64Profile, bucketName, filekey, profilePic.type).then( async res =>{
-                    console.log(res)
-                    try {
-                        await app.currentUser.functions.putImageObjToS3(thumb64, bucketName, keyThumb, profilePic.type).then(async res =>{
-                            console.log(res)
-                            const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                            const collectionUser = mongo.db("smoke-show").collection("users")
-                            try{
-                                await collectionUser.updateOne(
-                                    { "userId": app.currentUser.id},
-                                    { "$set": {"profileThumb": imgUrlWithKeyThumb} },
-                                    { upsert: true }
-                                ).then(async res =>{
-                                    console.log(res)
-                                    const result = await collectionUser.updateOne(
-                                        { "userId": app.currentUser.id},
-                                        { "$set": {"profilePic": imgUrlWithKey} },
-                                        { upsert: true }
-                                    )
-                                    return result
-                                })
-                                .then(res =>{
-                                    console.log('res', res)
-                                    setIsSuccess({
-                                        ...isSuccess,
-                                        profilePic: true
-                                    })
-                                    setDisableBtnStates({
-                                        ...disableBtnStates,
-                                        profilePic: true
-                                    })
-                                    props.updateProfileData(imgUrlWithKey, "profilePic")
-                                    return
-                                })
-                            }catch(err){
-                                console.log(err)
-                            }
-                        })
-                    } catch (error) {
-                        console.log(error)
-                    }
-                    
-                    // console.log('res', res)
-                    // if(typeof(oldProfilePic) !== "undefined"){
-                  
-                    //         const currentUrl = props.profileUser.profilePic
-                    //         const splitted = currentUrl.split('/');
-                    //         const key = splitted.splice(4, 7).join("/")
-                    //         deleteImgObj(key)
-                        
-                    // }
-                    
-              
-                })
-            }catch(err){
-            console.log(err)
-            }
-        }else{
+        //     try{
+        //         await app.currentUser.functions.putImageObjToS3(imgData64Profile, bucketName, filekey, profilePic.type).then( async res =>{
+        //             console.log(res)
+        //             try {
+        //                 await app.currentUser.functions.putImageObjToS3(thumb64, bucketName, keyThumb, profilePic.type).then(async res =>{
+        //                     console.log(res)
+        //                     if(typeof(oldProfilePic) !== "undefined"){
+        //                         const currentUrl = props.profileUser.profilePic
+        //                         const splitted = currentUrl.split('/');
+        //                         const key = splitted.splice(4, 7).join("/")
+        //                         deleteImgObj(key)
+        //                     }
+        //                     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        //                     const collectionUser = mongo.db("smoke-show").collection("users")
+        //                     try{
+        //                         await collectionUser.updateOne(
+        //                             { "userId": app.currentUser.id},
+        //                             { "$set": {"profileThumb": imgUrlWithKeyThumb} },
+        //                             { upsert: true }
+        //                         ).then(async res =>{
+        //                             console.log(res)
+        //                             const result = await collectionUser.updateOne(
+        //                                 { "userId": app.currentUser.id},
+        //                                 { "$set": {"profilePic": imgUrlWithKey} },
+        //                                 { upsert: true }
+        //                             )
+        //                             return result
+        //                         })
+        //                         .then(res =>{
+        //                             console.log('res', res)
+        //                             setIsSuccess({
+        //                                 ...isSuccess,
+        //                                 profilePic: true
+        //                             })
+        //                             setDisableBtnStates({
+        //                                 ...disableBtnStates,
+        //                                 profilePic: true
+        //                             })
+        //                             props.updatedata(mongo)
+                           
+        //                             return
+        //                         })
+        //                     }catch(err){
+        //                         console.log(err)
+        //                     }
+        //                 })
+        //             } catch (error) {
+        //                 console.log(error)
+        //             }
+        //         })
+        //     }catch(err){
+        //     console.log(err)
+        //     }
+        // }else{
         const tokenUser = sessionStorage.getItem('session_user')
         // const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
-        const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+        const decoded = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
         try{
-            await app.logIn(credentials.cre).then(async user =>{
+            await app.logIn(decoded.cre).then(async user =>{
+                if(user.id === app.currentUser.id){
+                    console.log('user updated')
+                }else{
+                    console.log('user not updated')
+                }
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionUser = mongo.db("smoke-show").collection("users")
                 await user.functions.putImageObjToS3(imgData64Profile, bucketName, filekey, profilePic.type).then(async res =>{
                     console.log(res)
                     const result = await user.functions.putImageObjToS3(thumb64, bucketName, keyThumb, profilePic.type)
                     console.log(result)
-                    // if(typeof(oldProfilePic) !== "undefined"){
-                  
-                    //     const currentUrl = props.profileUser.profilePic
-                    //     const splitted = currentUrl.split('/');
-                    //     const key = splitted.splice(4, 7).join("/")
-                    //     deleteImgObj(key)
-                    
-                    // }
+                    if(typeof(oldProfilePic) !== "undefined"){
+                        const currentUrl = props.profileUser.profilePic
+                        const splitted = currentUrl.split('/');
+                        const key = splitted.splice(4, 7).join("/")
+                        deleteImgObj(key)
+                    }
                 })
                 try{
                     await collectionUser.updateOne(
-                        { "userId": user.userId},
+                        { "userId": user.id},
                         { "$set": { "profilePic": imgUrlWithKey} },
                         { upsert: true}
                     ).then(async res =>{
                     console.log(res)
                        const result =  await collectionUser.updateOne(
-                            { "userId": user.userId},
+                            { "userId": user.id},
                             { "$set": { "profileThumb": imgUrlWithKeyThumb} },
                             { upsert: true}
                         )
@@ -214,7 +212,8 @@ const SettingModal = (props) =>{
                             ...disableBtnStates,
                             profilePic: true
                         })
-                        props.updateProfileData(imgUrlWithKey, "profilePic")
+                        props.updatedata(mongo)
+                        // props.updateProfileData(imgUrlWithKey, "profilePic")
 
                         return
                     })
@@ -225,7 +224,7 @@ const SettingModal = (props) =>{
         }catch(err){
             console.log(err)
         }
-        }
+        // }
     }
     const coverPicUpload = (e) =>{
         
@@ -255,64 +254,74 @@ const SettingModal = (props) =>{
     }
     const saveProfileCover = async  (e) =>{
         const imgId = short.generate()
-        const filekey = props.profileUser.userId + '/profile/' + imgId
-        const imgUrlWithKey = baseImgUrl + filekey
+        const filekey = props.profileUser.userId + '/profile/cover-' + imgId
+        const imgUrlWithKey = cloudFrontUrl + filekey
         
-        if(currentUserId === props.profileUser.userId){
-            const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-            try{
-                await app.currentUser.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
-                    console.log('res', res)
-                    if( typeof(props.profileUser.profileCover) !== "undefined"){
-                        const currentUrl = props.profileUser.profileCover
-                        const splitted = currentUrl.split('/');
-                        const key = splitted.splice(4, 7).join("/")
-                        deleteImgObj(key)
-                    }
-                    
-                    const collectionUser = mongo.db("smoke-show").collection("users")
-                    try{
-                        await collectionUser.updateOne(
-                            { "userId": props.profileUser.userId},
-                            { "$set": { "profileCover": imgUrlWithKey } },
-                            { upsert: true}
-                        ).then( res =>{
-                            console.log('res', res)
-                            setIsSuccess({
-                                ...isSuccess,
-                                profilePic: true
-                            })
-                            setDisableBtnStates({
-                                ...disableBtnStates,
-                                profilePic: true
-                            })
-                            props.updateProfileData(imgUrlWithKey, "profileCover")
-                        })
-                    }catch(err){ console.log(err) }
-                })
-            }catch(err){
-            console.log(err)
-            }
-        }else{
+        // if(currentUserId === props.profileUser.userId){
+        //     const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        //     try{
+        //         await app.currentUser.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
+        //             console.log('res', res)
+        //             if( typeof(props.profileUser.profileCover) !== "undefined"){
+        //                 const currentUrl = props.profileUser.profileCover
+        //                 const splitted = currentUrl.split('/');
+        //                 const key = splitted.splice(4, 7).join("/")
+        //                 deleteImgObj(key)
+        //             }
+        //             console.log('url',imgUrlWithKey)
+        //             const collectionUser = mongo.db("smoke-show").collection("users")
+        //             try{
+        //                 await collectionUser.updateOne(
+        //                     { "userId": props.profileUser.userId},
+        //                     { "$set": { "profileCover": imgUrlWithKey } },
+        //                     { upsert: true}
+        //                 ).then( res =>{
+        //                     console.log('res', res)
+        //                     setIsSuccess({
+        //                         ...isSuccess,
+        //                         coverPic: true
+        //                     })
+        //                     setDisableBtnStates({
+        //                         ...disableBtnStates,
+        //                         coverPic: true
+        //                     })
+        //                     props.updatedata(mongo)
+        //                 })
+        //             }catch(err){ console.log(err) }
+        //         })
+        //     }catch(err){
+        //     console.log(err)
+        //     }
+        // }else{
             const tokenUser = sessionStorage.getItem('session_user')
             // const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
-            const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
+            const decoded = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
             try{
-                await app.logIn(credentials.cre).then(async  user =>{
+                await app.logIn(decoded.cre).then(async  user =>{
+                    if(user.id === app.currentUser.id){
+                        console.log('user updated')
+                    }else{
+                        console.log('user not updated')
+                    }
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                     const collectionUser = mongo.db("smoke-show").collection("users")
-                    await user.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
-                        if( typeof(props.profileUser.profileCover) !== "undefined"){
-                            const currentUrl = props.profileUser.profileCover
-                            const splitted = currentUrl.split('/');
-                            const key = splitted.splice(4, 7).join("/")
-                            deleteImgObj(key)
-                        }
-
-                    })
+                    try {
+                        await user.functions.putImageObjToS3(imgData64Cover, bucketName, filekey, coverPic.type).then( async res =>{
+                            console.log(res)
+                            if( typeof(props.profileUser.profileCover) !== "undefined"){
+                                const currentUrl = props.profileUser.profileCover
+                                const splitted = currentUrl.split('/');
+                                const key = splitted.splice(4, 7).join("/")
+                                deleteImgObj(key)
+                            }
+                        })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    
                 try{
                     await collectionUser.updateOne(
-                        { "userId": user.userId},
+                        { "userId": user.id},
                         { "$set": { "profileCover": imgUrlWithKey } },
                         { upsert: true}
                     ).then(res =>{
@@ -325,7 +334,7 @@ const SettingModal = (props) =>{
                             ...disableBtnStates,
                             coverPic: true
                         })
-                        props.updateProfileData(imgUrlWithKey, 'profileCover')
+                        props.updatedata(mongo)
                     })
                 }catch(err){
                     console.log(err)
@@ -335,50 +344,49 @@ const SettingModal = (props) =>{
                 console.log(err)
             }
             
-        }
+        // }
     }
 
 
     const handleUpdateProfile = async (e) =>{
         e.preventDefault()
-        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-        const collectionUser = mongo.db("smoke-show").collection("users")
+        // const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        // const collectionUser = mongo.db("smoke-show").collection("users")
        
-        if(app.currentUser.id === props.profileUser.userId){
-            try{
-                await collectionUser.updateOne(
-                    { "userId": app.currentUser.id},
-                    {
-                        "$set": {
-                            "fname": userObj.fname,
-                            "lname": userObj.lname,
-                            "username": userObj.username
-                          }
-                    },
-                    { upsert: true}
-                ).then( res =>{
-                    console.log(res)
-                    setIsSuccess({
-                        ...isSuccess,
-                        userDetails: true
-                    })
-                    setDisableBtnStates({
-                        ...disableBtnStates,
-                        userDetails: true
-                    })
-                    props.updateUserDetails(userObj.fname, userObj.lname, userObj.username)
-                })
-            }catch(err){ console.log(err) }
+        // if(app.currentUser.id === props.profileUser.userId){
+        //     try{
+        //         await collectionUser.updateOne(
+        //             { "userId": app.currentUser.id},
+        //             {
+        //                 "$set": {
+        //                     "fname": userObj.fname,
+        //                     "lname": userObj.lname,
+        //                     "username": userObj.username
+        //                   }
+        //             },
+        //             { upsert: true}
+        //         ).then( res =>{
+        //             console.log(res)
+        //             setIsSuccess({
+        //                 ...isSuccess,
+        //                 userDetails: true
+        //             })
+        //             setDisableBtnStates({
+        //                 ...disableBtnStates,
+        //                 userDetails: true
+        //             })
+        //             props.updateUserDetails(userObj.fname, userObj.lname, userObj.username)
+        //         })
+        //     }catch(err){ console.log(err) }
             
-        }else{
-            console.log('write login function')
+        // }else{
             const token = sessionStorage.getItem('session_user')
             const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
             
             try{
                 await app.logIn(decoded.cre).then( async user =>{
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                    collectionUser = mongo.db("smoke-show").collection("users")
+                    const collectionUser = mongo.db("smoke-show").collection("users")
                     try{
                         await collectionUser.updateOne(
                             { "userId": user.userId },
@@ -405,7 +413,7 @@ const SettingModal = (props) =>{
                     }catch(err){ console.log(err) }
                 })
             }catch(err){ console.log(err) }
-        }
+        // }
         
     }
 

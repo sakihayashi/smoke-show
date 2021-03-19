@@ -6,14 +6,10 @@ import Pagination from 'react-bootstrap/Pagination'
 
 import Comments from '../Comments'
 import Avatar from 'react-avatar'
-// import powerIcon from '../../assets/global/Horsepower.png'
-// import pistonIcon from '../../assets/global/piston.png'
-// import priceIcon from '../../assets/global/Price-Tag-icon.png'
 import Layout from '../Layout/Layout'
 import { logInAsPublic, updateLogin } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
-// import noImg from '../../assets/global/no_image.jpg'
 import { getInfluencer }from '../../store/actions/influencerActions'
 import SubNav from './SubNav'
 import './allVideos.scss'
@@ -56,10 +52,7 @@ const AllVideos = (props) =>{
         return tempArray;
     }
 
-    // const expandDiv = (index)=>{
-    //     setDivId(index)
-    //     setShowMore(!showMore)
-    // }
+
     const attachCarData = async (chunk, num) =>{
         
        setVideoArr([])
@@ -72,24 +65,22 @@ const AllVideos = (props) =>{
                     const mapResults = chunk[num].map(async video =>{
                         const filterCar = {_id: {"$oid": video.carDataId}}
 
-                            const data = await collectionCars.findOne(filterCar)
-                            
-                               if(data){
+                        const data = await collectionCars.findOne(filterCar)
+                        
+                            if(data){
+                            video.carData = data
+                            return video
+                            }else{
+
+                            const data = await collectionManual.findOne(filterCar)
+                            if(data){
                                 video.carData = data
                                 return video
-                                // setVideoArr(videoArr =>[...videoArr, video])
-                               }else{
-
-                                const data = await collectionManual.findOne(filterCar)
-                                if(data){
-                                    video.carData = data
-                                    return video
-                                    // setVideoArr(videoArr =>[...videoArr, video])
-                                }else{
-                                    console.log('no data')
-                                }
-                                    
-                               }
+                            }else{
+                                console.log('no data')
+                            }
+                                
+                            }
                                 
                     })
                     Promise.all(mapResults).then(video =>{
