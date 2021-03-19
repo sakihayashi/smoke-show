@@ -266,7 +266,7 @@ const [isLoading, setIsloading] = useState(false)
                                                 </div>
                                                 
                                                 <div className="col-11" style={{paddingRight:0, margin: 'auto'}} >
-                                                    <Link to={`/influencer/${video.userId}`}>
+                                                    <Link to={`/influencer/${linkUsername}`}>
                                                         <div className="creator-name">
                                                         <strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{video.fans && video.fans} {''} fans</span>
                                                         </div>
