@@ -1,12 +1,10 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Layout from './Layout/Layout'
-import { Row, Col, Button} from 'react-bootstrap'
+import { Button} from 'react-bootstrap'
 import './carStats.scss'
-import { v4 as uuidv4 } from 'uuid'
 
 import { Helmet } from 'react-helmet'
-import Head from '../components/Layout/Head'
 import { switchTabs } from './functionsStats'
 import loadable from '@loadable/component'
 
@@ -38,7 +36,6 @@ const CarStats = (props) =>{
             <Helmet encodeSpecialCharacters={true}>
                 {/* <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title> */}
                 <title>{typeof(carData) !== 'undefined' && `${carData[0].make}, ${carData[0].year}, ${carData[0].model}, Statistics, Specs`}</title>
-                <Head />
             </Helmet>
             <div className="main-wrapper stats-container">
                 <div className="spacer-4rem"></div>

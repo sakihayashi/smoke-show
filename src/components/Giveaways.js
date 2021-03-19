@@ -4,7 +4,6 @@ import Layout from './Layout/Layout'
 import { Row  } from 'react-bootstrap'
 import './giveaways.scss'
 import { giveAwaysArr } from './giveAwayData'
-import Head from './Layout/Head'
 import { openLoginModal, attachMsg, swapToSignup } from '../store/actions/authActions'
 import { connect } from 'react-redux'
 // import {

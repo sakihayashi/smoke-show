@@ -2,7 +2,6 @@ import React from 'react'
 import {Helmet} from "react-helmet"
 import Layout from './Layout/Layout'
 import { Link } from 'react-router-dom'
-import Head from '../components/Layout/Head'
 
 const NotFoundPage = () => {
   return (
@@ -11,8 +10,6 @@ const NotFoundPage = () => {
           <meta charSet="utf-8" />
           <title>404 Page Not Found | The Smoke Show</title>
           <meta name="description" content="The page does not exist at thesmokeshow.com. " />
-          <Head />
-          {/* <link rel="canonical" href="http://mysite.com/example" /> */}
       </Helmet>
         <div className="spacer-4rem"></div>
         <div className="not-found-wrapper">

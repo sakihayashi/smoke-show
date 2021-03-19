@@ -1,13 +1,13 @@
-import React, { useEffect, useState, Fragment } from 'react'
+import React, { useEffect, useState, Fragment, Suspense } from 'react'
 import {Helmet} from "react-helmet"
 import { Row, Col, Spinner } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import VisibilitySensor from 'react-visibility-sensor'
 // import wheelImg from '../assets/global/smoke-wheel.png'
 // import { youtubeAPI } from '../utils/youtubeAPI'
 
 // import Avatar from 'react-avatar'
-import Head from './Layout/Head'
 import Layout from './Layout/Layout'
 import '../scss/spinner.css'
 import './homepage.scss'
@@ -19,6 +19,7 @@ import loadable from '@loadable/component'
 const Comments = loadable(() => import('./Comments'))
 const SpecDiv = loadable(() => import('./SpecDiv'))
 const VideoDiv = loadable(()=> import('./VideoDiv'))
+// const VideoDiv = React.lazy(()=> import('./VideoDiv'))
 
 const HomePage = (props) =>{
 let today = new Date()
@@ -26,7 +27,7 @@ const timeISO = today.toISOString()
 let published = new Date('2021-03-01')
 const publishedISO = published.toISOString()
 const s3BaseUrl = 'https://dwdlqiq3zg6k6.cloudfront.net/'
-
+const [visibleOn, setVisibleOn] = useState(null)
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
 // const videoEmbedURL = 'https://www.youtube.com/embed/'
 const [latestVideos, setLatestVideos] = useState([])
@@ -72,7 +73,7 @@ const [isLoading, setIsloading] = useState(false)
         setLatestVideos([])
         const now = new Date()
         const aWeekAgo = moment(now).add(-7, 'day').format('YYYY-MM-DD')
-    
+        let tempArr = []
         try {
             await app.logIn(credentials).then(async user =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
@@ -101,7 +102,7 @@ const [isLoading, setIsloading] = useState(false)
                     const collectionManual = mongo.db("smoke-show").collection("cars-manual")
                     
                     const results = videos.map(async video =>{
-
+                        tempArr.push(false)
                         if(video.userId === '60230361f63ff517d4fdad14'){
                             video.fans = eddieFans
                             
@@ -130,6 +131,8 @@ const [isLoading, setIsloading] = useState(false)
                             }
                         }
                     })
+                    
+                    setVisibleOn(tempArr)
                     Promise.all(results).then(videos =>{
                         setLatestVideos(videos)
                     })
@@ -159,6 +162,18 @@ const [isLoading, setIsloading] = useState(false)
             const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
             getVideos(credentials)
         }
+    }
+    const visibleChange = (isVisible, index) =>{
+        console.log('vsi', isVisible)
+        console.log(index)
+        // console.log('index', index)
+        let tempArr = [...visibleOn]
+        if(tempArr[index] === false){
+            tempArr[index] = isVisible
+            setVisibleOn(tempArr)
+        }
+        
+        
     }
 
     useEffect( () => {
@@ -222,8 +237,18 @@ const [isLoading, setIsloading] = useState(false)
                                 <Col sm={6} className="main-col" >
                                     <Row >
                                         <Col sm >
-                                            <VideoDiv video={video} videoId={id} />
-                                         
+                                        <VisibilitySensor onChange={(isVisible)=>visibleChange(isVisible, index)} partialVisibility={true} delayedCall={true}>
+                                        {/* {({isVisible}) =>
+                                            <div>{isVisible ? <VideoDiv video={video} videoId={id} />  : ''}</div>
+                                        } */}
+                                        {/* {visibleOn[index] &&  */}
+                                            {/* <VideoDiv video={video} videoId={id} /> */}
+                                        {/* } */}
+                                        {/* <VideoDiv video={video} videoId={id} /> */}
+                                        <div style={{minHeight: '100px', width: '100%'}}>{visibleOn[index] ? <VideoDiv video={video} videoId={id} />: ' '}</div>
+                                        </VisibilitySensor>
+                                            
+
                                             <h3 style={{marginTop:'10px'}} className="video-title">{video.snippet.title}</h3>
                                             <small>{date}</small>
                                            
