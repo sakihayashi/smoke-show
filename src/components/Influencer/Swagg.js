@@ -140,7 +140,7 @@ const SwaggInfluencer = (props) =>{
             <Layout>
                 <div className="main-wrapper" style={{minHeight: 'calc(100vh - 21rem)'}}>
                     <div className="spacer-4rem"></div>
-                    <SubNav influencer={influencer} formattedFans={props.formattedFans}/>
+                    <SubNav influencer={influencer} formattedFans={props.formattedFans} username={name}/>
                     <div className="spacer-4rem"></div>
                     <h2 className="title">{influencer.username} Swagg</h2>
                     <div className="spacer-4rem"></div>

@@ -334,7 +334,7 @@ const AllVideos = (props) =>{
             </Helmet>
             
             <div className="main-wrapper">
-                <SubNav influencer={props.influencerObj} formattedFans={props.formattedFans} />
+                <SubNav influencer={props.influencerObj} formattedFans={props.formattedFans} username={name} />
             <div className="spacer-4rem"></div>
             <h2 className="title">All Videos from {props.influencerObj.username && props.influencerObj.username}</h2>
             <div className="pagination-wrapper">

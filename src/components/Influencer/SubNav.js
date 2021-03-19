@@ -19,7 +19,7 @@ const SubNav = (props) =>{
       };
     const app = new Realm.App(appConfig);
     const influencer = props.influencer
-    const replaced = props.influencer.username.replace(" ", "-")
+    const replaced = props.username.replace(" ", "-")
     const renderTooltip = (props) => (
         <Tooltip  id="button-tooltip" {...props} key="button-tooltip-key">
           <p style={{marginBottom: 0}}>You will receive notifications when the influencer publishes a video or updates their bio.</p>

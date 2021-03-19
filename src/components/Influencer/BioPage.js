@@ -203,7 +203,7 @@ const BioPage = (props) =>{
             </Helmet>
             <div className="main-wrapper">
    
-                <SubNav influencer={influencer} formattedFans={formattedFans} />
+                <SubNav influencer={influencer} formattedFans={formattedFans} username={name}/>
 
                 <div className="spacer-2rem"></div>
                 <Row className="bio-main-row">

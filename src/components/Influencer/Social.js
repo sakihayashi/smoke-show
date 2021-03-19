@@ -120,7 +120,7 @@ const Social = (props) =>{
             <Layout>
                 <div className="main-wrapper">
                     <div className="spacer-4rem"></div>
-                    <SubNav influencer={influencer} formattedFans={props.formattedFans}/>
+                    <SubNav influencer={influencer} formattedFans={props.formattedFans} username={name} />
                     <div className="spacer-4rem"></div>
                     <h2 className="title">{influencer.username} Social Media</h2>
                     <div className="spacer-4rem"></div>

@@ -319,7 +319,7 @@ const Garage = (props) =>{
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} profileUser={profileUser}  updateProfileData={updateProfileData} updateUserDetails={updateUserDetails}/>}
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>
-                <SubNav influencer={profileUser} formattedFans={props.formattedFans} allowEdit={allowEdit} handleShowSetting={handleShowSetting} />
+                <SubNav influencer={profileUser} formattedFans={props.formattedFans} allowEdit={allowEdit} handleShowSetting={handleShowSetting} username={name} />
                 {/* <div className="garage-setting-wrapper">
                     {allowEdit && 
                         <Button className="garage-setting-btn" onClick={handleShowSetting} >
