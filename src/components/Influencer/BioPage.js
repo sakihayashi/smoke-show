@@ -13,7 +13,7 @@ import jwt from 'jsonwebtoken'
 import loadable from '@loadable/component'
 import moment from 'moment'
 
-const SpecDiv = loadable(() => import('./SpecDiv'))
+const SpecDiv = loadable(() => import('../SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
 const SubNav = loadable(() => import('./SubNav'))
 

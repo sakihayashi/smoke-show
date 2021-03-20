@@ -14,7 +14,7 @@ import './allVideos.scss'
 import short from 'short-uuid'
 import loadable from '@loadable/component'
 
-const SpecDiv = loadable(() => import('./SpecDiv'))
+const SpecDiv = loadable(() => import('../SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
 const SubNav = loadable(() => import('./SubNav'))
 
