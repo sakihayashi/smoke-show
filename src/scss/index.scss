@@ -3,17 +3,19 @@
 @font-face {
   font-family: 'Progress';
   src: local('Progress'), url(../fonts/Progress.ttf) format('truetype');
+  font-display: swap;
 }
 @font-face {
   font-family: 'Best in Class';
   src: local('BestInClass'), url(../fonts/BEST-IN-CLASS.ttf) format('truetype');
+  font-display: swap;
 }
 @font-face{
   font-family: 'MerriweatherSans';
   src: url('../fonts/MerriweatherSans-VariableFont_wght.ttf'); 
   src: local('MerriweatherSans'), url(../fonts/MerriweatherSans-VariableFont_wght.ttf) format('truetype');
   font-weight: normal;
-
+  font-display: swap;
 }
 @font-face{
   font-family: 'X-Heighting';
@@ -21,6 +23,7 @@
   font-weight: normal;
   src: local('X-Heighting'), url(../fonts/X-Heighting400.ttf) format('truetype');
   src: url('../fonts/X-Heighting400.ttf');
+  font-display: swap;
 }
 
 *{
