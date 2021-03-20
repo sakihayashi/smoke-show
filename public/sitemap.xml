@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?><urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>https://thesmokeshow.com/</loc></url>
+<url><loc>https://thesmokeshow.com</loc></url>
 <url><loc>https://thesmokeshow.com/about</loc></url>
 <url><loc>https://thesmokeshow.com/car-search</loc></url>
 <url><loc>https://thesmokeshow.com/giveaways</loc></url>
@@ -8,18 +8,17 @@
 <url><loc>https://thesmokeshow.com/privacy-policy</loc></url>
 <url><loc>https://thesmokeshow.com/terms</loc></url>
 
-<url><loc>https://thesmokeshow.com/influencer/60230361f63ff517d4fdad14</loc></url>
-<url><loc>https://thesmokeshow.com/influencer/602303890ff2832f7d19a2af</loc></url>
-<url><loc>https://thesmokeshow.com/influencer/Lexurious-Fleet</loc></url>
 <url><loc>https://thesmokeshow.com/influencer/EddieX</loc></url>
-<url><loc>https://thesmokeshow.com/all-videos/60230361f63ff517d4fdad14</loc></url>
-<url><loc>https://thesmokeshow.com/garage/60230361f63ff517d4fdad14</loc></url>
-<url><loc>https://thesmokeshow.com/social/60230361f63ff517d4fdad14</loc></url>
-<url><loc>https://thesmokeshow.com/swagg-influencer/60230361f63ff517d4fdad14</loc></url>
-<url><loc>https://thesmokeshow.com/all-videos/602303890ff2832f7d19a2af</loc></url>
-<url><loc>https://thesmokeshow.com/garage/602303890ff2832f7d19a2af</loc></url>
-<url><loc>https://thesmokeshow.com/social/602303890ff2832f7d19a2af</loc></url>
-<url><loc>https://thesmokeshow.com/swagg-influencer/602303890ff2832f7d19a2af</loc></url>
+<url><loc>https://thesmokeshow.com/influencer/EddieX/all-videos</loc></url>
+<url><loc>https://thesmokeshow.com/influencer/EddieX/garage</loc></url>
+<url><loc>https://thesmokeshow.com/influencer/EddieX/social</loc></url>
+<url><loc>https://thesmokeshow.com/influencer/EddieX/swagg</loc></url>
+
+<url><loc>https://thesmokeshow.com/influencer/Lexurious-Fleet</loc></url>
+<url><loc>https://thesmokeshow.com/influencer/Lexurious-Fleet/all-videos</loc></url>
+<url><loc>https://thesmokeshow.com/influencer/Lexurious-Fleet/garage</loc></url>
+<url><loc>https://thesmokeshow.com/influencer/Lexurious-Fleet/social</loc></url>
+<url><loc>https://thesmokeshow.com/influencer/Lexurious-Fleet/swagg</loc></url>
 
 <url><loc>https://thesmokeshow.com/toyota/2021/corollahatchback/5fbc71f287a7a21330c42cf3</loc></url>
 <url><loc>https://thesmokeshow.com/kia/2020/k900/5fbc6c9e87a7a21330c35e1e</loc></url>

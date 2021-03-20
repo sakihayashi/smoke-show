@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
 } from "react-router-dom"
 
 
@@ -63,6 +64,10 @@ function App() {
 
           <Route exact path="/influencers" component={InfluencerIndexPage} />
           <Route exact path="/influencer/:username" component={BioPageInfluencer} />
+          <Route exact path="/influencer/EddieX" component={BioPageInfluencer} />
+          <Route exact path="/influencer/60230361f63ff517d4fdad14" >
+            <Redirect to="/influencer/EddieX" />
+          </Route>
           <Route exact path="/influencer/:username/social" component={Social} />
           <Route exact path="/influencer/:username/swagg" component={SwaggInfluencer} />
           <Route exact path="/influencer/:username/all-videos" component={AllVideos} />
