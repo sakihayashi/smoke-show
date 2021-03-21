@@ -17,7 +17,7 @@ import loadable from '@loadable/component'
 const SpecDiv = loadable(() => import('../SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
 const SubNav = loadable(() => import('./SubNav'))
-
+const VideoDiv = loadable(()=> import('../VideoDiv'))
 
 const AllVideos = (props) =>{
     let today = new Date()
@@ -362,7 +362,8 @@ const AllVideos = (props) =>{
                                 
                                 <Row className="video-row">
                                     <Col sm >
-                                        <div className="videoWrapper">
+                                    <VideoDiv video={video} videoId={id}/>
+                                        {/* <div className="videoWrapper">
                                             <iframe src={videoEmbedURL + id}
                                                     frameBorder='0'
                                                     allow='autoplay; encrypted-media'
@@ -371,7 +372,7 @@ const AllVideos = (props) =>{
                                                     title={video.snippet.title}
                                             />
                                             
-                                        </div>
+                                        </div> */}
                                         <div className="video-title-div" dangerouslySetInnerHTML={{__html: video.snippet.title}} />
                                         <Row className="comment-wrapper" >
                                             <div className="col-1" style={{margin:0,padding:0}} >

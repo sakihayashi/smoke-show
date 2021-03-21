@@ -199,16 +199,17 @@ const [isLoading, setIsloading] = useState(false)
                                 <Col sm={6} className="main-col" >
                                     <Row >
                                         <Col sm >
-                                        <VisibilitySensor onChange={(isVisible)=>visibleChange(isVisible, index)} partialVisibility={true} delayedCall={true}>
+                                        {/* <VisibilitySensor onChange={(isVisible)=>visibleChange(isVisible, index)} partialVisibility={true} delayedCall={true}> */}
                                         {/* {({isVisible}) =>
                                             <div>{isVisible ? <VideoDiv video={video} videoId={id} />  : ''}</div>
                                         } */}
                                         {/* {visibleOn[index] &&  */}
                                             {/* <VideoDiv video={video} videoId={id} /> */}
                                         {/* } */}
-                                        {/* <VideoDiv video={video} videoId={id} /> */}
-                                        <div style={{minHeight: '100px', width: '100%'}}>{visibleOn[index] ? <VideoDiv video={video} videoId={id} />: ' '}</div>
-                                        </VisibilitySensor>
+                                        <VideoDiv video={video} videoId={id} />
+                                        
+                                        {/* <div style={{minHeight: '100px', width: '100%'}}>{visibleOn[index] ? <VideoDiv video={video} videoId={id} />: ' '}</div> */}
+                                        {/* </VisibilitySensor> */}
                                             
 
                                             <h3 style={{marginTop:'10px'}} className="video-title">{video.snippet.title}</h3>

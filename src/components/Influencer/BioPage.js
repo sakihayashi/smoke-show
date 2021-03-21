@@ -16,6 +16,7 @@ import moment from 'moment'
 const SpecDiv = loadable(() => import('../SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
 const SubNav = loadable(() => import('./SubNav'))
+const VideoDiv = loadable(()=> import('../VideoDiv'))
 
 const BioPage = (props) =>{
     let today = new Date()
@@ -260,7 +261,8 @@ const BioPage = (props) =>{
                         <Col sm={6} >
                         <Row>
                             <Col sm >
-                                <div className="videoWrapper">
+                            <VideoDiv video={video} videoId={video.videoId}/>
+                                {/* <div className="videoWrapper">
                                     
                                     <iframe src={videoEmbedURL + video.videoId}
                                             frameBorder='0'
@@ -269,7 +271,7 @@ const BioPage = (props) =>{
                                             title='video'
                                             loading='lazy'
                                     />
-                                </div>
+                                </div> */}
                                 <h3 style={{marginTop:'10px'}}>{video.snippet.title}</h3>
                                 <small>{date}</small>
                                 <input className="acd-input" type="checkbox" id={`title${index}`} />
