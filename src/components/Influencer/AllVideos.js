@@ -13,11 +13,12 @@ import { getInfluencer }from '../../store/actions/influencerActions'
 import './allVideos.scss'
 import short from 'short-uuid'
 import loadable from '@loadable/component'
+import ReactPlayer from 'react-player/lazy'
 
 const SpecDiv = loadable(() => import('../SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
 const SubNav = loadable(() => import('./SubNav'))
-const VideoDiv = loadable(()=> import('../VideoDiv'))
+// const VideoDiv = loadable(()=> import('../VideoDiv'))
 
 const AllVideos = (props) =>{
     let today = new Date()
@@ -351,6 +352,7 @@ const AllVideos = (props) =>{
                     const model = str.charAt(0).toUpperCase() +str.slice(1)
                     const name = video.carData.make
                     const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
+                    const videoWatchURL = 'https://www.youtube.com/watch?v='
                     let price;
                     if(video.carData.price && video.carData.price.baseMSRP){
                         price = numberWithCommas(video.carData.price.baseMSRP)
@@ -362,7 +364,16 @@ const AllVideos = (props) =>{
                                 
                                 <Row className="video-row">
                                     <Col sm >
-                                    <VideoDiv video={video} videoId={id}/>
+                                    <div className="videoWrapper">
+                                        <ReactPlayer
+                                        width="560" 
+                                        height="315"
+                                        url={videoWatchURL + video.videoId}
+                                        controls={true}
+                                        />
+                                    </div>
+                                    
+                                    {/* <VideoDiv video={video} videoId={id}/> */}
                                         {/* <div className="videoWrapper">
                                             <iframe src={videoEmbedURL + id}
                                                     frameBorder='0'

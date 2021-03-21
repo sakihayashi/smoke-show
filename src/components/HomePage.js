@@ -3,7 +3,7 @@ import {Helmet} from "react-helmet"
 import { Row, Col, Spinner } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import VisibilitySensor from 'react-visibility-sensor'
+// import VisibilitySensor from 'react-visibility-sensor'
 // import wheelImg from '../assets/global/smoke-wheel.png'
 // import { youtubeAPI } from '../utils/youtubeAPI'
 
@@ -207,7 +207,7 @@ const [isLoading, setIsloading] = useState(false)
                                             {/* <VideoDiv video={video} videoId={id} /> */}
                                         {/* } */}
                                         <VideoDiv video={video} videoId={id} />
-                                        
+
                                         {/* <div style={{minHeight: '100px', width: '100%'}}>{visibleOn[index] ? <VideoDiv video={video} videoId={id} />: ' '}</div> */}
                                         {/* </VisibilitySensor> */}
                                             
