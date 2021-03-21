@@ -44,7 +44,7 @@ const CarSearch = (props) =>{
         const makeLowerCase = e.toLowerCase()
         const filter = {make: makeLowerCase} 
         try{
-            await mongoCollection.find(filter).then(async cars =>{
+            await mongoCollection.find(filter).then(cars =>{
                 // const carModelArr = [...new Set(availableTypes)]
                 let carModelArr = cars.map(car =>{
                              return car.model
@@ -53,8 +53,7 @@ const CarSearch = (props) =>{
                   setModelName(unique.sort())
                   setCars(cars)
                   setCarResults(cars)
-                  const result = await mongoCollection.distinct('model', {make: 'toyota'})
-                  console.log('res', result)
+       
               })
         }catch(err){console.log(err)}
         
