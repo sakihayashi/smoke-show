@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Layout from './Layout/Layout'
 import { carBrands, carsAllYear } from './carTempData'
 import { Container, Row, Col } from 'react-bootstrap'
 import { Link } from 'react-router-dom'

@@ -58,7 +58,6 @@ const CarStatsListsYear = (props) =>{
                     return car.year
                 })
                 const unique = [...new Set(tempArr)]
-                console.log(unique)
                 unique.sort()
                 const len = unique.length
                 const third = Math.ceil(len/3)
