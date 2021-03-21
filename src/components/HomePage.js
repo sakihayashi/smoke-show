@@ -127,8 +127,7 @@ const [isLoading, setIsloading] = useState(false)
         }
     }
     const visibleChange = (isVisible, index) =>{
-        console.log('vsi', isVisible)
-        console.log(index)
+      
         // console.log('index', index)
         let tempArr = [...visibleOn]
         if(tempArr[index] === false){
