@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import * as Realm from "realm-web"
 // import Avatar from 'react-avatar'
 import './bioPage.scss'
-// import * as Papa from 'papaparse'
+import ReactPlayer from 'react-player/lazy'
 
 import Layout from '../Layout/Layout'
 // import SubNav from './SubNav'
@@ -19,6 +19,7 @@ const SubNav = loadable(() => import('./SubNav'))
 const VideoDiv = loadable(()=> import('../VideoDiv'))
 
 const BioPage = (props) =>{
+    const videoWatchURL = 'https://www.youtube.com/watch?v='
     let today = new Date()
     const timeISO = today.toISOString()
     let published = new Date('2021-03-01')
@@ -261,7 +262,14 @@ const BioPage = (props) =>{
                         <Col sm={6} >
                         <Row>
                             <Col sm >
-                            <VideoDiv video={video} videoId={video.videoId}/>
+                             <div className="videoWrapper">
+                                <ReactPlayer
+                                width="560" 
+                                height="315"
+                                url={videoWatchURL + video.videoId}
+                                controls={true}
+                                />
+                            </div>
                                 {/* <div className="videoWrapper">
                                     
                                     <iframe src={videoEmbedURL + video.videoId}

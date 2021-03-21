@@ -8,7 +8,7 @@ import { updateLogin, logInAsPublic } from '../../store/actions/authActions'
 const HeaderWithRouter = withRouter(Header);
 
 const Layout = (props) =>{
-    const [modalShow, setModalShow] = useState(false)
+    // const [modalShow, setModalShow] = useState(false)
     const [user, setUser] = useState(false)
     const [username, setUsername] = useState('')
     const [userId, setUserId] = useState('')
@@ -65,7 +65,6 @@ const mapDispatchToProps = (dispatch) =>{
     return{
         logInAsPublic: ()=>dispatch(logInAsPublic()),
         updateLogin: (credentials)=>dispatch(updateLogin(credentials))
-        // modalShowHide: (state) =>dispatch(modalShowHide(state))
     }
 }
 

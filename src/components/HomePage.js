@@ -15,12 +15,16 @@ import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"
 import moment from 'moment'
 import loadable from '@loadable/component'
+import ReactPlayer from 'react-player/lazy'
+
 
 const Comments = loadable(() => import('./Comments'))
 const SpecDiv = loadable(() => import('./SpecDiv'))
-const VideoDiv = loadable(()=> import('./VideoDiv'))
+// const VideoDiv = loadable(()=> import('./VideoDiv'))
 
 const HomePage = (props) =>{
+const videoWatchURL = 'https://www.youtube.com/watch?v='
+
 let today = new Date()
 const timeISO = today.toISOString()
 let published = new Date('2021-03-01')
@@ -206,11 +210,18 @@ const [isLoading, setIsloading] = useState(false)
                                         {/* {visibleOn[index] &&  */}
                                             {/* <VideoDiv video={video} videoId={id} /> */}
                                         {/* } */}
-                                        <VideoDiv video={video} videoId={id} />
+                                        {/* <VideoDiv video={video} videoId={id} /> */}
 
                                         {/* <div style={{minHeight: '100px', width: '100%'}}>{visibleOn[index] ? <VideoDiv video={video} videoId={id} />: ' '}</div> */}
                                         {/* </VisibilitySensor> */}
-                                            
+                                        <div className="videoWrapper">
+                                            <ReactPlayer
+                                            width="560" 
+                                            height="315"
+                                            url={videoWatchURL + video.videoId}
+                                            controls={true}
+                                            />
+                                        </div>
 
                                             <h3 style={{marginTop:'10px'}} className="video-title">{video.snippet.title}</h3>
                                             <small>{date}</small>

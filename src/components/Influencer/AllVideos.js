@@ -21,6 +21,7 @@ const SubNav = loadable(() => import('./SubNav'))
 // const VideoDiv = loadable(()=> import('../VideoDiv'))
 
 const AllVideos = (props) =>{
+    const videoWatchURL = 'https://www.youtube.com/watch?v='
     let today = new Date()
     const timeISO = today.toISOString()
     let published = new Date('2021-03-01')
@@ -33,7 +34,7 @@ const AllVideos = (props) =>{
     }else if(name === 'Lexurious-Fleet'){
         influencerId = '602303890ff2832f7d19a2af'
     }
-    const videoEmbedURL = 'https://www.youtube.com/embed/'
+    // const videoEmbedURL = 'https://www.youtube.com/embed/'
     const [videoArr, setVideoArr] = useState([])
     const [allVideoData, setAllVideoData] = useState([])
 
@@ -352,7 +353,6 @@ const AllVideos = (props) =>{
                     const model = str.charAt(0).toUpperCase() +str.slice(1)
                     const name = video.carData.make
                     const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
-                    const videoWatchURL = 'https://www.youtube.com/watch?v='
                     let price;
                     if(video.carData.price && video.carData.price.baseMSRP){
                         price = numberWithCommas(video.carData.price.baseMSRP)
