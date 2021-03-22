@@ -36,6 +36,7 @@ const CarStats = (props) =>{
             <Helmet encodeSpecialCharacters={true}>
                 {/* <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title> */}
                 <title>{typeof(carData) !== 'undefined' && `${carData[0].make}, ${carData[0].year}, ${carData[0].model}, Statistics, Specs`}</title>
+                
             </Helmet>
             <div className="main-wrapper stats-container">
                 <div className="spacer-4rem"></div>

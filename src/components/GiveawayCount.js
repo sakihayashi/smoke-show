@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Col, Button, Card, ProgressBar } from 'react-bootstrap'
+import { Col, Button, Card } from 'react-bootstrap'
 import {
     EmailShareButton,
     FacebookShareButton,

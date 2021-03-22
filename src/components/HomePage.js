@@ -1,13 +1,11 @@
-import React, { useEffect, useState, Fragment, Suspense } from 'react'
+import React, { useEffect, useState, Fragment } from 'react'
 import {Helmet} from "react-helmet"
 import { Row, Col, Spinner } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 // import VisibilitySensor from 'react-visibility-sensor'
 // import wheelImg from '../assets/global/smoke-wheel.png'
-// import { youtubeAPI } from '../utils/youtubeAPI'
 
-// import Avatar from 'react-avatar'
 import Layout from './Layout/Layout'
 import '../scss/spinner.css'
 import './homepage.scss'
@@ -17,20 +15,18 @@ import moment from 'moment'
 import loadable from '@loadable/component'
 import ReactPlayer from 'react-player/lazy'
 
-
 const Comments = loadable(() => import('./Comments'))
 const SpecDiv = loadable(() => import('./SpecDiv'))
-// const VideoDiv = loadable(()=> import('./VideoDiv'))
 
-const HomePage = (props) =>{
+const HomePage = () =>{
 const videoWatchURL = 'https://www.youtube.com/watch?v='
-
+const seoDesc = 'The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!'
 let today = new Date()
 const timeISO = today.toISOString()
 let published = new Date('2021-03-01')
 const publishedISO = published.toISOString()
 const s3BaseUrl = 'https://dwdlqiq3zg6k6.cloudfront.net/'
-const [visibleOn, setVisibleOn] = useState(null)
+// const [visibleOn, setVisibleOn] = useState(null)
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
 // const videoEmbedURL = 'https://www.youtube.com/embed/'
 const [latestVideos, setLatestVideos] = useState([])
@@ -99,7 +95,7 @@ const [isLoading, setIsloading] = useState(false)
                         }
                     })
                     
-                    setVisibleOn(tempArr)
+                    // setVisibleOn(tempArr)
                     Promise.all(results).then(videos =>{
                         setLatestVideos(videos)
                     })
@@ -130,17 +126,17 @@ const [isLoading, setIsloading] = useState(false)
             getVideos(credentials)
         }
     }
-    const visibleChange = (isVisible, index) =>{
+    // const visibleChange = (isVisible, index) =>{
       
-        // console.log('index', index)
-        let tempArr = [...visibleOn]
-        if(tempArr[index] === false){
-            tempArr[index] = isVisible
-            setVisibleOn(tempArr)
-        }
+    //     // console.log('index', index)
+    //     let tempArr = [...visibleOn]
+    //     if(tempArr[index] === false){
+    //         tempArr[index] = isVisible
+    //         setVisibleOn(tempArr)
+    //     }
         
         
-    }
+    // }
 
     useEffect( () => {
         setIsloading(false)
@@ -157,14 +153,14 @@ const [isLoading, setIsloading] = useState(false)
                 
                 <title>The Smoke Show -The Home For Auto Fans, Built By Auto Fans</title>
                 
-                <meta name="description" content="The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!" />
+                <meta name="description" content={seoDesc} />
 
                 <link rel="canonical" href="https://thesmokeshow.com" />
                 <script type="application/ld+json">{`
                     {
                         "@context": "http://schema.org",
-                        "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website","url":"https://thesmokeshow.com/","name":"The Smoke Show","description":"","potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],"inLanguage":"en"},{"@type": ["WebPage","CollectionPage"],
-                        "@id": "https://thesmokeshow.com/#webpage", "url": "https://thesmokeshow.com/", "name": "The Home For Auto Fans, Built By Auto Fans | The Smoke Show","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!", "breadcrumb":{"@id":"https://thesmokeshow.com/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/"]}]},
+                        "@graph": [{"@type":"WebSite","@id":"https://thesmokeshow.com/#website","url":"https://thesmokeshow.com/","name":"The Smoke Show","description":"${seoDesc}","potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],"inLanguage":"en"},{"@type": ["WebPage","CollectionPage"],
+                        "@id": "https://thesmokeshow.com/#webpage", "url": "https://thesmokeshow.com/", "name": "The Home For Auto Fans, Built By Auto Fans | The Smoke Show","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "${seoDesc}", "breadcrumb":{"@id":"https://thesmokeshow.com/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/"]}]},
                         {"@type":"BreadcrumbList","@id":"https://thesmokeshow.com/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"WebPage","@id":"https://thesmokeshow.com/","url":"https://thesmokeshow.com/","name":"Home"}}]}
                         ]
                     }
@@ -203,17 +199,6 @@ const [isLoading, setIsloading] = useState(false)
                                 <Col sm={6} className="main-col" >
                                     <Row >
                                         <Col sm >
-                                        {/* <VisibilitySensor onChange={(isVisible)=>visibleChange(isVisible, index)} partialVisibility={true} delayedCall={true}> */}
-                                        {/* {({isVisible}) =>
-                                            <div>{isVisible ? <VideoDiv video={video} videoId={id} />  : ''}</div>
-                                        } */}
-                                        {/* {visibleOn[index] &&  */}
-                                            {/* <VideoDiv video={video} videoId={id} /> */}
-                                        {/* } */}
-                                        {/* <VideoDiv video={video} videoId={id} /> */}
-
-                                        {/* <div style={{minHeight: '100px', width: '100%'}}>{visibleOn[index] ? <VideoDiv video={video} videoId={id} />: ' '}</div> */}
-                                        {/* </VisibilitySensor> */}
                                         <div className="videoWrapper">
                                             <ReactPlayer
                                             width="560" 
@@ -232,10 +217,7 @@ const [isLoading, setIsloading] = useState(false)
                                                 <Link to={`/influencer/${linkUsername}`}>
                                                 <img src={`${s3BaseUrl}${video.userId}/profile/thumbnail`} 
                                                 className="creator-profile-pic" alt={`A car vlogger ${video.snippet.channelTitle} | The Smoke Show`}/> 
-                                                {/* <div
-                                                style={{width:'46px', height: '46px', backgroundColor: 'teal'}}
-                                                className="creator-profile-pic" name={video.snippet.channelTitle}></div> */}
-                                            
+
                                                 </Link> 
                                                 </div>
                                                 

@@ -1,15 +1,22 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import * as Realm from "realm-web"
 
-import LoginDiv from './LoginDiv'
+// import AdminLoginDiv from './AdminLoginDiv'
 import { Container, Button, Form, Col, Row, Alert } from 'react-bootstrap'
-import ColorDiv from './colorDiv'
-import ColorInterior from './colorInterior'
-import FormText from './FormText'
-import FormCheckbox from './FormCheckbox'
+// import ColorDiv from './colorDiv'
+// import ColorInterior from './colorInterior'
+// import FormText from './FormText'
+// import FormCheckbox from './FormCheckbox'
 import { logInUser } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import short from 'short-uuid'
+import loadable from '@loadable/component'
+
+const ColorDiv = loadable(() => import('./colorDiv'))
+const ColorInterior = loadable(() => import('./colorInterior'))
+const FormText = loadable(() => import('./FormText'))
+const FormCheckbox = loadable(() => import('./FormCheckbox'))
+const AdminLoginDiv = loadable(() => import('./AdminLoginDiv'))
 
 const AddCarData = (props) =>{
     const [userObj, setUserObj] = useState({email: '', password: ''})
@@ -179,22 +186,6 @@ const AddCarData = (props) =>{
                 "tire pressure monitoring": false,
                 "traction control": false,
                 "Ventilated front disc / solid rear disc brakes": false
-//                 0: "Rear door child safety locks"
-// 1: "daytime running lights"
-// 2: "stability control"
-// 3: "Passenger airbag occupant sensing deactivation"
-// 4: "remote anti-theft alarm system"
-// 5: "2 front headrests"
-// 6: "tire pressure monitoring"
-// 7: "traction control"
-// 8: "4-wheel ABS"
-// 9: "Rear center 3-point belt"
-// 10: "child seat anchors"
-// 11: "front and rear head airbags"
-// 12: "dusk sensing headlamps"
-// 13: "3 rear headrests"
-// 14: "dual front side-mounted airbags"
-// 15: "Ventilated front disc / solid rear disc brakes"
             },
             "Tires and Wheels": {
                 "temporary spare tire": false,
@@ -723,7 +714,7 @@ const AddCarData = (props) =>{
                     <Button style={{margin:'4rem auto', width: '100%'}} onClick={handleSubmitData}>Save data</Button>
                 </Form>
             </Container>
-             : <LoginDiv handleSubmitLogin={handleSubmitLogin} handleChange={handleChange} />}
+             : <AdminLoginDiv handleSubmitLogin={handleSubmitLogin} handleChange={handleChange} />}
         </Fragment>
     )
 }

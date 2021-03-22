@@ -7,7 +7,11 @@ import './carStats.scss'
 import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'
 import { Helmet } from 'react-helmet'
-import CarStatsListsMake from './CarStatsListsMake'
+import loadable from '@loadable/component'
+
+// import CarStatsListsMake from './CarStatsListsMake'
+const CarStatsListsMake = loadable(() => import('./CarStatsListsMake'))
+
 
 const CarSearch = (props) =>{
 

@@ -219,16 +219,7 @@ const EditVideoData = () =>{
                         
                     })
                 }
-                
-                    {/* <div className="videoWrapper">
-                        <iframe src={videoEmbedURL + car.videoId}
-                                frameBorder='0'
-                                allow='autoplay; encrypted-media'
-                                allowFullScreen
-                                title='video'
-                        />
-                    <h3 style={{marginTop:'10px'}} >{car.youtube.snippet.title}</h3>
-                    </div> */}
+            
                 </Row>
             </Container>
             : loginDiv}

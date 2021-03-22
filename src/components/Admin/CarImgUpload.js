@@ -3,14 +3,19 @@ import {logOutUser} from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import {Helmet} from "react-helmet"
 import { Container, Form, Button, Alert } from 'react-bootstrap'
-import AdminLoginDiv from './AdminLoginDiv'
+// import AdminLoginDiv from './AdminLoginDiv'
 import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"
+import loadable from '@loadable/component'
+
 const appConfig = {
     id: process.env.REACT_APP_REALM_APP_ID,
     timeout: 10000, // timeout in number of milliseconds
   };
 const app = new Realm.App(appConfig);
+
+const AdminLoginDiv = loadable(() => import('./AdminLoginDiv'))
+
 
 const CarImgUpload = (props) =>{
     const carmake = 'lamborghini'

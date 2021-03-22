@@ -6,6 +6,8 @@ import './giveaways.scss'
 import { giveAwaysArr } from './giveAwayData'
 import { openLoginModal, attachMsg, swapToSignup } from '../store/actions/authActions'
 import { connect } from 'react-redux'
+import loadable from '@loadable/component'
+
 // import {
 //     EmailShareButton,
 //     FacebookShareButton,
@@ -17,7 +19,7 @@ import { connect } from 'react-redux'
 // import facebookIcon from '../assets/global/Facebook-icon.svg'
 // import twitterIcon from '../assets/global/Twitter-icon.svg'
 // import emailIcon from '../assets/global/Messages-icon.svg'
-import GiveawayCount from './GiveawayCount'
+const GiveawayCount = loadable(() => import('./GiveawayCount'))
 
 const Giveaways = (props) =>{
     const sharePathname = props.location.pathname
@@ -27,12 +29,13 @@ const Giveaways = (props) =>{
     let published = new Date('2021-03-01')
     const publishedISO = published.toISOString()
     const slug = 'giveaways'
+    const seoDesc = 'Learn about active giveaways in the car community!  Find out how to win prizes from influencers. Only confirmed and verified info is found here, never fakes!'
     return(
         <Layout>
         <Helmet>
             <meta charSet="utf-8" />
             <title>Giveaways | The Smoke Show</title>
-            <meta name="description" content="Checkout our giveaways and entry now to win!" />
+            <meta name="description" content={seoDesc} />
             
             <link rel="canonical" href="https://thesmokeshow.com/giveaways" />
             <script type="application/ld+json">
@@ -46,7 +49,7 @@ const Giveaways = (props) =>{
                         "potentialAction":[{"@type":"SearchAction","target":"https://thesmokeshow.com/search?s={search_term_string}","query-input":"required name=search_term_string"}],
                         "inLanguage":"en"},
                         {"@type": "WebPage",
-                        "@id": "https://thesmokeshow.com/giveaways/#webpage", "url": "https://thesmokeshow.com/giveaways/", "name": "Giveaways | The Smoke Show","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "The Smoke Show is a home for auto fans, built by auto fans. The best place to watch Car Vloggers and find all Car Info. Learn all about giveaways and buy swag!", "breadcrumb":{"@id":"https://thesmokeshow.com/giveaways/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/giveaways/"]}]},
+                        "@id": "https://thesmokeshow.com/giveaways/#webpage", "url": "https://thesmokeshow.com/giveaways/", "name": "Giveaways | The Smoke Show","isPartOf":{"@id":"https://thesmokeshow.com/#website"}, "datePublished": "${publishedISO}", "dateModified": "${timeISO}", "description": "${seoDesc}", "breadcrumb":{"@id":"https://thesmokeshow.com/giveaways/#breadcrumb"},"inLanguage":"en","potentialAction":[{"@type":"ReadAction","target":["https://thesmokeshow.com/giveaways/"]}]},
                         {"@type":"BreadcrumbList","@id":"https://thesmokeshow.com/#breadcrumb",
                         "itemListElement":[{
                             "@type":"ListItem","position":1,

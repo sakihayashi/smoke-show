@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Form } from 'react-bootstrap'
-// import Logo from '../assets/global/Logo-smoke-show.png'
 import * as Realm from "realm-web"
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import Layout from './Layout/Layout'
 import { Helmet } from 'react-helmet'
@@ -33,11 +32,8 @@ const ResetPassword = (props) =>{
         return jwt.sign({ userData: userData }, process.env.REACT_APP_JWT_SECRET, {expiresIn: maxAgeTest});
     }
     const handeleRestPw = async (e) =>{
-        // console.log('pw', token, tokenId, userObj.password)
         e.preventDefault()
         try{
-            // await app.emailPasswordAuth.resetPassword("newPassw0rd", token, tokenId);
-            // await app.emailPasswordAuth.resetPassword(token, tokenId, "newPassw0rd");
             await app.emailPasswordAuth.resetPassword( token, tokenId, userObj.password).then(res =>{
                 console.log('res', res)
                 setHasReset(true)
@@ -124,10 +120,7 @@ const ResetPassword = (props) =>{
                             <Form.Control type="password" placeholder="Between 6 and 128 characters long" name="password" onChange={handleChange} />
                         </Form.Group>
                         <br/>
-                        {/* <Form.Group >
-                            <Form.Label>Confirm new password</Form.Label>
-                            <Form.Control type="password" placeholder="type your new password again" name="password2" onChange={handleChange} />
-                        </Form.Group> */}
+                    
                         {hasError && <div className="error-msg">{msg}</div>}
                         <br/>
                         <div className="login-btn-wrapper">
@@ -145,6 +138,6 @@ const ResetPassword = (props) =>{
     )
 }
 
-export default connect()(ResetPassword)
+export default ResetPassword
 
 

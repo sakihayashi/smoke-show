@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import {logOutUser} from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import {Helmet} from "react-helmet"
-import { Container, Form, Button, Alert } from 'react-bootstrap'
+import { Container, Button } from 'react-bootstrap'
 import AdminLoginDiv from './AdminLoginDiv'
 import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"
@@ -17,7 +17,7 @@ const CreateSiteMap = (props) =>{
     const [userObj, setUserObj] = useState({email: '', password: ''})
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [msg, setMsg] = useState('')
-    const [uniqArr, setUniqArr] = useState([])
+    // const [uniqArr, setUniqArr] = useState([])
     const [finalArr, setFinalArr] = useState(null)
 
     const maxAgeTest = 1 * 60 * 60
