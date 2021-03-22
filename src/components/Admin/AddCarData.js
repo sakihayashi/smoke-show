@@ -3,10 +3,7 @@ import * as Realm from "realm-web"
 
 // import AdminLoginDiv from './AdminLoginDiv'
 import { Container, Button, Form, Col, Row, Alert } from 'react-bootstrap'
-// import ColorDiv from './colorDiv'
-// import ColorInterior from './colorInterior'
-// import FormText from './FormText'
-// import FormCheckbox from './FormCheckbox'
+
 import { logInUser } from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 import short from 'short-uuid'
