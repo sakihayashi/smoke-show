@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState} from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
 import Layout from '../Layout/Layout'
 import { Helmet } from "react-helmet"
@@ -129,35 +129,35 @@ const Social = (props) =>{
                             <ul style={{listStyle: 'none'}}>
                             {influencer.social.instagram  && 
                                 <li className="social-media-container">
-                                    <Link to={influencer.social.instagram}>
+                                    <a href={influencer.social.instagram} target="_blank">
                                         <img className="social-img" src={instaIcon} alt="Instagram" />
                                         <p className="social-text">{influencer.social.instagram}</p>
-                                    </Link>
+                                    </a>
                                 </li>
                             }
                             
                             {influencer.social.facebook && 
                                 <li className="social-media-container">
-                                    <Link to={influencer.social.facebook}>
+                                    <a href={influencer.social.facebook} target="_blank">
                                         <img className="social-img" src={fbIcon} alt="Instagram" />
                                         <p className="social-text">{influencer.social.facebook}</p>
-                                    </Link>
+                                    </a>
                                 </li>
                             }
                             {influencer.social.twitter && 
                                 <li className="social-media-container">
-                                    <Link to={influencer.social.twitter}>
+                                    <a href={influencer.social.twitter} target="_blank">
                                         <img className="social-img" src={twitterIcon} alt="Instagram" />
                                         <p className="social-text">{influencer.social.twitter}</p>
-                                    </Link>
+                                    </a>
                                 </li>
                             }
                             {influencer.social.tiktok && 
                                 <li className="social-media-container">
-                                    <Link to={influencer.social.tiktok}>
+                                    <a href={influencer.social.tiktok} target="_blank">
                                         <img className="social-img" src={tiktokIcon} alt="Instagram" />
                                         <p className="social-text">{influencer.social.tiktok}</p>
-                                    </Link>
+                                    </a>
                                 </li>
                             }
                             </ul>
@@ -166,10 +166,10 @@ const Social = (props) =>{
                             <ul style={{listStyle: 'none'}}>
                             {influencer.social.amazon && 
                                 <li className="social-media-container">
-                                    <Link to={influencer.social.amazon}>
+                                    <a href={influencer.social.amazon} target="_blank">
                                         <img className="social-img" src={amazonIcon} alt="Instagram" />
                                         <p className="social-text">{influencer.social.amazon}</p>
-                                    </Link>
+                                    </a>
                                 </li>
                             }
                             </ul>

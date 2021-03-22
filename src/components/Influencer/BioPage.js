@@ -108,7 +108,16 @@ const BioPage = (props) =>{
                 }
             })
             Promise.all(results).then(res =>{
-                const removed = res.shift()
+                let removed = res.shift()
+                const str = removed.carData.model
+                const modelTitle = str.charAt(0).toUpperCase() +str.slice(1)
+                const make = removed.carData.make
+                const makeTitle = make.charAt(0).toUpperCase() +make.slice(1)
+                removed.makeTitle = makeTitle
+                removed.modelTitle = modelTitle
+                if(removed.carData.price && removed.carData.price.baseMSRP){
+                    removed.price = numberWithCommas(removed.carData.price.baseMSRP)
+                }else{ removed.price = ''}
                 setFeatured(removed)
                 setLatestVideos(res)
             })
@@ -221,24 +230,36 @@ const BioPage = (props) =>{
                         </div>
                         <h3 style={{marginTop:'10px'}}>{featured && featured.snippet.title}</h3>
                         <small>{featured && moment(featured.snippet.publishedAt).fromNow()}</small>
+                        {featured && <Comments videoId={featured.videoId} />
+                                }
                     </Col>
                     <Col sm={6}>
-                        <div className="bio-desc-wrapper">
-                            <p>{influencer && influencer.desc}</p>
-                            <input className="acd-input" type="checkbox" id={`title-featured`} />
-                                    
-                            <label className="show-label" htmlFor={`title-featured`} className="acd-label">Show </label>
-                            <div className="desc-box-featured">
-                                { featured && featured.snippet.description}
-                            </div> 
-                            <div className="content">
-                                <small className="wrap-text-desc">{featured && featured.snippet.description}</small>
+                        <Row>
+                            <Col sm>
+                            <div className="bio-desc-wrapper">
+                                <input className="acd-input" type="checkbox" id={`title-featured`} />
+                                        
+                                <label className="show-label" htmlFor={`title-featured`} className="acd-label">Show </label>
+                                <div className="desc-box-featured">
+                                    { featured && featured.snippet.description}
+                                </div> 
+                                <div className="content">
+                                    <small className="wrap-text-desc">{featured && featured.snippet.description}</small>
+                                </div>
+                                <div className="spacer-4rem"></div>
+                                {/* {featured && <Comments videoId={featured.videoId} />
+                                } */}
+                                
                             </div>
-                            <div className="spacer-4rem"></div>
-                            {featured && <Comments videoId={featured.videoId} />
+                            </Col>
+                            <Col sm="auto" className="bio-stats">
+                            {featured && 
+                                <SpecDiv titleCase={featured.makeTitle} price={featured.price} video={featured} dataid={featured.carDataId} model={featured.modelTitle}/>
                             }
-                            
-                        </div>
+                                
+                            </Col>
+                        </Row>
+                        
                         
                     </Col>
                 </Row>
