@@ -39,7 +39,7 @@ const Social = (props) =>{
     const userLogin =async (cre) =>{
          try{
              await app.logIn(cre).then(user =>{
-                 console.log('user logged in', user.id)
+                //  console.log('user logged in', user.id)
              })
          }catch(err){console.log(err)}
     }

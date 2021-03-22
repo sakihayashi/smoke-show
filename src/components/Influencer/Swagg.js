@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import Layout from '../Layout/Layout'
 import { Helmet } from "react-helmet"
 import * as Realm from "realm-web"
@@ -28,7 +28,7 @@ const SwaggInfluencer = (props) =>{
     }
 
     const [influencer, setInfluencer] = useState({profileCover: '', profilePic: '', username: '', userId: '', swagg: {teeSpring: '', printful: ''}})
-    const [formattedFans, setFormattedFans] = useState('')
+    // const [formattedFans, setFormattedFans] = useState('')
     const [noData, setNodata] = useState(false)
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -57,7 +57,7 @@ const SwaggInfluencer = (props) =>{
     const userLogin =async (cre) =>{
         try{
             await app.logIn(cre).then(user =>{
-                console.log('user logged in', user.id)
+                // console.log('user logged in', user.id)
             })
         }catch(err){console.log(err)}
    }
@@ -150,18 +150,18 @@ const SwaggInfluencer = (props) =>{
                                 { noData && <p>No Swagg</p>}
                                 { influencer.swagg.teeSpring &&
                                 <li className="social-media-container">
-                                    <Link to={influencer.swagg.teeSpring}>
+                                    <a href={influencer.swagg.teeSpring} target="_blank">
                                         <img src={teeSpringIcon} alt="Teespring" className="social-img"/>
                                         <p className="social-text">{influencer.swagg.teeSpring}</p>
-                                    </Link>
+                                    </a>
                                 </li>
                                 }
                                 {influencer.swagg.printful && 
                                 <li className="social-media-container">
-                                    <Link to={influencer.swagg.teeSpring}>
+                                    <a href={influencer.swagg.teeSpring} target="_blank">
                                         <img src={printfulIcon} alt="Printful" className="social-img"/>
                                         <p className="social-text">{influencer.swagg.printful}</p>
-                                    </Link>
+                                    </a>
                                 </li>
                                 }
                             </ul>
