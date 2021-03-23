@@ -25,7 +25,7 @@ const BioPage = (props) =>{
     let published = new Date('2021-03-01')
     const publishedISO = published.toISOString()
     const slug = props.match.params.username
-    let pageName = `Influencer + Vlogger ${slug.replaceAll("-", " ")} on The Smoke Show`
+    let pageName = `Influencer + Vlogger ${slug.replace("-", " ")} on The Smoke Show`
 
     let influencerId;
     const name = props.match.params.username
@@ -57,7 +57,7 @@ const BioPage = (props) =>{
 
             try {
                 const mongoCollection = mongo.db("smoke-show").collection("influencers");
-                const replaced = name.replaceAll('-', ' ')
+                const replaced = name.replace('-', ' ')
                 const filter = {username: replaced} 
                 await mongoCollection.findOne(filter).then( async res =>{
                     setInfluencer(res)
@@ -162,7 +162,7 @@ const BioPage = (props) =>{
     return(
         <Layout>
             <Helmet>
-                <title>Influencer {name.replaceAll("-", " ")} Featured Page | The Smoke Show</title>
+                <title>Influencer {name.replace("-", " ")} Featured Page | The Smoke Show</title>
                 <meta name="description" content={influencer && influencer.desc} />
                 <link rel="canonical" href={`https://thesmokeshow.com/influencer/${name}`} />
                 <script type="application/ld+json">

@@ -27,7 +27,7 @@ const CarStatsListsMake = () =>{
                     <Col sm={4} className="list-pd">
                         <ul style={{listStyle: 'none'}}>
                         {chunk1 && chunk1.map(make =>{
-                            const replaced = make.replaceAll(" ", "-")
+                            const replaced = make.replace(" ", "-")
                             return(
                                 <Link to={`/car-stats/${replaced.toLocaleLowerCase()}`} key={make}>
                                     <li>{make}</li>
@@ -39,7 +39,7 @@ const CarStatsListsMake = () =>{
                     <Col sm={4} className="list-pd">
                         <ul style={{listStyle: 'none'}}>
                         {chunk2 && chunk2.map(make =>{
-                            const replaced = make.replaceAll(" ", "-")
+                            const replaced = make.replace(" ", "-")
                             return(
                                 <Link to={`/car-stats/${replaced.toLocaleLowerCase()}`} key={make}>
                                     <li>{make}</li>
@@ -51,7 +51,7 @@ const CarStatsListsMake = () =>{
                     <Col sm={4} className="list-pd">
                         <ul style={{listStyle: 'none'}}>
                         {chunk3 && chunk3.map(make =>{
-                            const replaced = make.replaceAll(" ", "-")
+                            const replaced = make.replace(" ", "-")
                             return(
                                 <Link to={`/car-stats/${replaced.toLocaleLowerCase()}`} key={make}>
                                     <li >{make}</li>

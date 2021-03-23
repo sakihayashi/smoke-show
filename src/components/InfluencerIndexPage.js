@@ -118,7 +118,7 @@ const InfluencerIndexPage = () =>{
                 {influencers && influencers.map(influencer =>{
                     const unique = short.generate()
                     let username = influencer.username
-                    const replaced = username.replaceAll(' ', '-')
+                    const replaced = username.replace(' ', '-')
                     return(
                         <Col sm={6} md={4} key={unique} className="bottom-space">
                             <Card className="card-influencer" >
