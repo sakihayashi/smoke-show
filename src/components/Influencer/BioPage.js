@@ -16,7 +16,7 @@ import moment from 'moment'
 const SpecDiv = loadable(() => import('../SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
 const SubNav = loadable(() => import('./SubNav'))
-const VideoDiv = loadable(()=> import('../VideoDiv'))
+// const VideoDiv = loadable(()=> import('../VideoDiv'))
 
 const BioPage = (props) =>{
     const videoWatchURL = 'https://www.youtube.com/watch?v='
@@ -220,13 +220,14 @@ const BioPage = (props) =>{
                 <Row className="bio-main-row">
                     <Col sm={6}>
                         <div className="videoWrapper">
-                            <iframe src={ featured ? videoEmbedURL + featured.videoId : ''}
-                            frameBorder='0'
-                            allow='autoplay; encrypted-media'
-                            allowFullScreen
-                            title='video'
-                            />
-                            
+                        {featured && 
+                            <ReactPlayer
+                                width="560" 
+                                height="315"
+                                url={videoWatchURL + featured.videoId}
+                                controls={true}
+                                />
+                        }
                         </div>
                         <h3 style={{marginTop:'10px'}}>{featured && featured.snippet.title}</h3>
                         <small>{featured && moment(featured.snippet.publishedAt).fromNow()}</small>
