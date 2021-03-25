@@ -4,13 +4,15 @@ import { Navbar, Nav, Button} from 'react-bootstrap'
 import Logo from '../../assets/global/Logo-smoke-show.png'
 import './header.scss'
 import * as Realm from "realm-web"
-import LoginModal from './LoginModal'
-import SignUpModal from './SignUpModal'
 import { connect } from 'react-redux'
 import { logOutUser } from '../../store/actions/authActions'
 import { logInUser } from '../../store/actions/authActions'
 import { openLoginModal } from '../../store/actions/authActions'
 import { updateProfilePage } from '../../store/actions/userActions'
+import loadable from '@loadable/component'
+
+const LoginModal = loadable(() => import('./LoginModal'))
+const SignUpModal = loadable(() => import('./SignUpModal'))
 
 const Header = (props) =>{
     let history = useHistory();

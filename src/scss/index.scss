@@ -301,6 +301,91 @@ label{
 .main-height{
   min-height: calc(100vh - 21rem);
 }
+// video styles
+.acd-input {
+  display: none;
+}
+.acd-label {
+  display: block;    
+  padding: 8px 0;
+  margin: 0 0 1px 0;
+  cursor: pointer;
+
+  color: $theme-color;
+  transition: ease .5s;
+  text-decoration: underline;
+  position: relative;
+  top: 3rem;
+}
+.acd-label::after {
+  content: ' more';
+}
+.acd-input:checked + .acd-label::after {
+  content: ' less';
+}
+.acd-input:checked + .acd-label{
+  top: 1rem;
+}
+.acd-label:hover {
+  background: transparent;
+}
+.content {
+  padding: 10px 0;
+  margin: 0 0 1px 0;
+}
+.acd-input:checked + .acd-label{
+  top: 1rem;
+}
+.acd-input + .acd-label + .desc-box + .content {
+  display: none;
+}
+.acd-input:checked + .acd-label + .desc-box + .content {
+  display: block;
+  .acd-wrapper:first-child & {
+      background-color: white;
+      margin-top: -5rem;
+  }
+}
+.acd-input:checked + .acd-label + .desc-box{
+  display: none;
+}
+.acd-input:checked + .acd-label + .desc-box-featured{
+  display: none;
+}
+.desc-box{
+  margin-top: -2rem;
+  width: 100%;
+  max-height: 2.6rem;
+  overflow: hidden;
+  display: block;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+.desc-box-featured{
+  margin-top: -2rem;
+  width: 100%;
+  max-height: 2.6rem;
+  overflow: hidden;
+  display: block;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+.desc-box-expanded{
+  width: 100%;
+  margin-top: 1rem;
+  overflow: visible;
+  // background-color: white;
+  // height: auto;
+  font-size: 14px;
+  background-color: aliceblue;
+  font-size: 14px;
+  /* height: 2.6rem; */
+  position: absolute;
+  z-index: 100;
+  top: 22rem;
+}
 @media (min-width: 576px) { 
   .main-wrapper{
     padding: 0;

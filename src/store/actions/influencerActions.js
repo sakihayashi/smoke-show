@@ -7,7 +7,7 @@ const appConfig = {
     // timeout in number of milliseconds
   };
 const app = new Realm.App(appConfig);
-const maxAgeTest = 1 * 60 * 60
+// const maxAgeTest = 1 * 60 * 60
 
 export const getInfluencer = (influencerId) =>{
     let formattedFans
@@ -27,12 +27,6 @@ export const getInfluencer = (influencerId) =>{
                 const data = {user: influencer, numOfFans: formattedFans}
                 dispatch({type: 'GET_INFLUENCER', data})
             })
-            // console.log('fans', fansCount)
-            // if(fansCount > 999){
-            //     formattedFans = Math.sign(fansCount)*((Math.abs(fansCount)/1000).toFixed(1)) + 'k'
-            // }else{
-            //     formattedFans = Math.sign(fansCount)*Math.abs(fansCount)
-            // }
             
         }).catch(err =>{
             console.log(err)

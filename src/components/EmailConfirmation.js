@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Form } from 'react-bootstrap'
-// import Logo from '../assets/global/Logo-smoke-show.png'
 import * as Realm from "realm-web"
 import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import Layout from './Layout/Layout'
-// import { openLoginModal } from '../store/actions/authActions'
 import axios from 'axios'
 
 const EmailConfirmation = (props) =>{

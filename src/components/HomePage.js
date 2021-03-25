@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 
 import Layout from './Layout/Layout'
 import '../scss/spinner.css'
+import '../scss/index.scss'
 import './homepage.scss'
 import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"

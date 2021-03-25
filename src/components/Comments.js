@@ -205,7 +205,6 @@ const Comments = (props) =>{
          if(tokenUser){
             jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
-                    // setIsLoggedIn(false)
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
                     getComments(credentials)
                 }else{
@@ -215,7 +214,6 @@ const Comments = (props) =>{
             });
             
          }else{
-            // setIsLoggedIn(false)
             const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
                     getComments(credentials)
          }
@@ -228,11 +226,6 @@ const Comments = (props) =>{
             const unique = short.generate()
             {/* var localtime = moment(comment.date_posted).local().format('MM-DD-YYYY') */}
             let localtime = moment(comment.date_posted).fromNow()
-            {/* if(comment.profileThumb === 'https://s3.amazonaws.com/smokeshow.users/default/avator-thumb.jpg'){
-                isPicSet = false
-            }else{
-                isPicSet = true
-            } */}
             return(
                 <Row className="comment-wrapper" key={unique}>
                     {/* <VisibilitySensor onChange={onChange}> */}

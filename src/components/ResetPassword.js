@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import * as Realm from "realm-web"
-// import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import Layout from './Layout/Layout'
 import { Helmet } from 'react-helmet'

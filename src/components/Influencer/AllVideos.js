@@ -69,8 +69,7 @@ const AllVideos = (props) =>{
     const attachCarData = async (chunk, num) =>{
         
        setVideoArr([])
-        // try{
-        //     await app.logIn(credentials).then( user =>{
+
                 const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionCars = mongo.db("smoke-show").collection("cars")
                 const collectionManual = mongo.db("smoke-show").collection("cars-manual")
@@ -363,26 +362,15 @@ const AllVideos = (props) =>{
                                 
                                 <Row className="video-row">
                                     <Col sm >
-                                    <div className="videoWrapper">
-                                        <ReactPlayer
-                                        width="560" 
-                                        height="315"
-                                        url={videoWatchURL + video.videoId}
-                                        controls={true}
-                                        />
-                                    </div>
-                                    
-                                    {/* <VideoDiv video={video} videoId={id}/> */}
-                                        {/* <div className="videoWrapper">
-                                            <iframe src={videoEmbedURL + id}
-                                                    frameBorder='0'
-                                                    allow='autoplay; encrypted-media'
-                                                    allowFullScreen
-                                                    loading='lazy'
-                                                    title={video.snippet.title}
+                                        <div className="videoWrapper">
+                                            <ReactPlayer
+                                            width="560" 
+                                            height="315"
+                                            url={videoWatchURL + video.videoId}
+                                            controls={true}
                                             />
-                                            
-                                        </div> */}
+                                        </div>
+                                    
                                         <div className="video-title-div" dangerouslySetInnerHTML={{__html: video.snippet.title}} />
                                         <Row className="comment-wrapper" >
                                             <div className="col-1" style={{margin:0,padding:0}} >
@@ -411,7 +399,7 @@ const AllVideos = (props) =>{
                                         </Row>
                                         
                                         <div className="spacer-4rem"></div>
-                                            <Comments videoId={id} />
+                                        <Comments videoId={id} />
                                         
                                     </Col>
                                     <Col sm="auto"  className="spec-col"  >

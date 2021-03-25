@@ -8,7 +8,6 @@ import './bioPage.scss'
 import ReactPlayer from 'react-player/lazy'
 
 import Layout from '../Layout/Layout'
-// import SubNav from './SubNav'
 import jwt from 'jsonwebtoken'
 import loadable from '@loadable/component'
 import moment from 'moment'
@@ -16,7 +15,6 @@ import moment from 'moment'
 const SpecDiv = loadable(() => import('../SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
 const SubNav = loadable(() => import('./SubNav'))
-// const VideoDiv = loadable(()=> import('../VideoDiv'))
 
 const BioPage = (props) =>{
     const videoWatchURL = 'https://www.youtube.com/watch?v='
@@ -40,7 +38,7 @@ const BioPage = (props) =>{
 
     const [formattedFans, setFormattedFans] = useState('')
 
-    const videoEmbedURL = 'https://www.youtube.com/embed/'
+    // const videoEmbedURL = 'https://www.youtube.com/embed/'
  
     const [latestVideos, setLatestVideos] = useState([])
     const appConfig = {

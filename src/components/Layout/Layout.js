@@ -1,11 +1,15 @@
 import React, { useState, useEffect  } from 'react'
-import Header from './Header'
-import Footer from './Footer'
+// import Header from './Header'
+// import Footer from './Footer'
 import { withRouter } from "react-router"
 import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import { updateLogin, logInAsPublic } from '../../store/actions/authActions'
-const HeaderWithRouter = withRouter(Header);
+import loadable from '@loadable/component'
+
+const Header = loadable(() => import('./Header'))
+const Footer = loadable(() => import('./Footer'))
+const HeaderWithRouter = withRouter(Header)
 
 const Layout = (props) =>{
     // const [modalShow, setModalShow] = useState(false)

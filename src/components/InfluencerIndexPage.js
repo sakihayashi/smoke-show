@@ -10,6 +10,9 @@ import jwt from 'jsonwebtoken'
 import noImg from '../assets/global/no_image.jpg'
 import short from 'short-uuid'
 import Logo from '../assets/global/Logo-smoke-show.png'
+import loadable from '@loadable/component'
+
+const InfluCard = loadable(() => import('./InfluCard'))
 
 const InfluencerIndexPage = () =>{
     let today = new Date()
@@ -19,8 +22,6 @@ const InfluencerIndexPage = () =>{
     const slug = 'influencers'
     const pageName = 'All Influencers and Vloggers'
 
-    const videoEmbedURL = 'https://www.youtube.com/embed/'
-
     const [influencers, setInfluencers] = useState([])
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -29,7 +30,6 @@ const InfluencerIndexPage = () =>{
       };
     const app = new Realm.App(appConfig);
    
-
     const getInfluencers = async (credentials) =>{
 
         try{
@@ -51,7 +51,7 @@ const InfluencerIndexPage = () =>{
     }
 
     useEffect(() => {
-        let token = sessionStorage.getItem('session_token')
+        let token = sessionStorage.getItem('session_user')
         if(token){
             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
@@ -59,10 +59,7 @@ const InfluencerIndexPage = () =>{
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
                     getInfluencers(credentials)
                 }else{
-                    const tokenUser = sessionStorage.getItem('session_user')
-             
-                    const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
-                    getInfluencers(credentials.cre)
+                    getInfluencers(decoded.cre)
                 }
             });
             
@@ -120,35 +117,7 @@ const InfluencerIndexPage = () =>{
                     let username = influencer.username
                     const replaced = username.replace(' ', '-')
                     return(
-                        <Col sm={6} md={4} key={unique} className="bottom-space">
-                            <Card className="card-influencer" >
-                                <div className="videoWrapper">
-                                        <iframe src={videoEmbedURL + influencer.featuredVideo.id}
-                                                frameBorder='0'
-                                                allow='autoplay; encrypted-media'
-                                                allowFullScreen
-                                                title='video'
-                                        />
-                                </div>
-                                <Card.Body>
-                                    <Card.Title>{influencer.username}</Card.Title>
-                                    <Card.Text className="influencer-desc">{influencer.desc}</Card.Text>
-                                    <Link 
-                                    to={{
-                                        pathname: `/influencer/${replaced}`,
-                                        state: { influencer: influencer }
-                                        // influencer: influencer
-                                    }}
-                                    // activeStyle={{
-                                    //     color: "gray"
-                                    // }}
-                                    >
-                                        <Button className="login-btn">See {influencer.username}'s Bio</Button>
-                                    </Link>
-                                    
-                                </Card.Body>
-                            </Card>
-                        </Col>
+                        <InfluCard unique={unique} influencer={influencer} replaced={replaced}/>
                     )
                     
                 })}
@@ -157,28 +126,13 @@ const InfluencerIndexPage = () =>{
                                 <div className="videoWrapper">
                                 <img src={noImg} alt="coming soon" style={{width: '100%'}}/>
                                 <img src={Logo} className="overlay-logo"/>
-                                        {/* <iframe src={videoEmbedURL + influencer.featuredVideo.id}
-                                                frameBorder='0'
-                                                allow='autoplay; encrypted-media'
-                                                allowFullScreen
-                                                title='video'
-                                        /> */}
+                                       
                                 </div>
                                 <Card.Body>
                                     <Card.Title>More Coming Soon!</Card.Title>
                                     <Card.Text className="influencer-desc">Check back here as we grow Influencers on The Smoke Show!<br/><br/>
                                     <Link to="/about"><span>Want your content featured too? </span></Link>
                                     </Card.Text>
-                                    {/* <NavLink 
-                                    to={{
-                                        pathname: `/influencer/${influencer.userId}`,
-                                        state: { influencer: influencer }
-                                        // influencer: influencer
-                                    }}
-                                    activeStyle={{
-                                        color: "gray"
-                                    }}
-                                    > */}
                                     <Link to="/about">
                                     <Button className="login-btn" >More details here</Button>
                                     </Link>
@@ -196,7 +150,6 @@ const InfluencerIndexPage = () =>{
     )
 }
 const mapStateToProps = (state) => {
-    //syntax is propName: state.key of combineReducer.key
     return{
       username: state.user.username,
     }

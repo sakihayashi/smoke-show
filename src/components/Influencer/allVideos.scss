@@ -1,39 +1,6 @@
 @import "../../scss/config";
 
-.desc-box{
-    margin-top: -2rem;
-    width: 100%;
-    max-height: 2.6rem;
-    overflow: hidden;
-    display: block;
-    font-size: 14px;
-    overflow-wrap: anywhere;
-    word-break: break-all;
-}
-.desc-box-featured{
-    margin-top: -2rem;
-    width: 100%;
-    max-height: 2.6rem;
-    overflow: hidden;
-    display: block;
-    font-size: 14px;
-    overflow-wrap: anywhere;
-    word-break: break-all;
-}
-.desc-box-expanded{
-    width: 100%;
-    margin-top: 1rem;
-    overflow: visible;
-    // background-color: white;
-    // height: auto;
-    font-size: 14px;
-    background-color: aliceblue;
-    font-size: 14px;
-    /* height: 2.6rem; */
-    position: absolute;
-    z-index: 100;
-    top: 22rem;
-}
+
 .wrap-text-desc{
     overflow-wrap: anywhere;
 }
@@ -104,30 +71,28 @@
 //     border: 1px solid #ccc;
 // }
 
-.acd-input {
-    display: none;
-}
-.acd-label {
-    display: block;    
-    padding: 8px 0;
-    margin: 0 0 1px 0;
-    cursor: pointer;
+// .acd-input {
+//     display: none;
+// }
+// .acd-label {
+//     display: block;    
+//     padding: 8px 0;
+//     margin: 0 0 1px 0;
+//     cursor: pointer;
 
-    color: $theme-color;
-    transition: ease .5s;
-    text-decoration: underline;
-    position: relative;
-    top: 3rem;
-}
+//     color: $theme-color;
+//     transition: ease .5s;
+//     text-decoration: underline;
+//     position: relative;
+//     top: 3rem;
+// }
 // .acd-label::after {
 //     content: ' more';
 // }
 .desc-box::after{
     content: ' more';
 }
-.desc-box-featured::after{
-    content: ' more';
-}
+
 .acd-input:checked + .acd-label{
     top: 1rem;
 }
@@ -145,9 +110,7 @@
 .acd-input + .acd-label + .desc-box + .content {
     display: none;
 }
-.acd-input + .acd-label + .desc-box-featured + .content {
-    display: none;
-}
+
 .acd-input:checked + .acd-label + .desc-box + .content {
     display: block;
     overflow-wrap: anywhere;
@@ -156,18 +119,9 @@
         margin-top: -5rem;
     }
 }
-.acd-input:checked + .acd-label + .desc-box-featured + .content {
-    display: block;
-    overflow-wrap: anywhere;
-    .acd-wrapper:first-child & {
-        background-color: white;
-        margin-top: -5rem;
-    }
-}
+
 .acd-input:checked + .acd-label + .desc-box{
     display: none;
 }
 
-.acd-input:checked + .acd-label + .desc-box-featured{
-    display: none;
-}
+

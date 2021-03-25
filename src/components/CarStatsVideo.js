@@ -16,7 +16,6 @@ import { Helmet } from 'react-helmet'
 const CarStatsCard = loadable(() => import('./CarStatsCard'))
 const VideoDiv = loadable(()=> import('./VideoDiv'))
 
-
 const CarStatsVideo = (props) =>{
     const statsArr = ['Main Stats', 'Engine', 'Measurements', 'Comfort & Convenience', 'Drive Train', 'Suspension', 'Color', 'Warranty']
     const [carImages, setCarImages] = useState([])

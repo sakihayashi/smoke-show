@@ -65,17 +65,19 @@
   .acd-input {
     display: none;
 }
-.acd-label {
-    display: block;    
-    padding: 8px 0;
-    margin: 0 0 1px 0;
-    cursor: pointer;
-    // background: #6AAB95;
-    // border-radius: 3px;
-    color: $theme-color;
-    transition: ease .5s;
-    text-decoration: underline;
+.acd-input {
+    display: none;
 }
+
+// .acd-label {
+//     display: block;    
+//     padding: 8px 0;
+//     margin: 0 0 1px 0;
+//     cursor: pointer;
+//     color: $theme-color;
+//     transition: ease .5s;
+//     text-decoration: underline;
+// }
 .acd-label::after {
     content: ' more';
 }
@@ -92,6 +94,23 @@
 .acd-input + .acd-label + .content {
     display: none;
 }
+.desc-box-featured::after{
+    content: ' more';
+}
+.acd-input:checked + .acd-label + .desc-box-featured + .content {
+    display: block;
+    overflow-wrap: anywhere;
+    .acd-wrapper:first-child & {
+        background-color: white;
+        margin-top: -5rem;
+    }
+}
+.acd-input:checked + .acd-label + .desc-box-featured{
+    display: none;
+}
+.acd-input + .acd-label + .desc-box-featured + .content {
+    display: none;
+}
 .acd-input:checked + .acd-label + .content {
     display: block;
     .acd-wrapper:first-child & {
@@ -103,7 +122,7 @@
     display: none;
 }
 .desc-box{
-    margin-top: 1rem;
+    // margin-top: 1rem;
     width: 100%;
     max-height: 2.6rem;
     overflow: hidden;
