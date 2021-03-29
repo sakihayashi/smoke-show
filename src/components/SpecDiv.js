@@ -8,7 +8,7 @@ import weightIcon from '../assets/global/weight.svg'
 import { Link } from 'react-router-dom'
 
 const SpecDiv = (props) =>{
-    const { video } = props
+    const { video, weight } = props
     // const goToStatsPage = () =>{
     //     props.history.push()
     // }
@@ -24,7 +24,7 @@ const SpecDiv = (props) =>{
                 <img alt="price" src={priceIcon} className="icon-s" /><span className="spec-text" loading="lazy" >{' '}${props.price}</span><br />
                 <img alt="power " src={powerIcon} className="icon-s" /><span  className="spec-text" loading="lazy">{' '}{video.carData.features.Engine.Torque}</span><br />
                 <img alt="piston" src={pistonIcon}  className="icon-s" loading="lazy" /><span className="spec-text">{' '}{video.carData.features.Engine.Horsepower}</span><br />
-                <img alt="weight" src={weightIcon} style={{padding: '2px'}}   className="icon-s" loading="lazy" /><span className="spec-text">{' '}{video.carData.features.Measurements ? video.carData.features.Measurements["Curb weight"] : 'N/A'}</span><br />
+                <img alt="weight" src={weightIcon} style={{padding: '2px'}}   className="icon-s" loading="lazy" /><span className="spec-text">{' '}{weight ? weight : 'N/A'}</span><br />
                 {/* <img alt="mileage" src={mileageIcon} style={{padding: '2px'}}  className="icon-s" loading="lazy" /><span className="spec-text">{' '}{video.carData.features["Fuel"]["EPA mileage est"][' (cty/hwy)']}</span><br /> */}
                 <Link 
                 to={{

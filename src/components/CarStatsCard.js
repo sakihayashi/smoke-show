@@ -7,9 +7,7 @@ const CarStatsCard = (props) =>{
     const maker = car.make.toUpperCase()
     const model = car.model.toUpperCase()
     let carImg = 'https://smoke-show.s3.amazonaws.com/car-photos/Ferrari-F8_Spider-2020-1280-01.jpg'
-    // https://thesmokeshow.s3.amazonaws.com/bugatti/2006/Veyron16.4_2dr+Coupe+AWD+(8.0L+16cyl+Turbo+7A).jpg
-    // https://d32cnvod31xbse.cloudfront.net
-    // https://s3.amazonaws.com/thesmokeshow
+  
     if(car.imgUrl){
         if(car.imgUrl.includes('s3.amazonaws.com/thesmokeshow')){
             

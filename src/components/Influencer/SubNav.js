@@ -94,11 +94,11 @@ const SubNav = (props) =>{
     }, [influencer.userId])
 
     return(
-        <Fragment>
+        <Fragment >
             <div className="banner-wrapper">
                 <img src={influencer.profileCover} alt={props.influencer.username} className="influencer-banner"/>
             </div>
-            <Row>
+            <Row >
                 <Col style={{paddingRight:0}}>
                 <img src={influencer.profilePic} className="bio-profile-pic" alt={`${influencer.username} profile picture`}/>
                 </Col>

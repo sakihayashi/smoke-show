@@ -179,12 +179,18 @@ const [isLoading, setIsloading] = useState(false)
                         const str = video.carData.model
                         const id = video.videoId
                         let linkUsername = ''
+                        let weight = video.carData.features.Measurements["Curb weight"]
                         if(video.userId === '602303890ff2832f7d19a2af'){
                             linkUsername = 'Lexurious-Fleet'
                         }else if(video.userId === '60230361f63ff517d4fdad14'){
                             linkUsername = 'EddieX'
                         }else{
                             console.log('you have to add new user')
+                        }
+                        if(weight){
+                            weight = numberWithCommas(weight)
+                        }else{
+                            weight= 'N/A'
                         }
                         const model = str.charAt(0).toUpperCase() +str.slice(1)
                         const name = video.carData.make
@@ -248,7 +254,7 @@ const [isLoading, setIsloading] = useState(false)
                                         <Col sm="auto" className="spec-col"  >
                                         <div style={{minWidth: '160px'}}>
                                         
-                                            <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId}/>
+                                            <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
                                             {/* <div className="ad-container">
                                             
                                             

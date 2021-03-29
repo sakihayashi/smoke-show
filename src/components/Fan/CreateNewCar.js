@@ -1,11 +1,14 @@
 import React, { useState, Fragment } from 'react'
 import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 import * as Realm from "realm-web"
-import ImageUpload from './ImageUpload'
+// import ImageUpload from './ImageUpload'
 import jwt from 'jsonwebtoken'
 import short from 'short-uuid'
 import { createMyCar } from '../../store/actions/bioActions'
 import { connect } from 'react-redux'
+import loadable from '@loadable/component'
+
+const ImageUpload = loadable(() => import('../Global/ImageUpload'))
 
 const CreateNewCar = (props) =>{
     const bucketName = process.env.REACT_APP_AWS_BUCKET_NAME;

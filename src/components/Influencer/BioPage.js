@@ -11,6 +11,7 @@ import Layout from '../Layout/Layout'
 import jwt from 'jsonwebtoken'
 import loadable from '@loadable/component'
 import moment from 'moment'
+import { switchTabs } from '../functionsStats'
 
 const SpecDiv = loadable(() => import('../SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
@@ -215,6 +216,7 @@ const BioPage = (props) =>{
                 <SubNav influencer={influencer} formattedFans={formattedFans} username={name}/>
 
                 <div className="spacer-2rem"></div>
+                <h2 className="title">Newest Vlog</h2>
                 <Row className="bio-main-row">
                     <Col sm={6}>
                         <div className="videoWrapper">
@@ -233,9 +235,13 @@ const BioPage = (props) =>{
                                 }
                     </Col>
                     <Col sm={6}>
-                        <Row>
-                            <Col sm>
+                        {/* <Row>
+                            <Col sm> */}
                             <div className="bio-desc-wrapper">
+                                <div className="stats-bio">
+                                    {featured && switchTabs(featured.carData, 'Main Stats')}
+                                </div>
+                                <div className="spacer-2rem"></div>
                                 <input className="acd-input" type="checkbox" id={`title-featured`} />
                                         
                                 <label className="show-label" htmlFor={`title-featured`} className="acd-label">Show </label>
@@ -245,25 +251,22 @@ const BioPage = (props) =>{
                                 <div className="content">
                                     <small className="wrap-text-desc">{featured && featured.snippet.description}</small>
                                 </div>
-                                <div className="spacer-4rem"></div>
-                                {/* {featured && <Comments videoId={featured.videoId} />
-                                } */}
-                                
                             </div>
-                            </Col>
-                            <Col sm="auto" className="bio-stats">
-                            {featured && 
+                            {/* </Col>
+                            <Col sm="auto" className="bio-stats"> */}
+                            
+                            {/* {featured && 
                                 <SpecDiv titleCase={featured.makeTitle} price={featured.price} video={featured} dataid={featured.carDataId} model={featured.modelTitle}/>
-                            }
+                            } */}
                                 
-                            </Col>
-                        </Row>
+                            {/* </Col>
+                        </Row> */}
                         
                         
                     </Col>
                 </Row>
                 <div className="spacer-4rem"></div>
-                <h2 className="title">New This Week</h2>
+                <h2 className="title">Recent Vlogs</h2>
                 <Row className="bio-main-row">
                 { latestVideos && 
                     latestVideos.map((video, index) =>{
@@ -274,9 +277,16 @@ const BioPage = (props) =>{
                         const date = moment(video.snippet.publishedAt).fromNow()
                         let price;
                         const car = video.carData
+                        let weight = video.carData.features.Measurements["Curb weight"]
+                        
                         if(video.carData.price && video.carData.price.baseMSRP){
                             price = numberWithCommas(video.carData.price.baseMSRP)
                         }else{ price = ''}
+                        if(weight){
+                            weight = numberWithCommas(weight)
+                        }else{
+                            weight= 'N/A'
+                        }
                         return (
                         <Fragment key={video.videoId}>
                         <Col sm={6} >
@@ -317,7 +327,7 @@ const BioPage = (props) =>{
                             <Col sm="auto" className="bio-stats">
                                 <div className="ad-size">
                       
-                                <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId}/>
+                                <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
                                 {/* <div className="ad-container">
                                     <p style={{color: 'gray'}}>ads will go here</p>
                                     <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>

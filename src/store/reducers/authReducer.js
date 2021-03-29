@@ -4,7 +4,7 @@ const initState = {
     isLoggedIn: false,
     customData: {},
     hasLoginErr: false,
-    mongo: null,
+    // mongo: null,
     isPublicView: false,
     openmodal: false,
     modalMsg: '',
@@ -42,11 +42,11 @@ const authReducer = (state = initState, action) =>{
                 isLoggedIn: false,
                 customData: {}
             }
-        case 'LOGIN_CHECK':
-            return{
-                ...state,
-                mongo: action.mongo
-            }
+        // case 'LOGIN_CHECK':
+        //     return{
+        //         ...state,
+        //         mongo: action.mongo
+        //     }
         case 'LOGIN_PUBLIC':
             return{
                 ...state,

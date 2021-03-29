@@ -1,16 +1,6 @@
 @import "../../scss/config";
 
-.bio-profile-pic{
-    width: 70px;
-    height: 70px;
-    border-radius: 35px;
-}
-.bio-creator-name{
-    font-size: $font-l;
-    font-weight: 600;
-    color: $black;
-    // margin-left: 20px;
-}
+
 .bio-creator-data{
     font-size: $font-m;
     color: $gray;
@@ -19,36 +9,18 @@
 .bio-text-wrapper{
     margin: auto;
 }
-.banner-wrapper{
-    width: 100%;
-    margin: 4rem 0 2rem 0;
-    
-  }
-  .bio-sub-menu{
-      margin: auto;
-      font-size: $font-m;
-      font-family: 'X-Heighting';
-      color: $black;
-    //   overflow-wrap: break-word;
-      flex-wrap: wrap;
-      ul{
-          margin: auto;
-          li{
-              display: inline;
-              margin-right: 20px;
-          }
-      }
-  }
+
+
   .bio-stats{
     margin-bottom: 2rem;
 }
 .bio-desc-wrapper{
     // background-color: $theme-lighter;
     height: 100%;
-    padding: 5px;
+    padding-right: 5px;
 }
 .bio-main-row{
-    overflow: hidden;
+    // overflow: hidden;
     padding: 0 -7px;
 }
 .bio-ad-container{
@@ -128,6 +100,11 @@
     overflow: hidden;
     display: block;
     font-size: 14px;
+}
+.stats-bio{
+    width: 100%;
+    box-shadow: 0 0 8px #ccc;
+    padding: 20px;
 }
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {

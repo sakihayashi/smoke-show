@@ -90,7 +90,6 @@ const VehicleCard = (props) =>{
                         await app.logIn(decoded.cre).then(async user =>{
                             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                             const collectionMyCars = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("my-cars")
-                            console.log('obj', props.car)
                             const oid = props.car._id.toString()
                             const currentUrl = props.car.imgUrl
                             const splitted = currentUrl.split('/');
@@ -274,7 +273,6 @@ const VehicleCard = (props) =>{
                             <img className="edit-icon" src={trashIcon} alt="Delete this car data"/>
                         </div>
                     </Fragment>
-                        
                     }
                         
                     </div>
@@ -286,10 +284,10 @@ const VehicleCard = (props) =>{
                 <Col sm={7} >
                     <div className="bio-car-contents">
                         <p>Name: {props.car.name}</p>
-                        <p>Upgrades: {props.car.upgrades}</p>
                         <p>Color: {props.car.color}</p>
                         <p>Wheels: {props.car.wheels}</p>
                         <p>Performance: {props.car.performance}</p>
+                        <p>Upgrades: {props.car.upgrades}</p>
                     </div>
                     
                 </Col>

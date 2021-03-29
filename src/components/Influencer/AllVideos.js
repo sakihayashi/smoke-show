@@ -352,9 +352,15 @@ const AllVideos = (props) =>{
                     const name = video.carData.make
                     const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
                     let price;
+                    let weight = video.carData.features.Measurements["Curb weight"]
                     if(video.carData.price && video.carData.price.baseMSRP){
                         price = numberWithCommas(video.carData.price.baseMSRP)
                     }else{ price = ''}
+                    if(weight){
+                        weight = numberWithCommas(weight)
+                    }else{
+                        weight= 'N/A'
+                    }
                     
                     return(
                         <Fragment key={unique} >
@@ -404,7 +410,7 @@ const AllVideos = (props) =>{
                                     </Col>
                                     <Col sm="auto"  className="spec-col"  >
                                     <div style={{minWidth: '160px'}}>
-                                    <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId}/>
+                                    <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
                                     </div>
                               
                                     </Col>

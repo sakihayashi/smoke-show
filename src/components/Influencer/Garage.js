@@ -16,7 +16,7 @@ import loadable from '@loadable/component'
 
 const SettingModal = loadable(() => import('./SettingModal'))
 const SubNav = loadable(() => import('./SubNav'))
-const VehicleCard = loadable(() => import('./vehicleCard'))
+const VehicleCard = loadable(() => import('../Global/vehicleCard'))
 const CreateNewCar = loadable(() => import('./CreateNewCar'))
 
 const Garage = (props) =>{
@@ -315,7 +315,7 @@ const Garage = (props) =>{
                 `}
         </script>
         </Helmet>
-        {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal} profileUser={profileUser} updateProfileData={updateProfileData} updateCarData={updateCarData} />}
+        {showAddCar && <CreateNewCar show={showAddCar} handleClose={handleCloseAddCarModal} profileUser={profileUser} updateProfileData={updateProfileData} updateCarData={updateCarData} getMyCars={getMyCars} />}
             {showSetting && <SettingModal show={showSetting} handleShowSetting={handleShowSetting} handleCloseSetting={handleCloseSetting} profileUser={profileUser}  updateProfileData={updateProfileData} updateUserDetails={updateUserDetails}/>}
             <div className="main-wrapper">
                 <div className="spacer-4rem"></div>

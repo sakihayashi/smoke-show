@@ -29,12 +29,12 @@ import Social from './components/Influencer/Social'
 import SwaggInfluencer from './components/Influencer/Swagg'
 // import QueryVideoData from './components/Admin/QueryVideoData'
 // import EditVideoData from './components/Admin/EditVideoData'
-import AddCarData from './components/Admin/AddCarData'
+// import AddCarData from './components/Admin/AddCarData'
 // import CheckCarData from './components/Admin/CheckCarData'
-import EditVideoDataKirk from './components/Admin/EditVideoDataKirk'
+// import EditVideoDataKirk from './components/Admin/EditVideoDataKirk'
 // import AllVideos from './components/Influencer/AllVideos'
-import Terms from './components/Terms'
-import Privacy from './components/Privacy'
+// import Terms from './components/Terms'
+// import Privacy from './components/Privacy'
 // import CarImgUpload from './components/Admin/CarImgUpload'
 // import UpdateDB from './components/Admin/UpdateDB'
 import CarStatsVideo from './components/CarStatsVideo'
@@ -55,6 +55,10 @@ const AllVideos = loadable(() => import('./components/Influencer/AllVideos'))
 const NotFoundPage = loadable(() => import('./components/NotFoundPage'))
 const QueryVideoData = loadable(() => import('./components/Admin/QueryVideoData'))
 const EditVideoData = loadable(() => import('./components/Admin/EditVideoData'))
+const AddCarData = loadable(() => import('./components/Admin/AddCarData'))
+const EditVideoDataKirk = loadable(() => import('./components/Admin/EditVideoDataKirk'))
+const Terms = loadable(() => import('./components/Terms'))
+const Privacy = loadable(() => import('./components/Privacy'))
 
 function App() {
 

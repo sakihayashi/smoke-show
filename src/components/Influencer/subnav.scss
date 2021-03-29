@@ -1,5 +1,10 @@
 @import "../../scss/config";
 
+.banner-wrapper{
+    width: 100%;
+    margin: 4rem 0 2rem 0;
+
+  }
 .btn-fan{
     background-color: $theme-color;
     border-color: $theme-color;
@@ -17,8 +22,33 @@
         // color: black !important;
     }
 }
+.bio-sub-menu{
+    margin: auto;
+    font-size: $font-m;
+    font-family: 'X-Heighting';
+    color: $black;
+  //   overflow-wrap: break-word;
+    flex-wrap: wrap;
+    ul{
+        margin: auto;
+        li{
+            display: inline;
+            margin-right: 20px;
+        }
+    }
+}
 
-
+.bio-profile-pic{
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+}
+.bio-creator-name{
+    font-size: $font-l;
+    font-weight: 600;
+    color: $black;
+    // margin-left: 20px;
+}
 .center-btn{
     margin-top: auto;
     margin-bottom: auto;

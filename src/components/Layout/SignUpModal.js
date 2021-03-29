@@ -20,9 +20,9 @@ const SignUpModal = (props) =>{
         setShow(false);
         props.openLoginModal(false)
     }
-    const handleShow = () =>{
-        setShow(true)
-    }
+    // const handleShow = () =>{
+    //     setShow(true)
+    // }
     // console.log('check from signin', props)
     const handleChange =(e) =>{
         setUserObj({
@@ -35,6 +35,7 @@ const SignUpModal = (props) =>{
         setHasError(false)
         const email = userObj.email.toLowerCase()
         if(userObj.password === userObj.password2){
+            
             try{
                 await getApp.emailPasswordAuth.registerUser(email, userObj.password).then(async res =>{
                   

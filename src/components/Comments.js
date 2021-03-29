@@ -199,8 +199,8 @@ const Comments = (props) =>{
        newArr[index] = false
        setMorePics(newArr)
     }
+
     useEffect( () => {
-        
         const tokenUser = sessionStorage.getItem('session_user')
          if(tokenUser){
             jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
@@ -320,7 +320,7 @@ const mapStateToProps = (state) => {
     return{
         loginUserData: state.auth.loginUserData,
         isLoggedIn: state.auth.isLoggedIn,
-        customData: state.auth.customData
+        customData: state.auth.customData,
     }
   }
 

@@ -1,9 +1,12 @@
 import React, { useState, Fragment } from 'react'
 import { Row, Col, Modal, Button, Form } from 'react-bootstrap'
 import * as Realm from "realm-web"
-import ImageUpload from './ImageUpload'
+// import ImageUpload from './ImageUpload'
 import jwt from 'jsonwebtoken'
 import short from 'short-uuid'
+import loadable from '@loadable/component'
+
+const ImageUpload = loadable(() => import('../Global/ImageUpload'))
 
 const CreateNewCar = (props) =>{
     const bucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
@@ -63,7 +66,6 @@ const CreateNewCar = (props) =>{
     }
 
  
-
     const handleSubmit = async (e) =>{
         e.preventDefault()
         const baseImgUrl = `https://s3.amazonaws.com/${process.env.REACT_APP_AWS_BUCKET_NAME}/`
@@ -92,7 +94,6 @@ const CreateNewCar = (props) =>{
                     try{
                         await collectionMyCars.insertOne(newCarData).then(async res =>{
                             console.log('res', res)
-                            console.log('inserted', res.insertedId)
                             await collectionInfluencer.updateOne(
                                 { "userId": app.currentUser.id },
                                 { $push: { myCars:  res.insertedId }},
@@ -112,18 +113,7 @@ const CreateNewCar = (props) =>{
                                     closeModal()
                                 })
                         })
-                    //     await mongoCollection.updateOne(
-                    //         { "userId": app.currentUser.id},
-                    //         {
-                    //          $push: { myCars: newCarData }
-                    //         }
-                    //         ).then(res =>{
-                    //             console.log('res', res)
-                    //             const oldArr = props.profileUser.myCars
-                    //             const cars = {myCars: oldArr.push(newCarData)}
-                    //             props.updateProfileData(cars, 'myCars')
-                    //             closeModal()
-                    //         })
+         
                     }catch(err){
                         console.log(err)
                     }
@@ -135,7 +125,6 @@ const CreateNewCar = (props) =>{
             console.log('warning current user and the login user do not match')
             const token = sessionStorage.getItem('session_user')
             const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
-        
             
             try{
                 await app.logIn(decoded.cre).then(user =>{
@@ -179,23 +168,6 @@ const CreateNewCar = (props) =>{
                 <Row className="bio-modal-inner-wrapper">
                     <Col sm={6} className="">
                     <ImageUpload fileObj={setImgData} />
-
-                    {/* <div {...getRootProps()} className="dropzone-wrapper">
-                        <input {...getInputProps()} />
-                        {
-                            isDragActive ?
-                            <p>Drop the files here ...</p> :
-                            <div className="drag-dropzone">
-                                <div className="bio-modal-container">
-                                    <img src={uploadIcon} alt="upload files here" />
-                                    <p>Drag and drop or click to upload an image</p>
-                                    <p>*3MB max image file size<br/>
-                                    *accepted file formats: jpg, png, gif</p>
-                                </div>
-
-                            </div>
-                        }
-                    </div> */}
                     
                     </Col>
                     <Col sm={6}>

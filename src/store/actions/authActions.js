@@ -98,34 +98,39 @@ export const logInAsCurrent = () =>{
     }
 }
 
-export const checkLogin = () =>{
-    const token = sessionStorage.getItem('session_user')
-    return (dispatch, getState)=>{
-        if(token){
-            jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
-                if(err){
-                    const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-                    app.logIn(credentials).then( user =>{
-                        const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                        dispatch({type: 'LOGIN_CHECK', mongo})
-                    })
-                }else{
-                    app.logIn(decoded.cre).then( user =>{
-                        const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                        dispatch({type: 'LOGIN_CHECK', mongo})
-                    })
-                }
-            })
-        }else{
-            const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-            app.logIn(credentials).then( user =>{
-                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                dispatch({type: 'LOGIN_CHECK', mongo})
-            })
-        }
-    }
+// export const checkLogin = () =>{
+//     const token = sessionStorage.getItem('session_user')
+//     return (dispatch, getState)=>{
+//         if(token){
+//             jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
+//                 if(err){
+//                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+//                     app.logIn(credentials).then( user =>{
+//                         if(user.id === app.currentUser.id){
+//                             console.log('user updated')
+//                         }else{
+//                             console.log('current user and logged in user do not match')
+//                         }
+//                         const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+//                         dispatch({type: 'LOGIN_CHECK', mongo})
+//                     })
+//                 }else{
+//                     app.logIn(decoded.cre).then( user =>{
+//                         const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+//                         dispatch({type: 'LOGIN_CHECK', mongo})
+//                     })
+//                 }
+//             })
+//         }else{
+//             const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+//             app.logIn(credentials).then( user =>{
+//                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+//                 dispatch({type: 'LOGIN_CHECK', mongo})
+//             })
+//         }
+//     }
 
-}
+// }
 
 export const authUser = (userData) =>{
     //with thunk, we can reutrn function but otherwise, return state

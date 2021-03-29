@@ -17,7 +17,7 @@ import jwt from 'jsonwebtoken'
 import moment from 'moment'
 import loadable from '@loadable/component'
 
-const VehicleCard = loadable(() => import('./vehicleCard'))
+const VehicleCard = loadable(() => import('../Global/vehicleCard'))
 const CreateNewCar = loadable(() => import('./CreateNewCar'))
 const SettingModal = loadable(() => import('./SettingModal'))
 
