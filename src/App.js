@@ -35,7 +35,7 @@ import SwaggInfluencer from './components/Influencer/Swagg'
 // import AllVideos from './components/Influencer/AllVideos'
 // import Terms from './components/Terms'
 // import Privacy from './components/Privacy'
-// import CarImgUpload from './components/Admin/CarImgUpload'
+import CarImgUpload from './components/Admin/CarImgUpload'
 // import UpdateDB from './components/Admin/UpdateDB'
 import CarStatsVideo from './components/CarStatsVideo'
 import CarStatsListsYear from './components/CarStatsListsYear'
@@ -100,7 +100,7 @@ function App() {
           {/* <Route exact path="/create-sitemap" component={CreateSiteMap} /> */}
 
           <Route path="/update-video" component={QueryVideoData} />
-          {/* <Route path="/img-upload" component={CarImgUpload} /> */}
+          <Route path="/img-upload" component={CarImgUpload} />
           <Route component={NotFoundPage} />
         </Switch>
     </Router>    

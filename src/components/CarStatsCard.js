@@ -16,7 +16,6 @@ const CarStatsCard = (props) =>{
         }else{
             carImg = car.imgUrl
         }
-        
     }
 
     return(
@@ -25,7 +24,6 @@ const CarStatsCard = (props) =>{
             <p className="theme-text-p">{car.name}</p>
             <Row style={{paddingRight: '3px'}}>
                 <Col sm={4}>
-                    
                     <img src={ carImg } alt={car.name} style={{width: '100%'}}/> 
                     {/* <img src={carImg} alt={car.name} style={{width: '100%'}}/> */}
                 </Col>

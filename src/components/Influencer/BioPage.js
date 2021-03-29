@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react'
 import { Helmet } from "react-helmet"
 import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import * as Realm from "realm-web"
 // import Avatar from 'react-avatar'
 import './bioPage.scss'
@@ -241,6 +242,17 @@ const BioPage = (props) =>{
                                 <div className="stats-bio">
                                     {featured && switchTabs(featured.carData, 'Main Stats')}
                                 </div>
+                                {featured && 
+                                    <Link 
+                                        to={{
+                                            pathname: `/car-stats/${featured.carData.make}/${featured.carData.year}/${featured.carData.model.toLowerCase()}/${featured.carData._id.toString()}`
+                                        }}
+                                        >
+                                        <div className="btn-spec">
+                                            See more stats
+                                        </div>
+                                    </Link>
+                                }
                                 <div className="spacer-2rem"></div>
                                 <input className="acd-input" type="checkbox" id={`title-featured`} />
                                         
@@ -251,6 +263,8 @@ const BioPage = (props) =>{
                                 <div className="content">
                                     <small className="wrap-text-desc">{featured && featured.snippet.description}</small>
                                 </div>
+                                <div className="spacer-2rem"></div>
+                                
                             </div>
                             {/* </Col>
                             <Col sm="auto" className="bio-stats"> */}

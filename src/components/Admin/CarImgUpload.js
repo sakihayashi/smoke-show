@@ -7,6 +7,7 @@ import { Container, Form, Button, Alert } from 'react-bootstrap'
 import jwt from 'jsonwebtoken'
 import * as Realm from "realm-web"
 import loadable from '@loadable/component'
+import { carsAllYear, carYears } from '../carTempData'
 
 const appConfig = {
     id: process.env.REACT_APP_REALM_APP_ID,
@@ -16,11 +17,11 @@ const app = new Realm.App(appConfig);
 
 const AdminLoginDiv = loadable(() => import('./AdminLoginDiv'))
 
-
 const CarImgUpload = (props) =>{
-    const carmake = 'lamborghini'
-    const caryear = '2016'
-    const year = 2016
+    // const carmake = 'lamborghini'
+    // const caryear = '2016'
+    const [carObj, setCarObj] = useState({make: '', year: null})
+    // const year = 2016
     const [userObj, setUserObj] = useState({email: '', password: ''})
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [msg, setMsg] = useState('')
@@ -31,7 +32,7 @@ const CarImgUpload = (props) =>{
     const [imgName, setImgName] = useState()
     const [carName, setCarName] = useState()
     const [resMsg, setResMsg] = useState()
-    const bucketName = process.env.REACT_APP_AWS_BUCKET_NAME_CAR
+    const bucketName = process.env.REACT_APP_BUCKET_NAME_CAR
     const baseUrl = 'https://s3.amazonaws.com/thesmokeshow'
 
     const changeUserObj = (e) =>{
@@ -39,6 +40,7 @@ const CarImgUpload = (props) =>{
             ...userObj,
             [e.target.name]: e.target.value
         })
+        
     }
     const picUpload = (e) =>{
 
@@ -64,18 +66,25 @@ const CarImgUpload = (props) =>{
         };
         reader.readAsDataURL(file)
     }
+    const handleChange = (e) =>{
+        setCarObj({
+            ...carObj,
+            [e.target.name]: e.target.value
+        })
+        console.log(e.target.value)
+    }
     const savePic = async () =>{
         console.log('pic', pic)
+        console.log(carObj)
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-        const collectionCars = mongo.db("smoke-show").collection("cars")
+        const collectionCars = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("cars")
 
-        const filekey = `/${carmake}/${caryear}/${imgName}`
+        const filekey = `/${carObj.make}/${carObj.year}/${imgName}`
         console.log(filekey)
-        console.log(carName)
         try {
-            await app.currentUser.functions.putImageObjToS3(imgBase64, 'thesmokeshow', filekey, pic.type).then(async res =>{
+            await app.currentUser.functions.putImageObjToS3(imgBase64, bucketName, filekey, pic.type).then(async res =>{
                 console.log(res)
-                const filter = {make: carmake, year: year, name: carName}
+                const filter = {make: carObj.make, year: Number(carObj.year), name: carName}
                 await collectionCars.findOne(filter).then(async data =>{
                     console.log('data', data)
                     console.log('_data', data._id)
@@ -94,13 +103,7 @@ const CarImgUpload = (props) =>{
         } catch (error) {
             console.log(error)
         }
-   
-        // if(result){
-        //     console.log(result)
-        //     setResMsg(true)
-        // }else{
-        //     console.log('fail')
-        // }
+
     }
     const handleSubmitLogin = async (e) =>{
         setMsg('')
@@ -153,6 +156,30 @@ const CarImgUpload = (props) =>{
                 <p>uploading url: {imgName && imgName}</p>
                 {resMsg && <Alert variant="success">Uploaded</Alert>}
                 <Form style={{width: '500px', margin: '2rem auto', }}>
+                    <Form.Group controlId="select1">
+                        <Form.Label>Example select</Form.Label>
+                        <Form.Control as="select" onChange={handleChange}>
+                        {carsAllYear && carsAllYear.map(car =>{
+                            return(
+                                <option name="make" value={car} key={car}>{car}</option>
+                            )
+                            
+                        })}
+                        </Form.Control>
+                    </Form.Group>
+                    <div className="spacer-2rem"></div>
+                    <Form.Group controlId="select1">
+                        <Form.Label>Example select</Form.Label>
+                        <Form.Control as="select" onChange={handleChange}>
+                        {carYears && carYears.map(year =>{
+                            return(
+                                <option name="year" value={year} key={year}>{year}</option>
+                            )
+                            
+                        })}
+                        </Form.Control>
+                    </Form.Group>
+                    <div className="spacer-2rem"></div>
                     <Form.Group>
                         <Form.File 
                         id="exampleFormControlFile1" 
