@@ -35,7 +35,7 @@ import SwaggInfluencer from './components/Influencer/Swagg'
 // import AllVideos from './components/Influencer/AllVideos'
 // import Terms from './components/Terms'
 // import Privacy from './components/Privacy'
-import CarImgUpload from './components/Admin/CarImgUpload'
+// import CarImgUpload from './components/Admin/CarImgUpload'
 // import UpdateDB from './components/Admin/UpdateDB'
 import CarStatsVideo from './components/CarStatsVideo'
 import CarStatsListsYear from './components/CarStatsListsYear'
@@ -46,6 +46,7 @@ import Loading from './components/Loading'
 const HomePage = loadable(() => import('./components/HomePage'), {
   fallback: <Loading />
 })
+
 const InfluencerIndexPage = loadable(() => import('./components/InfluencerIndexPage'))
 const BioPage = loadable(() => import('./components/Fan/BioPage'))
 const AboutPage = loadable(() => import('./components/AboutPage'))
@@ -59,6 +60,9 @@ const AddCarData = loadable(() => import('./components/Admin/AddCarData'))
 const EditVideoDataKirk = loadable(() => import('./components/Admin/EditVideoDataKirk'))
 const Terms = loadable(() => import('./components/Terms'))
 const Privacy = loadable(() => import('./components/Privacy'))
+const CarImgUpload = loadable(() => import('./components/Admin/CarImgUpload'), {
+  fallback: <Loading />
+})
 
 function App() {
 

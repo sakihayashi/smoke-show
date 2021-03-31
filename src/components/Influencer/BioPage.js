@@ -236,10 +236,14 @@ const BioPage = (props) =>{
                                 }
                     </Col>
                     <Col sm={6}>
-                        {/* <Row>
-                            <Col sm> */}
-                            <div className="bio-desc-wrapper">
-                                <div className="stats-bio">
+                    <div className="bio-featured-stats">
+                    {featured && <div className="bio-sub-title-wrapper">
+                                    <img alt={featured.carData.name} src={require(`../../assets/maker_logos/${featured.makeTitle}_Logo.png`).default}  className="icon-f" loading="lazy" />
+                                    <h3 className="sub-title" style={{fontSize: '1.75rem'}}>{featured.makeTitle} {' '}{featured.carData.year}{' '}{featured.modelTitle}</h3>
+                                 </div>
+                    }
+                            
+                                <div className="stats-div">
                                     {featured && switchTabs(featured.carData, 'Main Stats')}
                                 </div>
                                 {featured && 
@@ -248,11 +252,14 @@ const BioPage = (props) =>{
                                             pathname: `/car-stats/${featured.carData.make}/${featured.carData.year}/${featured.carData.model.toLowerCase()}/${featured.carData._id.toString()}`
                                         }}
                                         >
-                                        <div className="btn-spec">
+                                        <div className="btn-spec" style={{margin: '0 20px'}}>
                                             See more stats
                                         </div>
                                     </Link>
                                 }
+                        
+                                </div>
+                                <div className="bio-desc-wrapper">
                                 <div className="spacer-2rem"></div>
                                 <input className="acd-input" type="checkbox" id={`title-featured`} />
                                         

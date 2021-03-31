@@ -20,7 +20,7 @@ const AdminLoginDiv = loadable(() => import('./AdminLoginDiv'))
 const CarImgUpload = (props) =>{
     // const carmake = 'lamborghini'
     // const caryear = '2016'
-    const [carObj, setCarObj] = useState({make: '', year: null})
+    const [carObj, setCarObj] = useState({})
     // const year = 2016
     const [userObj, setUserObj] = useState({email: '', password: ''})
     const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -43,7 +43,7 @@ const CarImgUpload = (props) =>{
         
     }
     const picUpload = (e) =>{
-
+        console.log('car obj', carObj)
         const file = e.target.files[0] 
         console.log('file', file)
         let arr = file.name.split('_')
@@ -54,7 +54,8 @@ const CarImgUpload = (props) =>{
         const trimmed = str.slice(0, index)
         console.log('name?', trimmed.replaceAll("-", " "))
         // setCarName(trimmed.replaceAll("-", " "))
-        setCarName(trimmed)
+        const replaced = trimmed.replace(':', '/')
+        setCarName(replaced)
         // setImgName(file.name.replaceAll("-", " "))
         setImgName(file.name)
         setPic(e.target.files[0])
@@ -71,7 +72,12 @@ const CarImgUpload = (props) =>{
             ...carObj,
             [e.target.name]: e.target.value
         })
+        // setUserObj({
+        //     ...userObj,
+        //     [e.target.name]: e.target.value
+        // })
         console.log(e.target.value)
+        console.log(carObj)
     }
     const savePic = async () =>{
         console.log('pic', pic)
@@ -84,14 +90,16 @@ const CarImgUpload = (props) =>{
         try {
             await app.currentUser.functions.putImageObjToS3(imgBase64, bucketName, filekey, pic.type).then(async res =>{
                 console.log(res)
+                
                 const filter = {make: carObj.make, year: Number(carObj.year), name: carName}
                 await collectionCars.findOne(filter).then(async data =>{
                     console.log('data', data)
                     console.log('_data', data._id)
                     const replaced = filekey.replaceAll(" ", "+")
                     if(data){
+                        
                         await collectionCars.updateOne(
-                            { _id: data._id},
+                            { _id: {"$oid": data._id.toString()}},
                             { $set: {imgUrl: baseUrl + replaced}},
                             { upsert: true}
                         ).then(res =>{
@@ -158,10 +166,10 @@ const CarImgUpload = (props) =>{
                 <Form style={{width: '500px', margin: '2rem auto', }}>
                     <Form.Group controlId="select1">
                         <Form.Label>Example select</Form.Label>
-                        <Form.Control as="select" onChange={handleChange}>
+                        <Form.Control as="select" name="make" custom onChange={handleChange}>
                         {carsAllYear && carsAllYear.map(car =>{
                             return(
-                                <option name="make" value={car} key={car}>{car}</option>
+                                <option  value={car} key={car}>{car}</option>
                             )
                             
                         })}
@@ -170,10 +178,10 @@ const CarImgUpload = (props) =>{
                     <div className="spacer-2rem"></div>
                     <Form.Group controlId="select1">
                         <Form.Label>Example select</Form.Label>
-                        <Form.Control as="select" onChange={handleChange}>
+                        <Form.Control as="select" name="year" custom onChange={handleChange}>
                         {carYears && carYears.map(year =>{
                             return(
-                                <option name="year" value={year} key={year}>{year}</option>
+                                <option  value={year} key={year}>{year}</option>
                             )
                             
                         })}

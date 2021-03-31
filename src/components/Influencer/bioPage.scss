@@ -9,8 +9,24 @@
 .bio-text-wrapper{
     margin: auto;
 }
-
-
+.icon-f{
+    height: 50px;
+    display: inline;
+    margin-right: 1rem;
+}
+.bio-featured-stats{
+    padding-bottom: 1rem;
+    box-shadow: 0 0 8px #eee;
+    margin-right: 5px;
+}
+.bio-sub-title-wrapper{
+    padding-left: 20px;
+}
+.sub-title{
+    display: inline;
+    font-weight: 800;
+    color: $black;
+}
   .bio-stats{
     margin-bottom: 2rem;
 }
