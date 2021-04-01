@@ -76,7 +76,6 @@ export const logInAsPublic = () =>{
 }
 
 export const updateLogin = (credentials) =>{
-    console.log(credentials)
     return(dispatch, getState)=>{
         app.logIn(credentials).then(user =>{
             const customData = user.customData

@@ -6,7 +6,7 @@ const CarStatsCard = (props) =>{
     const { car, index, handleTabClick, switchTabs } = props
     const maker = car.make.toUpperCase()
     const model = car.model.toUpperCase()
-    let carImg = 'https://smoke-show.s3.amazonaws.com/car-photos/Ferrari-F8_Spider-2020-1280-01.jpg'
+    let carImg = 'https://d32cnvod31xbse.cloudfront.net/default/no-image.jpg'
   
     if(car.imgUrl){
         if(car.imgUrl.includes('s3.amazonaws.com/thesmokeshow')){

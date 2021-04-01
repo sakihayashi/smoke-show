@@ -121,27 +121,27 @@ const InfluencerIndexPage = () =>{
                     )
                     
                 })}
-                <Col sm={6} md={4} >
-                            <Card className="card-influencer" >
-                                <div className="videoWrapper">
-                                <img src={noImg} alt="coming soon" style={{width: '100%'}}/>
-                                <img src={Logo} className="overlay-logo"/>
-                                       
-                                </div>
-                                <Card.Body>
-                                    <Card.Title>More Coming Soon!</Card.Title>
-                                    <Card.Text className="influencer-desc">Check back here as we grow Influencers on The Smoke Show!<br/><br/>
-                                    <Link to="/about"><span>Want your content featured too? </span></Link>
-                                    </Card.Text>
-                                    <Link to="/about">
-                                    <Button className="login-btn" >More details here</Button>
-                                    </Link>
-                                        
-                                    {/* </NavLink> */}
+                    <Col sm={6} md={4} >
+                        <Card className="card-influencer" >
+                            <div className="videoWrapper" style={{background: '#eee'}}>
+                            {/* <img src={noImg} alt="coming soon" style={{width: '100%'}}/> */}
+                            <img src={Logo} className="overlay-logo" alt="more coming soon | The Smoke Show"/>
                                     
-                                </Card.Body>
-                            </Card>
-                        </Col>
+                            </div>
+                            <Card.Body>
+                                <Card.Title>More Coming Soon!</Card.Title>
+                                <Card.Text className="influencer-desc">Check back here as we grow Influencers on The Smoke Show!<br/><br/>
+                                <Link to="/about"><span>Want your content featured too? </span></Link>
+                                </Card.Text>
+                                <Link to="/about">
+                                <Button className="login-btn" >More details here</Button>
+                                </Link>
+                                    
+                                {/* </NavLink> */}
+                                
+                            </Card.Body>
+                        </Card>
+                    </Col>
                 </Row>
                 <div className="spacer-4rem"></div>
             </div>

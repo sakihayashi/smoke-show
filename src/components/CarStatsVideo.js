@@ -54,14 +54,15 @@ const CarStatsVideo = (props) =>{
             jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
-                    return credentials
+                    getCarData(credentials)
                 }else{
-                    return decoded.cre
+                    getCarData(decoded.cre)
                 }
             })
         }else{
             const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
-            return credentials
+            getCarData(credentials)
+
         }
 
     }
@@ -100,8 +101,7 @@ const CarStatsVideo = (props) =>{
     }
 
     useEffect(() => {
-        const credentials = loginCheck()
-        getCarData(credentials)
+       loginCheck()
 
     }, [])
     return(
