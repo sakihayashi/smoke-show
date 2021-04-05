@@ -80,7 +80,7 @@ export const carBrands =[
     // "Scion",
     // "Smart",
     "Subaru",
-    "Suzuki",
+    // "Suzuki",
     "Tesla",
     "Toyota",
     "Volkswagen",

@@ -352,15 +352,17 @@ const AllVideos = (props) =>{
                     const name = video.carData.make
                     const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
                     let price;
-                    let weight = video.carData.features.Measurements["Curb weight"]
+                    let weight
+                    if(video.carData.features.Measurements && video.carData.features.Measurements["Curb weight"]){
+                        weight = video.carData.features.Measurements["Curb weight"]
+                        weight = numberWithCommas(weight)
+                    }else{
+                        weight = ''
+                    }
+                    
                     if(video.carData.price && video.carData.price.baseMSRP){
                         price = numberWithCommas(video.carData.price.baseMSRP)
                     }else{ price = ''}
-                    if(weight){
-                        weight = numberWithCommas(weight)
-                    }else{
-                        weight= 'N/A'
-                    }
                     
                     return(
                         <Fragment key={unique} >
