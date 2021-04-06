@@ -341,6 +341,7 @@ label{
 }
 .acd-input:checked + .acd-label + .desc-box + .content {
   display: block;
+  overflow-wrap: anywhere;
   .acd-wrapper:first-child & {
       background-color: white;
       margin-top: -5rem;

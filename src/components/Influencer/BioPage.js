@@ -239,7 +239,7 @@ const BioPage = (props) =>{
                     <div className="bio-featured-stats">
                     {featured && <div className="bio-sub-title-wrapper">
                                     <img alt={featured.carData.name} src={require(`../../assets/maker_logos/${featured.makeTitle}_Logo.png`).default}  className="icon-f" loading="lazy" />
-                                    <h3 className="sub-title" style={{fontSize: '1.75rem'}}>{featured.makeTitle} {' '}{featured.carData.year}{' '}{featured.modelTitle}</h3>
+                                    <h3 className="sub-title" style={{fontSize: '1.75rem'}}>{featured.carData.year}{' '}{featured.makeTitle} {' '}{featured.modelTitle}</h3>
                                  </div>
                     }
                             

@@ -100,7 +100,7 @@ function App() {
           <Route path="/terms" component={Terms} />
           <Route path="/car-stats/:make/:year/:model/:id" component={CarStatsVideo} />
           {/* <Route path="/check-data" component={CheckCarData} /> */}
-          {/* <Route path="/update-db" component={UpdateDB} /> */}
+          <Route path="/update-db" component={UpdateDB} />
           {/* <Route exact path="/create-sitemap" component={CreateSiteMap} /> */}
 
           <Route path="/update-video" component={QueryVideoData} />

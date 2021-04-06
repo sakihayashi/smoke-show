@@ -15,7 +15,7 @@ import * as Realm from "realm-web"
 import moment from 'moment'
 import loadable from '@loadable/component'
 import ReactPlayer from 'react-player/lazy'
-
+import { adHome } from './adData'
 const Comments = loadable(() => import('./Comments'))
 const SpecDiv = loadable(() => import('./SpecDiv'))
 
@@ -206,14 +206,14 @@ const [isLoading, setIsloading] = useState(false)
                                 <Col sm={6} className="main-col" >
                                     <Row >
                                         <Col sm >
-                                        <div className="videoWrapper">
-                                            <ReactPlayer
-                                            width="560" 
-                                            height="315"
-                                            url={videoWatchURL + video.videoId}
-                                            controls={true}
-                                            />
-                                        </div>
+                                            <div className="videoWrapper">
+                                                <ReactPlayer
+                                                width="560" 
+                                                height="315"
+                                                url={videoWatchURL + video.videoId}
+                                                controls={true}
+                                                />
+                                            </div>
 
                                             <h3 style={{marginTop:'10px'}} className="video-title">{video.snippet.title}</h3>
                                             <small>{date}</small>
@@ -255,13 +255,15 @@ const [isLoading, setIsloading] = useState(false)
                                         <div style={{minWidth: '160px'}}>
                                         
                                             <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
-                                            {/* <div className="ad-container">
+                                            <div className="ad-container">
+                                           
+                                            <div id={`unit-${adHome[index]}`} className="tmsads"></div>
+
                                             
-                                            
-                                                <p style={{color: 'gray'}}>ads will go here</p>
+                                                {/* <p style={{color: 'gray'}}>ads will go here</p>
                                                 <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
-                                                <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p>
-                                            </div> */}
+                                                <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p> */}
+                                            </div>
                                             </div>
                                         </Col>
                                     </Row>
@@ -273,45 +275,6 @@ const [isLoading, setIsloading] = useState(false)
                 }
                 
             </Row>
-           
-            {/* <div className="spacer-4rem"></div> */}
-            {/* <div className="title title-adj">
-                <h2 style={{marginBottom: '-1rem'}}>{titleStr}</h2>
-                <Form inline onSubmit={handleVideoSearch} style={{marginRight: '-8px'}}>
-                    <FormControl type="text" placeholder="Search" className="mr-sm-2 form-adj" onChange={handleChangeKeyword}/>
-                </Form>
-            </div> */}
-            {/* <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
-                {searchedCarData &&
-                    searchedCarData.map((car, index) =>{
-                        const uuid = uuidv4()
-                        return(
-                            <Fragment key={uuid} >
-                                <Col sm={6}>
-                                    <Row >
-                                        <Col sm={8} >
-                                            <div className="videoWrapper">
-                                                <iframe src={videoEmbedURL + car.videoId}
-                                                        frameBorder='0'
-                                                        allow='autoplay; encrypted-media'
-                                                        allowFullScreen
-                                                        title='video'
-                                                />
-                                    
-                                            </div>
-                                            <h3 style={{marginTop:'10px'}}>{car.youtube.snippet.title}</h3>
-                                        </Col>
-                                        <Col sm={4} style={{paddingLeft:0}} >
-                                            <div className="spec-wrapper">
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            </Fragment>
-                        )
-                })
-                }
-                </Row> */}
                 
             </div>
         </Layout>
