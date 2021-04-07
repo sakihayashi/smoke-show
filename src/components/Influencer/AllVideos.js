@@ -14,7 +14,7 @@ import './allVideos.scss'
 import short from 'short-uuid'
 import loadable from '@loadable/component'
 import ReactPlayer from 'react-player/lazy'
-
+import { adAllVideos } from '../adData'
 const SpecDiv = loadable(() => import('../SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
 const SubNav = loadable(() => import('./SubNav'))
@@ -414,7 +414,11 @@ const AllVideos = (props) =>{
                                     <div style={{minWidth: '160px'}}>
                                     <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
                                     </div>
-                              
+                                    <div className="ad-container">
+                                           
+                                        <div id={`unit-${adAllVideos[index]}`} className="tmsads"></div>
+
+                                    </div>
                                     </Col>
                                 </Row>
                                 

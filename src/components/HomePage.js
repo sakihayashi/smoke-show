@@ -252,10 +252,6 @@ const [isImg, setIsImg] = useState(false)
                                            
                                             <div id={`unit-${adHome[index]}`} className="tmsads"></div>
 
-                                            
-                                                {/* <p style={{color: 'gray'}}>ads will go here</p>
-                                                <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
-                                                <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p> */}
                                             </div>
                                             </div>
                                         </Col>

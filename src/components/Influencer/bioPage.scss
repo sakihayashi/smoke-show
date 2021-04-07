@@ -122,6 +122,11 @@
     box-shadow: 0 0 8px #ccc;
     padding: 20px;
 }
+.ad-featured{
+    display: flex;
+    justify-content: center;
+    background: #eeeeff73;
+}
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {
     .bio-stats{

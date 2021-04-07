@@ -7,7 +7,7 @@ import * as Realm from "realm-web"
 // import Avatar from 'react-avatar'
 import './bioPage.scss'
 import ReactPlayer from 'react-player/lazy'
-
+import { adHome, adFeatured } from '../adData'
 import Layout from '../Layout/Layout'
 import jwt from 'jsonwebtoken'
 import loadable from '@loadable/component'
@@ -270,19 +270,11 @@ const BioPage = (props) =>{
                                 <div className="content">
                                     <small className="wrap-text-desc">{featured && featured.snippet.description}</small>
                                 </div>
-                                <div className="spacer-2rem"></div>
-                                
+                                <div className="spacer-4rem"></div>
+                                <div className="ad-featured">
+                                <div id={`unit-${adFeatured}`} className="tmsads"></div>
+                                </div>
                             </div>
-                            {/* </Col>
-                            <Col sm="auto" className="bio-stats"> */}
-                            
-                            {/* {featured && 
-                                <SpecDiv titleCase={featured.makeTitle} price={featured.price} video={featured} dataid={featured.carDataId} model={featured.modelTitle}/>
-                            } */}
-                                
-                            {/* </Col>
-                        </Row> */}
-                        
                         
                     </Col>
                 </Row>
@@ -321,16 +313,7 @@ const BioPage = (props) =>{
                                 controls={true}
                                 />
                             </div>
-                                {/* <div className="videoWrapper">
-                                    
-                                    <iframe src={videoEmbedURL + video.videoId}
-                                            frameBorder='0'
-                                            allow='autoplay; encrypted-media'
-                                            allowFullScreen
-                                            title='video'
-                                            loading='lazy'
-                                    />
-                                </div> */}
+                   
                                 <h3 style={{marginTop:'10px'}}>{video.snippet.title}</h3>
                                 <small>{date}</small>
                                 <input className="acd-input" type="checkbox" id={`title${index}`} />
@@ -349,11 +332,9 @@ const BioPage = (props) =>{
                                 <div className="ad-size">
                       
                                 <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
-                                {/* <div className="ad-container">
-                                    <p style={{color: 'gray'}}>ads will go here</p>
-                                    <p style={{color: 'gray'}}> 160px x 600px <br/>for above 576px</p>
-                                    <p style={{color: 'gray'}}> 300px x 250px <br/> for above 1400px </p>
-                                </div> */}
+                                <div className="ad-container">
+                                    <div id={`unit-${adHome[index]}`} className="tmsads"></div>
+                                    </div>
                                 </div>
                             </Col>
                         </Row>
@@ -362,44 +343,7 @@ const BioPage = (props) =>{
                     })
                 }
             </Row>
-            {/* <div className="spacer-4rem"></div> */}
-            {/* <div className="title title-adj">
-                <h2 style={{marginBottom: '-1rem'}}>{titleStr}</h2>
-                <Form inline onSubmit={handleVideoSearch} style={{marginRight: '-8px'}}>
-                    <FormControl type="text" placeholder="Search" className="mr-sm-2 form-adj" onChange={handleChangeKeyword}/>
-                </Form>
-            </div> */}
-            {/* <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
-                {searchedCarData &&
-                    searchedCarData.map((car, index) =>{
-        
-                        return <>
-                        <Col sm={6} key={uid(car)}>
-                        <Row>
-                            <Col sm={8} >
-                                <div className="videoWrapper">
-                                    <iframe src={videoEmbedURL + car.videoId}
-                                            frameBorder='0'
-                                            allow='autoplay; encrypted-media'
-                                            allowFullScreen
-                                            title='video'
-                                    
-                                    />
-                        
-                                </div>
-                                <h3 style={{marginTop:'10px'}}>{car.youtube.snippet.title}</h3>
-                            </Col>
-                            <Col sm={4} style={{paddingLeft:0}}>
-                                <div className="spec-wrapper">
-                 
-                                </div>
-                            </Col>
-                        </Row>
-                    </Col>
-                        </>
-                })
-                }
-                </Row> */}
+       
             </div>
         </Layout>
         
