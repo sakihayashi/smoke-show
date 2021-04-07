@@ -21,7 +21,7 @@ const CarSearch = (props) =>{
     const publishedISO = published.toISOString()
     const slug = 'car-search'
     const pageName = 'Search Car Statistics'
-
+    const [isPicSet, setIsPicSet] = useState([])
     const [modelName, setModelName] = useState([])
     const [selectedCar, setSelectedCar] = useState({make: "Select a maker", model: "Select a model", type: "Select a type", year: "Select a year"})
     const [carTypeArr, setCarTypeArr] = useState([])
@@ -35,6 +35,7 @@ const CarSearch = (props) =>{
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
       };
+    
     const app = new Realm.App(appConfig)
   
     const searchId = uuidv4()
@@ -57,7 +58,6 @@ const CarSearch = (props) =>{
                   setModelName(unique.sort())
                   setCars(cars)
                   setCarResults(cars)
-       
               })
         }catch(err){console.log(err)}
         
@@ -168,8 +168,10 @@ const CarSearch = (props) =>{
         }
      }
    }
+
    useEffect(() => {
     checkToken()
+    
    }, [])
     return(
         <Layout>
@@ -217,7 +219,9 @@ const CarSearch = (props) =>{
                             return(
                                 <Fragment key={maker +index}>
                                     <Dropdown.Item  eventKey={titleCase} >
-                                    <img src={require(`../assets/maker_logos/${titleCase}_Logo.png`).default} alt={titleCase} className="maker-img"/>
+                                   
+                                        <img src={require(`../assets/maker_logos/${titleCase}_Logo.png`).default} alt={titleCase} loading="lazy" className="maker-img" /> 
+                                    
                                     {titleCase}
                                     </Dropdown.Item>
                                 </Fragment>

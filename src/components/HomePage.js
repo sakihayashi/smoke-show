@@ -32,7 +32,10 @@ const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
 // const videoEmbedURL = 'https://www.youtube.com/embed/'
 const [latestVideos, setLatestVideos] = useState([])
 const [isLoading, setIsloading] = useState(false)
-
+const [isImg, setIsImg] = useState(false)
+    const swapImg = () =>{
+        
+    }
     const getVideos = async (credentials) =>{
         setLatestVideos([])
         const now = new Date()
@@ -127,17 +130,7 @@ const [isLoading, setIsloading] = useState(false)
             getVideos(credentials)
         }
     }
-    // const visibleChange = (isVisible, index) =>{
-      
-    //     // console.log('index', index)
-    //     let tempArr = [...visibleOn]
-    //     if(tempArr[index] === false){
-    //         tempArr[index] = isVisible
-    //         setVisibleOn(tempArr)
-    //     }
-        
-        
-    // }
+
 
     useEffect( () => {
         setIsloading(false)
