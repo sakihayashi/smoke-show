@@ -85,12 +85,15 @@ const SubNav = (props) =>{
         }
     }
     useEffect(() => {
-        console.log('fired?')
+       
         checkFanOf()
     }, [props.customData.fansOf])
 
     useEffect(() => {
-        checkFanOf()
+        if(influencer.userId){
+            checkFanOf()
+        }
+        
     }, [influencer.userId])
 
     return(

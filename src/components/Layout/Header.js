@@ -24,7 +24,7 @@ const Header = (props) =>{
     let linkUrl = ''
     if(props.customData.isInfluencer !== undefined){
         if(props.customData.isInfluencer){
-            linkUrl = `/influencer/${props.customData.userId}`
+            linkUrl = `/influencer/${props.customData.username}/garage`
         }else{
             linkUrl = `/user/${props.customData.userId}`
         }

@@ -2,20 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { Helmet } from "react-helmet"
 import * as Realm from "realm-web"
 import Layout from '../Layout/Layout'
-
 import noImg from '../../assets/global/no_image.jpg'
 import bioPic from '../../assets/temp-photos/bio/avator-male.jpg'
 import editIcon from '../../assets/global/edit-icon.svg'
 import settingsIcon from '../../assets/global/Settings-icon-white.svg'
-// import SettingModal from './SettingModal'
-import { Button, Row, Col, Form } from 'react-bootstrap'
+import { Button, Row, Col } from 'react-bootstrap'
 import './biopage.scss'
 import { connect } from 'react-redux'
-// import VehicleCard from './vehicleCard'
-// import CreateNewCar from './CreateNewCar'
 import jwt from 'jsonwebtoken'
 import moment from 'moment'
 import loadable from '@loadable/component'
+import { EditAbout, EditSong, EditArtist } from './editsBioPage'
 
 const VehicleCard = loadable(() => import('../Global/vehicleCard'))
 const CreateNewCar = loadable(() => import('./CreateNewCar'))
@@ -39,7 +36,6 @@ const BioPage = (props) =>{
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
-        // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
     
@@ -66,7 +62,6 @@ const BioPage = (props) =>{
                 setShowSetting(true)
             }
           });
-        
     }
     
     const handleCloseSetting = () =>{
@@ -154,54 +149,6 @@ const BioPage = (props) =>{
         }
         
     }
-    const editAbout = ()=>{
-        return(
-            <Form>
-                <Form.Group >
-                    <Form.Label>Edit</Form.Label>
-                    <Form.Control as="textarea" rows={3} name="profileDesc" value={profileUser.profileDesc && profileUser.profileDesc } onChange={handleChangeProfile} />
-                </Form.Group>
-                <div className="bio-edit-btn-wrapper">
-                    <Button variant="primary" type="submit" onClick={handleDataUpdate} className="bio-edit-btn">
-                        Submit
-                    </Button>
-                </div>
-                
-            </Form>
-        )
-    }
-    const editSong = ()=>{
-        return(
-            <Form>
-                <Form.Group >
-                    <Form.Label>Edit</Form.Label>
-                    <Form.Control as="textarea" rows={3} name="favSong" value={profileUser.favSong && profileUser.favSong } onChange={handleChangeProfile} />
-                </Form.Group>
-                <div className="bio-edit-btn-wrapper">
-                    <Button variant="primary" type="submit" onClick={handleDataUpdate} className="bio-edit-btn">
-                        Submit
-                    </Button>
-                </div>
-                
-            </Form>
-        )
-    }
-    const editArtist = ()=>{
-        return(
-            <Form>
-                <Form.Group >
-                    <Form.Label>Edit</Form.Label>
-                    <Form.Control as="textarea" rows={3} name="favArtist" value={profileUser.favArtist && profileUser.favArtist } onChange={handleChangeProfile} />
-                </Form.Group>
-                <div className="bio-edit-btn-wrapper">
-                    <Button variant="primary" type="submit" onClick={handleDataUpdate} className="bio-edit-btn">
-                        Submit
-                    </Button>
-                </div>
-                
-            </Form>
-        )
-    }
 
     const getData = async (credentials) =>{
         try{
@@ -236,7 +183,6 @@ const BioPage = (props) =>{
                             }else{
                                 setProfileCover(noImg)
                             }
-                            
                             getTotalComments(mongo)
                             getMyCars(mongo)
                             return user
@@ -257,9 +203,7 @@ const BioPage = (props) =>{
     }
     
     const getTotalComments = async (mongo) =>{
-        
         const mongoCollectionComments = mongo.db("smoke-show").collection("comments")
-        
         const filter = {userId: userIdParam}
         await mongoCollectionComments.find(filter).then(res =>{
             // setProfileUser({...profileUser, totalComments: res.length})
@@ -278,7 +222,6 @@ const BioPage = (props) =>{
         } catch (error) {
             console.log(error)
         }
-        
     }
     const loginCheck = () =>{
         const tokenUser = sessionStorage.getItem('session_user')
@@ -287,23 +230,27 @@ const BioPage = (props) =>{
             jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
                 if (err) {
                     // timeout
-
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
                     cre = credentials
                 }else{
                     cre = decoded.cre
                 }
               });
-            
         }else{
             const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW)
             cre = credentials
         }
         return cre
     }
+    const goInfluencerGarage = (id) =>{
+        if(id === '60230361f63ff517d4fdad14'){
+            props.history.push('/influencer/EddieX/garage')
+        }else if(id === '602303890ff2832f7d19a2af'){
+            props.history.push('/influencer/Lexurious-Fleet/garage')
+        }
+    }
     useEffect(() => {
         if(props.isLoggedIn){
-       
             if(props.customData.userId === props.match.params.id){
                 setAllowEdit(true)
             }else{
@@ -327,8 +274,13 @@ const BioPage = (props) =>{
         }
     }, [userIdParam])
     useEffect(() => {
+        if(userIdParam === '60230361f63ff517d4fdad14' || userIdParam === '602303890ff2832f7d19a2af'){
+            goInfluencerGarage(userIdParam)
+        }else{
         const credentials = loginCheck()
         getData(credentials)
+        }
+        
     }, [])
 
     return(
@@ -346,14 +298,7 @@ const BioPage = (props) =>{
                 <h2 className="title">{profileUser && profileUser.username} Profile</h2>
                 <div className="bio-fleet-img">
                     <img
-                    // sizes="(max-width: 1500px) 100vw, 1500px"
-                    // srcset={`
-                    // ${bioImgXs} 375w,
-                    // ${bioImgS} 752w,
-                    // ${bioImgM} 1040w,
-                    // ${bioImgL} 1280w,
-                    // ${bioImgXL} 1500w
-                    // `}
+    
                     src={profileCover}
                     alt={`User ${profileUser.fname}'s cover image on The Smoke Show`}
                      />
@@ -384,7 +329,7 @@ const BioPage = (props) =>{
                                 <p className="bio-about no-m-b"><strong>About: {` ${profileUser.fname} ${profileUser.lname}`}</strong></p>
                                 <div className="">
                                     <p className="bio-content bio-border">
-                                        {editMode.about ? editAbout()
+                                        {editMode.about ? <EditAbout profileUser={profileUser} handleChangeProfile={handleChangeProfile} handleDataUpdate={handleDataUpdate}/>
                                         : [
                                             (profileUser.profileDesc 
                                                 ? <p >{profileUser.profileDesc}</p>
@@ -436,7 +381,7 @@ const BioPage = (props) =>{
                                         <p className="no-m-b">Favorite Driving Song:</p>
                                     </Col>
                                     <Col sm={8}>
-                                        {editMode.song ? editSong()
+                                        {editMode.song ? <EditSong profileUser={profileUser} handleChangeProfile={handleChangeProfile} handleDataUpdate={handleDataUpdate}/>
                                         : [
                                             (profileUser.favSong 
                                                 ? <p className="no-m-b">{profileUser.favSong}</p>
@@ -456,7 +401,7 @@ const BioPage = (props) =>{
                                         <p className="no-m-b">Favorite Artist:</p>
                                     </Col>
                                     <Col sm={8}>
-                                    {editMode.artist ? editArtist()
+                                    {editMode.artist ? <EditArtist profileUser={profileUser} handleChangeProfile={handleChangeProfile} handleDataUpdate={handleDataUpdate}/>
                                         : [
                                             (profileUser.favArtist 
                                                 ? <p className="no-m-b">{profileUser.favArtist}</p>
