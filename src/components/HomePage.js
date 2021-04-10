@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 // import VisibilitySensor from 'react-visibility-sensor'
 // import wheelImg from '../assets/global/smoke-wheel.png'
-
+import { numberWithCommas, urlify } from './Global/functions'
 import Layout from './Layout/Layout'
 import '../scss/spinner.css'
 import '../scss/index.scss'
@@ -32,10 +32,7 @@ const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
 // const videoEmbedURL = 'https://www.youtube.com/embed/'
 const [latestVideos, setLatestVideos] = useState([])
 const [isLoading, setIsloading] = useState(false)
-const [isImg, setIsImg] = useState(false)
-    const swapImg = () =>{
-        
-    }
+
     const getVideos = async (credentials) =>{
         setLatestVideos([])
         const now = new Date()
@@ -111,9 +108,7 @@ const [isImg, setIsImg] = useState(false)
             console.log(error)
         }
     }
-    const numberWithCommas = (x) =>{
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
+
     const loginCheck = async () =>{
         const tokenUser = sessionStorage.getItem('session_user')
         if(tokenUser){
@@ -238,7 +233,7 @@ const [isImg, setIsImg] = useState(false)
                                                 {video.snippet.description}
                                             </div> 
                                             <div className="content">
-                                                <small className="wrap-text-desc">{video.snippet.description}</small>
+                                                <small className="wrap-text-desc" dangerouslySetInnerHTML={{ __html: urlify(video.snippet.description) }}></small>
                                             </div>
                                            <div className="spacer-4rem"></div>
                                             <Comments videoId={video.videoId} />
@@ -270,7 +265,6 @@ const [isImg, setIsImg] = useState(false)
     )
 }
 const mapStateToProps = (state) => {
-    //syntax is propName: state.key of combineReducer.key
     return{
       username: state.user.username,
     }

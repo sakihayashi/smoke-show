@@ -202,7 +202,7 @@ export const switchTabs = (car, tab) =>{
         case 'Color':
             return <Fragment>
                     <p><strong>Exterior</strong></p>
-                    { colors && colors['EXTERIOR'].map((color, index)=>{
+                    { colors && colors['EXTERIOR'] && colors['EXTERIOR'].map((color, index)=>{
                         const uuid = uuidv4()
                         return <Fragment key={uuid}>
                                 <div className="stats-box-outline" >
@@ -213,7 +213,7 @@ export const switchTabs = (car, tab) =>{
                     })}
                       <hr />
                    <p><strong>Interior</strong></p>
-                   { colors && colors['INTERIOR'].map((color, index)=>{
+                   { colors && colors['INTERIOR'] && colors['INTERIOR'].map((color, index)=>{
                         return <div className="stats-box-outline" key={color.name}>
                                 <div className="color-thumbnail" style={{backgroundColor: `rgb(${color.rgb})`}}></div>
                                 <div className="color-name">{color.name}</div>

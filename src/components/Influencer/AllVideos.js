@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet"
 import { Row, Col } from 'react-bootstrap'
 import * as Realm from "realm-web"
 import Pagination from 'react-bootstrap/Pagination'
-
+import { numberWithCommas, urlify } from '../Global/functions'
 import Avatar from 'react-avatar'
 import Layout from '../Layout/Layout'
 import { logInAsPublic, updateLogin } from '../../store/actions/authActions'
@@ -11,6 +11,7 @@ import { connect } from 'react-redux'
 import jwt from 'jsonwebtoken'
 import { getInfluencer }from '../../store/actions/influencerActions'
 import './allVideos.scss'
+import moment from 'moment'
 import short from 'short-uuid'
 import loadable from '@loadable/component'
 import ReactPlayer from 'react-player/lazy'
@@ -18,7 +19,6 @@ import { adAllVideos } from '../adData'
 const SpecDiv = loadable(() => import('../SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
 const SubNav = loadable(() => import('./SubNav'))
-// const VideoDiv = loadable(()=> import('../VideoDiv'))
 
 const AllVideos = (props) =>{
     const videoWatchURL = 'https://www.youtube.com/watch?v='
@@ -91,7 +91,6 @@ const AllVideos = (props) =>{
                             }else{
                                 console.log('no data')
                             }
-                                
                             }
                                 
                     })
@@ -101,18 +100,18 @@ const AllVideos = (props) =>{
                 }else{
                     const results = allVideoData[num].map(async video =>{
                         const filterCar = {_id: {"$oid": video.carDataId}}
-                        
-                            const data = await collectionCars.findOne(filterCar)
-                            
-                               if(data){
-                                video.carData = data
-                                return video
 
-                               }else{
-                                const data = await collectionManual.findOne(filterCar)
-                                    video.carData = data
-                                    return video
-                               }
+                        const data = await collectionCars.findOne(filterCar)
+                        
+                        if(data){
+                        video.carData = data
+                        return video
+
+                        }else{
+                        const data = await collectionManual.findOne(filterCar)
+                            video.carData = data
+                            return video
+                        }
                         
                     })
                     Promise.all(results).then(res =>{
@@ -120,7 +119,6 @@ const AllVideos = (props) =>{
                     })
                 }
                 
-        
     }
     const getVideos = async (cre) =>{
         
@@ -163,9 +161,6 @@ const AllVideos = (props) =>{
         
     }
 
-    const numberWithCommas = (x) =>{
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
     const loginCheck = () =>{
         const tokenUser = sessionStorage.getItem('session_user')
         if(tokenUser){
@@ -199,12 +194,12 @@ const AllVideos = (props) =>{
                 if(num === 2){
                     setMiddleNum(3)
                 }else if(num <= 1){
-                 if(pgNum %2 === 0){
-                    setMiddleNum(pgNum /2)
-                 }else{
-                     const temp = pgNum /2
-                     setMiddleNum(Math.ceil(temp))
-                 }
+                    if(pgNum %2 === 0){
+                        setMiddleNum(pgNum /2)
+                    }else{
+                        const temp = pgNum /2
+                        setMiddleNum(Math.ceil(temp))
+                    }
                     
                 }else{
                     setMiddleNum(num)
@@ -221,7 +216,6 @@ const AllVideos = (props) =>{
     const getNextPage = () =>{
         if(active < pgNum){
             const num = active +1
-            
             setActive(num)
             attachCarData(null, num)
             
@@ -241,6 +235,7 @@ const AllVideos = (props) =>{
             return
         }
     }
+
     const paginationItems = () =>{
         let items = [];
         if(pgNum > 9){
@@ -274,7 +269,6 @@ const AllVideos = (props) =>{
             }
             return items
         }
-
     }
 
     useEffect(() => {
@@ -330,7 +324,7 @@ const AllVideos = (props) =>{
                         ]
                     }
                 `}
-        </script>
+                </script>
             </Helmet>
             
             <div className="main-wrapper">
@@ -348,6 +342,7 @@ const AllVideos = (props) =>{
                     const unique = short.generate()
                     const str = video.carData.model
                     const id = video.videoId
+                    const date = moment(video.snippet.publishedAt).fromNow()
                     const model = str.charAt(0).toUpperCase() +str.slice(1)
                     const name = video.carData.make
                     const titleCase = name.charAt(0).toUpperCase() +name.slice(1)
@@ -380,6 +375,7 @@ const AllVideos = (props) =>{
                                         </div>
                                     
                                         <div className="video-title-div" dangerouslySetInnerHTML={{__html: video.snippet.title}} />
+                                        <small>{date}</small>
                                         <Row className="comment-wrapper" >
                                             <div className="col-1" style={{margin:0,padding:0}} >
                                             {props.influencerObj.profilePic ? <img src={props.influencerObj.profilePic} 
@@ -391,7 +387,6 @@ const AllVideos = (props) =>{
                                             </div>
                                             <div className="col-11" style={{paddingRight:0, margin: 'auto'}} >
                                             <div className="creator-name"><strong>{video.snippet.channelTitle}</strong><br /> <span style={{color:'gray', fontSize: '13px'}}>{' '} {props.formattedFans} fans</span></div>
-                                           
                                             </div>
                                             
                                             <input className="acd-input" type="checkbox" id={`title${index}`} />
@@ -401,9 +396,8 @@ const AllVideos = (props) =>{
                                                 {video.snippet.description}
                                             </div> 
                                             <div className="content">
-                                            <small>{video.snippet.description}</small>
+                                            <small className="whole-desc" dangerouslySetInnerHTML={{ __html: urlify(video.snippet.description) }}></small>
                                             </div>
-
                                         </Row>
                                         
                                         <div className="spacer-4rem"></div>
@@ -411,14 +405,12 @@ const AllVideos = (props) =>{
                                         
                                     </Col>
                                     <Col sm="auto"  className="spec-col"  >
-                                    <div style={{minWidth: '160px'}}>
-                                    <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
-                                    </div>
-                                    <div className="ad-container">
-                                           
-                                        <div id={`unit-${adAllVideos[index]}`} className="tmsads"></div>
-
-                                    </div>
+                                        <div style={{minWidth: '160px'}}>
+                                        <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
+                                        </div>
+                                        <div className="ad-container">
+                                            <div id={`unit-${adAllVideos[index]}`} className="tmsads"></div>
+                                        </div>
                                     </Col>
                                 </Row>
                                 

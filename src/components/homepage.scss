@@ -1,7 +1,9 @@
 @import "../scss/config";
 
 
-
+.wrap-text-desc > a{
+  text-decoration: underline;
+}
 .rotate {
     animation: rotation 1s infinite linear;
   }

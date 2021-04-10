@@ -117,6 +117,12 @@
     display: block;
     font-size: 14px;
 }
+.wrap-text-desc > a{
+    text-decoration: underline;
+}
+.whole-desc > a{
+    text-decoration: underline;
+}
 .stats-bio{
     width: 100%;
     box-shadow: 0 0 8px #ccc;

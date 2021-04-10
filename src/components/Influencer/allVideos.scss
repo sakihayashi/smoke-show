@@ -92,7 +92,9 @@
 .desc-box::after{
     content: ' more';
 }
-
+.whole-desc > a{
+    text-decoration: underline;
+}
 .acd-input:checked + .acd-label{
     top: 1rem;
 }

@@ -13,6 +13,7 @@ import jwt from 'jsonwebtoken'
 import loadable from '@loadable/component'
 import moment from 'moment'
 import { switchTabs } from '../functionsStats'
+import { numberWithCommas, urlify } from '../Global/functions'
 
 const SpecDiv = loadable(() => import('../SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
@@ -46,13 +47,9 @@ const BioPage = (props) =>{
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
-        // timeout in number of milliseconds
       };
     const app = new Realm.App(appConfig);
 
-    const numberWithCommas = (x) =>{
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
     const getInfluencer = async (mongo) =>{
 
             try {
@@ -268,7 +265,10 @@ const BioPage = (props) =>{
                                     { featured && featured.snippet.description}
                                 </div> 
                                 <div className="content">
-                                    <small className="wrap-text-desc">{featured && featured.snippet.description}</small>
+                                {featured &&
+                                    <small className="wrap-text-desc" dangerouslySetInnerHTML={{ __html: urlify(featured.snippet.description) }}></small>
+                                }
+                                    
                                 </div>
                                 <div className="spacer-4rem"></div>
                                 <div className="ad-featured">
@@ -323,7 +323,7 @@ const BioPage = (props) =>{
                                     {video.snippet.description}
                                 </div> 
                                 <div className="content">
-                                    <small>{video.snippet.description}</small>
+                                    <small className="whole-desc" dangerouslySetInnerHTML={{ __html: urlify(video.snippet.description) }}></small>
                                 </div>
                                 <div className="spacer-4rem"></div>
                                 <Comments videoId={video.videoId}/>

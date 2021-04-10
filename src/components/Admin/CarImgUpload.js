@@ -94,7 +94,7 @@ const CarImgUpload = (props) =>{
                 const filter = {make: carObj.make, year: Number(carObj.year), name: carName}
                 await collectionCars.findOne(filter).then(async data =>{
                     console.log('data', data)
-                    console.log('_data', data._id)
+                    console.log('_id', data._id)
                     const replaced = filekey.replaceAll(" ", "+")
                     if(data){
                         

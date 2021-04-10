@@ -21,7 +21,6 @@ const CarSearch = (props) =>{
     const publishedISO = published.toISOString()
     const slug = 'car-search'
     const pageName = 'Search Car Statistics'
-    const [isPicSet, setIsPicSet] = useState([])
     const [modelName, setModelName] = useState([])
     const [selectedCar, setSelectedCar] = useState({make: "Select a maker", model: "Select a model", type: "Select a type", year: "Select a year"})
     const [carTypeArr, setCarTypeArr] = useState([])

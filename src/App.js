@@ -92,7 +92,6 @@ function App() {
           <Route exact path="/influencer/:username/all-videos" component={AllVideos} />
           <Route exact path="/influencer/:username/garage" component={Garage} />
           
-          {/* <Route path="/all-videos/:id" component={AllVideos} /> */}
           <Route path="/add-car-data" component={AddCarData} />
           <Route path="/edit-video-data" component={EditVideoData} />
           <Route path="/edit-video-data-kirk" component={EditVideoDataKirk} />
@@ -100,7 +99,6 @@ function App() {
           <Route path="/terms" component={Terms} />
           <Route path="/car-stats/:make/:year/:model/:id" component={CarStatsVideo} />
           {/* <Route path="/check-data" component={CheckCarData} /> */}
-          <Route path="/update-db" component={UpdateDB} />
           {/* <Route exact path="/create-sitemap" component={CreateSiteMap} /> */}
 
           <Route path="/update-video" component={QueryVideoData} />
