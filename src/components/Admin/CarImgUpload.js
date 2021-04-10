@@ -42,6 +42,31 @@ const CarImgUpload = (props) =>{
         })
         
     }
+    const picUploadNiceId = (e) =>{
+        console.log('car obj', carObj)
+        const file = e.target.files[0] 
+        console.log('file', file)
+        let arr = file.name.split('_')
+        arr.shift()
+        console.log('arr', arr)
+        let str = arr.join('')
+        const index = str.lastIndexOf('.')
+        const trimmed = str.slice(0, index)
+        // console.log('name?', trimmed.replaceAll("-", " "))
+        // // setCarName(trimmed.replaceAll("-", " "))
+        // const replaced = trimmed.replace(':', '/')
+        setCarName(trimmed)
+        // setImgName(file.name.replaceAll("-", " "))
+        setImgName(file.name)
+        setPic(e.target.files[0])
+        setImgThumb(URL.createObjectURL(e.target.files[0]))
+        const reader = new FileReader()
+        reader.onload = (event) => {
+        const base64 = event.target.result.split(",").pop()
+          setImgBase64(base64)
+        };
+        reader.readAsDataURL(file)
+    }
     const picUpload = (e) =>{
         console.log('car obj', carObj)
         const file = e.target.files[0] 
@@ -72,12 +97,42 @@ const CarImgUpload = (props) =>{
             ...carObj,
             [e.target.name]: e.target.value
         })
-        // setUserObj({
-        //     ...userObj,
-        //     [e.target.name]: e.target.value
-        // })
+
         console.log(e.target.value)
         console.log(carObj)
+    }
+    const savePicNiceId = async () =>{
+        console.log('pic', pic)
+        console.log(carObj)
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        const collectionCars = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("cars")
+
+        const filekey = `/${carObj.make}/${carObj.year}/${imgName}`
+        console.log(filekey)
+        try {
+            await app.currentUser.functions.putImageObjToS3(imgBase64, bucketName, filekey, pic.type).then(async res =>{
+                console.log(res)
+                
+                const filter = {make: carObj.make, year: Number(carObj.year), niceId: carName}
+                await collectionCars.findOne(filter).then(async data =>{
+                    console.log('data', data)
+                    console.log('_id', data._id)
+                    // const replaced = filekey.replaceAll(" ", "+")
+                    if(data){
+                        await collectionCars.updateOne(
+                            { _id: {"$oid": data._id.toString()}},
+                            { $set: {imgUrl: baseUrl + filekey}},
+                            { upsert: true}
+                        ).then(res =>{
+                            console.log(res)
+                        })
+                    }
+                })
+            })
+        } catch (error) {
+            console.log(error)
+        }
+
     }
     const savePic = async () =>{
         console.log('pic', pic)
@@ -156,6 +211,7 @@ const CarImgUpload = (props) =>{
         </Helmet>
             {isLoggedIn ? 
             <Container className="" style={{marginTop: '4rem'}}>
+            
                 <center>
                 <img src={imgThumb ? imgThumb : ''} 
                     style={{width: '200px', height: '200px', objectFit: 'cover'}}
@@ -165,7 +221,7 @@ const CarImgUpload = (props) =>{
                 {resMsg && <Alert variant="success">Uploaded</Alert>}
                 <Form style={{width: '500px', margin: '2rem auto', }}>
                     <Form.Group controlId="select1">
-                        <Form.Label>Example select</Form.Label>
+                        <Form.Label>Slelect Make</Form.Label>
                         <Form.Control as="select" name="make" custom onChange={handleChange}>
                         {carsAllYear && carsAllYear.map(car =>{
                             return(
@@ -187,18 +243,29 @@ const CarImgUpload = (props) =>{
                         })}
                         </Form.Control>
                     </Form.Group>
-                    <div className="spacer-2rem"></div>
+                    <br/><br/>
                     <Form.Group>
                         <Form.File 
                         id="exampleFormControlFile1" 
-                        // label="Example file input"
+                        label="NiceId "
+                        onChange={picUploadNiceId}
+                        style={{background: 'aquamarine', padding: '1rem'}}
+                        />
+                    </Form.Group>
+                    <div className="spacer-2rem"></div>
+                    <Form.Group>
+                        <Form.File 
+                        id="exampleFormControlFile2" 
+                        label="Name field"
                         onChange={picUpload}
+                        style={{background: 'lightgray', padding: '1rem'}}
                         />
                     </Form.Group>
                 </Form>
-                <Button style={{minWidth: '200px'}} onClick={savePic}>Upload an image</Button>
-                <br/><br/><br/><br/>
-                <Button onClick={handleLogout} style={{minWidth: '200px'}}>Logout</Button>
+                <Button style={{minWidth: '200px', background: 'aquamarine', color: 'black'}}  onClick={savePicNiceId}>NiceID</Button><br/><br/><br/>
+                <Button style={{minWidth: '200px'}} variant="warning" onClick={savePic}>Name -deprecated</Button>
+                <br/><br/><br/>
+                <Button onClick={handleLogout} variant="secondary" style={{minWidth: '200px'}}>Logout</Button><br/><br/><br/>
             </center>
             
             </Container>
