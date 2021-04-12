@@ -263,8 +263,6 @@ const CarSearch = (props) =>{
                                         <Dropdown.Item eventKey={type} >{type}</Dropdown.Item>
                                     </Fragment>
                                 )
-                                
-                                
                             })}
                         </DropdownButton>
                     </div>

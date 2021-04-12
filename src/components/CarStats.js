@@ -55,7 +55,7 @@ const CarStats = (props) =>{
                 })
                 }
                 <div className="spacer-4rem"></div>
-                <div className="ad-div" id="unit-1617929086580" class="tmsads"></div>
+                <div className="ad-div tmsads" id="unit-1617929086580"></div>
                 <div className="spacer-4rem"></div>
                 <Link to="/car-search">
                     <Button className="login-btn">Start New Search</Button>
