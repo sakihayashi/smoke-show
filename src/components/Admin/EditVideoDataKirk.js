@@ -23,7 +23,7 @@ const EditVideoDataKirk = () =>{
         setAllVideos({...allVideos})
     }
     let items = [];
-    for (let number = 0; number <= 6; number++) {
+    for (let number = 0; number <= 15; number++) {
     items.push(
         <Pagination.Item key={number} active={number === activePag} onClick={()=>{handlePagNum(number)}}>
         {number}
