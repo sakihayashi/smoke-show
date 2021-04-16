@@ -15,7 +15,7 @@ import * as Realm from "realm-web"
 import moment from 'moment'
 import loadable from '@loadable/component'
 import ReactPlayer from 'react-player/lazy'
-import { adHome } from './adData'
+import { adHome, adHomeInfinite } from './adData'
 const Comments = loadable(() => import('./Comments'))
 const SpecDiv = loadable(() => import('./SpecDiv'))
 
@@ -145,6 +145,8 @@ const [isLoading, setIsloading] = useState(false)
                 <meta name="description" content={seoDesc} />
 
                 <link rel="canonical" href="https://thesmokeshow.com" />
+
+                <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="homepage" data-debug="true"></script>
                 <script type="application/ld+json">{`
                     {
                         "@context": "http://schema.org",
@@ -244,8 +246,11 @@ const [isLoading, setIsloading] = useState(false)
                                         
                                             <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
                                             <div className="ad-container">
-                                           
-                                            <div id={`unit-${adHome[index]}`} className="tmsads"></div>
+                                           {index < 6 ? 
+                                           <div id={`unit-${adHome[index]}`} className="tmsads"></div>
+                                           :
+                                           <div id={`child-${adHomeInfinite}-${index}`} className="tmsads" data-ad={`unit-${adHomeInfinite}`}></div>
+                                           }
 
                                             </div>
                                             </div>

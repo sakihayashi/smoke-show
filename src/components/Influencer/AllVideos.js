@@ -15,7 +15,7 @@ import moment from 'moment'
 import short from 'short-uuid'
 import loadable from '@loadable/component'
 import ReactPlayer from 'react-player/lazy'
-import { adAllVideos } from '../adData'
+import { adAllVideos, adAllVideosInfinite } from '../adData'
 const SpecDiv = loadable(() => import('../SpecDiv'))
 const Comments = loadable(() => import('../Comments'))
 const SubNav = loadable(() => import('./SubNav'))
@@ -288,6 +288,9 @@ const AllVideos = (props) =>{
                 <title>All Videos from {`${influencerName}`} | The Smoke Show</title>
                 <meta name="description" content={`Enjoy all videos from the influencer + Vlogger ${influencerName}. Check out the related car statistics and more information.`} />
                 <link rel="canonical" href={`https://thesmokeshow.com/${name}/all-videos`} />
+                <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="Influencer_all_videos" data-debug="true"></script>
+
+
                 <script type="application/ld+json">
             {`
                     {
@@ -339,6 +342,7 @@ const AllVideos = (props) =>{
             <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
             {   videoArr[0] &&
                 videoArr.map((video, index) =>{
+                    console.log('índex', index)
                     const unique = short.generate()
                     const str = video.carData.model
                     const id = video.videoId
@@ -409,7 +413,12 @@ const AllVideos = (props) =>{
                                         <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
                                         </div>
                                         <div className="ad-container">
+                                            {index < 6 ? 
                                             <div id={`unit-${adAllVideos[index]}`} className="tmsads"></div>
+                                            :
+                                            <div id={`child-${adAllVideosInfinite}-${index}`} className="tmsads" data-ad={`unit-${adAllVideosInfinite}`}>{index}</div>
+                                            }
+                                            
                                         </div>
                                     </Col>
                                 </Row>
