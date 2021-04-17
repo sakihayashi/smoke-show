@@ -7,7 +7,7 @@ import * as Realm from "realm-web"
 // import Avatar from 'react-avatar'
 import './bioPage.scss'
 import ReactPlayer from 'react-player/lazy'
-import { adHome, adFeatured } from '../adData'
+import { adInfluencer, adFeatured } from '../adData'
 import Layout from '../Layout/Layout'
 import jwt from 'jsonwebtoken'
 import loadable from '@loadable/component'
@@ -162,6 +162,9 @@ const BioPage = (props) =>{
                 <title>Influencer {name.replace("-", " ")} Featured Page | The Smoke Show</title>
                 <meta name="description" content={influencer && influencer.desc} />
                 <link rel="canonical" href={`https://thesmokeshow.com/influencer/${name}`} />
+                <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="influencer" data-debug="true"></script>
+                <script>{`window.TAS = window.TAS || { cmd: [] }`}</script>
+
                 <script type="application/ld+json">
         {`
             {
@@ -333,7 +336,7 @@ const BioPage = (props) =>{
                       
                                 <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
                                 <div className="ad-container">
-                                    <div id={`unit-${adHome[index]}`} className="tmsads"></div>
+                                    <div id={`unit-${adInfluencer[index]}`} className="tmsads"></div>
                                     </div>
                                 </div>
                             </Col>

@@ -288,9 +288,9 @@ const AllVideos = (props) =>{
                 <title>All Videos from {`${influencerName}`} | The Smoke Show</title>
                 <meta name="description" content={`Enjoy all videos from the influencer + Vlogger ${influencerName}. Check out the related car statistics and more information.`} />
                 <link rel="canonical" href={`https://thesmokeshow.com/${name}/all-videos`} />
-                <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="Influencer_all_videos" data-debug="true"></script>
+                <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="influencer all videos" data-debug="true"></script>
 
-
+                <script>{`window.TAS = window.TAS || { cmd: [] }`}</script>
                 <script type="application/ld+json">
             {`
                     {
@@ -416,7 +416,7 @@ const AllVideos = (props) =>{
                                             {index < 6 ? 
                                             <div id={`unit-${adAllVideos[index]}`} className="tmsads"></div>
                                             :
-                                            <div id={`child-${adAllVideosInfinite}-${index}`} className="tmsads" data-ad={`unit-${adAllVideosInfinite}`}>{index}</div>
+                                            <div id={`child-${adAllVideosInfinite}-${index}`} className="tmsads" data-ad={`unit-${adAllVideosInfinite}`}></div>
                                             }
                                             
                                         </div>

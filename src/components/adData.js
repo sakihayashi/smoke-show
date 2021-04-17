@@ -9,7 +9,17 @@ export const adHome = [
 
 export const adHomeInfinite = 1618602023290
 
-export const adFeatured = 1617743106475
+export const adInfluencer =[
+    1618572273360,
+    1618599246289,
+    1618599292822,
+    1618599351628,
+    1618599450245,
+    1618599504378
+]
+
+export const adFeatured = 1618622951700
+
 
 export const adAllVideos = [
     1618593384502,
