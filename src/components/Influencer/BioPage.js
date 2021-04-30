@@ -153,7 +153,6 @@ const BioPage = (props) =>{
     }
       useEffect(() => {
         checkToken()
-        
       }, [])
 
     return(
@@ -163,7 +162,7 @@ const BioPage = (props) =>{
                 <meta name="description" content={influencer && influencer.desc} />
                 <link rel="canonical" href={`https://thesmokeshow.com/influencer/${name}`} />
                 <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="influencer" data-debug="true"></script>
-                <script>{`window.TAS = window.TAS || { cmd: [] }`}</script>
+                <script>{`window.TAS = window.TAS.reload() || { cmd: [] }`}</script>
 
                 <script type="application/ld+json">
         {`
@@ -336,7 +335,7 @@ const BioPage = (props) =>{
                       
                                 <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
                                 <div className="ad-container">
-                                    <div id={`unit-${adInfluencer[index]}`} className="tmsads"></div>
+                                    <div id={`unit-${adInfluencer[index]}`} className="tmsads" key={Math.random()}></div>
                                     </div>
                                 </div>
                             </Col>

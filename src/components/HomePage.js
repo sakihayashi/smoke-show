@@ -128,6 +128,7 @@ const [isLoading, setIsloading] = useState(false)
 
 
     useEffect( () => {
+
         setIsloading(false)
         const res = loginCheck()
         if(res){
@@ -147,6 +148,8 @@ const [isLoading, setIsloading] = useState(false)
                 <link rel="canonical" href="https://thesmokeshow.com" />
 
                 <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="homepage" data-debug="true"></script>
+                <script>{`window.TAS = window.TAS.reload() || { cmd: [] }`}</script>
+
                 <script type="application/ld+json">{`
                     {
                         "@context": "http://schema.org",

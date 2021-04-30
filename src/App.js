@@ -52,7 +52,9 @@ const BioPage = loadable(() => import('./components/Fan/BioPage'))
 const AboutPage = loadable(() => import('./components/AboutPage'))
 const CarStats = loadable(() => import('./components/CarStats'))
 const BioPageInfluencer = loadable(() => import('./components/Influencer/BioPage'))
-const AllVideos = loadable(() => import('./components/Influencer/AllVideos'))
+const AllVideos = loadable(() => import('./components/Influencer/AllVideos'), {
+  fallback: <Loading />
+})
 const NotFoundPage = loadable(() => import('./components/NotFoundPage'))
 const QueryVideoData = loadable(() => import('./components/Admin/QueryVideoData'))
 const EditVideoData = loadable(() => import('./components/Admin/EditVideoData'))

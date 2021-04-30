@@ -34,7 +34,7 @@ const AllVideos = (props) =>{
     }else if(name === 'Lexurious-Fleet'){
         influencerId = '602303890ff2832f7d19a2af'
     }
-    // const videoEmbedURL = 'https://www.youtube.com/embed/'
+    const [scriptState, setScriptState] = useState(false)
     const [videoArr, setVideoArr] = useState([])
     const [allVideoData, setAllVideoData] = useState([])
 
@@ -270,6 +270,33 @@ const AllVideos = (props) =>{
             return items
         }
     }
+    const new_script = ()=>{
+        return new Promise(function(resolve, reject){
+
+                const script = document.createElement("script");
+                script.setAttribute('data-layout', "all-videos");
+                script.setAttribute('data-debug', "true");
+                script.setAttribute('data-tmsclient', "The Smoke Show");
+                script.setAttribute('id', "all-videos");
+                script.src = "https://lib.tashop.co/the_smoke_show/adengine.js";
+                script.async = true;
+                const scriptW = document.createElement("script");
+                scriptW.setAttribute('id', 'ad-w');
+                scriptW.text = 'window.TAS = window.TAS || { cmd: [] }'
+               
+                script.addEventListener('load', function () {
+                  resolve();
+                });
+                script.addEventListener('error', function (e) {
+                  reject(e);
+                });
+                document.body.appendChild(script);
+                document.body.appendChild(scriptW)
+            
+            
+          })
+    }
+
 
     useEffect(() => {
         if(typeof(props.influencerObj.username) !== 'undefined'){
@@ -277,6 +304,42 @@ const AllVideos = (props) =>{
         }
     }, [props.influecerObj])
     useEffect( () => {
+        
+        
+        // new_script()
+        // if(allVideosScript){
+        //     document.body.removeChild(allVideosScript)
+        //     document.body.removeChild(scriptA)
+        //     const script = document.createElement("script");
+        //     script.setAttribute('data-layout', "all-videos");
+        //     script.setAttribute('data-debug', "true");
+        //     script.setAttribute('data-tmsclient', "The Smoke Show");
+        //     script.setAttribute('id', "all-videos");
+        //     script.src = "https://lib.tashop.co/the_smoke_show/adengine.js";
+        //     script.async = true;
+        //     document.body.appendChild(script);
+        //     const scriptW = document.createElement("script");
+        //     scriptW.setAttribute('id', 'ad-w');
+        //     scriptW.text = 'window.TAS = window.TAS || { cmd: [] }'
+        //     document.body.appendChild(scriptW)
+        // }else{
+        //     const script = document.createElement("script");
+        //     script.setAttribute('data-layout', "all-videos");
+        //     script.setAttribute('data-debug', "true");
+        //     script.setAttribute('data-tmsclient', "The Smoke Show");
+        //     script.setAttribute('id', "all-videos");
+        //     script.src = "https://lib.tashop.co/the_smoke_show/adengine.js";
+        //     script.async = true;
+        //     document.body.appendChild(script);
+        //     const scriptW = document.createElement("script");
+        //     scriptW.setAttribute('id', 'ad-w');
+        //     scriptW.text = 'window.TAS = window.TAS || { cmd: [] }'
+        //     document.body.appendChild(scriptW)
+        // }
+        
+        // const scriptW = document.createElement("script")
+        // scriptW.innerHTML = "window.TAS = window.TAS || { cmd: [] }"
+        
         loginCheck()
         props.getInfluencer(influencerId)
     }, [])
@@ -289,8 +352,9 @@ const AllVideos = (props) =>{
                 <meta name="description" content={`Enjoy all videos from the influencer + Vlogger ${influencerName}. Check out the related car statistics and more information.`} />
                 <link rel="canonical" href={`https://thesmokeshow.com/${name}/all-videos`} />
                 <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="all-videos" data-debug="true"></script>
+                
 
-                {/* <script>{`window.TAS = window.TAS || { cmd: [] }`}</script> */}
+                <script>{`window.TAS = window.TAS.reload() || { cmd: [] }`}</script>
                 <script type="application/ld+json">
             {`
                     {
@@ -342,7 +406,6 @@ const AllVideos = (props) =>{
             <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
             {   videoArr[0] &&
                 videoArr.map((video, index) =>{
-                    console.log('índex', index)
                     const unique = short.generate()
                     const str = video.carData.model
                     const id = video.videoId
@@ -414,9 +477,9 @@ const AllVideos = (props) =>{
                                         </div>
                                         <div className="ad-container">
                                             {index < 6 ? 
-                                            <div id={`unit-${adAllVideos[index]}`} className="tmsads"></div>
+                                            <div id={`unit-${adAllVideos[index]}`} className="tmsads" key={Math.random()}></div>
                                             :
-                                            <div id={`child-${adAllVideosInfinite}-${index}`} className="tmsads" data-ad={`unit-${adAllVideosInfinite}`}></div>
+                                            <div id={`child-${adAllVideosInfinite}-${index}`} className="tmsads" data-ad={`unit-${adAllVideosInfinite}`} key={Math.random()}></div>
                                             }
                                             
                                         </div>
