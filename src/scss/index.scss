@@ -279,7 +279,9 @@ label{
   
 }
 .ad-container{
-  height: 250px;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
   background-color: #eee;
   margin: 1rem 0;
   display: flex;
