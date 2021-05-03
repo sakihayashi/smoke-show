@@ -280,10 +280,12 @@ label{
 }
 .ad-container{
   width: 100%;
-  max-width: 100%;
+  max-width: 300px;
   height: auto;
   background-color: #eee;
-  margin: 1rem 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
