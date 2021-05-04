@@ -16,19 +16,13 @@ const EditVideoDataKirk = () =>{
     const [editVideoId, setEditVideoId] = useState('')
     const [editMode, setEditMode] = useState(false)
     const maxAgeTest = 1 * 60 * 60
+    const [items, setItems] = useState([])
+    let chunk_size = 15
 
     const handlePagNum = (num) =>{
         console.log('num', num)
         setActivePag(num)
-        setAllVideos({...allVideos})
-    }
-    let items = [];
-    for (let number = 0; number <= 15; number++) {
-    items.push(
-        <Pagination.Item key={number} active={number === activePag} onClick={()=>{handlePagNum(number)}}>
-        {number}
-        </Pagination.Item>,
-    );
+        // setAllVideos({...allVideos})
     }
     
     const handleChange = (e) =>[
@@ -40,7 +34,7 @@ const EditVideoDataKirk = () =>{
     const videoEmbedURL = 'https://www.youtube.com/embed/'
 
     const chunkArray = (allVideos) =>{
-        let chunk_size = 15
+        
         let index = 0;
         let arrayLength = allVideos.length;
         let tempArray = [];
@@ -157,11 +151,26 @@ const EditVideoDataKirk = () =>{
             </Form>
         )
     }
+    const makePagination = (num) =>{
+        let temp = []
+        for (let i = 0; i < num; i++) {
+            temp.push(
+                <Pagination.Item key={i} active={ i === activePag} onClick={()=>{handlePagNum(i)}}>
+                {i}
+                </Pagination.Item>,
+            );
+            if(i == num -1){
+                setItems(temp)
+            }
+        }
+        
+    }
     const queryData = async () =>{
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
         const collectionYoutube = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("youtube-videos")
         const filter = {channelId: kirkChannelId}
         await collectionYoutube.find(filter).then( videos =>{
+            makePagination(Math.ceil(videos.length/chunk_size))
             const chunkedVideos = chunkArray(videos)
             setAllVideos(chunkedVideos)
         })
@@ -187,7 +196,6 @@ const EditVideoDataKirk = () =>{
                 <center><Pagination>{items}</Pagination></center>
                 <hr />
                 <Row>
-                {console.log('array 0', allVideos[0])}
                 { allVideos[activePag] && 
                     allVideos[activePag].map(video =>{
                         return(

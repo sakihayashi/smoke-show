@@ -41,11 +41,12 @@ export const switchTabs = (car, tab) =>{
     }else{mileage = car.features['Fuel']['EPA mileage est'][' (cty/hwy)']}
     if(car.totalSeating !== undefined) totalSeating = car.totalSeating
     if(car.color !== undefined) colors = car.color
- 
-    if(car.price === undefined){
-        baseMSRP = null
-    }else if(car.price.baseMSRP === undefined){
-        baseMSRP = null
+
+    if(car.price === undefined || car.price === null){
+        baseMSRP = ''
+        
+    }else if(car.price.baseMSRP === undefined || car.price.baseMSRP === null){
+        baseMSRP = ''
     }else{
         baseMSRP = car.price.baseMSRP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
