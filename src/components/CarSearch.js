@@ -26,9 +26,7 @@ const CarSearch = (props) =>{
     const [carTypeArr, setCarTypeArr] = useState([])
     const [carYearArr, setCarYearArr] = useState([])
     const [mongo, setMongo] = useState()
-    const [cars, setCars] = useState([])
-    const [carsByModel, setCarsByModel] = useState([])
-    const [carsByYear, setCarsByYear] = useState([])
+    const [disabled, setDisabled] = useState(true)
     const [carResults, setCarResults] = useState([])
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -42,50 +40,43 @@ const CarSearch = (props) =>{
 
     const getModel = async (e) =>{
         setModelName([])
+        setDisabled(true)
         setSelectedCar({ make: e, model: "Select a model", type: "Select a type", year: "Select a year"})
-        // let carModelArr = []
-        const mongoCollection = mongo.db("smoke-show").collection("cars")
         const makeLowerCase = e.toLowerCase()
-        const filter = {make: makeLowerCase} 
-        try{
-            await mongoCollection.find(filter).then(cars =>{
-                // const carModelArr = [...new Set(availableTypes)]
-                let carModelArr = cars.map(car =>{
-                             return car.model
-                          })
-                const unique = [...new Set(carModelArr)]
-                  setModelName(unique.sort())
-                  setCars(cars)
-                  setCarResults(cars)
-              })
-        }catch(err){console.log(err)}
+        const models = await app.currentUser.functions.distinctCarModel(makeLowerCase)
+
+        if(models){
+            setModelName(models)
+        }else{
+            setModelName(['error. Please choose another maker name.'])
+        }
+        setCarYearArr([])
         
     }
-    const getCarYear = (data) =>{
-        let yearArr = []
-        data.map(car =>{
-            if(yearArr.includes(car.year) === false){
-                yearArr.push(car.year)
-            }
-        })
-        setCarYearArr(yearArr.sort())
-    }
-    const filterByModel = (e) =>{
+    // const getCarYear = (data) =>{
+    //     let yearArr = []
+    //     data.map(car =>{
+    //         if(yearArr.includes(car.year) === false){
+    //             yearArr.push(car.year)
+    //         }
+    //     })
+    //     setCarYearArr(yearArr.sort())
+    // }
+    const filterByModel = async (e) =>{
         
         setSelectedCar({...selectedCar, model: e, type: "Select a type", year: "Select a year"})
-        let filteredByModel = cars.filter(function (car) {
-            if(car.model === e){
-                return car
-            }
-        });
-        // setCars(filteredByModel)
-        setCarsByModel(filteredByModel)
-        setCarResults(filteredByModel)
-        getCarYear(filteredByModel)
+        const makeLowerCase = selectedCar.make.toLowerCase()
+        const years = await app.currentUser.functions.distinctCarYear(makeLowerCase, e)
+        setCarYearArr(years)
+        const collectionCars = mongo.db("smoke-show").collection("cars")
+        const filter = { make: makeLowerCase, modelName: e }
+        const results = await collectionCars.find(filter)
+        setCarResults(results)
+        setDisabled(false)
         
     }
     const getModelNames = (data) =>{
-        
+
         const regCarTypes = /Sedan|Coupe|SUV|Minivan|Wagon|Sport|Station Wagon|Hatchback|Truck/i
         let availableTypes = data.map(car =>{
           const result = car.name.match(regCarTypes) 
@@ -99,22 +90,25 @@ const CarSearch = (props) =>{
         setCarTypeArr(finalResult.sort())
 
     }
-    const filterByYear = (e) =>{
+    const filterByYear = async (e) =>{
         setSelectedCar({...selectedCar, year: e, type: "Select a type"})
-        let filteredByYear = carsByModel.filter((car) =>{
-            if(car.year == e){
-                return car
-            }
-        })
-        setCarsByYear(filteredByYear)
-        setCarResults(filteredByYear)
-        getModelNames(filteredByYear)
+        const collectionCars = mongo.db("smoke-show").collection("cars")
+        const filter = {make: selectedCar.make.toLowerCase(), modelName: selectedCar.model, year: Number(e)}
+        const results = await collectionCars.find(filter)
+        // let filteredByYear = carsByModel.filter((car) =>{
+        //     if(car.year == e){
+        //         return car
+        //     }
+        // })
+        // setCarsByYear(filteredByYear)
+        setCarResults(results)
+        getModelNames(results)
     }
 
     const filterByType = (e) =>{
        
         setSelectedCar({...selectedCar, type: e})
-        let filtered =  carsByYear.filter(car => car.name.includes(e))
+        let filtered =  carResults.filter(car => car.name.includes(e))
         setCarResults(filtered)
     }
    const goStatsPage = () =>{
@@ -127,7 +121,6 @@ const CarSearch = (props) =>{
       })
    }
    const checkToken = async () =>{
-    // let token = sessionStorage.getItem('session_token')
     const tokenUser = sessionStorage.getItem('session_user')
     if(tokenUser){
         jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, async (err, decoded)=>{
@@ -232,11 +225,11 @@ const CarSearch = (props) =>{
                     <div className="center-box">
                     {/* model */}
                         <DropdownButton id="dropdown-year" title={selectedCar.model} onSelect={filterByModel} className="dropdown-middle">
-                            {modelName.map((model, index) =>{
-                                const titleCase = model.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})
+                            {modelName && modelName.map((model, index) =>{
+                                // const titleCase = model.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})
                                 return(
                                     <Fragment key={model +index}>
-                                        <Dropdown.Item eventKey={model} >{titleCase}</Dropdown.Item>
+                                        <Dropdown.Item eventKey={model} >{model}</Dropdown.Item>
                                     </Fragment>
                                 )
                             })}
@@ -245,7 +238,7 @@ const CarSearch = (props) =>{
                     <div className="center-box">
                     {/* year */}
                         <DropdownButton id="dropdown-model" title={selectedCar.year} onSelect={filterByYear}>
-                            {carYearArr.map(year =>{
+                            {carYearArr && carYearArr.map(year =>{
                                 const uuid = uuidv4()
                                 return(
                                     <Fragment key={uuid} >
@@ -268,7 +261,7 @@ const CarSearch = (props) =>{
                     </div>
                     
                     <div className="center-box">
-                        <Button className="search-btn" onClick={goStatsPage}>Search</Button>
+                        <Button className="search-btn" onClick={goStatsPage} disabled={disabled}>Search</Button>
                     </div>
                     
                 </div>

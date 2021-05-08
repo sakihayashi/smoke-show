@@ -58,6 +58,10 @@ a{
 a:hover{
   color: $theme-darker !important;
 }
+button:disabled{
+  background-color: gray !important;
+  border-color: gray !important;
+}
 // text color style
 .theme-text-color{
   color: $theme-darker;
