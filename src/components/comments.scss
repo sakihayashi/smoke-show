@@ -14,3 +14,9 @@
     padding-left: 0;
     text-align: left;
 }
+.edit-icon-comment{
+    float: right;
+    &:hover{
+        cursor: pointer;
+    }
+}

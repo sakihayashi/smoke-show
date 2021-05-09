@@ -53,15 +53,7 @@ const CarSearch = (props) =>{
         setCarYearArr([])
         
     }
-    // const getCarYear = (data) =>{
-    //     let yearArr = []
-    //     data.map(car =>{
-    //         if(yearArr.includes(car.year) === false){
-    //             yearArr.push(car.year)
-    //         }
-    //     })
-    //     setCarYearArr(yearArr.sort())
-    // }
+ 
     const filterByModel = async (e) =>{
         
         setSelectedCar({...selectedCar, model: e, type: "Select a type", year: "Select a year"})

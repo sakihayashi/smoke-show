@@ -50,15 +50,7 @@ const CarStatsListsModel = (props) =>{
     const getData = async (cre) =>{
         try {
             await app.logIn(cre).then(async user =>{
-                const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                const collectionCars = mongo.db("smoke-show").collection("cars")
-                const filter = {make: makeName, year: Number(carYear)}
-                const results = await collectionCars.find(filter)
-                const tempArr = results.map(car =>{
-                    return car.model
-                })
-                const unique = [...new Set(tempArr)]
-                unique.sort()
+                const unique = await user.functions.modelsFromMakeYear(makeName, Number(carYear))
                 const len = unique.length
                 const third = Math.ceil(len/3)
                 setChunk1(unique.slice(0, third))

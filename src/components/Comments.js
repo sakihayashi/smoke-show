@@ -6,21 +6,25 @@ import * as Realm from "realm-web"
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
+import editIcon from '../assets/global/edit-icon.svg'
 import { openLoginModal, attachMsg } from '../store/actions/authActions'
 import './comments.scss'
 // import VisibilitySensor from 'react-visibility-sensor'
 import short from 'short-uuid'
+import { EditComment } from './Edits'
 
 const Comments = (props) =>{
+    const { customData } = props
     const [commentsDB, setCommentsDB] = useState([])
     const [moreComments, setMoreComments] = useState([])
     const [isComment, setIsComment] = useState(false)
     const [userComment, setUserComment] = useState("")
-    
+    const [editMode, setEditMode] = useState([])
     const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
-
     const [isPicSet, setIsPicSet] = useState([])
     const [morePics, setMorePics] = useState([])
+    const [loginUser, setLoginUser] = useState('')
+    const [allowEdit, setAllowEdit] = useState([])
 
     const handleChange = (e) =>{
         setUserComment(e.target.value)
@@ -58,7 +62,7 @@ const Comments = (props) =>{
         try{
             // Authenticate the user
             await app.logIn(credentials.cre).then(async user=>{
-                
+                    setLoginUser(user.id)
                     const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
                     const mongoCollection = mongo.db("smoke-show").collection("comments");
 
@@ -73,6 +77,44 @@ const Comments = (props) =>{
 
         }
    
+    }
+    const updateComment = async (e, id, index, rewrite) =>{
+        e.preventDefault()
+        const tokenUser = sessionStorage.getItem('session_user')
+     
+        if(tokenUser){
+            jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, async (err, decoded)=>{
+                if(err){
+                    console.log('decode error')
+                    
+                }else{
+                    try{
+                        await app.logIn(decoded.cre).then( async user =>{
+                            const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+                            const collectionComments = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("comments")
+                            await collectionComments.updateOne(
+                                { _id: {"$oid": id}},
+                                {
+                                    "$set": {
+                                        "comment": rewrite
+                                    }
+                                }
+                            ).then(res =>{
+                                console.log(res)
+                                let newArr = [...editMode]
+                                newArr[index] = false
+                                setEditMode(newArr)
+                                getComments(decoded.cre)
+                            })
+                       })
+                    }catch(error){
+                        console.log(error)
+                    }
+                   
+            
+                }
+            })
+        }
     }
     const writeComment = () =>{
         return (
@@ -154,13 +196,18 @@ const Comments = (props) =>{
                 }
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionComments = mongo.db("smoke-show").collection("comments")
-                // const collectionUsers = mongo.db("smoke-show").collection("users")
                 await collectionComments.find(filter, options).then(async resAll =>{
                     let arr = []
+                    let arrIds = []
+                    let arrModes = []
                     resAll.map(res =>{
                         arr.push(true)
+                        arrIds.push(res.userId)
+                        arrModes.push(false)
                     })
                     setIsPicSet(arr)
+                    setAllowEdit(arrIds)
+                    setEditMode(arrModes)
                     if( resAll.length !== 0){
                         // let picAttached = resAll.map(async 
                         setIsComment(true)
@@ -189,26 +236,36 @@ const Comments = (props) =>{
                 
             }catch(err){console.log(err)}
     }
-    const swapImg = (index) =>{
+    const swapImg = (i) =>{
        let newArr = [...isPicSet]
-       newArr[index] = false
+       newArr[i] = false
        setIsPicSet(newArr)
     }
-    const swapMoreImg = (index) =>{
+    const swapMoreImg = (i) =>{
        let newArr = [...morePics]
-       newArr[index] = false
+       newArr[i] = false
        setMorePics(newArr)
     }
-
+    const editModeOn = (i) =>{
+        let newArr = [...editMode]
+        newArr[i] = true
+        setEditMode(newArr)
+    }
+    useEffect(() =>{
+        if(typeof(customData) !== 'undefined' && typeof(customData.userId) !== 'undefined' ){
+            setLoginUser(customData.userId)
+        }
+        
+    }, [customData])
     useEffect( () => {
         const tokenUser = sessionStorage.getItem('session_user')
          if(tokenUser){
             jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET, (err, decoded)=>{
                 if(err){
                     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
+                    
                     getComments(credentials)
                 }else{
-
                     getComments(decoded.cre)
                 }
             });
@@ -226,6 +283,7 @@ const Comments = (props) =>{
             const unique = short.generate()
             {/* var localtime = moment(comment.date_posted).local().format('MM-DD-YYYY') */}
             let localtime = moment(comment.date_posted).fromNow()
+          
             return(
                 <Row className="comment-wrapper" key={unique}>
                     {/* <VisibilitySensor onChange={onChange}> */}
@@ -250,8 +308,16 @@ const Comments = (props) =>{
                         }}>
                             <strong>{comment.username}</strong>
                         </Link>
-                     {" "} | <span style={{color:'gray'}}>{localtime}</span></div>
-                    <div className="comment-txt" >{comment.comment}</div>
+                     {" "} | <span style={{color:'gray'}}>{localtime}</span>
+                     { allowEdit[index] === loginUser && 
+                     <img src={editIcon} alt="edit this comment" className="edit-icon-comment" onClick={() => editModeOn(index)}/>}
+                     </div>
+                     {editMode[index] ? 
+                     <EditComment handleChange={handleChange} userComment={userComment} updateComment={updateComment} comment={comment.comment} commentId={comment._id} index={index}/>
+                     :
+                     <div className="comment-txt" >{comment.comment}</div>
+                     }
+                    
                     </div>
                 </Row>
             )
@@ -288,14 +354,19 @@ const Comments = (props) =>{
                             </div>
                             
                             <div  style={{margin: 0, paddingRight:0}} className="col-11">
-                            <div className="comment-username ">
+                            <div className="comment-username">
                                 <Link to={{
                                     pathname: `/user/${comment.userId}`
                                 }}>
                                     <strong>{comment.username}</strong>
                                 </Link>
                             {" "} | <span style={{color:'gray'}}>{localtime}</span></div>
+                            {editMode[index] ? 
+                            <EditComment handleChange={handleChange} loginUser={loginUser} updateComment={updateComment} /> 
+                            :
                             <div className="comment-txt" >{comment.comment}</div>
+                            }
+                            
                             </div>
                         </Row>
                     )

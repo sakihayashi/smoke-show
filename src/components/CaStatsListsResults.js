@@ -68,7 +68,7 @@ const CarStatsListsResults = (props) =>{
             await app.logIn(cre).then(async user =>{
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
                 const collectionCars = mongo.db("smoke-show").collection("cars")
-                const filter = {make: makeName, year: Number(carYear), model: carModel}
+                const filter = {make: makeName, year: Number(carYear), modelName: carModel}
                 const results = await collectionCars.find(filter)
                 const temp = results.map(item => ({...item, tabs: statsArr, activeTab: 'Main Stats'}))
                 setCarData(temp)

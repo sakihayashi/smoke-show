@@ -79,8 +79,6 @@ const CreateNewCar = (props) =>{
                 const result = await app.currentUser.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type)
                 console.log('res', result)
             }
-            // try{
-                // await app.currentUser.functions.putImageObjToS3(imgData64, bucketName, filekey, imgFile.type).then( async res =>{
                     
                     try{
                         await collectionMyCars.insertOne(newCarData).then(async res =>{
@@ -93,41 +91,20 @@ const CreateNewCar = (props) =>{
                                 ).then(res =>{
                                     console.log('res', res)
                                     props.getMyCars(mongo)
-                                    // let oldArr = []
-                                    // if(props.profileUser.myCars){
-                                    //     oldArr.push(props.profileUser.myCars)
-                                    // }
-                                    
-                                    // const cars = {myCars: oldArr.push(newCarData)}
-                                    // props.updateProfileData(cars, 'myCars')
-                                    // props.updateCarData(newCarData)
+                         
                                     closeModal()
                                 })
                         })
-                    //     await mongoCollection.updateOne(
-                    //         { "userId": app.currentUser.id},
-                    //         {
-                    //          $push: { myCars: newCarData }
-                    //         }
-                    //         ).then(res =>{
-                    //             console.log('res', res)
-                    //             const oldArr = props.profileUser.myCars
-                    //             const cars = {myCars: oldArr.push(newCarData)}
-                    //             props.updateProfileData(cars, 'myCars')
-                    //             closeModal()
-                    //         })
+         
                     }catch(err){
                         console.log(err)
                     }
-                // })
-            // }catch(err){
-            //     console.log(err)
-            // }
+ 
         }else{
             console.log('warning current user and the login user do not match')
             // const token = sessionStorage.getItem('session_token')
             const tokenUser = sessionStorage.getItem('session_user')
-            // const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
+        
             const credentials = jwt.verify(tokenUser, process.env.REACT_APP_JWT_SECRET)
             
             try{
