@@ -22,9 +22,7 @@ const CarStatsListsYear = (props) =>{
         title = str.charAt(0).toUpperCase() + str.slice(1)
     }
 
-    const [chunk1, setChunk1] = useState(null)
-    const [chunk2, setChunk2] = useState(null)
-    const [chunk3, setChunk3] = useState(null)
+    const [years, setYears] = useState([])
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
@@ -52,16 +50,10 @@ const CarStatsListsYear = (props) =>{
             await app.logIn(cre).then(async user =>{
          
                 const unique = await user.functions.yearsFromMake(makeName)
-                // const tempArr = results.map(car =>{
-                //     return car.year
-                // })
-                // const unique = [...new Set(tempArr)]
-                // unique.sort()
-                const len = unique.length
-                const third = Math.ceil(len/3)
-                setChunk1(unique.slice(0, third))
-                setChunk2(unique.slice(third, third*2))
-                setChunk3(unique.slice(third*2, len))
+        
+                unique.sort((a, b) => b - a)
+                setYears(unique)
+             
             })
         } catch (error) {
             
@@ -81,39 +73,16 @@ const CarStatsListsYear = (props) =>{
             <div className="spacer-1rem"></div>
             <Container>
             <Row className="list-container">
-                    <Col sm={4} className="list-pd">
-                        <ul className="stats-list">
-                        {chunk1 && chunk1.map(year =>{
-                            return(
-                                <Link to={`/car-stats/${makeName}/${year}`} key={year}>
-                                    <li>{title} {year}</li>
-                                </Link>
-                            )                            
-                         })}
-                        </ul>
-                    </Col>
-                    <Col sm={4} className="list-pd">
-                        <ul className="stats-list">
-                        {chunk2 && chunk2.map(year =>{
-                            return(
-                                <Link to={`/car-stats/${makeName}/${year}`} key={year}>
-                                    <li>{title} {year}</li>
-                                </Link>
-                            )                            
-                         })}
-                        </ul>
-                    </Col>
-                    <Col sm={4} className="list-pd">
-                        <ul className="stats-list">
-                        {chunk3 && chunk3.map(year =>{
-                            return(
-                                <Link to={`/car-stats/${makeName}/${year}`} key={year}>
-                                    <li >{title} {year}</li>
-                                </Link>
-                            )                            
-                         })}
-                        </ul>
-                    </Col>
+                { years && years.map((year) =>{
+                    return(
+                        <Col sm={4} className="list-pd" key={year} >
+                            <Link to={`/car-stats/${makeName}/${year}`} >
+                            {year}
+                            </Link>
+                        </Col>
+                    )
+
+                })}
                 </Row>
             </Container>
             </div>

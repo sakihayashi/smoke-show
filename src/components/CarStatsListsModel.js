@@ -22,9 +22,7 @@ const CarStatsListsModel = (props) =>{
         title = str.charAt(0).toUpperCase() + str.slice(1)
     }
 
-    const [chunk1, setChunk1] = useState(null)
-    const [chunk2, setChunk2] = useState(null)
-    const [chunk3, setChunk3] = useState(null)
+    const [modelNames, setModelNames] = useState([])
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
@@ -50,12 +48,8 @@ const CarStatsListsModel = (props) =>{
     const getData = async (cre) =>{
         try {
             await app.logIn(cre).then(async user =>{
-                const unique = await user.functions.modelsFromMakeYear(makeName, Number(carYear))
-                const len = unique.length
-                const third = Math.ceil(len/3)
-                setChunk1(unique.slice(0, third))
-                setChunk2(unique.slice(third, third*2))
-                setChunk3(unique.slice(third*2, len))
+                let unique = await user.functions.modelsFromMakeYear(makeName, Number(carYear))
+                setModelNames(unique.sort())
             })
         } catch (error) {
             
@@ -75,39 +69,17 @@ const CarStatsListsModel = (props) =>{
             <div className="spacer-2rem"></div>
             <Container>
             <Row className="list-container">
-                    <Col sm={4} className="list-pd">
-                        <ul style={{listStyle: 'none'}}>
-                        {chunk1 && chunk1.map(model =>{
-                            return(
-                                <Link to={`/car-stats/${makeName}/${carYear}/${model}`} key={model}>
-                                    <li>{model.toUpperCase()}</li>
-                                </Link>
-                            )                            
-                         })}
-                        </ul>
+
+            {modelNames && modelNames.map(model =>{
+                return(
+                    <Col sm={4} className="list-pd" key={model}>
+                        <Link to={`/car-stats/${makeName}/${carYear}/${model}`}>
+                            {model}
+                        </Link>
                     </Col>
-                    <Col sm={4} className="list-pd">
-                        <ul style={{listStyle: 'none'}}>
-                        {chunk2 && chunk2.map(model =>{
-                            return(
-                                <Link to={`/car-stats/${makeName}/${carYear}/${model}`} key={model}>
-                                    <li>{model.toUpperCase()}</li>
-                                </Link>
-                            )                            
-                         })}
-                        </ul>
-                    </Col>
-                    <Col sm={4} className="list-pd">
-                        <ul style={{listStyle: 'none'}}>
-                        {chunk3 && chunk3.map(model =>{
-                            return(
-                                <Link to={`/car-stats/${makeName}/${carYear}/${model}`} key={model}>
-                                    <li >{model.toUpperCase()}</li>
-                                </Link>
-                            )                            
-                         })}
-                        </ul>
-                    </Col>
+                )
+            })}
+
                 </Row>
             </Container>
             </div>

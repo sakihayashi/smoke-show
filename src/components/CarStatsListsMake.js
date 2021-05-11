@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { carBrands, carsAllYear } from './carTempData'
+import { carBrands } from './carTempData'
 import { Container, Row, Col } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
@@ -24,7 +24,17 @@ const CarStatsListsMake = () =>{
             <h2 className=" theme-text-p" style={{color: 'gray', textAlign: 'center', fontSize: '1rem'}}>Search car data by maker index</h2>
             <div className="spacer-2rem"></div>
                 <Row className="list-container">
-                    <Col sm={4} className="list-pd">
+                    {carBrands.map(make =>{
+                        const replaced = make.replace(" ", "-")
+                        return(
+                            <Col sm={4} className="list-pd" key={`car-maker-${make}`}>
+                                <Link to={`/car-stats/${replaced.toLocaleLowerCase()}`}>
+                                    {make}
+                                </Link>
+                            </Col>
+                        )
+                    })}
+                    {/* <Col sm={4} className="list-pd">
                         <ul style={{listStyle: 'none'}}>
                         {chunk1 && chunk1.map(make =>{
                             const replaced = make.replace(" ", "-")
@@ -35,8 +45,8 @@ const CarStatsListsMake = () =>{
                             )                            
                          })}
                         </ul>
-                    </Col>
-                    <Col sm={4} className="list-pd">
+                    </Col> */}
+                    {/* <Col sm={4} className="list-pd">
                         <ul style={{listStyle: 'none'}}>
                         {chunk2 && chunk2.map(make =>{
                             const replaced = make.replace(" ", "-")
@@ -59,7 +69,7 @@ const CarStatsListsMake = () =>{
                             )                            
                          })}
                         </ul>
-                    </Col>
+                    </Col> */}
                 </Row>
             </Container>
 

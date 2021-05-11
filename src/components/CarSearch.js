@@ -46,7 +46,7 @@ const CarSearch = (props) =>{
         const models = await app.currentUser.functions.distinctCarModel(makeLowerCase)
 
         if(models){
-            setModelName(models)
+            setModelName(models.sort())
         }else{
             setModelName(['error. Please choose another maker name.'])
         }
@@ -59,7 +59,7 @@ const CarSearch = (props) =>{
         setSelectedCar({...selectedCar, model: e, type: "Select a type", year: "Select a year"})
         const makeLowerCase = selectedCar.make.toLowerCase()
         const years = await app.currentUser.functions.distinctCarYear(makeLowerCase, e)
-        setCarYearArr(years)
+        setCarYearArr(years.sort((a, b) => b - a))
         const collectionCars = mongo.db("smoke-show").collection("cars")
         const filter = { make: makeLowerCase, modelName: e }
         const results = await collectionCars.find(filter)
