@@ -36,7 +36,8 @@ const CarStats = (props) =>{
             <Helmet encodeSpecialCharacters={true}>
                 {/* <title>{carData && carData[0].make}, {carData && carData[0].year}, {carData && carData[0].model} Specs, Reviews, and Pricing | The Smoke Show</title> */}
                 <title>{typeof(carData) !== 'undefined' && `${carData[0].make}, ${carData[0].year}, ${carData[0].model}, Statistics, Specs`}</title>
-                
+                <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="searches" data-debug="true"></script>
+                <script>{`window.TAS = window.TAS.reload() || { cmd: [] }`}</script>
             </Helmet>
             <div className="main-wrapper stats-container">
                 <div className="spacer-4rem"></div>
@@ -55,7 +56,9 @@ const CarStats = (props) =>{
                 })
                 }
                 <div className="spacer-4rem"></div>
-                <div className="ad-div tmsads" id="unit-1617929086580"></div>
+                <div className="ad-on-search">
+                    <div id="unit-1620778820240" class="tmsads"></div>
+                </div>
                 <div className="spacer-4rem"></div>
                 <Link to="/car-search">
                     <Button className="login-btn">Start New Search</Button>
