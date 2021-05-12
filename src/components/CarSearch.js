@@ -163,6 +163,8 @@ const CarSearch = (props) =>{
             <title>Car Statistics Search | The Smoke Show</title>
             <meta name="description" content="Look at all information about any car and have the results displayed in a way that's actually readable by a human. We didn't invent car search, we perfected it!" />
             <link rel="canonical" href="https://thesmokeshow.com/car-search" />
+            <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="searches" data-debug="true"></script>
+            <script>{`window.TAS = window.TAS.reload() || { cmd: [] }`}</script>
             <script type="application/ld+json">
         {`
             {
@@ -259,9 +261,10 @@ const CarSearch = (props) =>{
                 </div>
                 <div className="spacer-4rem"></div>
                 <CarStatsListsMake />
-                {/* <div className="ad-on-search">
-            
-                </div> */}
+                <div className="spacer-2rem"></div>
+                <div className="ad-on-search">
+                    <div id="unit-1620778820240" class="tmsads"></div>
+                </div>
             </div>
             
         </Layout>

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import * as Realm from "realm-web"
 import jwt from 'jsonwebtoken'
-
+import { jsonLD4 } from './jsonLD'
 import loadable from '@loadable/component'
 import { switchTabs } from './functionsStats'
 
@@ -29,7 +29,18 @@ const CarStatsListsResults = (props) =>{
         let str = makeName
         title = str.charAt(0).toUpperCase() + str.slice(1)
     }
-
+    let today = new Date()
+    const timeISO = today.toISOString()
+    let published = new Date('2021-03-01')
+    const publishedISO = published.toISOString()
+    const slug = `car-stats/${makeName}/${carYear}`
+    const list2 = `car-stats/${makeName}`
+    const list2Name = `List of year to search ${title} car data`
+    const list3 = carYear
+    const list4 = carModel
+    const list3Name = `List of car model names of ${title} in ${carYear}`
+    const pageName = `Search Car Statistics for ${makeName} ${carYear} ${carModel}`
+    const dataLD = { timeISO, publishedISO, slug, list2, list3, list4, list2Name, list3Name, pageName }
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
@@ -87,8 +98,10 @@ const CarStatsListsResults = (props) =>{
         <Layout>
             <Helmet encodeSpecialCharacters={true}>
                 <title>Car Statistics {title} {carYear} {carModel} | The Smoke Show</title>
-                <meta name="description" content="Place the meta description text here." />
-
+                <meta name="description" content={`Car statistics and data for ${title} ${carYear} ${carModel}` } />
+                <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="searches" data-debug="true"></script>
+                <script>{`window.TAS = window.TAS.reload() || { cmd: [] }`}</script>
+                <script type="application/ld+json">{jsonLD4(dataLD)}</script>
             </Helmet>
             <div className="main-wrapper stats-container">
                 <div className="spacer-4rem"></div>
@@ -109,6 +122,10 @@ const CarStatsListsResults = (props) =>{
                 })
                 }
                 <div className="spacer-4rem"></div>
+                <div className="ad-on-search">
+                    <div id="unit-1620778820240" class="tmsads"></div>
+                </div>
+                <div className="spacer-2rem"></div>
                 <Link to="/car-search">
                     <Button className="login-btn">Start New Search</Button>
                 </Link>

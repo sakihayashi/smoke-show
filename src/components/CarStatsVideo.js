@@ -110,7 +110,10 @@ const CarStatsVideo = (props) =>{
  
                 <title>{typeof(carMake) !== 'undefined' && `${carMake.toUpperCase()}, ${carYear}, ${carModel.toUpperCase()} all types car statictics | The Smoke Show`}</title>
                 <meta name="description" content={`${carMake.toUpperCase()} ${carYear} ${carModel.toUpperCase()} car statistics | engines, price, warranty, color, and more information`} />
+                
                 <link rel="canonical" href={`https://thesmokeshow.com/car-stats/${carMake}/${carYear}/${carModel}/${carDataId}`} />
+                <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="searches" data-debug="true"></script>
+                <script>{`window.TAS = window.TAS.reload() || { cmd: [] }`}</script>
 
                  <script type="application/ld+json">
             {`
@@ -217,6 +220,9 @@ const CarStatsVideo = (props) =>{
                     }
                 </Row>
                 <div className="spacer-4rem"></div>
+                <div className="ad-on-search">
+                    <div id="unit-1620778820240" class="tmsads"></div>
+                </div>
                 <Link to="/car-search">
                     <Button className="login-btn">Search other cars</Button>
                 </Link>

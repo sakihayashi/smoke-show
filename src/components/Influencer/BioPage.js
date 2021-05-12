@@ -40,8 +40,6 @@ const BioPage = (props) =>{
     const [influencer, setInfluencer] = useState({userId: '', fname: '', lname: '', username: '', fans: null, desc: '', channelId: '', banner_img: '', profile_pic: '', featuredVideo: {id: '', title: ''}})
 
     const [formattedFans, setFormattedFans] = useState('')
-
-    // const videoEmbedURL = 'https://www.youtube.com/embed/'
  
     const [latestVideos, setLatestVideos] = useState([])
     const appConfig = {

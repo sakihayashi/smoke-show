@@ -4,7 +4,8 @@ import { Container, Row, Col } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import * as Realm from "realm-web"
 import jwt from 'jsonwebtoken'
-
+import { Helmet } from 'react-helmet'
+import { jsonLD3 } from './jsonLD'
 
 const CarStatsListsModel = (props) =>{
     const makeName = props.match.params.make
@@ -21,7 +22,24 @@ const CarStatsListsModel = (props) =>{
         let str = makeName
         title = str.charAt(0).toUpperCase() + str.slice(1)
     }
-
+    let today = new Date()
+    const timeISO = today.toISOString()
+    let published = new Date('2021-03-01')
+    const publishedISO = published.toISOString()
+    const slug = `car-stats/${makeName}/${carYear}`
+    const list2 = `car-stats/${makeName}`
+    const list2Name = `List of car model names from ${title} year ${carYear}`
+    const list3 = carYear
+    const pageName = `Search Car Statistics for ${makeName} ${carYear}`
+    const dataLD = {
+        slug,
+        pageName,
+        publishedISO,
+        timeISO,
+        list2,
+        list3,
+        list2Name
+    }
     const [modelNames, setModelNames] = useState([])
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -57,12 +75,17 @@ const CarStatsListsModel = (props) =>{
     }
 
     useEffect(() => {
-  
         const cre = loginCheck()
         getData(cre)
     }, [])
     return(
         <Layout>
+            <Helmet>
+                <title>Car Statistics Search for {title} year {carYear} | The Smoke Show</title>
+                <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="searches" data-debug="true"></script>
+                <script>{`window.TAS = window.TAS.reload() || { cmd: [] }`}</script>
+                <script type="application/ld+json">{jsonLD3(dataLD)}</script>
+            </Helmet>
             <div className="spacer-4rem"></div>
             <div className="main-wrapper" style={{minHeight: 'calc(100vh - 22rem)'}}>
             <h1 className="title">{title} {carYear} car data model list</h1>
@@ -83,7 +106,9 @@ const CarStatsListsModel = (props) =>{
                 </Row>
             </Container>
             </div>
-            
+            <div className="ad-on-search">
+                <div id="unit-1620778820240" class="tmsads"></div>
+            </div>
         </Layout>
     )
 }

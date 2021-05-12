@@ -4,7 +4,8 @@ import { Container, Row, Col } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import * as Realm from "realm-web"
 import jwt from 'jsonwebtoken'
-
+import { Helmet } from "react-helmet"
+import { jsonLD2 } from './jsonLD'
 
 const CarStatsListsYear = (props) =>{
     const makeName = props.match.params.make
@@ -15,12 +16,18 @@ const CarStatsListsYear = (props) =>{
         for(let i=0; i < splitted.length; i++){
             temp.push(splitted[i].charAt(0).toUpperCase() + splitted[i].slice(1))
         }
-        
         title = temp.join(" ")
     }else{
         let str = makeName
         title = str.charAt(0).toUpperCase() + str.slice(1)
     }
+    let today = new Date()
+    const timeISO = today.toISOString()
+    let published = new Date('2021-03-01')
+    const publishedISO = published.toISOString()
+    const slug = `car-stats/${makeName}`
+    const pageName = `Search Car Statistics for ${makeName}`
+    const dataLD = { slug, pageName, publishedISO, timeISO }
 
     const [years, setYears] = useState([])
     const appConfig = {
@@ -67,6 +74,13 @@ const CarStatsListsYear = (props) =>{
     }, [])
     return(
         <Layout>
+            <Helmet>
+                <title>Car Statistics Search for {title} | The Smoke Show</title>
+                <meta name="description" content={`Search ${title.toUpperCase()} car statistics | engines, price, warranty, color, and more information`} />
+                <script src="https://lib.tashop.co/the_smoke_show/adengine.js" async data-tmsclient="The Smoke Show" data-layout="searches" data-debug="true"></script>
+                <script>{`window.TAS = window.TAS.reload() || { cmd: [] }`}</script>
+                <script type="application/ld+json">{jsonLD2(dataLD)}</script>
+            </Helmet>
             <div className="spacer-4rem"></div>
             <div className="main-wrapper" style={{minHeight: 'calc(100vh - 22rem)'}}>
             <h1 className="title">{title} car data year list</h1>
@@ -86,7 +100,9 @@ const CarStatsListsYear = (props) =>{
                 </Row>
             </Container>
             </div>
-            
+            <div className="ad-on-search">
+                <div id="unit-1620778820240" class="tmsads"></div>
+            </div>
         </Layout>
     )
 }
