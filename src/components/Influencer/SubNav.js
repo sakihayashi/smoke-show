@@ -38,8 +38,15 @@ const SubNav = (props) =>{
                     try{
                         await app.logIn(decoded.cre).then( async user =>{
                             const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                            const collectionUsers = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
+                            let collectionUsers;
+                            if(user.isInfluencer){
+                                collectionUsers = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("influencers")
+                            }else{
+                                collectionUsers = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("users")
+                            }
+                            
                             const collectionFans = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection(`fans-${influencer.username}`)
+                            
                 
                             try{
                                 await collectionUsers.updateOne(
@@ -51,12 +58,11 @@ const SubNav = (props) =>{
                                     try{
                                         await collectionFans.insertOne(fanData).then(res =>{
                                             console.log(res)
-
                                         })
                                     }catch(err){
                                         console.log(err)
                                     }
-                                    console.log('become a fan of ', influencer.username)
+                                  
                                     setIsFanOf(true)
                                     
                                 })

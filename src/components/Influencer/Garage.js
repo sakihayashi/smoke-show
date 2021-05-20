@@ -189,6 +189,7 @@ const Garage = (props) =>{
                 const filter = {userId: userIdParam}
                 try{
                     await collectionInfluencer.findOne(filter).then( user =>{
+                        const userId = user.userId
                         setProfileUser(user)
                         if(typeof(user.joined) == 'undefined'){
                             setFormattedTime('No data')
@@ -386,8 +387,8 @@ const Garage = (props) =>{
                                     <Col sm={8}>
                                         <p className="no-m-b">
                                             { profileUser.fansOf &&
-                                                profileUser.fansOf.map((name, i) =>{
-                                                    return <span>{i > 0 && ', '}{name}</span>
+                                                profileUser.fansOf.map((influencer, i) =>{
+                                                    return <span key={influencer.username}>{i > 0 && ', '}{influencer.username}</span>
                                                 })
                                             }
                                         </p>
