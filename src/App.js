@@ -42,6 +42,7 @@ import CarStatsListsYear from './components/CarStatsListsYear'
 import CarStatsListsModel from './components/CarStatsListsModel'
 import CarStatsListsResults from './components/CaStatsListsResults'
 import Loading from './components/Loading'
+import Instagram from './components/Admin/Instagram'
 // import CreateSiteMap from './components/Admin/CreateSiteMap'
 const HomePage = loadable(() => import('./components/HomePage'), {
   fallback: <Loading />
@@ -105,6 +106,7 @@ function App() {
 
           <Route path="/update-video" component={QueryVideoData} />
           <Route path="/img-upload" component={CarImgUpload} />
+          <Route path="/instagram" component={Instagram} />
           <Route component={NotFoundPage} />
         </Switch>
     </Router>    
