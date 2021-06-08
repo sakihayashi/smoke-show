@@ -12,7 +12,7 @@ const Instagram = () =>{
     useEffect(() =>{
         // axios.get(`https://graph.instagram.com/me/media?fields=id,caption,permalink,media_url&access_token=${process.env.REACT_APP_INSTA}`)
         // IGQVJVLTJSRmRhemp3MTBqekJZAeFZAfYzFZANjJreEhCc1lVY05FaWd4T0tfN1NLVWp2WG52MG5ETTByR3NSVFo3M01PWk4tdFpzYzN2Ql9XMVRmelRmVEhwbFFwSDgzdzVOdDU5TkJB
-        axios.get(`https://graph.instagram.com/me/media?fields=id,caption,permalink,media_url,media_type&access_token=IGQVJVLTJSRmRhemp3MTBqekJZAeFZAfYzFZANjJreEhCc1lVY05FaWd4T0tfN1NLVWp2WG52MG5ETTByR3NSVFo3M01PWk4tdFpzYzN2Ql9XMVRmelRmVEhwbFFwSDgzdzVOdDU5TkJB`)
+        axios.get(`https://graph.instagram.com/me/media?fields=id,caption,permalink,media_url,media_type,username&access_token=IGQVJVLTJSRmRhemp3MTBqekJZAeFZAfYzFZANjJreEhCc1lVY05FaWd4T0tfN1NLVWp2WG52MG5ETTByR3NSVFo3M01PWk4tdFpzYzN2Ql9XMVRmelRmVEhwbFFwSDgzdzVOdDU5TkJB`)
       .then(res => {
         setInstaData(res.data.data)
       })
@@ -24,15 +24,13 @@ const Instagram = () =>{
             </Helmet>
             <div className="main-wrapper">
             <div className="spacer-4rem"></div>
-            <h2 className="title">Instagram Feed</h2>
+            <h2 className="title">Instagram Feed @ {instaData[0] && instaData[0].username}</h2>
                 <Row className="insta-row" >
                     {instaData[0] && 
                         instaData.map(data =>{
                             const instaLink = data.permalink.replace('/', '')
-                            console.log('media', data.media_type)
-                            // const srcLink = data.media_url.replace('/', '')
                             return (
-                                <Col md={4}>
+                                <Col md={4} lg={3}>
                                     <Card style={{ width: '100%' }} >
                                         <div className="square">
                                             { data.media_type === 'VIDEO' ? 
