@@ -20,7 +20,7 @@ const Instagram = () =>{
     return(
         <Layout>
             <Helmet>
-
+                <meta name="robots" content="noindex" />
             </Helmet>
             <div className="main-wrapper">
             <div className="spacer-4rem"></div>
@@ -30,7 +30,7 @@ const Instagram = () =>{
                         instaData.map(data =>{
                             const instaLink = data.permalink.replace('/', '')
                             return (
-                                <Col md={4} lg={3}>
+                                <Col md={4} xl={3}>
                                     <Card style={{ width: '100%' }} >
                                         <div className="square">
                                             { data.media_type === 'VIDEO' ? 
