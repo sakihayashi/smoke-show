@@ -1,6 +1,8 @@
 .square {
     position: relative;
     width: 100%;
+        // padding-bottom: 100%;
+        overflow: hidden;
   }
   
   .square:after {
@@ -19,4 +21,8 @@
   .insta-row{
       margin: 0;
       width: 100%;
+  }
+  .insta-video{
+    width: 100%;
+    height: auto;
   }
