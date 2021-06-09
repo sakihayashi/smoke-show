@@ -3,17 +3,13 @@ import { Helmet } from "react-helmet"
 import Layout from '../Layout/Layout'
 import { Col, Row, Card, Button, Carousel } from 'react-bootstrap'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 import './insta.scss'
 // import { Carousel } from 'bootstrap'
 
 const Instagram = () =>{
     const [instaData, setInstaData] = useState([])
-    // const [instaCarousel, setInstaCarousel] = useState([])
-    const [index, setIndex] = useState(0);
-
-    const handleSelect = (selectedIndex, e) => {
-      setIndex(selectedIndex);
-    };
+ 
     const filterCarousel =  (data) =>{
         const result = data.map(async data =>{
             
@@ -74,7 +70,7 @@ const Instagram = () =>{
                                                 // </div>
                                                 <React.Fragment>
                                                 { data.imgArr[0] ?
-                                                    <Carousel activeIndex={index} onSelect={handleSelect} >
+                                                    <Carousel  >
                                                     {data.imgArr.map(img =>{
                                                             return(
                                                             <Carousel.Item key={img.id}>
@@ -102,7 +98,7 @@ const Instagram = () =>{
                                             <Card.Text>
                                             {data.caption}
                                             </Card.Text>
-                                            <a href={instaLink}>
+                                            <a target="_blank" href={instaLink}>
                                             <Button variant="outline-primary">Go Instagram</Button>
                                             </a>
                                             
