@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Helmet } from "react-helmet"
 import Layout from '../Layout/Layout'
-import { Col, Row, Card, Button, Carousel } from 'react-bootstrap'
+import { Col, Row, Card, Button, Carousel, Pagination } from 'react-bootstrap'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 import './insta.scss'
 // import { Carousel } from 'bootstrap'
 
 const Instagram = () =>{
     const [instaData, setInstaData] = useState([])
+    const [pageNum, setPageNum] = useState(1)
+    const [nextData, setNextData] = useState('')
+    const [prevData, setPrevData] = useState('')
  
     const filterCarousel =  (data) =>{
         const result = data.map(async data =>{
@@ -17,7 +19,6 @@ const Instagram = () =>{
                 const res = await axios.get(`https://graph.instagram.com/${data.id}/children?fields=media_url&access_token=IGQVJVLTJSRmRhemp3MTBqekJZAeFZAfYzFZANjJreEhCc1lVY05FaWd4T0tfN1NLVWp2WG52MG5ETTByR3NSVFo3M01PWk4tdFpzYzN2Ql9XMVRmelRmVEhwbFFwSDgzdzVOdDU5TkJB`)
                 
                 data.imgArr = res.data.data
-                console.log('image arr attached', data)
                 return data
             }else{
                 return data
@@ -30,11 +31,41 @@ const Instagram = () =>{
         })
         
     }
+    const setData = (prev, next) =>{
+        if(prev){
+            setPrevData(prev)
+        }else{
+            setPrevData('')
+        }
+        if(next){
+            setNextData(next)
+        }else{
+            setNextData('')
+        }
+    }
+    const nextPage = () =>{
+        setPageNum(pageNum +1)
+        axios.get(nextData).then(res =>{
+            console.log('res next page', res)
+            filterCarousel(res.data.data)
+            setData(res.data.paging.previous, res.data.paging.next)
+            
+        })
+    }
+    const prevPage = () =>{
+        setPageNum(pageNum -1)
+        axios.get(prevData).then(res =>{
+            filterCarousel(res.data.data)
+            setData(res.data.paging.previous, res.data.paging.next)
+        })
+    }
     useEffect(() =>{
         // axios.get(`https://graph.instagram.com/me/media?fields=id,caption,permalink,media_url&access_token=${process.env.REACT_APP_INSTA}`)
         // IGQVJVLTJSRmRhemp3MTBqekJZAeFZAfYzFZANjJreEhCc1lVY05FaWd4T0tfN1NLVWp2WG52MG5ETTByR3NSVFo3M01PWk4tdFpzYzN2Ql9XMVRmelRmVEhwbFFwSDgzdzVOdDU5TkJB
         axios.get(`https://graph.instagram.com/me/media?fields=id,caption,permalink,media_url,media_type,username&access_token=IGQVJVLTJSRmRhemp3MTBqekJZAeFZAfYzFZANjJreEhCc1lVY05FaWd4T0tfN1NLVWp2WG52MG5ETTByR3NSVFo3M01PWk4tdFpzYzN2Ql9XMVRmelRmVEhwbFFwSDgzdzVOdDU5TkJB`)
       .then(res => {
+          console.log('res', res.data.paging.next)
+        setNextData(res.data.paging.next)
         filterCarousel(res.data.data)
         // setInstaData(res.data.data)
       })
@@ -52,7 +83,7 @@ const Instagram = () =>{
                         instaData.map(data =>{
                             const instaLink = data.permalink.replace('/', '')
                             return (
-                                <Col md={4} xl={3}>
+                                <Col md={4} xl={3} key={data.id}>
                                     <Card style={{ width: '100%' }} >
                                         <div className="square-insta">
                                             { data.media_type === 'VIDEO' ? 
@@ -122,6 +153,12 @@ const Instagram = () =>{
                     }
                     
                 </Row>
+                <Pagination className="pagination-insta">
+                    { prevData !== '' && <Pagination.Prev  onClick={prevPage}/> }
+                    <div className="page-num-insta">{pageNum}</div>
+                    { nextData !== '' && <Pagination.Next onClick={nextPage} /> }
+                    
+                </Pagination>
             </div>
             
         </Layout>
