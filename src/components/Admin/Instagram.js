@@ -4,6 +4,7 @@ import Layout from '../Layout/Layout'
 import { Col, Row, Card, Button, Carousel, Pagination } from 'react-bootstrap'
 import axios from 'axios'
 import './insta.scss'
+import { urlify } from '../Global/functions'
 // import { Carousel } from 'bootstrap'
 
 const Instagram = () =>{
@@ -64,7 +65,6 @@ const Instagram = () =>{
         // IGQVJVLTJSRmRhemp3MTBqekJZAeFZAfYzFZANjJreEhCc1lVY05FaWd4T0tfN1NLVWp2WG52MG5ETTByR3NSVFo3M01PWk4tdFpzYzN2Ql9XMVRmelRmVEhwbFFwSDgzdzVOdDU5TkJB
         axios.get(`https://graph.instagram.com/me/media?fields=id,caption,permalink,media_url,media_type,username&access_token=IGQVJVLTJSRmRhemp3MTBqekJZAeFZAfYzFZANjJreEhCc1lVY05FaWd4T0tfN1NLVWp2WG52MG5ETTByR3NSVFo3M01PWk4tdFpzYzN2Ql9XMVRmelRmVEhwbFFwSDgzdzVOdDU5TkJB`)
       .then(res => {
-          console.log('res', res.data.paging.next)
         setNextData(res.data.paging.next)
         filterCarousel(res.data.data)
         // setInstaData(res.data.data)
@@ -81,7 +81,8 @@ const Instagram = () =>{
                 <Row className="insta-row" >
                     {instaData[0] && 
                         instaData.map(data =>{
-                            const instaLink = data.permalink.replace('/', '')
+                            const instaLink = data.permalink
+                            const caption = data.caption
                             return (
                                 <Col md={4} xl={3} key={data.id}>
                                     <Card style={{ width: '100%' }} >
@@ -95,10 +96,6 @@ const Instagram = () =>{
                                                 data.media_type === 'IMAGE' ? 
                                                 <Card.Img variant="top" src={data.media_url} />
                                                 :
-                                                // <div>
-                                                //     {console.log(data.imgArr)}
-                                                //     test
-                                                // </div>
                                                 <React.Fragment>
                                                 { data.imgArr[0] ?
                                                     <Carousel  >
@@ -126,8 +123,7 @@ const Instagram = () =>{
                                         
                                         <Card.Body>
                                             {/* <Card.Title>Card Title</Card.Title> */}
-                                            <Card.Text>
-                                            {data.caption}
+                                            <Card.Text dangerouslySetInnerHTML={{ __html: caption && urlify(caption)}}>
                                             </Card.Text>
                                             <a target="_blank" href={instaLink}>
                                             <Button variant="outline-primary">Go Instagram</Button>
@@ -137,16 +133,6 @@ const Instagram = () =>{
                                     </Card>
                                 </Col>
                                 
-                                // <Col md={3}>
-                                //     <a href={instaLink}>
-                                //     <h3>{data.caption}</h3>
-                                //     <div className="square">
-                                //         <img src={data.media_url} alt={data.caption} className="content"/>
-                                //     </div>
-                                    
-                                //     </a>
-                                    
-                                // </Col>
                             )
                         })
                         

@@ -29,7 +29,6 @@ const publishedISO = published.toISOString()
 const s3BaseUrl = 'https://dwdlqiq3zg6k6.cloudfront.net/'
 // const [visibleOn, setVisibleOn] = useState(null)
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
-// const videoEmbedURL = 'https://www.youtube.com/embed/'
 const [latestVideos, setLatestVideos] = useState([])
 const [isLoading, setIsloading] = useState(false)
 
