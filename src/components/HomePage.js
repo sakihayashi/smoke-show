@@ -204,6 +204,7 @@ const [isLoading, setIsloading] = useState(false)
                                                 height="315"
                                                 url={videoWatchURL + video.videoId}
                                                 controls={true}
+                                                allowFullScreen={true}
                                                 />
                                             </div>
 
