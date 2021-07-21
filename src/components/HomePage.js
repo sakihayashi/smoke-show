@@ -31,6 +31,7 @@ const s3BaseUrl = 'https://dwdlqiq3zg6k6.cloudfront.net/'
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
 const [latestVideos, setLatestVideos] = useState([])
 const [isLoading, setIsloading] = useState(false)
+const [views, setViews] = useState([])
 
     const getVideos = async (credentials) =>{
         setLatestVideos([])
@@ -63,8 +64,15 @@ const [isLoading, setIsloading] = useState(false)
              
                     const collectionCars = mongo.db("smoke-show").collection("cars")
                     const collectionManual = mongo.db("smoke-show").collection("cars-manual")
-                    
-                    const results = videos.map(async video =>{
+                    let arr = [...views]
+                    const results = videos.map(async (video, index) =>{
+                        console.log('id', video.videoId)
+                        console.log('bug fix', video.views)
+                        if(typeof(video.views) !== 'undefined'){
+                            arr[index] = Number(video.views)
+                        }else{
+                            arr[index] = 0;
+                        }
                         tempArr.push(false)
                         if(video.userId === '60230361f63ff517d4fdad14'){
                             video.fans = eddieFans
@@ -74,13 +82,11 @@ const [isLoading, setIsloading] = useState(false)
                         }else{
                             video.fans = 0
                         }
-
                         const filterCar = {_id: {"$oid": video.carDataId}}
                         const data = await collectionCars.findOne(filterCar)
                         if(data){
                         video.carData = data
                         return video
-
                         }else{
                         const data = await collectionManual.findOne(filterCar)
                             if(data){
@@ -98,6 +104,7 @@ const [isLoading, setIsloading] = useState(false)
                     // setVisibleOn(tempArr)
                     Promise.all(results).then(videos =>{
                         setLatestVideos(videos)
+                        setViews(arr)
                     })
                         
                     })
@@ -124,7 +131,26 @@ const [isLoading, setIsloading] = useState(false)
             getVideos(credentials)
         }
     }
+    const runCounter = async (videoId, index) => {
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        const collectionYoutube = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("youtube-videos")
+        const addedViews = Number(views[index] +1)
+        const tempArr = [...views]
+        tempArr[index] = addedViews
 
+        try {
+            await collectionYoutube.updateOne(
+                {"videoId": videoId},
+                { "$set": { "views": addedViews} }
+            ).then(res => {
+                console.log(res)
+                setViews(tempArr)
+            })
+            
+        } catch (error) {
+            console.log('err', error);
+        }
+    }
 
     useEffect( () => {
 
@@ -169,7 +195,6 @@ const [isLoading, setIsloading] = useState(false)
                 {latestVideos &&
                     latestVideos.map((video, index) =>{
                         const str = video.carData.model
-                        const id = video.videoId
                         let linkUsername = ''
                         let weight = video.carData.features.Measurements["Curb weight"]
                         if(video.userId === '602303890ff2832f7d19a2af'){
@@ -200,6 +225,7 @@ const [isLoading, setIsloading] = useState(false)
                                         <Col sm >
                                             <div className="videoWrapper">
                                                 <ReactPlayer
+                                                onStart={() => runCounter(video.videoId, index)}
                                                 width="560" 
                                                 height="315"
                                                 url={videoWatchURL + video.videoId}
@@ -209,8 +235,10 @@ const [isLoading, setIsloading] = useState(false)
                                             </div>
 
                                             <h3 style={{marginTop:'10px'}} className="video-title">{video.snippet.title}</h3>
-                                            <small>{date}</small>
-                                           
+                                            <small>{date}</small> {' |'}
+                                            { <small>{views[index] ? views[index] : 0 } views</small>
+                                            }
+                                            
                                             <Row className="comment-wrapper" >
                                                 
                                                 <div className="col-1" style={{margin:0,padding:0}} >

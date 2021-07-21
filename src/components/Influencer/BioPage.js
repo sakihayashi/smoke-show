@@ -38,9 +38,9 @@ const BioPage = (props) =>{
 
     const [featured, setFeatured] = useState()
     const [influencer, setInfluencer] = useState({userId: '', fname: '', lname: '', username: '', fans: null, desc: '', channelId: '', banner_img: '', profile_pic: '', featuredVideo: {id: '', title: ''}})
-
+    const [views, setViews] = useState([])
     const [formattedFans, setFormattedFans] = useState('')
- 
+    const [featuredViews, setFeaturedViews] = useState(null)
     const [latestVideos, setLatestVideos] = useState([])
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
@@ -80,9 +80,14 @@ const BioPage = (props) =>{
         const filter = {userId: influencerId}
         const options = {sort: {"snippet.publishedAt": -1}, limit: 7 }
         const videos = await collectionVideos.find(filter, options)
-        
+        let arr = [...views]
         if(videos){
-            const results = videos.map(async video =>{
+            const results = videos.map(async (video, index) =>{
+                if(typeof(video.views) !== 'undefined'){
+                    arr[index] = Number(video.views)
+                }else{
+                    arr[index] = 0;
+                }
                 const filterCar = {_id: {"$oid": video.carDataId}}
                 const data =  await collectionCars.findOne(filterCar)
                 if(data){
@@ -104,6 +109,9 @@ const BioPage = (props) =>{
             })
             Promise.all(results).then(res =>{
                 let removed = res.shift()
+                let removedViews = arr.shift()
+                setViews(arr)
+                setFeaturedViews(Number(removedViews))
                 const str = removed.carData.model
                 const modelTitle = str.charAt(0).toUpperCase() +str.slice(1)
                 const make = removed.carData.make
@@ -118,7 +126,43 @@ const BioPage = (props) =>{
             })
         }
     }
+    const runCounter = async (videoId, index) => {
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        const collectionYoutube = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("youtube-videos")
+        const addedViews = Number(views[index] +1)
+        const tempArr = [...views]
+        tempArr[index] = addedViews
 
+        try {
+            await collectionYoutube.updateOne(
+                {"videoId": videoId},
+                { "$set": { "views": addedViews} }
+            ).then(res => {
+                console.log(res)
+                setViews(tempArr)
+            })
+            
+        } catch (error) {
+            console.log('err', error);
+        }
+    }
+    const runCounterFeatured = async (id) => {
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        const collectionYoutube = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("youtube-videos")
+        const addedViews = Number(featuredViews + 1)
+        try {
+            await collectionYoutube.updateOne(
+                {"videoId": id},
+                { "$set": { "views": addedViews} }
+            ).then(res => {
+                console.log(res)
+                setFeaturedViews(addedViews)
+            })
+            
+        } catch (error) {
+            console.log('err', error);
+        }
+    }
     const checkToken = async () =>{
         const token = sessionStorage.getItem('session_user')
         if(token){
@@ -220,6 +264,7 @@ const BioPage = (props) =>{
                         <div className="videoWrapper">
                         {featured && 
                             <ReactPlayer
+                                onStart={() => runCounterFeatured(featured.videoId)}
                                 width="560" 
                                 height="315"
                                 url={videoWatchURL + featured.videoId}
@@ -228,7 +273,9 @@ const BioPage = (props) =>{
                         }
                         </div>
                         <h3 style={{marginTop:'10px'}}>{featured && featured.snippet.title}</h3>
-                        <small>{featured && moment(featured.snippet.publishedAt).fromNow()}</small>
+                        <small>{featured && moment(featured.snippet.publishedAt).fromNow()}</small>{' | '}
+                        { <small>{featuredViews ? featuredViews : 0 } views</small>
+                                }
                         {featured && <Comments videoId={featured.videoId} />
                                 }
                     </Col>
@@ -283,6 +330,8 @@ const BioPage = (props) =>{
                 <Row className="bio-main-row">
                 { latestVideos && 
                     latestVideos.map((video, index) =>{
+                        console.log('id', video.videoId)
+                        console.log('views', video.views)
                         const str = video.carData.model
                         const model = str.charAt(0).toUpperCase() +str.slice(1)
                         const name = video.carData.make
@@ -307,6 +356,7 @@ const BioPage = (props) =>{
                             <Col sm >
                              <div className="videoWrapper">
                                 <ReactPlayer
+                                onStart={() => runCounter(video.videoId, index)}
                                 width="560" 
                                 height="315"
                                 url={videoWatchURL + video.videoId}
@@ -315,7 +365,9 @@ const BioPage = (props) =>{
                             </div>
                    
                                 <h3 style={{marginTop:'10px'}}>{video.snippet.title}</h3>
-                                <small>{date}</small>
+                                <small>{date}</small> {' |'}
+                                { <small>{views[index] ? views[index] : 0 } views</small>
+                                }
                                 <input className="acd-input" type="checkbox" id={`title${index}`} />
                                     
                                 <label htmlFor={`title${index}`} className="acd-label">Show </label>

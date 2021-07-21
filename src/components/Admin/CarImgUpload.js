@@ -135,8 +135,6 @@ const CarImgUpload = (props) =>{
 
     }
     const savePic = async () =>{
-        console.log('pic', pic)
-        console.log(carObj)
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
         const collectionCars = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("cars")
 

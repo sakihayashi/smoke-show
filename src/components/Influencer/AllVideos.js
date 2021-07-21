@@ -34,15 +34,13 @@ const AllVideos = (props) =>{
     }else if(name === 'Lexurious-Fleet'){
         influencerId = '602303890ff2832f7d19a2af'
     }
-    const [scriptState, setScriptState] = useState(false)
     const [videoArr, setVideoArr] = useState([])
     const [allVideoData, setAllVideoData] = useState([])
-
+    const [views, setViews] = useState([])
     const [pgNum, setPgNum] = useState(null)
     const [middleNum, setMiddleNum] = useState(null)
     const [active, setActive] = useState(1)
     const [influencerName, setInfluencerName] = useState('')
-  
     const appConfig = {
         id: process.env.REACT_APP_REALM_APP_ID,
         // timeout: 10000, 
@@ -64,60 +62,91 @@ const AllVideos = (props) =>{
 
         return tempArray;
     }
+    const runCounter = async (videoId, index) => {
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        const collectionYoutube = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("youtube-videos")
+        const addedViews = Number(views[index] +1)
+        const tempArr = [...views]
+        tempArr[index] = addedViews
 
+        try {
+            await collectionYoutube.updateOne(
+                {"videoId": videoId},
+                { "$set": { "views": addedViews} }
+            ).then(res => {
+                console.log(res)
+                // setViews(tempArr)
+            })
+            
+        } catch (error) {
+            console.log('err', error);
+        }
+    }
 
     const attachCarData = async (chunk, num) =>{
         
-       setVideoArr([])
-
-                const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-                const collectionCars = mongo.db("smoke-show").collection("cars")
-                const collectionManual = mongo.db("smoke-show").collection("cars-manual")
-                if(chunk){
-                    const mapResults = chunk[num].map(async video =>{
-                        const filterCar = {_id: {"$oid": video.carDataId}}
-
-                        const data = await collectionCars.findOne(filterCar)
-                        
-                            if(data){
-                            video.carData = data
-                            return video
-                            }else{
-
-                            const data = await collectionManual.findOne(filterCar)
-                            if(data){
-                                video.carData = data
-                                return video
-                            }else{
-                                console.log('no data')
-                            }
-                            }
-                                
-                    })
-                    Promise.all(mapResults).then(video =>{
-                        setVideoArr(video)
-                    })
+        setVideoArr([])
+        setViews([])
+        const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+        const collectionCars = mongo.db("smoke-show").collection("cars")
+        const collectionManual = mongo.db("smoke-show").collection("cars-manual")
+        let arr = [...views]
+        if(chunk){
+            const mapResults = chunk[num].map(async (video, index) =>{
+                if(typeof(video.views) !== 'undefined'){
+                    arr[index] = Number(video.views)
                 }else{
-                    const results = allVideoData[num].map(async video =>{
-                        const filterCar = {_id: {"$oid": video.carDataId}}
+                    arr[index] = 0;
+                }
+                const filterCar = {_id: {"$oid": video.carDataId}}
 
-                        const data = await collectionCars.findOne(filterCar)
-                        
-                        if(data){
+                const data = await collectionCars.findOne(filterCar)
+                
+                if(data){
+                    video.carData = data
+                    return video
+                }else{
+
+                    const data = await collectionManual.findOne(filterCar)
+                    if(data){
                         video.carData = data
                         return video
-
-                        }else{
-                        const data = await collectionManual.findOne(filterCar)
-                            video.carData = data
-                            return video
-                        }
-                        
-                    })
-                    Promise.all(results).then(res =>{
-                        setVideoArr(res)
-                    })
+                    }else{
+                        console.log('no data')
+                    }
                 }
+                        
+            })
+            Promise.all(mapResults).then(video =>{
+                setVideoArr(video)
+                setViews(arr)
+            })
+        }else{
+            const results = allVideoData[num].map(async (video, index) =>{
+                if(typeof(video.views) !== 'undefined'){
+                    arr[index] = Number(video.views)
+                }else{
+                    arr[index] = 0;
+                }
+                const filterCar = {_id: {"$oid": video.carDataId}}
+                const data = await collectionCars.findOne(filterCar)
+                
+                if(data){
+                video.carData = data
+                return video
+
+                }else{
+                const data = await collectionManual.findOne(filterCar)
+                    video.carData = data
+                    return video
+                }
+                
+            })
+            Promise.all(results).then(res =>{
+                setVideoArr(res)
+                setViews(arr)
+            })
+        }
                 
     }
     const getVideos = async (cre) =>{
@@ -145,7 +174,6 @@ const AllVideos = (props) =>{
                         
                         const chunk = chunkArray(videos)
                         setAllVideoData(chunk)
-
                         return chunk
                     }).then( chunk =>{
                         attachCarData(chunk, 0)
@@ -270,32 +298,32 @@ const AllVideos = (props) =>{
             return items
         }
     }
-    const new_script = ()=>{
-        return new Promise(function(resolve, reject){
+    // const new_script = ()=>{
+    //     return new Promise(function(resolve, reject){
 
-                const script = document.createElement("script");
-                script.setAttribute('data-layout', "all-videos");
-                script.setAttribute('data-debug', "true");
-                script.setAttribute('data-tmsclient', "The Smoke Show");
-                script.setAttribute('id', "all-videos");
-                script.src = "https://lib.tashop.co/the_smoke_show/adengine.js";
-                script.async = true;
-                const scriptW = document.createElement("script");
-                scriptW.setAttribute('id', 'ad-w');
-                scriptW.text = 'window.TAS = window.TAS || { cmd: [] }'
+    //             const script = document.createElement("script");
+    //             script.setAttribute('data-layout', "all-videos");
+    //             script.setAttribute('data-debug', "true");
+    //             script.setAttribute('data-tmsclient', "The Smoke Show");
+    //             script.setAttribute('id', "all-videos");
+    //             script.src = "https://lib.tashop.co/the_smoke_show/adengine.js";
+    //             script.async = true;
+    //             const scriptW = document.createElement("script");
+    //             scriptW.setAttribute('id', 'ad-w');
+    //             scriptW.text = 'window.TAS = window.TAS || { cmd: [] }'
                
-                script.addEventListener('load', function () {
-                  resolve();
-                });
-                script.addEventListener('error', function (e) {
-                  reject(e);
-                });
-                document.body.appendChild(script);
-                document.body.appendChild(scriptW)
+    //             script.addEventListener('load', function () {
+    //               resolve();
+    //             });
+    //             script.addEventListener('error', function (e) {
+    //               reject(e);
+    //             });
+    //             document.body.appendChild(script);
+    //             document.body.appendChild(scriptW)
             
             
-          })
-    }
+    //       })
+    // }
 
 
     useEffect(() => {
@@ -304,7 +332,6 @@ const AllVideos = (props) =>{
         }
     }, [props.influecerObj])
     useEffect( () => {
-        
         
         // new_script()
         // if(allVideosScript){
@@ -406,6 +433,7 @@ const AllVideos = (props) =>{
             <Row style={{paddingLeft:'-7px', paddingRight:'-7px'}}>
             {   videoArr[0] &&
                 videoArr.map((video, index) =>{
+                    console.log('check how many times', video.videoId)
                     const unique = short.generate()
                     const str = video.carData.model
                     const id = video.videoId
@@ -434,6 +462,7 @@ const AllVideos = (props) =>{
                                     <Col sm >
                                         <div className="videoWrapper">
                                             <ReactPlayer
+                                            onStart={() => runCounter(video.videoId, index)}
                                             width="560" 
                                             height="315"
                                             url={videoWatchURL + video.videoId}
@@ -442,7 +471,10 @@ const AllVideos = (props) =>{
                                         </div>
                                     
                                         <div className="video-title-div" dangerouslySetInnerHTML={{__html: video.snippet.title}} />
-                                        <small>{date}</small>
+                                        <small>{date}</small> {' |'}
+                                        { <small>{views[index] ? views[index] : 0 } views</small>
+                                        }
+                                            
                                         <Row className="comment-wrapper" >
                                             <div className="col-1" style={{margin:0,padding:0}} >
                                             {props.influencerObj.profilePic ? <img src={props.influencerObj.profilePic} 
