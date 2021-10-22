@@ -280,7 +280,8 @@ const [views, setViews] = useState([])
                                            {index < 6 ? 
                                            <div id={`unit-${adHome[index]}`} className="tmsads"></div>
                                            :
-                                           <div id={`child-${adHomeInfinite}-${index}`} className="tmsads" data-ad={`unit-${adHomeInfinite}`}></div>
+                                           <div id={`unit-${adHomeInfinite}`} className="tmsads" ></div>
+                                        //    <div id={`child-${adHomeInfinite}-${index}`} className="tmsads" data-ad={`unit-${adHomeInfinite}`}></div>
                                            }
 
                                             </div>
