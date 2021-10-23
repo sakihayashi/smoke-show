@@ -5,7 +5,6 @@ export const adHome = [
     1617659943833,
     1617660087496,
     1617660193197,
-    1618602023290
 ]
 
 export const adHomeInfinite = 1618602023290
