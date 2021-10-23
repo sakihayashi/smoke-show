@@ -277,10 +277,13 @@ const [views, setViews] = useState([])
                                         
                                             <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
                                             <div className="ad-container">
-                                           {index < 6 ? 
+                                           {index < 7 ? 
                                            <div id={`unit-${adHome[index]}`} className="tmsads"></div>
                                            :
-                                           <div id={`unit-${adHomeInfinite}`} className="tmsads" ></div>
+                                        //    <div id={`unit-${adHomeInfinite}`} className="tmsads" ></div>
+
+                                            <div id={`home-child-${adHomeInfinite}-${index}`} class="tmsads" data-ad={`unit-${adHomeInfinite}`}></div>
+
                                         //    <div id={`child-${adHomeInfinite}-${index}`} className="tmsads" data-ad={`unit-${adHomeInfinite}`}></div>
                                            }
 
