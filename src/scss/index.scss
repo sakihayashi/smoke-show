@@ -423,11 +423,17 @@ label{
     height: 600px;
   }
   .ad-container > div {
-    height: 600px;
+    height: 600px !important;
+    width: 300px !important;
     display: block !important;
   }
   .ad-container > div > div {
-    height: 600px;
+    height: 600px !important;
+    width: 300px !important;
+  }
+  .ad-container > div > div > iframe {
+    height: 600px !important;
+    width: 300px !important;
   }
   .ad-160{
     display: block;
