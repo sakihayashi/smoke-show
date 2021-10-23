@@ -422,6 +422,13 @@ label{
   .ad-container{
     height: 600px;
   }
+  .ad-container > div {
+    height: 600px;
+    display: block !important;
+  }
+  .ad-container > div > div {
+    height: 600px;
+  }
   .ad-160{
     display: block;
   }
