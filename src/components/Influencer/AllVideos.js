@@ -453,7 +453,7 @@ const AllVideos = (props) =>{
                     if(video.carData.price && video.carData.price.baseMSRP){
                         price = numberWithCommas(video.carData.price.baseMSRP)
                     }else{ price = ''}
-                    
+                    const uniqueToDiv = Date.now();
                     return(
                         <Fragment key={unique} >
                             <Col sm={6} className="main-col" >
@@ -511,7 +511,7 @@ const AllVideos = (props) =>{
                                             {index < 6 ? 
                                             <div id={`unit-${adAllVideos[index]}`} className="tmsads" key={Math.random()}></div>
                                             :
-                                            <div id={`child-${adAllVideosInfinite}-${index}`} className="tmsads" data-ad={`unit-${adAllVideosInfinite}`} key={Math.random()}></div>
+                                            <div id={`smoke-show-allvideos-${uniqueToDiv}-${index}`} className="tmsads" data-ad={`unit-${adAllVideosInfinite}`} key={Math.random()}></div>
                                             }
                                             
                                         </div>

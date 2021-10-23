@@ -284,7 +284,7 @@ const [views, setViews] = useState([])
 
                                             // <div id={`home-child-${adHomeInfinite}-${index}`} class="tmsads" data-ad={`unit-${adHomeInfinite}`}></div>
 
-                                           <div id={uniqueToDiv} className="tmsads" data-ad={`unit-${adHomeInfinite}`}></div>
+                                           <div id={`smoke-show-home-${uniqueToDiv}`} className="tmsads" data-ad={`unit-${adHomeInfinite}`}></div>
                                            }
 
                                             </div>
