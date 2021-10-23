@@ -197,6 +197,7 @@ const [views, setViews] = useState([])
                         const str = video.carData.model
                         let linkUsername = ''
                         let weight = video.carData.features.Measurements["Curb weight"]
+                        const uniqueToDiv = Date.now();
                         if(video.userId === '602303890ff2832f7d19a2af'){
                             linkUsername = 'Lexurious-Fleet'
                         }else if(video.userId === '60230361f63ff517d4fdad14'){
@@ -283,7 +284,7 @@ const [views, setViews] = useState([])
 
                                             // <div id={`home-child-${adHomeInfinite}-${index}`} class="tmsads" data-ad={`unit-${adHomeInfinite}`}></div>
 
-                                           <div id={`child-${adHomeInfinite}-${index}`} className="tmsads" data-ad={`unit-${adHomeInfinite}`}></div>
+                                           <div id={uniqueToDiv} className="tmsads" data-ad={`unit-${adHomeInfinite}`}></div>
                                            }
 
                                             </div>
