@@ -4,11 +4,10 @@ import Helmet from 'react-helmet'
 import { Container, Row, Col, Form, Pagination, Button } from 'react-bootstrap'
 import jwt from 'jsonwebtoken'
 
-const EditVideoDataKirk = () =>{
+const EditVideoDataElliot = () =>{
     const [activePag, setActivePag] = useState(0)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [userObj, setUserObj] = useState({email: '', password: ''})
-    const kirkChannelId = 'UCXPVB7s1TJTE0WjDpakGp5Q'
     const app = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID })
     const [allVideos, setAllVideos] = useState([])
     const [message, setMessage] = useState('')
@@ -17,20 +16,19 @@ const EditVideoDataKirk = () =>{
     const [editMode, setEditMode] = useState(false)
     const maxAgeTest = 1 * 60 * 60
     const [items, setItems] = useState([])
-    let chunk_size = 15
 
     const handlePagNum = (num) =>{
-        console.log('num', num)
         setActivePag(num)
-        // setAllVideos({...allVideos})
     }
+    const chunk_size = 15
     
-    const handleChange = (e) =>[
+    const handleChange = (e) =>{
         setUserObj({
             ...userObj,
             [e.target.name]: e.target.value
         })
-    ]
+    }
+
     const videoEmbedURL = 'https://www.youtube.com/embed/'
 
     const chunkArray = (allVideos) =>{
@@ -63,7 +61,7 @@ const EditVideoDataKirk = () =>{
                 sessionStorage.setItem('session_user', tokenCredentials)
                 const mongo = user.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
                 const mongoCollection = mongo.db("smoke-show").collection("youtube-videos")
-                const filter = {channelId: kirkChannelId}
+                const filter = {channelId: 'UCxojx8IgGmKgPGmewtnaqyw'}
                 await mongoCollection.find(filter).then( videos =>{
                     console.log(videos)
                     const chunkedVideos = chunkArray(videos)
@@ -100,7 +98,6 @@ const EditVideoDataKirk = () =>{
     </Container>
     
     const handleChangeCarData = (e) =>{
-      
         setCarDataId(e.target.value)
         setEditVideoId(e.target.name)
     }
@@ -122,7 +119,7 @@ const EditVideoDataKirk = () =>{
                 setEditVideoId('')
                 setCarDataId('')
                 setEditMode(false)
-                const filter = {channelId: kirkChannelId}
+                const filter = {channelId: 'UCxojx8IgGmKgPGmewtnaqyw'}
                 await collectionYoutube.find(filter).then( videos =>{
                     const chunkedVideos = chunkArray(videos)
                     setAllVideos(chunkedVideos)
@@ -159,6 +156,7 @@ const EditVideoDataKirk = () =>{
                 {i}
                 </Pagination.Item>,
             );
+            // console.log('loop', temp)
             if(i == num -1){
                 setItems(temp)
             }
@@ -168,7 +166,7 @@ const EditVideoDataKirk = () =>{
     const queryData = async () =>{
         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME);
         const collectionYoutube = mongo.db(process.env.REACT_APP_REALM_DB_NAME).collection("youtube-videos")
-        const filter = {channelId: kirkChannelId}
+        const filter = {channelId: 'UCxojx8IgGmKgPGmewtnaqyw'}
         await collectionYoutube.find(filter).then( videos =>{
             makePagination(Math.ceil(videos.length/chunk_size))
             const chunkedVideos = chunkArray(videos)
@@ -176,14 +174,13 @@ const EditVideoDataKirk = () =>{
         })
     }
     useEffect(() => {
-        // const tokenUser = sessionStorage.getItem('session_user')
-        // if(tokenUser){
-        //     setIsLoggedIn(true)
-        //     queryData()
-        // }else{
-        //     setIsLoggedIn(false)
-        // }
-        queryData()
+        const tokenUser = sessionStorage.getItem('session_user')
+        if(tokenUser){
+            setIsLoggedIn(true)
+            queryData()
+        }else{
+            setIsLoggedIn(false)
+        }
 
     }, [])
     return(
@@ -191,16 +188,17 @@ const EditVideoDataKirk = () =>{
             <Helmet>
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>
-            {/* {isLoggedIn ?  */}
+            {isLoggedIn ? 
             <Container>
                 <h1>Edit video data</h1>
                 <center><Pagination>{items}</Pagination></center>
                 <hr />
                 <Row>
+                {console.log('array 0', allVideos[0])}
                 { allVideos[activePag] && 
                     allVideos[activePag].map(video =>{
                         return(
-                            <Col style={{marginBottom: '2rem'}} key={video.videoId}>
+                            <Col style={{marginBottom: '2rem'}}>
                                 <iframe src={videoEmbedURL + video.videoId}
                                     frameBorder='0'
                                     allow='autoplay; encrypted-media'
@@ -227,13 +225,12 @@ const EditVideoDataKirk = () =>{
                         
                     })
                 }
-                
-           
+            
                 </Row>
             </Container>
-            {/* : loginDiv} */}
+            : loginDiv}
         </Fragment>
     )
 }
 
-export default EditVideoDataKirk
+export default EditVideoDataElliot

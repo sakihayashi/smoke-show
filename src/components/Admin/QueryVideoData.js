@@ -21,6 +21,8 @@ const QueryVideoData = (props) =>{
     const EddiXuserId = '60230361f63ff517d4fdad14'
     const KirkUserId = '602303890ff2832f7d19a2af'
     const KirkChannelId = 'UCXPVB7s1TJTE0WjDpakGp5Q'
+    const ElliotUserId = '603c3d4e79ca596edd9b6161'
+    const ElliottChannelId = 'UCxojx8IgGmKgPGmewtnaqyw'
 
     const maxAgeTest = 1 * 60 * 60
     const appConfig = {
@@ -62,37 +64,38 @@ const QueryVideoData = (props) =>{
         
     }
 
-    // const handleVideoSearch = async e =>{
-    //     e.preventDefault()
-
-    //     await youtubeAPI.get('/search', {
-    //         params: {
-    //             // q: searchKeyword,
-    //             channelId: KirkChannelId,
-    //             publishedAfter: '2021-02-21T00:00:00Z',
-    //             publishedBefore: '2021-02-23T23:59:59Z',
-    //             order: 'date'
-    //         }
-    //     }).then(async youtubeObj =>{
-    //         console.log('res from youtube', youtubeObj)
-    //         // setTitleStr("EddieX " + searchKeyword)
-    //         const formatted = youtubeObj.data.items.map(video =>{
-
-    //             video.videoId = video.id.videoId
-    //             video.userId = KirkUserId
-    //             video.channelId = KirkChannelId
-    //             delete video.kind
-    //             delete video.etag
-    //             delete video.id
-    //             return video
-    //         })
-    //         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-    //         const collection = mongo.db("smoke-show").collection("youtube-videos")
-    //         const result = await collection.insertMany(formatted)
-    //         console.log(result)
-    //     })
-    // }
-
+    const handleVideoSearch = async e =>{
+        e.preventDefault()
+    
+        await youtubeAPI.get('/search', {
+            params: {
+                // q: searchKeyword,
+                channelId: ElliottChannelId,
+                publishedAfter: '2021-06-01T00:00:00Z',
+                publishedBefore: '2022-06-10T23:59:59Z',
+                order: 'date'
+            }
+        }).then(async youtubeObj =>{
+            console.log('res from youtube', youtubeObj)
+            // setTitleStr("EddieX " + searchKeyword)
+            const formatted = youtubeObj.data.items.map(video => {
+    
+                video.videoId = video.id.videoId
+                video.userId = ElliotUserId
+                video.channelId = ElliottChannelId
+                delete video.kind
+                delete video.etag
+                delete video.id
+                return video
+            })
+            console.log({formatted})
+            const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+            const collection = mongo.db("smoke-show").collection("youtube-videos")
+            const result = await collection.insertMany(formatted)
+            console.log(result)
+        })
+    }
+    
     // const updateLatest =async ()=>{
     //     const credentials = Realm.Credentials.apiKey(process.env.REACT_APP_REALM_AUTH_PUBLIC_VIEW);
         
@@ -221,34 +224,34 @@ const QueryVideoData = (props) =>{
     //         console.log(err)
     //     }
     // }
-    const checkYoutubeId = async() =>{
-        let tempArr = []
-        await youtubeAPI.get('/search', {
-            params: {
-                channelId: KirkChannelId,
-                publishedAfter: '2021-01-01T00:00:00Z',
-                publishedBefore: '2021-02-20T23:59:59Z',
-                order: 'date'
-            }
-        }).then(async youtubeObj =>{
-            console.log('res from youtube', youtubeObj)
-            youtubeObj.data.items.map(video =>{
-                tempArr.push(video.id.videoId)
-            })  
-            return tempArr
+    // const checkYoutubeId = async() =>{
+    //     let tempArr = []
+    //     await youtubeAPI.get('/search', {
+    //         params: {
+    //             channelId: KirkChannelId,
+    //             publishedAfter: '2021-01-01T00:00:00Z',
+    //             publishedBefore: '2021-02-20T23:59:59Z',
+    //             order: 'date'
+    //         }
+    //     }).then(async youtubeObj =>{
+    //         console.log('res from youtube', youtubeObj)
+    //         youtubeObj.data.items.map(video =>{
+    //             tempArr.push(video.id.videoId)
+    //         })  
+    //         return tempArr
             
-        }).then( async arr =>{
-            const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
-            const collection = mongo.db("smoke-show").collection("cars-data-analysis")
-            const youtubeIds = {allVideoIds: arr, source: 'youtube'}
-            const result = await collection.insertOne(youtubeIds)
-            // const result = await collection.updateOne(
-            //     {source: 'youtube'},
-            //     { $push: {allVideoIds: { $each: arr }}}
-            // )
-            console.log(result)
-        })
-    }
+    //     }).then( async arr =>{
+    //         const mongo = app.currentUser.mongoClient(process.env.REACT_APP_REALM_SERVICE_NAME)
+    //         const collection = mongo.db("smoke-show").collection("cars-data-analysis")
+    //         const youtubeIds = {allVideoIds: arr, source: 'youtube'}
+    //         const result = await collection.insertOne(youtubeIds)
+    //         // const result = await collection.updateOne(
+    //         //     {source: 'youtube'},
+    //         //     { $push: {allVideoIds: { $each: arr }}}
+    //         // )
+    //         console.log(result)
+    //     })
+    // }
     const filterArray = (arr1, arr2) => {
         const filtered = arr1.filter(el => {
             console.log('doing?', arr2.indexOf(el) === -1)
@@ -363,9 +366,9 @@ const QueryVideoData = (props) =>{
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Video ID</Form.Label>
                     <Form.Control type="text" name="id" placeholder="Enter youtube video ID" onChange={handleChange}/>
-                    <Form.Text className="text-muted">
+                    {/* <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
-                    </Form.Text>
+                    </Form.Text> */}
                 </Form.Group>
                 <br/><br/>
                 <Form.Control as="select" name="name" onChange={handleChange}>
@@ -377,14 +380,14 @@ const QueryVideoData = (props) =>{
                     Submit
                 </Button> */}<br/><br/>
                 {msg && <Alert variant="danger">{msg}</Alert>}
-                
-                <Button onClick={addMissing}>Add data</Button>
+                <Button onClick={handleVideoSearch}>Add youtube videos for Elliotto</Button>
+                {/* <Button onClick={addMissing}>Add data</Button>
                 <br/><br/><br/><br/>
-                <Button onClick={handleLogout}>Logout</Button>
+                <Button onClick={handleLogout}>Logout</Button> */}
             </Form>
-            :
-            <AdminLoginDiv handleSubmitLogin={handleSubmitLogin} handleChange={changeUserObj} msg={msg} />
-            }
+             :
+             <AdminLoginDiv handleSubmitLogin={handleSubmitLogin} handleChange={changeUserObj} msg={msg} />
+             }
                 {/* <Button onClick={handleVideoSearch}>Query data</Button> */}
                 {/* <Button onClick={handleUpdateDesc}>Click me to update description</Button> */}
                 {/* <Button onClick={updateLatest}>updateLatest</Button> */}

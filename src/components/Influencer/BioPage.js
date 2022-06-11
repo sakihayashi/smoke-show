@@ -32,10 +32,12 @@ const BioPage = (props) =>{
     const name = props.match.params.username
     if(name === 'EddieX'){
         influencerId = '60230361f63ff517d4fdad14'
-    }else if(name === 'Lexurious-Fleet'){
+    } else if(name === 'Lexurious-Fleet'){
         influencerId = '602303890ff2832f7d19a2af'
+    } else if(name === 'Elliott-Alvis'){
+        influencerId = '603c3d4e79ca596edd9b6161'
     }
-
+    
     const [featured, setFeatured] = useState()
     const [influencer, setInfluencer] = useState({userId: '', fname: '', lname: '', username: '', fans: null, desc: '', channelId: '', banner_img: '', profile_pic: '', featuredVideo: {id: '', title: ''}})
     const [views, setViews] = useState([])

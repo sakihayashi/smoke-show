@@ -33,6 +33,8 @@ const AllVideos = (props) =>{
         influencerId = '60230361f63ff517d4fdad14'
     }else if(name === 'Lexurious-Fleet'){
         influencerId = '602303890ff2832f7d19a2af'
+    }else if(name === 'Elliott-Alvis'){
+        influencerId = '603c3d4e79ca596edd9b6161'
     }
     const [videoArr, setVideoArr] = useState([])
     const [allVideoData, setAllVideoData] = useState([])

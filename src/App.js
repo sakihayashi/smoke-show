@@ -43,6 +43,7 @@ import CarStatsListsModel from './components/CarStatsListsModel'
 import CarStatsListsResults from './components/CaStatsListsResults'
 import Loading from './components/Loading'
 import Instagram from './components/Admin/Instagram'
+import EditVideoDataElliot from './components/Admin/EditVideoDataElliot'
 // import CreateSiteMap from './components/Admin/CreateSiteMap'
 const HomePage = loadable(() => import('./components/HomePage'), {
   fallback: <Loading />
@@ -98,6 +99,7 @@ function App() {
           <Route path="/add-car-data" component={AddCarData} />
           <Route path="/edit-video-data" component={EditVideoData} />
           <Route path="/edit-video-data-kirk" component={EditVideoDataKirk} />
+          <Route path="/edit-video-data-elliot" component={EditVideoDataElliot} />
           <Route path="/privacy-policy" component={Privacy} />
           <Route path="/terms" component={Terms} />
           <Route path="/car-stats/:make/:year/:model/:id" component={CarStatsVideo} />
