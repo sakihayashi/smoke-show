@@ -380,10 +380,10 @@ const QueryVideoData = (props) =>{
                     Submit
                 </Button> */}<br/><br/>
                 {msg && <Alert variant="danger">{msg}</Alert>}
-                <Button onClick={handleVideoSearch}>Add youtube videos for Elliotto</Button>
-                {/* <Button onClick={addMissing}>Add data</Button>
+                {/* <Button onClick={handleVideoSearch}>Add youtube videos for Elliotto</Button> */}
+                <Button onClick={addMissing}>Add data</Button>
                 <br/><br/><br/><br/>
-                <Button onClick={handleLogout}>Logout</Button> */}
+                <Button onClick={handleLogout}>Logout</Button>
             </Form>
              :
              <AdminLoginDiv handleSubmitLogin={handleSubmitLogin} handleChange={changeUserObj} msg={msg} />
