@@ -69,7 +69,8 @@
           "defaultAuthentication": {
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
-              "description": "theSmokeShowAmplifyAPIkey"
+              "apiKeyExpirationDays": 365,
+              "description": "June 16 2022"
             }
           },
           "additionalAuthenticationProviders": []
