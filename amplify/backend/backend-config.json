@@ -70,7 +70,7 @@
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
               "apiKeyExpirationDays": 365,
-              "description": "June 16 2022"
+              "description": "staging"
             }
           },
           "additionalAuthenticationProviders": []
