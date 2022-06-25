@@ -14,6 +14,11 @@ const QueryVideoData = (props) =>{
     const [userObj, setUserObj] = useState({email: '', password: ''})
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [msg, setMsg] = useState('')
+    const influencers = [
+        'EddieX',
+        'Kirk',
+        'Elliott'
+    ]
     //last query data Feb 20 2021 for both Kirk and Eddie
 
     // const [videoData, setVideoData] = useState([])
@@ -295,15 +300,18 @@ const QueryVideoData = (props) =>{
                     } else if(carObj.name === 'Elliott'){
                         influencer.userId = ElliotUserId
                         influencer.channelId = ElliottChannelId
+                        return influencer
                     }
                 }
                 
-            }).then(async influencer =>{
+            })
+            .then(async influencer =>{
                 await youtubeAPI.get('/videos', {
                     params: {
                         id: carObj.id
                     }
-                }).then(async res =>{
+                })
+                .then(async res =>{
                     const youtubeData = res.data.items[0]
                     const formatted = {
                         videoId: carObj.id,
@@ -363,7 +371,6 @@ const QueryVideoData = (props) =>{
 
         <center style={{maxWidth: '600px', margin: '0 auto'}}>
             { isLoggedIn ?
-            
             <Form>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Video ID</Form.Label>
@@ -375,13 +382,13 @@ const QueryVideoData = (props) =>{
                 <br/><br/>
                 <Form.Control as="select" name="name" onChange={handleChange}>
                     <option>Select an influencer</option>
-                    <option>EddieX</option>
-                    <option>Kirk</option>
-                    <option>Elliott</option>
+                    {influencers.map(name => {
+                        return (
+                            <option>{name}</option>
+                        )
+                    })}
                 </Form.Control>
-                {/* <Button variant="primary" type="submit">
-                    Submit
-                </Button> */}<br/><br/>
+                <br/><br/>
                 {msg && <Alert variant="danger">{msg}</Alert>}
                 {/* <Button onClick={handleVideoSearch}>Add youtube videos for Elliotto</Button> */}
                 <Button onClick={addMissing}>Add data</Button>
