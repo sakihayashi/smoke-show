@@ -283,7 +283,6 @@ const QueryVideoData = (props) =>{
                     setMsg('This videoId is in DB already.')
                     return
                 }else{
-                    console.log('running?')
                     let influencer = {userId: '', channelId: ''}
                     if(carObj.name === 'EddieX'){
                         influencer.userId = EddiXuserId
@@ -293,6 +292,9 @@ const QueryVideoData = (props) =>{
                         influencer.userId = KirkUserId
                         influencer.channelId = KirkChannelId
                         return influencer
+                    } else if(carObj.name === 'Elliott'){
+                        influencer.userId = ElliotUserId
+                        influencer.channelId = ElliottChannelId
                     }
                 }
                 
@@ -375,6 +377,7 @@ const QueryVideoData = (props) =>{
                     <option>Select an influencer</option>
                     <option>EddieX</option>
                     <option>Kirk</option>
+                    <option>Elliott</option>
                 </Form.Control>
                 {/* <Button variant="primary" type="submit">
                     Submit

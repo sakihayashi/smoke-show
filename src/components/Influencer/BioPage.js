@@ -56,7 +56,8 @@ const BioPage = (props) =>{
                 const mongoCollection = mongo.db("smoke-show").collection("influencers");
                 const replaced = name.replace('-', ' ')
                 const filter = {username: replaced} 
-                await mongoCollection.findOne(filter).then( async res =>{
+                await mongoCollection.findOne(filter).then( async res => {
+                    console.log({res})
                     setInfluencer(res)
                     const collectionFans = mongo.db("smoke-show").collection(`fans-${res.username}`)
                     try{
@@ -84,13 +85,13 @@ const BioPage = (props) =>{
         const videos = await collectionVideos.find(filter, options)
         let arr = [...views]
         if(videos){
-            const results = videos.map(async (video, index) =>{
+            const results = videos.map(async (video, index) => {
                 if(typeof(video.views) !== 'undefined'){
                     arr[index] = Number(video.views)
                 }else{
                     arr[index] = 0;
                 }
-                const filterCar = {_id: {"$oid": video.carDataId}}
+                const filterCar = {_id: {"$oid": video.carDataId || '5fbc6d2f87a7a21330c372e5'}}
                 const data =  await collectionCars.findOne(filterCar)
                 if(data){
                 video.carData = data
@@ -106,7 +107,6 @@ const BioPage = (props) =>{
                         video.carData = {}
                         return video
                     }
-                    
                 }
             })
             Promise.all(results).then(res =>{
@@ -332,8 +332,6 @@ const BioPage = (props) =>{
                 <Row className="bio-main-row">
                 { latestVideos && 
                     latestVideos.map((video, index) =>{
-                        console.log('id', video.videoId)
-                        console.log('views', video.views)
                         const str = video.carData.model
                         const model = str.charAt(0).toUpperCase() +str.slice(1)
                         const name = video.carData.make
