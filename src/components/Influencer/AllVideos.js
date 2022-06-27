@@ -100,7 +100,7 @@ const AllVideos = (props) =>{
                 }else{
                     arr[index] = 0;
                 }
-                const filterCar = {_id: {"$oid": video.carDataId}}
+                const filterCar = {_id: {"$oid": video.carDataId || '5fbc6d2f87a7a21330c372e5'}}
 
                 const data = await collectionCars.findOne(filterCar)
                 
@@ -130,7 +130,7 @@ const AllVideos = (props) =>{
                 }else{
                     arr[index] = 0;
                 }
-                const filterCar = {_id: {"$oid": video.carDataId}}
+                const filterCar = {_id: {"$oid": video.carDataId || '5fbc6d2f87a7a21330c372e5'}}
                 const data = await collectionCars.findOne(filterCar)
                 
                 if(data){
@@ -481,8 +481,8 @@ const AllVideos = (props) =>{
                                             <div className="col-1" style={{margin:0,padding:0}} >
                                             {props.influencerObj.profilePic ? <img src={props.influencerObj.profilePic} 
                                             
-                                            className="creator-profile-pic" alt={props.influencerObj.username}/> :
-                                            <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} className="creator-profile-pic" name={video.snippet.channelTitle} />
+                                            className="creator-profile-pic" alt={props.influencerObj.username} style={{width: 46, height: 46}}/> :
+                                            <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'teal'])} name={video.snippet.channelTitle} className="avator-smoke-show"/>
                                             }
                                             
                                             </div>
@@ -507,7 +507,7 @@ const AllVideos = (props) =>{
                                     </Col>
                                     <Col sm="auto"  className="spec-col"  >
                                         <div style={{minWidth: '160px'}}>
-                                        <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId} weight={weight}/>
+                                        <SpecDiv video={video} titleCase={titleCase} price={price} model={model} dataid={video.carDataId || '5fbc6d2f87a7a21330c372e5'} weight={weight}/>
                                         </div>
                                         <div className="ad-container">
                                             {index < 6 ? 
